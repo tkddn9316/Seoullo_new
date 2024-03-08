@@ -1,7 +1,9 @@
 package com.app.data.mapper
 
 import com.app.data.model.TourInfoDTO
+import com.app.data.model.UserEntity
 import com.app.domain.model.TourInfo
+import com.app.domain.model.User
 
 /**
  * Data Entity to Data Model
@@ -26,5 +28,16 @@ fun mapperTOTourInfo(tourInfo: List<TourInfoDTO>): List<TourInfo> =
             it.sigungucode,
             it.tel,
             it.title
+        )
+    }
+
+fun mapperToUser(userEntity: List<UserEntity>): List<User> =
+    userEntity.toList().map {
+        User(
+            it.index,
+            it.auto,
+            it.name,
+            it.email,
+            it.photoUrl
         )
     }

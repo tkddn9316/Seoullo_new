@@ -5,14 +5,18 @@ import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.os.SystemClock
 import android.view.View
+import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
+import com.app.seoullo_new.BR
+import com.app.seoullo_new.utils.Logging
 import com.app.seoullo_new.utils.OnSingleClickListener
 
 abstract class BaseActivity<VDB : ViewDataBinding, VM : BaseViewModel> : AppCompatActivity(),
     OnSingleClickListener {
-    protected lateinit var viewModel: VM
+    abstract val viewModel: VM
     protected lateinit var binding: VDB
     protected val TAG: String by lazy {
         javaClass.simpleName
@@ -33,7 +37,7 @@ abstract class BaseActivity<VDB : ViewDataBinding, VM : BaseViewModel> : AppComp
         } catch (e: Exception) {
             e.printStackTrace()
         }
-//        FLog.e(TAG, "onCreate")
+        Logging.e(TAG, "onCreate")
         context = this
         activity = this
         setup()
@@ -46,6 +50,14 @@ abstract class BaseActivity<VDB : ViewDataBinding, VM : BaseViewModel> : AppComp
 
     override fun onItemClick(v: View) {
 
+    }
+
+    open fun setBinding(@LayoutRes layoutId: Int) {
+        binding = DataBindingUtil.setContentView<VDB>(this, layoutId).apply {
+            setVariable(BR.viewModel, viewModel)
+            setVariable(BR.view, this@BaseActivity)
+            lifecycleOwner = this@BaseActivity
+        }
     }
 
     override fun onClick(v: View) {

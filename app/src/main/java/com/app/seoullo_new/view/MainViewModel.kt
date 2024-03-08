@@ -24,7 +24,7 @@ class MainViewModel @Inject constructor(
     private val tourInfoListResult = MutableStateFlow<List<TourInfo>>(emptyList())
     val _tourInfoListResult = tourInfoListResult.asStateFlow()
 
-    fun search() {
+    fun getTourInfo() {
         viewModelScope.launch {
             runCatching {
                 getTourInfoUseCase(

@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">Seoullo_new</string>
+    <string name="seoullo">SEOULLO</string>
+    <string name="yes">Y</string>
+    <string name="no">N</string>
 </resources>
