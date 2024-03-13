@@ -28,19 +28,19 @@
             android:onClick="@{view::onClick}"
             android:padding="12dp"
             android:src="@drawable/ic_back"
-            app:invisible="@{viewModel.back}"/>
+            app:invisible="@{viewModel.back}" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/title_"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:gravity="center"
-            android:text="@{viewModel.title}"
-            android:maxLines="1"
-            android:ellipsize="end"
             android:layout_marginStart="45dp"
             android:layout_marginEnd="45dp"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:maxLines="1"
+            android:text="@{viewModel.title}"
             android:textColor="@color/black"
             android:textSize="18sp"
             tools:text="sample" />
@@ -54,13 +54,12 @@
             android:onClick="@{view::onClick}"
             android:padding="12dp"
             android:src="@drawable/ic_baseline_refresh_24"
-            app:invisible="@{viewModel.refresh}"/>
+            app:invisible="@{viewModel.refresh}" />
 
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@color/gray_500"
             android:layout_gravity="bottom"
-            />
+            android:background="@color/gray_500" />
     </FrameLayout>
 </layout>

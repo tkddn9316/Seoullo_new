@@ -1,12 +1,13 @@
 package com.app.seoullo_new.view
 
-import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.app.domain.model.TourInfo
 import com.app.domain.usecase.tourInfo.GetTourInfoUseCase
 import com.app.seoullo_new.BuildConfig
 import com.app.seoullo_new.base.BaseViewModel
+import com.app.seoullo_new.di.DispatcherProvider
 import com.app.seoullo_new.utils.Constants.ContentTypeId
+import com.app.seoullo_new.utils.Logging
 import com.app.seoullo_new.utils.NetworkManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -18,14 +19,15 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
+    dispatcherProvider: DispatcherProvider,
     private val getTourInfoUseCase: GetTourInfoUseCase,
     private val networkManager: NetworkManager
-) : BaseViewModel() {
-    private val tourInfoListResult = MutableStateFlow<List<TourInfo>>(emptyList())
-    val _tourInfoListResult = tourInfoListResult.asStateFlow()
+) : BaseViewModel(dispatcherProvider) {
+    private val _tourInfoListResult = MutableStateFlow<List<TourInfo>>(emptyList())
+    val tourInfoListResult = _tourInfoListResult.asStateFlow()
 
     fun getTourInfo() {
-        viewModelScope.launch {
+        onIO {
             runCatching {
                 getTourInfoUseCase(
                     BuildConfig.TOUR_API_KEY,
@@ -37,12 +39,12 @@ class MainViewModel @Inject constructor(
                     .flowOn(Dispatchers.IO)
                     .collect { test ->
                         test.forEach {
-                            Log.d("AAZZZZZZZZZZ", it.toString())
+                            Logging.e(it.toString())
                         }
-                        tourInfoListResult.value = test
+                        _tourInfoListResult.value = test
                     }
             }.onFailure {
-                Log.d("AAZZZZZZZZZZ", "실패!!!!!!!!!!!!!!!!!!!!!!!!")
+                Logging.e("실패!!!!!!!!!!!!!!!!!!!!!!!!")
             }
         }
     }

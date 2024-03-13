@@ -10,9 +10,14 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.app.seoullo_new.BR
 import com.app.seoullo_new.utils.Logging
 import com.app.seoullo_new.utils.OnSingleClickListener
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 
 abstract class BaseActivity<VDB : ViewDataBinding, VM : BaseViewModel> : AppCompatActivity(),
     OnSingleClickListener {
@@ -69,5 +74,17 @@ abstract class BaseActivity<VDB : ViewDataBinding, VM : BaseViewModel> : AppComp
             return
         }
         onSingleClick(v)
+    }
+
+    /** stateFlow Observe.
+     *
+     * repeatOnLifecycle: Activity가 Foreground에 있을 때 한정으로 관찰함.
+     * Background에 나갈 시 Job Cancel 처리됨. */
+    inline fun observeFlow(
+        crossinline body: suspend CoroutineScope.() -> Unit
+    ) = lifecycleScope.launch {
+        repeatOnLifecycle(Lifecycle.State.STARTED) {
+            body(this)
+        }
     }
 }

@@ -1,14 +1,10 @@
-package com.app.data.data_source
+package com.app.data.source
 
 import com.app.data.db.UserDao
 import com.app.data.model.UserEntity
-import com.app.data.utils.Logging
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.single
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 

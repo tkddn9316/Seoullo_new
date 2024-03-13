@@ -1,12 +1,11 @@
 package com.app.data.repository
 
-import com.app.data.data_source.UserDataSource
+import com.app.data.source.UserDataSource
 import com.app.data.mapper.mapperToUser
 import com.app.data.model.UserEntity
 import com.app.domain.model.User
 import com.app.domain.repository.UserRepository
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collectIndexed
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 

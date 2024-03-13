@@ -1,4 +1,4 @@
-package com.app.data.data_source
+package com.app.data.source
 
 import com.app.data.model.TourInfoResponse
 import kotlinx.coroutines.flow.Flow

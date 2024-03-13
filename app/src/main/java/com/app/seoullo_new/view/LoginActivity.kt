@@ -4,11 +4,15 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.core.net.toUri
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.app.seoullo_new.R
 import com.app.seoullo_new.base.BaseActivity
 import com.app.seoullo_new.databinding.ActivityLoginBinding
 import com.app.seoullo_new.utils.Logging
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class LoginActivity : BaseActivity<ActivityLoginBinding, LoginViewModel>() {
@@ -28,8 +32,6 @@ class LoginActivity : BaseActivity<ActivityLoginBinding, LoginViewModel>() {
         }
 
         // Button Visible
-        viewModel._isLogin.observe(this) {
-
-        }
+//        observeFlow {  }
     }
 }

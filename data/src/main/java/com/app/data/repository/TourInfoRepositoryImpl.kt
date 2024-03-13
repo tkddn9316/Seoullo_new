@@ -1,8 +1,7 @@
 package com.app.data.repository
 
-import com.app.data.data_source.TourInfoDataSource
+import com.app.data.source.TourInfoDataSource
 import com.app.data.mapper.mapperTOTourInfo
-import com.app.data.model.TourInfoDTO
 import com.app.domain.model.TourInfo
 import com.app.domain.repository.TourInfoRepository
 import kotlinx.coroutines.flow.Flow
@@ -10,7 +9,6 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 
 /**
@@ -30,9 +28,9 @@ class TourInfoRepositoryImpl @Inject constructor(private val tourInfoDataSource:
     ): Flow<List<TourInfo>> {
         return flow {
             tourInfoDataSource.getTourInfo(serviceKey, contentTypeId, mapX, mapY, radius)
-                .catch { exception ->
-                    emit(mapperTOTourInfo(emptyList()))
-                }
+//                .catch { exception ->
+//                    emit(mapperTOTourInfo(emptyList()))
+//                }
                 .map { it.response.body.items.items }
                 .filter { it.isNotEmpty() }
                 .collect {

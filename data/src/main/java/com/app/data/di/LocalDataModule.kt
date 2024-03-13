@@ -2,8 +2,8 @@ package com.app.data.di
 
 import android.content.Context
 import androidx.room.Room
-import com.app.data.data_source.UserDataSource
-import com.app.data.data_source.UserDataSourceImpl
+import com.app.data.source.UserDataSource
+import com.app.data.source.UserDataSourceImpl
 import com.app.data.db.SeoulloDatabase
 import com.app.data.db.UserDao
 import dagger.Module
