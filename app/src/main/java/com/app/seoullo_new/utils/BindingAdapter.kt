@@ -65,4 +65,12 @@ object BindingAdapter {
 
         return Html.fromHtml(value, Html.FROM_HTML_MODE_LEGACY)
     }
+
+    @JvmStatic
+    @BindingAdapter("show")
+    fun View.isShow(visibility: LoginState) {
+        if (visibility is LoginState.IsUser) {
+            this.visibility = if (visibility.state) View.GONE else View.VISIBLE
+        }
+    }
 }

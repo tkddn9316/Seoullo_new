@@ -6,6 +6,7 @@ plugins {
     id("com.google.dagger.hilt.android")
     id("kotlin-kapt")
 //    id("dagger.hilt.android.plugin")
+    id("com.google.gms.google-services")
 }
 
 android {
@@ -90,10 +91,9 @@ dependencies {
     // ViewModelScope
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0")
 
-    // Coroutines
-//    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2")
-//    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.1")
-//
-//    // Coroutine Lifecycle Scopes
-//    implementation ("androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0")
+    // Google Login
+    implementation(platform("com.google.firebase:firebase-bom:32.7.4"))
+    implementation("com.google.firebase:firebase-analytics")
+    implementation("com.google.firebase:firebase-auth-ktx")
+    implementation("com.google.android.gms:play-services-auth:21.0.0")
 }
