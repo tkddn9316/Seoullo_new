@@ -48,4 +48,5 @@ open class BaseViewModel(dispatcherProvider: DispatcherProvider) : ViewModel(),
         body(this)
         withContext(Dispatchers.Main) { loading.value = false }
     }
+
 }

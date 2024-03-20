@@ -1,7 +1,7 @@
 package com.app.seoullo_new.module
 
 import android.content.Context
-import com.app.seoullo_new.utils.NetworkManager
+import com.app.seoullo_new.utils.CheckingManager
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -14,7 +14,7 @@ import javax.inject.Singleton
 class NetworkModule {
     @Provides
     @Singleton
-    fun provideNetworkManager(@ApplicationContext context: Context): NetworkManager {
-        return NetworkManager(context)
+    fun provideCheckingManager(@ApplicationContext context: Context): CheckingManager {
+        return CheckingManager(context)
     }
 }

@@ -7,7 +7,7 @@ import com.app.seoullo_new.base.BaseViewModel
 import com.app.seoullo_new.di.DispatcherProvider
 import com.app.seoullo_new.utils.Constants.ContentTypeId
 import com.app.seoullo_new.utils.Logging
-import com.app.seoullo_new.utils.NetworkManager
+import com.app.seoullo_new.utils.CheckingManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -20,10 +20,16 @@ import javax.inject.Inject
 class TourListViewModel @Inject constructor(
     dispatcherProvider: DispatcherProvider,
     private val getTourInfoUseCase: GetTourInfoUseCase,
-    private val networkManager: NetworkManager
+    private val checkingManager: CheckingManager
 ) : BaseViewModel(dispatcherProvider) {
     private val _tourInfoListResult = MutableStateFlow<List<TourInfo>>(emptyList())
     val tourInfoListResult = _tourInfoListResult.asStateFlow()
+
+    init {
+        // 위치 체크
+//        checkingManager.
+        // true 시 getTourInfo
+    }
 
     fun getTourInfo() {
         onIO {

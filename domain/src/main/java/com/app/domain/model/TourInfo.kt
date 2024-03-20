@@ -20,4 +20,4 @@ data class TourInfo(
     val sigungucode: String,
     val tel: String,
     val title: String
-)
+) : BaseModel()

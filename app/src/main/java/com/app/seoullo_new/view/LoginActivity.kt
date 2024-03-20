@@ -10,6 +10,7 @@ import com.app.seoullo_new.base.BaseActivity
 import com.app.seoullo_new.databinding.ActivityLoginBinding
 import com.app.seoullo_new.utils.Logging
 import com.app.seoullo_new.utils.LoginState
+import com.app.seoullo_new.utils.Util.launchActivity
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -116,6 +117,8 @@ class LoginActivity : BaseActivity<ActivityLoginBinding, LoginViewModel>() {
     }
 
     private fun moveMain() {
-
+        launchActivity<MainActivity>()
+        overridePendingTransition(R.anim.abc_fade_in, R.anim.abc_fade_out)
+        finish()
     }
 }

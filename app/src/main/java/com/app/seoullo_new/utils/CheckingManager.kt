@@ -3,10 +3,12 @@ package com.app.seoullo_new.utils
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
-import android.os.Build
 import javax.inject.Inject
 
-class NetworkManager @Inject constructor(
+/**
+ * 네트워크 및 Permission 체크
+ */
+class CheckingManager @Inject constructor(
     private val context: Context
 ) {
     fun checkNetworkState(): Boolean {

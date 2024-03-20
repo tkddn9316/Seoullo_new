@@ -96,4 +96,7 @@ dependencies {
     implementation("com.google.firebase:firebase-analytics")
     implementation("com.google.firebase:firebase-auth-ktx")
     implementation("com.google.android.gms:play-services-auth:21.0.0")
+
+    // Ted Permission
+    implementation("io.github.ParkSangGwon:tedpermission-coroutine:3.3.0")
 }
