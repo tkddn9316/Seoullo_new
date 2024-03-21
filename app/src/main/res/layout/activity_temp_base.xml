@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.app.seoullo_new.view.MainViewModel" />
+
+        <variable
+            name="view"
+            type="com.app.seoullo_new.view.MainActivity" />
+    </data>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <include
+                android:id="@+id/header_"
+                layout="@layout/base_title" />
+        </LinearLayout>
+
+
+        <com.app.seoullo_new.utils.LoadingBar
+            android:id="@+id/progress_"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center"
+            app:gone="@{viewModel.loading}"
+            tools:visibility="gone" />
+    </FrameLayout>
+</layout>

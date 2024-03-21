@@ -26,7 +26,7 @@ class TourListViewModel @Inject constructor(
     val tourInfoListResult = _tourInfoListResult.asStateFlow()
 
     init {
-        // 위치 체크
+        // 위치 퍼미션 체크
 //        checkingManager.
         // true 시 getTourInfo
     }

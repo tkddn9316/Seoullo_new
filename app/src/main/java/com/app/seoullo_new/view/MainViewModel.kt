@@ -1,4 +1,34 @@
 package com.app.seoullo_new.view
 
-class MainViewModel {
+import android.Manifest
+import com.app.seoullo_new.base.BaseViewModel
+import com.app.seoullo_new.di.DispatcherProvider
+import com.app.seoullo_new.utils.CheckingManager
+import com.app.seoullo_new.utils.Logging
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
+
+@HiltViewModel
+class MainViewModel @Inject constructor(
+    dispatcherProvider: DispatcherProvider,
+    private val checkingManager: CheckingManager
+) : BaseViewModel(dispatcherProvider) {
+
+    init {
+        checkPermission()
+    }
+
+    private fun checkPermission() {
+        onMain {
+            if (!checkingManager.checkPermission(
+                    Manifest.permission.ACCESS_COARSE_LOCATION,
+                    Manifest.permission.ACCESS_FINE_LOCATION
+                )
+            ) {
+                Logging.e("권한 X")
+            } else {
+                Logging.e("권한 O")
+            }
+        }
+    }
 }

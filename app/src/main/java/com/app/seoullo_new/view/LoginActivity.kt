@@ -1,5 +1,7 @@
 package com.app.seoullo_new.view
 
+import android.app.Activity
+import android.os.Build
 import android.os.Bundle
 import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
@@ -118,7 +120,13 @@ class LoginActivity : BaseActivity<ActivityLoginBinding, LoginViewModel>() {
 
     private fun moveMain() {
         launchActivity<MainActivity>()
-        overridePendingTransition(R.anim.abc_fade_in, R.anim.abc_fade_out)
+        if (Build.VERSION.SDK_INT >= 34) {
+            overrideActivityTransition(
+                Activity.OVERRIDE_TRANSITION_CLOSE, R.anim.abc_fade_in, R.anim.abc_fade_out
+            )
+        } else {
+            overridePendingTransition(R.anim.abc_fade_in, R.anim.abc_fade_out)
+        }
         finish()
     }
 }

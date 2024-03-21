@@ -3,6 +3,9 @@ package com.app.seoullo_new.utils
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
+import com.gun0912.tedpermission.coroutine.TedPermission
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 /**
@@ -10,15 +13,26 @@ import javax.inject.Inject
  */
 class CheckingManager @Inject constructor(
     private val context: Context
-) {
+) : PermissionManager {
     fun checkNetworkState(): Boolean {
-        val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val connectivityManager =
+            context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         val nw = connectivityManager.activeNetwork ?: return false
         val actNw = connectivityManager.getNetworkCapabilities(nw) ?: return false
         return when {
             actNw.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
             actNw.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
             else -> false
+        }
+    }
+
+    override suspend fun checkPermission(vararg permission: String): Boolean {
+        return withContext(Dispatchers.Main) {
+            TedPermission.create()
+                .setPermissions(*permission)
+                .setDeniedMessage("If you reject permission, you cannot use this service. Please turn on permissions in settings.")
+                .check()
+                .isGranted
         }
     }
 }
