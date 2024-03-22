@@ -1,9 +1,18 @@
 package com.app.seoullo_new.base
 
+import android.Manifest
+import android.annotation.SuppressLint
+import android.content.pm.PackageManager
+import android.location.Location
+import androidx.core.app.ActivityCompat
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.app.seoullo_new.di.DispatcherProvider
+import com.app.seoullo_new.utils.Logging
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -21,6 +30,12 @@ open class BaseViewModel(dispatcherProvider: DispatcherProvider) : ViewModel(),
     /** AppBar RefreshButton */
     val refresh = MutableLiveData(true)
     val loading = MutableLiveData(false)
+
+    /** My LAT(Y)/LON(X) */
+    private val _lat = MutableLiveData("")
+    val lat: LiveData<String> = _lat
+    private val _lng = MutableLiveData("")
+    val lng: LiveData<String> = _lng
 
     /** viewModelScope Main Thread */
     inline fun BaseViewModel.onMain(
@@ -49,4 +64,18 @@ open class BaseViewModel(dispatcherProvider: DispatcherProvider) : ViewModel(),
         withContext(Dispatchers.Main) { loading.value = false }
     }
 
+    @SuppressLint("MissingPermission")
+    fun getMyLocation(fusedLocationProviderClient: FusedLocationProviderClient, next: (() -> Unit)) {
+        fusedLocationProviderClient.lastLocation
+            .addOnSuccessListener { success: Location? ->
+                success?.let { location ->
+                    _lat.value = location.latitude.toString()
+                    _lng.value = location.longitude.toString()
+                    next.invoke()
+                }
+            }
+            .addOnFailureListener {
+                it.message?.let { it1 -> Logging.e(it1) }
+            }
+    }
 }

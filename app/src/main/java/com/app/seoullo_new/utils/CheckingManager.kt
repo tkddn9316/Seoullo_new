@@ -3,6 +3,7 @@ package com.app.seoullo_new.utils
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
+import com.app.seoullo_new.R
 import com.gun0912.tedpermission.coroutine.TedPermission
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -30,7 +31,7 @@ class CheckingManager @Inject constructor(
         return withContext(Dispatchers.Main) {
             TedPermission.create()
                 .setPermissions(*permission)
-                .setDeniedMessage("If you reject permission, you cannot use this service. Please turn on permissions in settings.")
+                .setDeniedMessage(context.getString(R.string.permission_denied))
                 .check()
                 .isGranted
         }

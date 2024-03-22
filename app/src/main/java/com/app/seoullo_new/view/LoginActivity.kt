@@ -119,7 +119,7 @@ class LoginActivity : BaseActivity<ActivityLoginBinding, LoginViewModel>() {
     }
 
     private fun moveMain() {
-        launchActivity<MainActivity>()
+        launchActivity<TourListActivity>()
         if (Build.VERSION.SDK_INT >= 34) {
             overrideActivityTransition(
                 Activity.OVERRIDE_TRANSITION_CLOSE, R.anim.abc_fade_in, R.anim.abc_fade_out

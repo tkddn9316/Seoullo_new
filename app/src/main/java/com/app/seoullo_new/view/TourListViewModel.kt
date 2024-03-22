@@ -1,13 +1,15 @@
 package com.app.seoullo_new.view
 
+import android.Manifest
 import com.app.domain.model.TourInfo
 import com.app.domain.usecase.tourInfo.GetTourInfoUseCase
 import com.app.seoullo_new.BuildConfig
 import com.app.seoullo_new.base.BaseViewModel
 import com.app.seoullo_new.di.DispatcherProvider
+import com.app.seoullo_new.utils.CheckingManager
 import com.app.seoullo_new.utils.Constants.ContentTypeId
 import com.app.seoullo_new.utils.Logging
-import com.app.seoullo_new.utils.CheckingManager
+import com.google.android.gms.location.FusedLocationProviderClient
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -25,25 +27,36 @@ class TourListViewModel @Inject constructor(
     private val _tourInfoListResult = MutableStateFlow<List<TourInfo>>(emptyList())
     val tourInfoListResult = _tourInfoListResult.asStateFlow()
 
-    init {
-        // 위치 퍼미션 체크
-//        checkingManager.
-        // true 시 getTourInfo
+    fun checkPermission(fusedLocationProviderClient: FusedLocationProviderClient) {
+        onMain {
+            if (checkingManager.checkPermission(
+                    Manifest.permission.ACCESS_COARSE_LOCATION,
+                    Manifest.permission.ACCESS_FINE_LOCATION
+                )
+            ) {
+                getMyLocation(fusedLocationProviderClient) {
+                    Logging.e(lat.value!!)
+                    Logging.e(lng.value!!)
+                    getTourInfo()
+                }
+            } else {
+                Logging.e("권한 X")
+            }
+        }
     }
 
-    fun getTourInfo() {
+
+    private fun getTourInfo() {
         onIO {
             getTourInfoUseCase(
                 BuildConfig.TOUR_API_KEY,
                 ContentTypeId.RESTAURANT.type,
-                "126.559888",
-                "37.488718",
+                lng.value!!,
+                lat.value!!,
                 10000
             )
                 .flowOn(Dispatchers.IO)
-                .catch {
-                    Logging.e("실패!!!!!!!!!!!!!!!!!!!!!!!!")
-                }
+                .catch { Logging.e(it.message!!) }
                 .collect { test ->
                     test.forEach {
                         Logging.e(it.toString())

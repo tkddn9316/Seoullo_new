@@ -5,6 +5,7 @@ import com.app.seoullo_new.base.BaseViewModel
 import com.app.seoullo_new.di.DispatcherProvider
 import com.app.seoullo_new.utils.CheckingManager
 import com.app.seoullo_new.utils.Logging
+import com.google.android.gms.location.FusedLocationProviderClient
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -20,15 +21,10 @@ class MainViewModel @Inject constructor(
 
     private fun checkPermission() {
         onMain {
-            if (!checkingManager.checkPermission(
-                    Manifest.permission.ACCESS_COARSE_LOCATION,
-                    Manifest.permission.ACCESS_FINE_LOCATION
-                )
-            ) {
-                Logging.e("권한 X")
-            } else {
-                Logging.e("권한 O")
-            }
+            checkingManager.checkPermission(
+                Manifest.permission.ACCESS_COARSE_LOCATION,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            )
         }
     }
 }
