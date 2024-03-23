@@ -1,6 +1,7 @@
 package com.app.seoullo_new.view
 
 import android.app.Activity
+import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.view.View
@@ -119,14 +120,19 @@ class LoginActivity : BaseActivity<ActivityLoginBinding, LoginViewModel>() {
     }
 
     private fun moveMain() {
-        launchActivity<TourListActivity>()
-        if (Build.VERSION.SDK_INT >= 34) {
-            overrideActivityTransition(
-                Activity.OVERRIDE_TRANSITION_CLOSE, R.anim.abc_fade_in, R.anim.abc_fade_out
-            )
-        } else {
-            overridePendingTransition(R.anim.abc_fade_in, R.anim.abc_fade_out)
-        }
+        launchActivity<MainActivity>()
         finish()
+//        if (Build.VERSION.SDK_INT >= 34) {
+//            Logging.e("aa")
+//            overrideActivityTransition(
+//                Activity.OVERRIDE_TRANSITION_OPEN, R.anim.abc_fade_in, R.anim.abc_fade_out, Color.TRANSPARENT
+//            )
+//        } else {
+//            Logging.e("bb")
+//            @Suppress("DEPRECATION")
+//            overridePendingTransition(R.anim.abc_fade_in, R.anim.abc_fade_out)
+//        }
+        @Suppress("DEPRECATION")
+        overridePendingTransition(R.anim.abc_fade_in, R.anim.abc_fade_out)
     }
 }

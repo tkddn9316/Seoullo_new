@@ -1,10 +1,7 @@
 package com.app.seoullo_new.base
 
-import android.Manifest
 import android.annotation.SuppressLint
-import android.content.pm.PackageManager
 import android.location.Location
-import androidx.core.app.ActivityCompat
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -12,7 +9,6 @@ import androidx.lifecycle.viewModelScope
 import com.app.seoullo_new.di.DispatcherProvider
 import com.app.seoullo_new.utils.Logging
 import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationServices
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -64,6 +60,7 @@ open class BaseViewModel(dispatcherProvider: DispatcherProvider) : ViewModel(),
         withContext(Dispatchers.Main) { loading.value = false }
     }
 
+    /** 현재 위치 위도, 경도 가져오기 */
     @SuppressLint("MissingPermission")
     fun getMyLocation(fusedLocationProviderClient: FusedLocationProviderClient, next: (() -> Unit)) {
         fusedLocationProviderClient.lastLocation
