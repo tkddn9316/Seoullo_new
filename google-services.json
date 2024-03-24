@@ -22,6 +22,14 @@
           }
         },
         {
+          "client_id": "1059945270546-flbgiket3njvjmard7qppqaqtuegq830.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.app.seoullo_new",
+            "certificate_hash": "a8a8b7d7e6ae3e1f8545f96c8a617bf4e4ac7bd4"
+          }
+        },
+        {
           "client_id": "1059945270546-ntt3kgi13gha83tulngd4gbk7jpj9fo8.apps.googleusercontent.com",
           "client_type": 3
         }

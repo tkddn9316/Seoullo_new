@@ -2,6 +2,7 @@ package com.app.seoullo_new.view
 
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.core.net.toUri
@@ -34,6 +35,7 @@ class LoginActivity : BaseActivity<ActivityLoginBinding, LoginViewModel2>() {
     }
 
     override fun onCreateView(savedInstanceState: Bundle?) {
+        // TODO: 구글 로그인 변경 예정: https://soopeach.tistory.com/176
         // Configure Google Sign In
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(getString(R.string.default_web_client_id))
@@ -96,6 +98,10 @@ class LoginActivity : BaseActivity<ActivityLoginBinding, LoginViewModel2>() {
                         // Google Sign In failed, update UI appropriately
                         Logging.e("Google sign in failed", e)
                     }
+                }
+
+                else -> {
+                    Toast.makeText(this, "Google sign in failed", Toast.LENGTH_SHORT).show()
                 }
             }
         }
