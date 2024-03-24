@@ -4,7 +4,7 @@ import android.Manifest
 import com.app.domain.model.TourInfo
 import com.app.domain.usecase.tourInfo.GetTourInfoUseCase
 import com.app.seoullo_new.BuildConfig
-import com.app.seoullo_new.base.BaseViewModel
+import com.app.seoullo_new.base.BaseViewModel2
 import com.app.seoullo_new.di.DispatcherProvider
 import com.app.seoullo_new.utils.CheckingManager
 import com.app.seoullo_new.utils.Constants.ContentTypeId
@@ -19,11 +19,11 @@ import kotlinx.coroutines.flow.flowOn
 import javax.inject.Inject
 
 @HiltViewModel
-class TourListViewModel @Inject constructor(
+class TourListViewModel2 @Inject constructor(
     dispatcherProvider: DispatcherProvider,
     private val getTourInfoUseCase: GetTourInfoUseCase,
     private val checkingManager: CheckingManager
-) : BaseViewModel(dispatcherProvider) {
+) : BaseViewModel2(dispatcherProvider) {
     private val _tourInfoListResult = MutableStateFlow<List<TourInfo>>(emptyList())
     val tourInfoListResult = _tourInfoListResult.asStateFlow()
 

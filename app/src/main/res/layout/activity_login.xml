@@ -7,7 +7,7 @@
 
         <variable
             name="viewModel"
-            type="com.app.seoullo_new.view.LoginViewModel" />
+            type="com.app.seoullo_new.view.LoginViewModel2" />
 
         <variable
             name="view"

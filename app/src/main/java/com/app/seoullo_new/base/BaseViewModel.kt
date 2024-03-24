@@ -5,18 +5,13 @@ import android.location.Location
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.app.seoullo_new.di.DispatcherProvider
 import com.app.seoullo_new.utils.Logging
 import com.google.android.gms.location.FusedLocationProviderClient
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
-open class BaseViewModel(dispatcherProvider: DispatcherProvider) : ViewModel(),
-    DispatcherProvider by dispatcherProvider {
-
+/**
+ * 기본 형태 BaseViewModel
+ */
+open class BaseViewModel : ViewModel() {
     /** AppBar Title */
     val title = MutableLiveData("")
 
@@ -32,33 +27,6 @@ open class BaseViewModel(dispatcherProvider: DispatcherProvider) : ViewModel(),
     val lat: LiveData<String> = _lat
     private val _lng = MutableLiveData("")
     val lng: LiveData<String> = _lng
-
-    /** viewModelScope Main Thread */
-    inline fun BaseViewModel.onMain(
-        crossinline body: suspend CoroutineScope.() -> Unit
-    ) = viewModelScope.launch {
-        loading.value = true
-        body(this)
-        loading.value = false
-    }
-
-    /** viewModelScope IO Thread */
-    inline fun BaseViewModel.onIO(
-        crossinline body: suspend CoroutineScope.() -> Unit
-    ) = viewModelScope.launch(io) {
-        withContext(Dispatchers.Main) { loading.value = true }
-        body(this)
-        withContext(Dispatchers.Main) { loading.value = false }
-    }
-
-    /** viewModelScope Default */
-    inline fun BaseViewModel.onDefault(
-        crossinline body: suspend CoroutineScope.() -> Unit
-    ) = viewModelScope.launch(default) {
-        withContext(Dispatchers.Main) { loading.value = true }
-        body(this)
-        withContext(Dispatchers.Main) { loading.value = false }
-    }
 
     /** 현재 위치 위도, 경도 가져오기 */
     @SuppressLint("MissingPermission")

@@ -4,7 +4,7 @@ import com.app.domain.model.User
 import com.app.domain.usecase.user.DeleteUserUseCase
 import com.app.domain.usecase.user.InsertUserUseCase
 import com.app.domain.usecase.user.SelectUserUseCase
-import com.app.seoullo_new.base.BaseViewModel
+import com.app.seoullo_new.base.BaseViewModel2
 import com.app.seoullo_new.di.DispatcherProvider
 import com.app.seoullo_new.utils.Logging
 import com.app.seoullo_new.utils.LoginState
@@ -19,12 +19,12 @@ import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
-class LoginViewModel @Inject constructor(
+class LoginViewModel2 @Inject constructor(
     dispatcherProvider: DispatcherProvider,
     private val selectUserUseCase: SelectUserUseCase,
     private val insertUserUseCase: InsertUserUseCase,
     private val deleteUserUseCase: DeleteUserUseCase
-) : BaseViewModel(dispatcherProvider) {
+) : BaseViewModel2(dispatcherProvider) {
     // 데이터를 캡슐화 하여 외부(뷰)에서 접근할 수 없도록 하고
     // 외부 접근 프로퍼티는 immutable 타입으로 제한해 변경할 수 없도록 한다.
     private val _isLogin = MutableStateFlow<LoginState>(LoginState.loading)

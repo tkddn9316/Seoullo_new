@@ -1,8 +1,5 @@
 package com.app.seoullo_new.view
 
-import android.app.Activity
-import android.graphics.Color
-import android.os.Build
 import android.os.Bundle
 import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
@@ -25,9 +22,9 @@ import com.google.firebase.auth.auth
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class LoginActivity : BaseActivity<ActivityLoginBinding, LoginViewModel>() {
+class LoginActivity : BaseActivity<ActivityLoginBinding, LoginViewModel2>() {
 
-    override val viewModel: LoginViewModel by viewModels()
+    override val viewModel: LoginViewModel2 by viewModels()
 
     private lateinit var auth: FirebaseAuth
     private lateinit var googleSignInClient: GoogleSignInClient

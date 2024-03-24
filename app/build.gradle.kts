@@ -101,4 +101,9 @@ dependencies {
 
     // Ted Permission
     implementation("io.github.ParkSangGwon:tedpermission-coroutine:3.3.0")
+
+    // navigation
+    val nav_version = "2.7.7"
+    implementation("androidx.navigation:navigation-fragment-ktx:$nav_version")
+    implementation("androidx.navigation:navigation-ui-ktx:$nav_version")
 }
