@@ -9,9 +9,9 @@ import com.google.android.gms.location.LocationServices
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class TourListActivity : BaseActivity<ActivityTourListBinding, TourListViewModel2>() {
+class TourListActivity : BaseActivity<ActivityTourListBinding, TourListViewModel>() {
 
-    override val viewModel: TourListViewModel2 by viewModels()
+    override val viewModel: TourListViewModel by viewModels()
 
     override fun setup() {
         setBinding(R.layout.activity_tour_list)

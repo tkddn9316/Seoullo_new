@@ -19,7 +19,7 @@ import kotlinx.coroutines.flow.flowOn
 import javax.inject.Inject
 
 @HiltViewModel
-class TourListViewModel2 @Inject constructor(
+class TourListViewModel @Inject constructor(
     dispatcherProvider: DispatcherProvider,
     private val getTourInfoUseCase: GetTourInfoUseCase,
     private val checkingManager: CheckingManager

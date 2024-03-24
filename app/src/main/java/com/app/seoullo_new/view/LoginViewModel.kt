@@ -19,7 +19,7 @@ import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
-class LoginViewModel2 @Inject constructor(
+class LoginViewModel @Inject constructor(
     dispatcherProvider: DispatcherProvider,
     private val selectUserUseCase: SelectUserUseCase,
     private val insertUserUseCase: InsertUserUseCase,

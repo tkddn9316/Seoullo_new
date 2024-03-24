@@ -8,7 +8,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-class MainViewModel2 @Inject constructor(
+class MainViewModel @Inject constructor(
     dispatcherProvider: DispatcherProvider,
     private val checkingManager: CheckingManager
 ) : BaseViewModel2(dispatcherProvider) {

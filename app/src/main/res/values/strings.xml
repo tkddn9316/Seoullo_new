@@ -5,6 +5,12 @@
     <string name="no">N</string>
     <string name="sign_in_with_google">Sign in with Google</string>
     <string name="permission_denied">If you reject permission, you cannot use this service. Please turn on permissions in settings.</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="skip">SKIP</string>
+    <string name="next">NEXT</string>
+    <string name="intro1_title">Welcome to Seoul!!</string>
+    <string name="intro1_contents">Thank you for using this app! It is a Seoul tour guide app.\nI\'m sure it will be a great help if you use this app while traveling to Seoul.</string>
+    <string name="intro2_title">Function!!</string>
+    <string name="intro2_contents">"Seoullo" has various functions.\nThere are travel destinations and restaurants that will remain memorable if you go, and maps and translations to go there.</string>
+    <string name="intro3_title">Let\'s going to Seoullo!</string>
+    <string name="intro3_contents">Now start a happy tour of Seoul with "Seoullo"!</string>
 </resources>

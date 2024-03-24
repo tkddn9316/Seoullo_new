@@ -3,9 +3,11 @@
     <color name="black">#FF000000</color>
     <color name="black_transparent">#80000000</color>
     <color name="black_100">#1C1B28</color>
+    <color name="black_200">#203152</color>
     <color name="white">#FFFFFFFF</color>
     <color name="color_92c8e0">#92c8e0</color>
     <color name="red_500">#eb3246</color>
     <color name="gray_500">#dcdfe3</color>
     <color name="gray_600">#8f9bb3</color>
+    <color name="gray_700">#7C8698</color>
 </resources>

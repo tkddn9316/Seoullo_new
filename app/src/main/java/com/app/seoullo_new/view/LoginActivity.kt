@@ -23,9 +23,9 @@ import com.google.firebase.auth.auth
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class LoginActivity : BaseActivity<ActivityLoginBinding, LoginViewModel2>() {
+class LoginActivity : BaseActivity<ActivityLoginBinding, LoginViewModel>() {
 
-    override val viewModel: LoginViewModel2 by viewModels()
+    override val viewModel: LoginViewModel by viewModels()
 
     private lateinit var auth: FirebaseAuth
     private lateinit var googleSignInClient: GoogleSignInClient

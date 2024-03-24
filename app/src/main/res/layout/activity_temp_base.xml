@@ -8,7 +8,7 @@
 
         <variable
             name="viewModel"
-            type="com.app.seoullo_new.view.MainViewModel2" />
+            type="com.app.seoullo_new.view.MainViewModel" />
 
         <variable
             name="view"
