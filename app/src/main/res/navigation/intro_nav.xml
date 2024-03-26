@@ -9,19 +9,19 @@
         android:id="@+id/intro1Fragment"
         android:name="com.app.seoullo_new.view.fragment.Intro1Fragment"
         android:label="fragment_intro1"
-        tools:layout="@layout/fragment_intro1" >
+        tools:layout="@layout/fragment_intro1">
         <action
             android:id="@+id/action_intro1Fragment_to_intro2Fragment"
-            app:destination="@id/intro2Fragment" />
+            app:destination="@id/intro2Fragment"/>
     </fragment>
     <fragment
         android:id="@+id/intro2Fragment"
         android:name="com.app.seoullo_new.view.fragment.Intro2Fragment"
         android:label="fragment_intro2"
-        tools:layout="@layout/fragment_intro2" >
+        tools:layout="@layout/fragment_intro2">
         <action
             android:id="@+id/action_intro2Fragment_to_intro3Fragment"
-            app:destination="@id/intro3Fragment" />
+            app:destination="@id/intro3Fragment"/>
     </fragment>
     <fragment
         android:id="@+id/intro3Fragment"

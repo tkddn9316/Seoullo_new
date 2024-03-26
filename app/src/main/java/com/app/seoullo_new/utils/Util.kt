@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import androidx.fragment.app.Fragment
 import com.app.domain.model.BaseModel
 import com.app.seoullo_new.utils.Constants.INTENT_DATA
 
@@ -11,7 +12,7 @@ import com.app.seoullo_new.utils.Constants.INTENT_DATA
  * 각종 유틸 클래스
  */
 object Util {
-
+    // Activity intent
     inline fun <reified T : Activity> Activity.launchActivity(
         model: BaseModel? = null,
         options: Bundle? = null,
@@ -63,4 +64,33 @@ object Util {
 
     inline fun <reified T : Activity> Context.newIntent(data: String): Intent =
         Intent(this, T::class.java).apply { putExtra(INTENT_DATA, data) }
+
+    // Fragment intent
+    inline fun <reified T : Activity> Fragment.launchActivity(
+        model: BaseModel? = null,
+        options: Bundle? = null,
+        noinline init: Intent.() -> Unit = {}
+    ) {
+
+        val intent = requireContext().newIntent<T>()
+            .apply { model?.let { putExtra(INTENT_DATA, it) } }
+        intent.init()
+        startActivity(intent, options)
+    }
+
+    inline fun <reified T : Activity> Fragment.launchActivity(
+        data: String,
+        options: Bundle? = null,
+        noinline init: Intent.() -> Unit = {}
+    ) {
+
+        val intent = requireContext().newIntent<T>().apply { putExtra(INTENT_DATA, data) }
+        intent.init()
+        startActivity(intent, options)
+
+    }
+
+    fun Class<*>.getTag(): String {
+        return this.simpleName
+    }
 }

@@ -70,6 +70,7 @@ dependencies {
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
     implementation("androidx.activity:activity-ktx:1.8.2")
     implementation("androidx.fragment:fragment-ktx:1.6.2")
+    implementation ("androidx.preference:preference-ktx:1.2.1")
     // 위치 구하기
     implementation("com.google.android.gms:play-services-location:21.2.0")
 

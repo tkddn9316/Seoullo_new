@@ -1,6 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.app.seoullo_new.view.IntroViewModel" />
+
+        <variable
+            name="view"
+            type="com.app.seoullo_new.view.fragment.Intro2Fragment" />
+    </data>
+
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
@@ -20,8 +31,8 @@
             <androidx.appcompat.widget.AppCompatTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="center"
                 android:layout_gravity="left"
+                android:gravity="center"
                 android:text="@string/intro2_title"
                 android:textColor="@color/black_200"
                 android:textSize="23dp"
@@ -57,6 +68,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="6dp"
                 android:layout_weight="1"
+                android:onClick="@{view::onClick}"
                 android:paddingTop="14dp"
                 android:paddingBottom="14dp"
                 android:text="@string/skip" />
@@ -68,6 +80,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="6dp"
                 android:layout_weight="1"
+                android:onClick="@{view::onClick}"
                 android:paddingTop="14dp"
                 android:paddingBottom="14dp"
                 android:text="@string/next" />

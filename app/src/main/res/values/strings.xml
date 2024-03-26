@@ -7,6 +7,7 @@
     <string name="permission_denied">If you reject permission, you cannot use this service. Please turn on permissions in settings.</string>
     <string name="skip">SKIP</string>
     <string name="next">NEXT</string>
+    <string name="start">START</string>
     <string name="intro1_title">Welcome to Seoul!!</string>
     <string name="intro1_contents">Thank you for using this app! It is a Seoul tour guide app.\nI\'m sure it will be a great help if you use this app while traveling to Seoul.</string>
     <string name="intro2_title">Function!!</string>

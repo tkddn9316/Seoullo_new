@@ -11,6 +11,7 @@ import com.app.seoullo_new.base.BaseActivity
 import com.app.seoullo_new.databinding.ActivityLoginBinding
 import com.app.seoullo_new.utils.Logging
 import com.app.seoullo_new.utils.LoginState
+import com.app.seoullo_new.utils.PreferenceManager
 import com.app.seoullo_new.utils.Util.launchActivity
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
@@ -123,15 +124,18 @@ class LoginActivity : BaseActivity<ActivityLoginBinding, LoginViewModel>() {
     }
 
     private fun moveMain() {
-        launchActivity<MainActivity>()
+        val preferences = PreferenceManager(this)
+        if (preferences.getIsIntro()) {
+            launchActivity<IntroActivity>()
+        } else {
+            launchActivity<MainActivity>()
+        }
         finish()
 //        if (Build.VERSION.SDK_INT >= 34) {
-//            Logging.e("aa")
 //            overrideActivityTransition(
 //                Activity.OVERRIDE_TRANSITION_OPEN, R.anim.abc_fade_in, R.anim.abc_fade_out, Color.TRANSPARENT
 //            )
 //        } else {
-//            Logging.e("bb")
 //            @Suppress("DEPRECATION")
 //            overridePendingTransition(R.anim.abc_fade_in, R.anim.abc_fade_out)
 //        }

@@ -1,6 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.app.seoullo_new.view.IntroViewModel" />
+
+        <variable
+            name="view"
+            type="com.app.seoullo_new.view.fragment.Intro3Fragment" />
+    </data>
+
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
@@ -50,26 +61,16 @@
             android:orientation="horizontal">
 
             <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/skip_"
-                style="@style/button_gray600"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="6dp"
-                android:layout_weight="1"
-                android:paddingTop="14dp"
-                android:paddingBottom="14dp"
-                android:text="@string/skip" />
-
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/next_"
+                android:id="@+id/start_"
                 style="@style/button_black100"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="6dp"
                 android:layout_weight="1"
+                android:onClick="@{view::onClick}"
                 android:paddingTop="14dp"
                 android:paddingBottom="14dp"
-                android:text="@string/next" />
+                android:text="@string/start" />
         </LinearLayout>
     </LinearLayout>
 </layout>
