@@ -16,3 +16,4 @@
 * **2024/03/04** Initial commit
 * **2024/03/08** Local DB, View Setting
 * **2024/03/20** Google 로그인 연동
+* **2024/03/26** Intro 화면 개발
