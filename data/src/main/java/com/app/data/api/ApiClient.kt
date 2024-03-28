@@ -12,7 +12,7 @@ import java.util.concurrent.TimeUnit
  * Api Module 에 사용할 API URL 선언
  */
 object ApiClient {
-    private const val BASE_URL = "https://apis.data.go.kr/B551011/EngService1/"
+    private const val BASE_URL = "https://places.googleapis.com/"
     private const val TIMEOUT = 15
 
     fun create(): ApiInterface {

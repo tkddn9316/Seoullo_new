@@ -23,6 +23,7 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
         buildConfigField("String", "TOUR_API_KEY", getApiKey("TOUR_API_KEY"))
+        buildConfigField("String", "SEOULLO_GOOGLE_MAPS_API_KEY", getApiKey("SEOULLO_GOOGLE_MAPS_API_KEY"))
     }
 
     buildTypes {
