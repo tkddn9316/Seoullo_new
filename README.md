@@ -17,3 +17,4 @@
 * **2024/03/08** Local DB, View Setting
 * **2024/03/20** Google 로그인 연동
 * **2024/03/26** Intro 화면 개발
+* **2024/03/28** Google Places API(주변 검색) 적용 완료
