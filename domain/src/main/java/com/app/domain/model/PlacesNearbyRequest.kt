@@ -1,6 +1,6 @@
 package com.app.domain.model
 
-data class PlacesRequest(
+data class PlacesNearbyRequest(
     var includedTypes: List<String>,
     var maxResultCount: Int,
     var locationRestriction: LocationRestriction

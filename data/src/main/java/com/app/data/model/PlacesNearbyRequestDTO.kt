@@ -2,7 +2,7 @@ package com.app.data.model
 
 import com.google.gson.annotations.SerializedName
 
-data class PlacesRequestDTO(
+data class PlacesNearbyRequestDTO(
     @SerializedName("includedTypes")
     var includedTypes: List<String>,
     @SerializedName("maxResultCount")

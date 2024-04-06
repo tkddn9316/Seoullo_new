@@ -5,6 +5,7 @@ import android.content.SharedPreferences
 import com.app.seoullo_new.utils.PreferenceHelper.get
 import com.app.seoullo_new.utils.PreferenceHelper.set
 
+/** SharedPreference */
 class PreferenceManager(context: Context) {
     private val prefs: SharedPreferences = PreferenceHelper.defaultPrefs(context)
 

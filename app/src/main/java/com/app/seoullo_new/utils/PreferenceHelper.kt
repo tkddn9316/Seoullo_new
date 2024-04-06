@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.SharedPreferences
 import androidx.preference.PreferenceManager
 
+/** SharedPreference Config */
 object PreferenceHelper {
     fun defaultPrefs(context: Context): SharedPreferences =
         PreferenceManager.getDefaultSharedPreferences(context)

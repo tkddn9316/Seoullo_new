@@ -1,8 +1,8 @@
 package com.app.data.di
 
 import com.app.data.api.ApiInterface
-import com.app.data.source.PlacesDataSource
-import com.app.data.source.PlacesDataSourceImpl
+import com.app.data.source.PlacesNearbyDataSource
+import com.app.data.source.PlacesNearbyDataSourceImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -15,7 +15,7 @@ class RemoteDataModule {
 
     @Provides
     @Singleton
-    fun providePlacesDataSource(apiInterface: ApiInterface): PlacesDataSource {
-        return PlacesDataSourceImpl(apiInterface)
+    fun providePlacesNearbyDataSource(apiInterface: ApiInterface): PlacesNearbyDataSource {
+        return PlacesNearbyDataSourceImpl(apiInterface)
     }
 }

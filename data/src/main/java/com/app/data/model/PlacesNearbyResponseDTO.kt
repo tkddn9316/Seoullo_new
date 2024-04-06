@@ -2,7 +2,7 @@ package com.app.data.model
 
 import com.google.gson.annotations.SerializedName
 
-data class PlacesResponseDTO(
+data class PlacesNearbyResponseDTO(
     @SerializedName("places")
     val place: List<Place>
 ) {

@@ -2,12 +2,13 @@ package com.app.seoullo_new.view
 
 import android.Manifest
 import com.app.domain.model.Places
-import com.app.domain.model.PlacesRequest
-import com.app.domain.usecase.tourInfo.GetPlacesListUseCase
+import com.app.domain.model.PlacesNearbyRequest
+import com.app.domain.usecase.places.GetPlacesNearbyListUseCase
 import com.app.seoullo_new.BuildConfig
 import com.app.seoullo_new.base.BaseViewModel2
 import com.app.seoullo_new.di.DispatcherProvider
 import com.app.seoullo_new.utils.CheckingManager
+import com.app.seoullo_new.utils.Constants.ContentType
 import com.app.seoullo_new.utils.Logging
 import com.google.android.gms.location.FusedLocationProviderClient
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -21,7 +22,7 @@ import javax.inject.Inject
 @HiltViewModel
 class PlacesListViewModel @Inject constructor(
     dispatcherProvider: DispatcherProvider,
-    private val getPlacesListUseCase: GetPlacesListUseCase,
+    private val getPlacesNearbyListUseCase: GetPlacesNearbyListUseCase,
     private val checkingManager: CheckingManager
 ) : BaseViewModel2(dispatcherProvider) {
     private val _tourInfoListResult = MutableStateFlow<List<Places>>(emptyList())
@@ -37,7 +38,7 @@ class PlacesListViewModel @Inject constructor(
                 getMyLocation(fusedLocationProviderClient) {
                     Logging.e(lat.value!!)
                     Logging.e(lng.value!!)
-                    getTourInfo()
+                    getPlacesNearbyList()
                 }
             } else {
                 Logging.e("권한 X")
@@ -46,20 +47,21 @@ class PlacesListViewModel @Inject constructor(
     }
 
 
-    private fun getTourInfo() {
+    /** 위치 기반 리스트 검색(1Km) */
+    private fun getPlacesNearbyList() {
         onIO {
-            getPlacesListUseCase(
+            getPlacesNearbyListUseCase(
                 BuildConfig.SEOULLO_GOOGLE_MAPS_API_KEY,
-                PlacesRequest(
-                    listOf("restaurant"),
+                PlacesNearbyRequest(
+                    listOf(ContentType.RESTAURANT.type),
                     10,
-                    PlacesRequest.LocationRestriction(
-                        PlacesRequest.Circle(
-                            PlacesRequest.Center(
+                    PlacesNearbyRequest.LocationRestriction(
+                        PlacesNearbyRequest.Circle(
+                            PlacesNearbyRequest.Center(
                                 lat.value!!,
                                 lng.value!!
                             ),
-                            radius = 500.0
+                            radius = 1000.0
                         )
                     )
                 )
