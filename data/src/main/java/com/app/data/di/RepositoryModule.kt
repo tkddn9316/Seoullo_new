@@ -4,6 +4,7 @@ import com.app.data.source.PlacesNearbyDataSource
 import com.app.data.source.UserDataSource
 import com.app.data.repository.PlacesNearbyRepositoryImpl
 import com.app.data.repository.UserRepositoryImpl
+import com.app.data.source.PlacesPhotoNearbyDataSource
 import com.app.domain.repository.PlacesNearbyRepository
 import com.app.domain.repository.UserRepository
 import dagger.Module
@@ -21,8 +22,8 @@ class RepositoryModule {
 
     @Provides
     @Singleton
-    fun providePlacesNearbyRepository(placesNearbyDataSource: PlacesNearbyDataSource): PlacesNearbyRepository {
-        return PlacesNearbyRepositoryImpl(placesNearbyDataSource)
+    fun providePlacesNearbyRepository(placesNearbyDataSource: PlacesNearbyDataSource, placesPhotoNearbyDataSource: PlacesPhotoNearbyDataSource): PlacesNearbyRepository {
+        return PlacesNearbyRepositoryImpl(placesNearbyDataSource, placesPhotoNearbyDataSource)
     }
 
     @Provides

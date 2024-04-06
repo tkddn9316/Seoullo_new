@@ -7,5 +7,6 @@ package com.app.domain.model
 data class Places(
     val name: String,
     val id: String,
-    val displayName: String
+    val displayName: String,
+    val photoUrl: String
 ) : BaseModel()

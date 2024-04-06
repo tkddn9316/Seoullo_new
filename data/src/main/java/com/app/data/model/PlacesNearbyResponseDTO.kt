@@ -12,7 +12,10 @@ data class PlacesNearbyResponseDTO(
         @SerializedName("id")
         val id: String,
         @SerializedName("displayName")
-        val displayName: DisplayName
+        val displayName: DisplayName,
+        @SerializedName("photos")
+        val photos: List<Photos>?,
+        var photoUrl: String = ""
     )
 
     data class DisplayName(
@@ -20,6 +23,15 @@ data class PlacesNearbyResponseDTO(
         val text: String,
         @SerializedName("languageCode")
         val languageCode: String
+    )
+
+    data class Photos(
+        @SerializedName("name")
+        val name: String,
+        @SerializedName("widthPx")
+        val widthPx: String,
+        @SerializedName("heightPx")
+        val heightPx: String
     )
 }
 

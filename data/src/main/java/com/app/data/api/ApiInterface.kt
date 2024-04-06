@@ -2,10 +2,14 @@ package com.app.data.api
 
 import com.app.data.model.PlacesNearbyRequestDTO
 import com.app.data.model.PlacesNearbyResponseDTO
+import com.app.data.model.PlacesPhotoNearbyResponseDTO
 import retrofit2.http.Body
+import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.Headers
 import retrofit2.http.POST
+import retrofit2.http.Path
+import retrofit2.http.Query
 
 /**
  * 서버와 통신 할 API 리스트(구글 관련)
@@ -19,4 +23,14 @@ interface ApiInterface {
         @Header("X-Goog-FieldMask") fieldMask: String = "places.id,places.displayName,places.name,places.photos",
         @Body placesNearbyRequestDTO: PlacesNearbyRequestDTO
     ): PlacesNearbyResponseDTO
+
+    // 사진 가져오기
+    @GET("v1/{NAME}/media")
+    suspend fun getPlacePhotoNearby(
+        @Path(value = "NAME", encoded = true) name: String,
+        @Query("maxHeightPx") maxHeightPx: Int = 500,
+        @Query("maxWidthPx") maxWidthPx: Int = 500,
+        @Query("key") key: String,
+        @Query("skipHttpRedirect") skipHttpRedirect: Boolean = true     // JSON 응답값으로
+    ): PlacesPhotoNearbyResponseDTO
 }

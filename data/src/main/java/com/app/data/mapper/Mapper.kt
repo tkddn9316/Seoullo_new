@@ -28,7 +28,8 @@ fun mapperToPlaceNearby(place: PlacesNearbyResponseDTO): List<Places> =
         Places(
             it.name,
             it.id,
-            it.displayName.text
+            it.displayName.text,
+            it.photoUrl
         )
     }
 
