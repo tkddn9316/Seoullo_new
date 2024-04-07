@@ -25,8 +25,8 @@ class PlacesListViewModel @Inject constructor(
     private val getPlacesNearbyListUseCase: GetPlacesNearbyListUseCase,
     private val checkingManager: CheckingManager
 ) : BaseViewModel2(dispatcherProvider) {
-    private val _tourInfoListResult = MutableStateFlow<List<Places>>(emptyList())
-    val tourInfoListResult = _tourInfoListResult.asStateFlow()
+    private val _placesListResult = MutableStateFlow<List<Places>>(emptyList())
+    val placesListResult = _placesListResult.asStateFlow()
 
     fun checkPermission(fusedLocationProviderClient: FusedLocationProviderClient) {
         onMain {
@@ -39,6 +39,17 @@ class PlacesListViewModel @Inject constructor(
                     Logging.e(lat.value!!)
                     Logging.e(lng.value!!)
                     getPlacesNearbyList()
+
+
+                    // TODO: TEST DATA
+//                    _placesListResult.value = listOf(
+//                        Places(
+//                            "places/ChIJWX6IgJaffDURpwHX788tTrI, id=ChIJWX6IgJaffDURpwHX788tTrI",
+//                            "ChIJWX6IgJaffDURpwHX788tTrI",
+//                            "Jungdamun Bossam",
+//                            "https://lh3.googleusercontent.com/places/ANXAkqE4nx0pku8WMpln81cMUewDJOucUKgppocTsmAL8kzDsXVMVK362vUhvRU2ArG8MhfjCY4jUarT3ygcgGF6vCQT_f9ImBKRQ68=s4800-w500-h500"
+//                        )
+//                    )
                 }
             } else {
                 Logging.e("권한 X")
@@ -48,6 +59,7 @@ class PlacesListViewModel @Inject constructor(
 
 
     /** 위치 기반 리스트 검색(1Km) */
+    // TODO: 매번 같은 이미지 안불러오도록 이미지 캐싱 필요
     private fun getPlacesNearbyList() {
         onIO {
             getPlacesNearbyListUseCase(
@@ -72,7 +84,7 @@ class PlacesListViewModel @Inject constructor(
                     test.forEach {
                         Logging.e(it.toString())
                     }
-                    _tourInfoListResult.value = test
+                    _placesListResult.value = test
                 }
         }
     }

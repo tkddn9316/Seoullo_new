@@ -8,6 +8,7 @@ import com.app.data.source.PlacesPhotoNearbyDataSource
 import com.app.domain.model.Places
 import com.app.domain.model.PlacesNearbyRequest
 import com.app.domain.repository.PlacesNearbyRepository
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flatMapConcat
 import kotlinx.coroutines.flow.flow
@@ -20,9 +21,9 @@ import javax.inject.Inject
 class PlacesNearbyRepositoryImpl @Inject constructor(
     private val placesNearbyDataSource: PlacesNearbyDataSource,
     private val placesPhotoNearbyDataSource: PlacesPhotoNearbyDataSource
-) :
-    PlacesNearbyRepository {
+) : PlacesNearbyRepository {
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     override fun getPlacesNearbyList(
         apiKey: String,
         placesNearbyRequest: PlacesNearbyRequest
@@ -48,6 +49,7 @@ class PlacesNearbyRepositoryImpl @Inject constructor(
         data: PlacesNearbyResponseDTO
     ): Flow<PlacesNearbyResponseDTO> {
         return flow {
+            // 구글에 등록된 사진이 최소 1장 이상 있을 경우
             if (data.place.any { place -> !place.photos.isNullOrEmpty() }) {
                 data.place.forEachIndexed { index, place ->
                     // 무조건 1번째 사진 사용
