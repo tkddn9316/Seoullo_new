@@ -12,6 +12,7 @@
 * Google Places API로 위치기반 관광지 검색(1Km 내외)
 * Google Directions API로 길찾기 서비스 제공(예정)
 * Papago API로 번역 기능 제공(예정)
+* Jetpack Compose(현재 공부중이며 일부 UI만 우선 적용)
 
 ## 작업 히스토리
 * **2024/03/04** Initial commit
