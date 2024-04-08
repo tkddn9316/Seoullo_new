@@ -47,6 +47,7 @@ class PlacesListViewModel @Inject constructor(
 //                            "places/ChIJWX6IgJaffDURpwHX788tTrI, id=ChIJWX6IgJaffDURpwHX788tTrI",
 //                            "ChIJWX6IgJaffDURpwHX788tTrI",
 //                            "Jungdamun Bossam",
+//                            "주소",
 //                            "https://lh3.googleusercontent.com/places/ANXAkqE4nx0pku8WMpln81cMUewDJOucUKgppocTsmAL8kzDsXVMVK362vUhvRU2ArG8MhfjCY4jUarT3ygcgGF6vCQT_f9ImBKRQ68=s4800-w500-h500"
 //                        )
 //                    )
@@ -79,7 +80,7 @@ class PlacesListViewModel @Inject constructor(
                 )
             )
                 .flowOn(Dispatchers.IO)
-                .catch { Logging.e(it.message!!) }
+                .catch { Logging.e(it.message ?: "") }
                 .collect { test ->
                     test.forEach {
                         Logging.e(it.toString())

@@ -3,6 +3,7 @@ package com.app.data.mapper
 import com.app.data.model.PlacesNearbyRequestDTO
 import com.app.data.model.PlacesNearbyResponseDTO
 import com.app.data.model.UserEntity
+import com.app.data.utils.Logging
 import com.app.domain.model.Places
 import com.app.domain.model.PlacesNearbyRequest
 import com.app.domain.model.User
@@ -25,11 +26,14 @@ fun mapperToPlaceNearbyDTO(place: PlacesNearbyRequest): PlacesNearbyRequestDTO =
 
 fun mapperToPlaceNearby(place: PlacesNearbyResponseDTO): List<Places> =
     place.place.toList().map {
+        Logging.e(it)
         Places(
             it.name,
             it.id,
             it.displayName.text,
             it.formattedAddress,
+            it.primaryTypeDisplayName.text,
+            it.regularOpeningHours?.openNow ?: run { false },
             it.photoUrl
         )
     }

@@ -9,5 +9,7 @@ data class Places(
     val id: String,
     val displayName: String,
     val address: String,
+    val description: String,
+    val openNow: Boolean,
     val photoUrl: String
 ) : BaseModel()

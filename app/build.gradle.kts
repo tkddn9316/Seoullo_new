@@ -103,6 +103,7 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-test-manifest")
     implementation("androidx.constraintlayout:constraintlayout-compose:1.1.0-alpha13")
     implementation("androidx.compose.runtime:runtime-livedata:1.5.2")
+    implementation("androidx.compose.material:material-icons-extended:1.6.5")
 
     // Glide
     implementation("com.github.skydoves:landscapist-glide:1.4.7")
@@ -143,4 +144,9 @@ dependencies {
     val nav_version = "2.7.7"
     implementation("androidx.navigation:navigation-fragment-ktx:$nav_version")
     implementation("androidx.navigation:navigation-ui-ktx:$nav_version")
+
+    // paging
+    val paging_version = "3.2.1"
+    implementation("androidx.paging:paging-runtime-ktx:$paging_version")
+    implementation("androidx.paging:paging-compose:3.3.0-beta01")
 }

@@ -15,4 +15,6 @@
     <string name="intro3_title">Let\'s going to Seoullo!</string>
     <string name="intro3_contents">Now start a happy tour of Seoul with "Seoullo"!</string>
     <string name="title_activity_places_list2">PlacesListActivity2</string>
+    <string name="open">OPEN</string>
+    <string name="close">CLOSE</string>
 </resources>

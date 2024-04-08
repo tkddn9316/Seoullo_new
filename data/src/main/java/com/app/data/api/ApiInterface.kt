@@ -20,7 +20,8 @@ interface ApiInterface {
     @Headers("Content-Type: application/json")
     suspend fun getPlacesNearbyList(
         @Header("X-Goog-Api-Key") apiKey: String,
-        @Header("X-Goog-FieldMask") fieldMask: String = "places.id,places.displayName,places.name,places.photos,places.formattedAddress",
+        @Header("X-Goog-FieldMask") fieldMask: String =
+            "places.id,places.displayName,places.name,places.photos,places.formattedAddress,places.primaryTypeDisplayName,places.regularOpeningHours",
         @Body placesNearbyRequestDTO: PlacesNearbyRequestDTO
     ): PlacesNearbyResponseDTO
 

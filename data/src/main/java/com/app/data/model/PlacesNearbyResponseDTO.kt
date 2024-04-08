@@ -17,6 +17,10 @@ data class PlacesNearbyResponseDTO(
         val formattedAddress: String,
         @SerializedName("photos")
         val photos: List<Photos>?,
+        @SerializedName("primaryTypeDisplayName")
+        val primaryTypeDisplayName: PrimaryTypeDisplayName,
+        @SerializedName("regularOpeningHours")
+        val regularOpeningHours: RegularOpeningHours?,
         var photoUrl: String = ""
     )
 
@@ -34,6 +38,18 @@ data class PlacesNearbyResponseDTO(
         val widthPx: String,
         @SerializedName("heightPx")
         val heightPx: String
+    )
+
+    data class PrimaryTypeDisplayName(
+        @SerializedName("text")
+        val text: String,
+        @SerializedName("languageCode")
+        val languageCode: String
+    )
+
+    data class RegularOpeningHours(
+        @SerializedName("openNow")
+        val openNow: Boolean = false
     )
 }
 
