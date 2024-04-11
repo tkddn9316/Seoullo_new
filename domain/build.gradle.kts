@@ -66,4 +66,8 @@ dependencies {
 
     // date time
     implementation("joda-time:joda-time:2.10.14")
+
+    // paging
+    val paging_version = "3.2.1"
+    testImplementation("androidx.paging:paging-common-ktx:$paging_version")
 }

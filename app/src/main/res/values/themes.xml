@@ -6,7 +6,7 @@
     </style>
 
     <style name="Theme.Seoullo_new" parent="Base.Theme.Seoullo_new" />
-    
+
     <style name="Button_Origin">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">48dp</item>
@@ -23,7 +23,7 @@
         <item name="android:textColor">@color/black</item>
         <item name="android:textStyle">bold</item>
     </style>
-    
+
     <style name="button_gray600" parent="Button_Origin">
         <item name="android:background">@drawable/bg_white_gray600_round5</item>
         <item name="android:textSize">14dp</item>

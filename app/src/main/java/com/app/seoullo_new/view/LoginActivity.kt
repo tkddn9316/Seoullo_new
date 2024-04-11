@@ -128,7 +128,8 @@ class LoginActivity : BaseActivity<ActivityLoginBinding, LoginViewModel>() {
         if (preferences.getIsIntro()) {
             launchActivity<IntroActivity>()
         } else {
-            launchActivity<MainActivity>()
+//            launchActivity<PlacesListActivity>()
+            launchActivity<PlacesListActivity> {  }
         }
         finish()
 //        if (Build.VERSION.SDK_INT >= 34) {

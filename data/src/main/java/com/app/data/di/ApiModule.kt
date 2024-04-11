@@ -2,6 +2,7 @@ package com.app.data.di
 
 import com.app.data.api.ApiClient
 import com.app.data.api.ApiInterface
+import com.app.data.api.ApiInterface2
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -13,8 +14,14 @@ import javax.inject.Singleton
 class ApiModule {
     @Provides
     @Singleton
-    fun provideApiInterface(): ApiInterface {
-        return ApiClient.create()
+    fun provideApiInterfaceGoogle(): ApiInterface {
+        return ApiClient.createGoogleApi()
+    }
+
+    @Provides
+    @Singleton
+    fun provideApiInterfaceSeoulData(): ApiInterface2 {
+        return ApiClient.createSeoulDataApi()
     }
 }
 

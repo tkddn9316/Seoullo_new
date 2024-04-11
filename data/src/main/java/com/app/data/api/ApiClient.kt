@@ -12,25 +12,38 @@ import java.util.concurrent.TimeUnit
  * Api Module 에 사용할 API URL 선언
  */
 object ApiClient {
-    private const val BASE_URL = "https://apis.data.go.kr/B551011/EngService1/"
+    private const val BASE_URL_GOOGLE = "https://places.googleapis.com/"
+    private const val BASE_URL_SEOUL_DATA = "http://openapi.seoul.go.kr/"
     private const val TIMEOUT = 15
 
-    fun create(): ApiInterface {
-        val logger = HttpLoggingInterceptor().apply {
-            level = HttpLoggingInterceptor.Level.BASIC
-        }
-
-        val client = OkHttpClient.Builder()
-            .addInterceptor(logger)
-            .build()
-
+    fun createGoogleApi(): ApiInterface {
         return Retrofit.Builder()
-            .baseUrl(BASE_URL)
-            .client(client)
+            .baseUrl(BASE_URL_GOOGLE)
+            .client(createLoggingClient())
             .client(createHttpClient())
             .addConverterFactory(GsonConverterFactory.create(GsonBuilder().setLenient().create()))
             .build()
             .create(ApiInterface::class.java)
+    }
+
+    fun createSeoulDataApi(): ApiInterface2 {
+        return Retrofit.Builder()
+            .baseUrl(BASE_URL_SEOUL_DATA)
+            .client(createLoggingClient())
+            .client(createHttpClient())
+            .addConverterFactory(GsonConverterFactory.create(GsonBuilder().setLenient().create()))
+            .build()
+            .create(ApiInterface2::class.java)
+    }
+
+    private fun createLoggingClient(): OkHttpClient {
+        val logger = HttpLoggingInterceptor().apply {
+            level = HttpLoggingInterceptor.Level.BASIC
+        }
+
+        return OkHttpClient.Builder()
+            .addInterceptor(logger)
+            .build()
     }
 
     private fun createHttpClient(): OkHttpClient {

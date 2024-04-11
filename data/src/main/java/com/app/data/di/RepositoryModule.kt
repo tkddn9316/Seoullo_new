@@ -1,10 +1,11 @@
 package com.app.data.di
 
-import com.app.data.source.TourInfoDataSource
+import com.app.data.source.PlacesNearbyDataSource
 import com.app.data.source.UserDataSource
-import com.app.data.repository.TourInfoRepositoryImpl
+import com.app.data.repository.PlacesNearbyRepositoryImpl
 import com.app.data.repository.UserRepositoryImpl
-import com.app.domain.repository.TourInfoRepository
+import com.app.data.source.PlacesPhotoNearbyDataSource
+import com.app.domain.repository.PlacesNearbyRepository
 import com.app.domain.repository.UserRepository
 import dagger.Module
 import dagger.Provides
@@ -21,8 +22,8 @@ class RepositoryModule {
 
     @Provides
     @Singleton
-    fun provideTourInfoRepository(tourInfoDataSource: TourInfoDataSource): TourInfoRepository {
-        return TourInfoRepositoryImpl(tourInfoDataSource)
+    fun providePlacesNearbyRepository(placesNearbyDataSource: PlacesNearbyDataSource, placesPhotoNearbyDataSource: PlacesPhotoNearbyDataSource): PlacesNearbyRepository {
+        return PlacesNearbyRepositoryImpl(placesNearbyDataSource, placesPhotoNearbyDataSource)
     }
 
     @Provides
