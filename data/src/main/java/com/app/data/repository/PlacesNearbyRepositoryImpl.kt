@@ -33,9 +33,6 @@ class PlacesNearbyRepositoryImpl @Inject constructor(
                 apiKey,
                 mapperToPlaceNearbyDTO(placesNearbyRequest)
             )
-//                .catch { exception ->
-//                    emit(mapperTOTourInfo(emptyList()))
-//                }
                 .flatMapConcat { getPhotoUrl(apiKey, it) }
                 .collect {
                     // mapper로 변환하기(TourInfoDTO -> TourInfo)
@@ -49,14 +46,16 @@ class PlacesNearbyRepositoryImpl @Inject constructor(
         data: PlacesNearbyResponseDTO
     ): Flow<PlacesNearbyResponseDTO> {
         return flow {
-            // 구글에 등록된 사진이 최소 1장 이상 있을 경우
-            if (data.place.any { place -> !place.photos.isNullOrEmpty() }) {
-                data.place.forEachIndexed { index, place ->
+            data.place.forEachIndexed { index, place ->
+                // 구글에 등록된 사진이 최소 1장 이상 있을 경우
+                if (!place.photos.isNullOrEmpty()) {
                     // 무조건 1번째 사진 사용
-                    placesPhotoNearbyDataSource.getPlacePhotoNearby(place.photos!![0].name, key)
+                    placesPhotoNearbyDataSource.getPlacePhotoNearby(place.photos[0].name, key)
                         .collect { response ->
                             data.place[index].photoUrl = response.photoUri
                         }
+                } else {
+                    data.place[index].photoUrl = ""
                 }
             }
 

@@ -2,11 +2,8 @@ package com.app.seoullo_new.view
 
 import android.widget.Toast
 import androidx.activity.viewModels
-import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -15,15 +12,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.LocationOn
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
@@ -32,15 +25,14 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -50,6 +42,7 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import com.app.domain.model.Places
 import com.app.seoullo_new.R
 import com.app.seoullo_new.base.BaseComposeActivity
+import com.app.seoullo_new.view.ui.theme.Color_ERROR
 import com.app.seoullo_new.view.ui.theme.Color_Gray500
 import com.google.android.gms.location.LocationServices
 import com.skydoves.landscapist.glide.GlideImage
@@ -64,19 +57,30 @@ class PlacesListActivity : BaseComposeActivity<PlacesListViewModel>() {
         val fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
         viewModel.checkPermission(fusedLocationProviderClient)
 
-        PlacesList()
+        Column {
+            BaseTitle()
+            PlacesList()
+        }
     }
 
     @Composable
     fun PlacesList() {
         val placesListResult by viewModel.placesListResult.collectAsState(initial = emptyList())
-        if (loading) {
-            CircularProgress()
-        } else {
-            LazyColumn(contentPadding = PaddingValues(14.dp, 7.dp)) {
-                items(placesListResult) { places ->
-                    PlacesListItem(places = places)
-                }
+        val menuClickedPosition by viewModel.menuClickedPosition.observeAsState(initial = 0)
+
+        when (menuClickedPosition) {
+            0 -> {
+                viewModel.test()
+            }
+
+            1 -> {
+                viewModel.getPlacesNearbyList()
+            }
+        }
+
+        LazyColumn(contentPadding = PaddingValues(14.dp, 7.dp)) {
+            items(placesListResult) { places ->
+                PlacesListItem(places = places)
             }
         }
     }
@@ -89,15 +93,10 @@ class PlacesListActivity : BaseComposeActivity<PlacesListViewModel>() {
             }
         ) {
             GlideImage(
-                imageModel = places.photoUrl.ifEmpty {
-                    Image(
-                        painter = painterResource(id = R.drawable.seoul_symbol),
-                        contentDescription = null
-                    )
-                },
+                imageModel = places.photoUrl.ifEmpty { "" },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(200.dp)
+                    .height(230.dp)
                     .clip(RoundedCornerShape(10.dp)),
                 contentScale = ContentScale.Crop,
                 loading = {
@@ -116,10 +115,24 @@ class PlacesListActivity : BaseComposeActivity<PlacesListViewModel>() {
                     }
                 },
                 failure = {
-                    Image(
-                        painter = painterResource(id = R.drawable.seoul_symbol),
-                        contentDescription = null
-                    )
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Image(
+                            painter = painterResource(id = R.drawable.seoul_symbol),
+                            contentDescription = null,
+                            contentScale = ContentScale.Fit
+                        )
+                        Text(
+                            style = MaterialTheme.typography.labelSmall.copy(
+                                color = Color_ERROR,
+                                textAlign = TextAlign.Center
+                            ),
+                            modifier = Modifier.fillMaxWidth(),
+                            text = stringResource(id = R.string.image_loading_error),
+                            fontSize = 14.sp
+                        )
+                    }
                 }
 //                placeHolder = ImageBitmap.imageResource(R.drawable.ic_back)
             )
@@ -133,7 +146,9 @@ class PlacesListActivity : BaseComposeActivity<PlacesListViewModel>() {
                         color = Color.Black,
                         textAlign = TextAlign.Start
                     ),
-                    modifier = Modifier.fillMaxSize().weight(1f),
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .weight(1f),
                     text = places.displayName,
                     fontSize = 18.sp,
                     fontWeight = FontWeight.Bold,
@@ -191,6 +206,13 @@ class PlacesListActivity : BaseComposeActivity<PlacesListViewModel>() {
         Divider(color = Color_Gray500)
         Spacer(modifier = Modifier.height(6.dp))
     }
+
+//    @Composable
+//    fun openMenu() {
+//        DropdownMenu(expanded = isMenu, onDismissRequest = { /*TODO*/ }) {
+//
+//        }
+//    }
 }
 
 //@Composable

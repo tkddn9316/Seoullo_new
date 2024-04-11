@@ -28,6 +28,11 @@ class PlacesListViewModel @Inject constructor(
     private val _placesListResult = MutableStateFlow<List<Places>>(emptyList())
     val placesListResult = _placesListResult.asStateFlow()
 
+    init {
+        title.value = "TEST"
+        menu.value = true
+    }
+
     fun checkPermission(fusedLocationProviderClient: FusedLocationProviderClient) {
         onMain {
             if (checkingManager.checkPermission(
@@ -38,19 +43,10 @@ class PlacesListViewModel @Inject constructor(
                 getMyLocation(fusedLocationProviderClient) {
                     Logging.e(lat.value!!)
                     Logging.e(lng.value!!)
-                    getPlacesNearbyList()
-
+//                    getPlacesNearbyList()
 
                     // TODO: TEST DATA
-//                    _placesListResult.value = listOf(
-//                        Places(
-//                            "places/ChIJWX6IgJaffDURpwHX788tTrI, id=ChIJWX6IgJaffDURpwHX788tTrI",
-//                            "ChIJWX6IgJaffDURpwHX788tTrI",
-//                            "Jungdamun Bossam",
-//                            "주소",
-//                            "https://lh3.googleusercontent.com/places/ANXAkqE4nx0pku8WMpln81cMUewDJOucUKgppocTsmAL8kzDsXVMVK362vUhvRU2ArG8MhfjCY4jUarT3ygcgGF6vCQT_f9ImBKRQ68=s4800-w500-h500"
-//                        )
-//                    )
+                    test()
                 }
             } else {
                 Logging.e("권한 X")
@@ -61,13 +57,13 @@ class PlacesListViewModel @Inject constructor(
 
     /** 위치 기반 리스트 검색(1Km) */
     // TODO: 매번 같은 이미지 안불러오도록 이미지 캐싱 필요
-    private fun getPlacesNearbyList() {
+    fun getPlacesNearbyList() {
         onIO {
             getPlacesNearbyListUseCase(
                 BuildConfig.SEOULLO_GOOGLE_MAPS_API_KEY,
                 PlacesNearbyRequest(
-                    listOf(ContentType.RESTAURANT.type),
-                    10,
+                    listOf(ContentType.DEPARTMENT_STORE.type, ContentType.MARKET.type, ContentType.CLOTHING_STORE.type),
+                    20,
                     PlacesNearbyRequest.LocationRestriction(
                         PlacesNearbyRequest.Circle(
                             PlacesNearbyRequest.Center(
@@ -82,11 +78,60 @@ class PlacesListViewModel @Inject constructor(
                 .flowOn(Dispatchers.IO)
                 .catch { Logging.e(it.message ?: "") }
                 .collect { test ->
-                    test.forEach {
-                        Logging.e(it.toString())
-                    }
+                    _placesListResult.value = emptyList()
+                    test.forEach { Logging.e(it.toString()) }
                     _placesListResult.value = test
                 }
         }
+    }
+
+    fun test() {
+        _placesListResult.value = listOf(
+            Places(
+                "places/ChIJWX6IgJaffDURpwHX788tTrI, id=ChIJWX6IgJaffDURpwHX788tTrI",
+                "ChIJWX6IgJaffDURpwHX788tTrI",
+                "Jungdamun Bossam",
+                "주소",
+                "fds",
+                false,
+                ""
+            ),
+            Places(
+                "places/ChIJWX6IgJaffDURpwHX788tTrI, id=ChIJWX6IgJaffDURpwHX788tTrI",
+                "ChIJWX6IgJaffDURpwHX788tTrI",
+                "Jungdamun Bossam",
+                "주소",
+                "fds",
+                false,
+                ""
+            ),
+            Places(
+                "places/ChIJWX6IgJaffDURpwHX788tTrI, id=ChIJWX6IgJaffDURpwHX788tTrI",
+                "ChIJWX6IgJaffDURpwHX788tTrI",
+                "Jungdamun Bossam",
+                "주소",
+                "fds",
+                false,
+                ""
+            ),
+            Places(
+                "places/ChIJWX6IgJaffDURpwHX788tTrI, id=ChIJWX6IgJaffDURpwHX788tTrI",
+                "ChIJWX6IgJaffDURpwHX788tTrI",
+                "Jungdamun Bossam",
+                "주소",
+                "fds",
+                false,
+                ""
+            ),
+            Places(
+                "places/ChIJWX6IgJaffDURpwHX788tTrI, id=ChIJWX6IgJaffDURpwHX788tTrI",
+                "ChIJWX6IgJaffDURpwHX788tTrI",
+                "Jungdamun Bossam",
+                "주소",
+                "fds",
+                false,
+                ""
+            )
+        )
     }
 }

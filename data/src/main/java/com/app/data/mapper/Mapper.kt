@@ -16,7 +16,7 @@ import com.app.domain.model.User
 
 fun mapperToPlaceNearbyDTO(place: PlacesNearbyRequest): PlacesNearbyRequestDTO =
     PlacesNearbyRequestDTO(
-        place.includedTypes, place.maxResultCount, PlacesNearbyRequestDTO.LocationRestriction(
+        place.includedTypes, place.maxResultCount, "en", PlacesNearbyRequestDTO.LocationRestriction(
             circle = PlacesNearbyRequestDTO.Circle(
                 center = PlacesNearbyRequestDTO.Center(place.locationRestriction.circle.center.latitude, place.locationRestriction.circle.center.longitude),
                 radius = place.locationRestriction.circle.radius

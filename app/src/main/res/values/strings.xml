@@ -17,4 +17,9 @@
     <string name="title_activity_places_list2">PlacesListActivity2</string>
     <string name="open">OPEN</string>
     <string name="close">CLOSE</string>
+    <string name="image_loading_error">Image does not exist.</string>
+    <string name="tour_list">Tour List</string>
+    <string name="tour_list_description">Showing the tourist attractions of Seoul as a list.</string>
+    <string name="nearby_list">Nearby List</string>
+    <string name="nearby_list_description">A list of tourist attractions within a radius of 1 km is shown.(up to 20)</string>
 </resources>

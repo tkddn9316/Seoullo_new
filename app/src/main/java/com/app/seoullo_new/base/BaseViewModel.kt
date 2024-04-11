@@ -19,10 +19,12 @@ open class BaseViewModel : ViewModel() {
     val back = MutableLiveData(true)
 
     /** AppBar RefreshButton */
-    val refresh = MutableLiveData(true)
+    val refresh = MutableLiveData(false)
+    val menu = MutableLiveData(false)
+    val menuClickedPosition = MutableLiveData(0)
     val loading = MutableLiveData(false)
 
-    /** My LAT(Y)/LON(X) */
+    /** My LAT(Y)/LNG(X) */
     private val _lat = MutableLiveData("")
     val lat: LiveData<String> = _lat
     private val _lng = MutableLiveData("")

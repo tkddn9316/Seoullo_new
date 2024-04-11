@@ -12,7 +12,15 @@ object Constants {
     }
 
     enum class ContentType(val type: String) {
-        LEISURE_SPORTS("75"), TOURIST("76"), TRAFFIC("77"), CULTURE("78"),
-        SHOPPING("79"), ACCOMMODATION("80"), RESTAURANT("restaurant"), FESTIVAL("85")
+        // TODO: https://developers.google.com/maps/documentation/places/web-service/place-types?hl=ko#lodging
+        // 1줄 마다 세트임
+        LEISURE_SPORTS("75"),
+        TOURIST("76"),
+        TRAFFIC("77"),
+        CULTURE("78"),
+        DEPARTMENT_STORE("department_store"), MARKET("market"), CLOTHING_STORE("clothing_store"),
+        HOTEL("hotel"), MOTEL("motel"), GUEST_HOUSE("guest_house"),
+        RESTAURANT("restaurant"), CAFE("cafe"),
+        FESTIVAL("85")
     }
 }

@@ -7,6 +7,8 @@ data class PlacesNearbyRequestDTO(
     var includedTypes: List<String>,
     @SerializedName("maxResultCount")
     var maxResultCount: Int,
+    @SerializedName("languageCode")
+    var languageCode: String,
     @SerializedName("locationRestriction")
     var locationRestriction: LocationRestriction
 ) {
