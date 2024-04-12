@@ -5,6 +5,8 @@ package com.app.seoullo_new.utils
  */
 object Constants {
     const val INTENT_DATA = "_data"
+    const val SELECTED_TOUR_LIST = 0
+    const val SELECTED_NEARBY_LIST = 1
 
     enum class ContentTypeId(val id: String) {
         LEISURE_SPORTS("75"), TOURIST("76"), TRAFFIC("77"), CULTURE("78"),

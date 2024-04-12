@@ -20,8 +20,8 @@ class ApiModule {
 
     @Provides
     @Singleton
-    fun provideApiInterfaceSeoulData(): ApiInterface2 {
-        return ApiClient.createSeoulDataApi()
+    fun provideApiInterfaceTourApi(): ApiInterface2 {
+        return ApiClient.createSeoulTourApi()
     }
 }
 
