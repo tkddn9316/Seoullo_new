@@ -1,14 +1,16 @@
-package com.app.data.source
+package com.app.data.source.paging
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.app.data.model.PlacesResponseDTO
+import com.app.data.source.PlacesDataSource
 import com.app.data.utils.Logging
 import kotlinx.coroutines.flow.single
 import retrofit2.HttpException
 import java.io.IOException
 import javax.inject.Inject
 
+// 참고: https://labs.brandi.co.kr/2021/07/07/parkks2.html
 class PlacesPagingSource @Inject constructor(
     private val placesDataSource: PlacesDataSource,
     private val serviceKey: String,

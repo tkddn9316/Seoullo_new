@@ -44,8 +44,6 @@ data class PlacesResponseDTO(
         val contentid: String,  // 컨텐츠 ID
         @SerializedName("contenttypeid")
         val contenttypeid: String,  // 컨텐츠 타입 ID
-        @SerializedName("cpyrhtDivCd")
-        val cpyrhtDivCd: String,    // 저작권 유형
         @SerializedName("createdtime")
         val createdtime: String,    // 등록일
         @SerializedName("dist")
