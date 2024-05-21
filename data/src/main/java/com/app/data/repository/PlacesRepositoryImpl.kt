@@ -6,7 +6,7 @@ import androidx.paging.PagingData
 import androidx.paging.map
 import com.app.data.mapper.mapperToPlace
 import com.app.data.source.PlacesDataSource
-import com.app.data.source.paging.PlacesPagingSource
+import com.app.data.source.PlacesPagingSource
 import com.app.domain.model.Places
 import com.app.domain.repository.PlacesRepository
 import kotlinx.coroutines.flow.Flow
@@ -26,7 +26,7 @@ class PlacesRepositoryImpl @Inject constructor(
         contentTypeId: String
     ): Flow<PagingData<Places>> {
         return Pager(
-            config = PagingConfig(pageSize = PAGE_SIZE, enablePlaceholders = true),
+            config = PagingConfig(pageSize = PAGE_SIZE, enablePlaceholders = false),
             pagingSourceFactory = { PlacesPagingSource(placesDataSource, serviceKey, contentTypeId) }
         ).flow.map { pagingData ->
             pagingData.map { placesResponseDTO ->
