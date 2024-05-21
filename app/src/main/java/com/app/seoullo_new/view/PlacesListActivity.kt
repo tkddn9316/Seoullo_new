@@ -71,7 +71,7 @@ class PlacesListActivity : BaseComposeActivity<PlacesListViewModel>() {
         val menuClickedPosition by viewModel.menuClickedPosition.observeAsState(initial = 0)
 
         when (menuClickedPosition) {
-            SELECTED_TOUR_LIST -> {
+            SELECTED_TOUR_LIST -> {f
                 viewModel.getPlacesList()
                 val placesListResult = viewModel.placesListResult2.collectAsLazyPagingItems()
                 LazyColumn(contentPadding = PaddingValues(14.dp, 7.dp)) {
