@@ -42,7 +42,7 @@ class PlacesNearbyRepositoryImpl @Inject constructor(
     }
 
     private suspend fun getPhotoUrl(
-        key: String,
+        apiKey: String,
         data: PlacesNearbyResponseDTO
     ): Flow<PlacesNearbyResponseDTO> {
         return flow {
@@ -50,7 +50,7 @@ class PlacesNearbyRepositoryImpl @Inject constructor(
                 // 구글에 등록된 사진이 최소 1장 이상 있을 경우
                 if (!place.photos.isNullOrEmpty()) {
                     // 무조건 1번째 사진 사용
-                    placesPhotoNearbyDataSource.getPlacePhotoNearby(place.photos[0].name, key)
+                    placesPhotoNearbyDataSource.getPlacePhotoNearby(place.photos[0].name, apiKey)
                         .collect { response ->
                             data.place[index].photoUrl = response.photoUri
                         }

@@ -39,9 +39,12 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.paging.compose.collectAsLazyPagingItems
 import com.app.domain.model.Places
 import com.app.seoullo_new.R
 import com.app.seoullo_new.base.BaseComposeActivity
+import com.app.seoullo_new.utils.Constants.SELECTED_NEARBY_LIST
+import com.app.seoullo_new.utils.Constants.SELECTED_TOUR_LIST
 import com.app.seoullo_new.view.ui.theme.Color_ERROR
 import com.app.seoullo_new.view.ui.theme.Color_Gray500
 import com.google.android.gms.location.LocationServices
@@ -65,22 +68,31 @@ class PlacesListActivity : BaseComposeActivity<PlacesListViewModel>() {
 
     @Composable
     fun PlacesList() {
-        val placesListResult by viewModel.placesListResult.collectAsState(initial = emptyList())
         val menuClickedPosition by viewModel.menuClickedPosition.observeAsState(initial = 0)
 
         when (menuClickedPosition) {
-            0 -> {
-                viewModel.test()
+            SELECTED_TOUR_LIST -> {
+                viewModel.getPlacesList()
+                val placesListResult = viewModel.placesListResult2.collectAsLazyPagingItems()
+                LazyColumn(contentPadding = PaddingValues(14.dp, 7.dp)) {
+                    items(
+                        count = placesListResult.itemCount,
+                        key = { placesListResult.peek(it)?.id ?: "" }
+                    ) { index ->
+                        val item = placesListResult[index]!!
+                        PlacesListItem(places = item)
+                    }
+                }
             }
 
-            1 -> {
+            SELECTED_NEARBY_LIST -> {
                 viewModel.getPlacesNearbyList()
-            }
-        }
-
-        LazyColumn(contentPadding = PaddingValues(14.dp, 7.dp)) {
-            items(placesListResult) { places ->
-                PlacesListItem(places = places)
+                val placesListResult by viewModel.placesListResult.collectAsState(initial = emptyList())
+                LazyColumn(contentPadding = PaddingValues(14.dp, 7.dp)) {
+                    items(placesListResult) { places ->
+                        PlacesListItem(places = places)
+                    }
+                }
             }
         }
     }
@@ -156,29 +168,33 @@ class PlacesListActivity : BaseComposeActivity<PlacesListViewModel>() {
                     maxLines = 1
                 )
                 // 오픈 여부
-                Text(
-                    style = MaterialTheme.typography.labelSmall.copy(
-                        color = if (places.openNow) Color.Red else Color.Blue,
-                        textAlign = TextAlign.End
-                    ),
-                    modifier = Modifier.padding(4.dp, 0.dp, 0.dp, 0.dp),
-                    text = if (places.openNow) stringResource(id = R.string.open) else stringResource(
-                        id = R.string.close
-                    ),
-                    fontSize = 14.sp
-                )
+                if (viewModel.menuClickedPosition.value!! == SELECTED_NEARBY_LIST) {
+                    Text(
+                        style = MaterialTheme.typography.labelSmall.copy(
+                            color = if (places.openNow) Color.Red else Color.Blue,
+                            textAlign = TextAlign.End
+                        ),
+                        modifier = Modifier.padding(4.dp, 0.dp, 0.dp, 0.dp),
+                        text = if (places.openNow) stringResource(id = R.string.open) else stringResource(
+                            id = R.string.close
+                        ),
+                        fontSize = 14.sp
+                    )
+                }
             }
             // 장소 설명
-            Text(
-                style = MaterialTheme.typography.labelSmall.copy(
-                    color = Color.Gray
-                ),
-                modifier = Modifier.fillMaxSize(),
-                text = places.description,
-                fontSize = 14.sp,
-                overflow = TextOverflow.Ellipsis,
-                maxLines = 1
-            )
+            if (viewModel.menuClickedPosition.value!! == SELECTED_NEARBY_LIST) {
+                Text(
+                    style = MaterialTheme.typography.labelSmall.copy(
+                        color = Color.Gray
+                    ),
+                    modifier = Modifier.fillMaxSize(),
+                    text = places.description,
+                    fontSize = 14.sp,
+                    overflow = TextOverflow.Ellipsis,
+                    maxLines = 1
+                )
+            }
             Spacer(modifier = Modifier.height(4.dp))
             // 주소
             Row(

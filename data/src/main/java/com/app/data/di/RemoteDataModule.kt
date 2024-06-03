@@ -1,6 +1,9 @@
 package com.app.data.di
 
 import com.app.data.api.ApiInterface
+import com.app.data.api.ApiInterface2
+import com.app.data.source.PlacesDataSource
+import com.app.data.source.PlacesDataSourceImpl
 import com.app.data.source.PlacesNearbyDataSource
 import com.app.data.source.PlacesNearbyDataSourceImpl
 import com.app.data.source.PlacesPhotoNearbyDataSource
@@ -25,5 +28,11 @@ class RemoteDataModule {
     @Singleton
     fun providePlacesPhotoNearbyDataSource(apiInterface: ApiInterface): PlacesPhotoNearbyDataSource {
         return PlacesPhotoNearbyDataSourceImpl(apiInterface)
+    }
+
+    @Provides
+    @Singleton
+    fun providePlacesDataSource(apiInterface: ApiInterface2): PlacesDataSource {
+        return PlacesDataSourceImpl(apiInterface)
     }
 }

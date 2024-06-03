@@ -13,7 +13,7 @@ import java.util.concurrent.TimeUnit
  */
 object ApiClient {
     private const val BASE_URL_GOOGLE = "https://places.googleapis.com/"
-    private const val BASE_URL_SEOUL_DATA = "http://openapi.seoul.go.kr/"
+    private const val BASE_URL_TOUR_API = "https://apis.data.go.kr/B551011/EngService1/"
     private const val TIMEOUT = 15
 
     fun createGoogleApi(): ApiInterface {
@@ -26,9 +26,9 @@ object ApiClient {
             .create(ApiInterface::class.java)
     }
 
-    fun createSeoulDataApi(): ApiInterface2 {
+    fun createSeoulTourApi(): ApiInterface2 {
         return Retrofit.Builder()
-            .baseUrl(BASE_URL_SEOUL_DATA)
+            .baseUrl(BASE_URL_TOUR_API)
             .client(createLoggingClient())
             .client(createHttpClient())
             .addConverterFactory(GsonConverterFactory.create(GsonBuilder().setLenient().create()))

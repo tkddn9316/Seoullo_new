@@ -1,7 +1,9 @@
 package com.app.data.mapper
 
+import androidx.paging.PagingData
 import com.app.data.model.PlacesNearbyRequestDTO
 import com.app.data.model.PlacesNearbyResponseDTO
+import com.app.data.model.PlacesResponseDTO
 import com.app.data.model.UserEntity
 import com.app.data.utils.Logging
 import com.app.domain.model.Places
@@ -37,6 +39,17 @@ fun mapperToPlaceNearby(place: PlacesNearbyResponseDTO): List<Places> =
             it.photoUrl
         )
     }
+
+fun mapperToPlace(place: PlacesResponseDTO.Place): Places =
+    Places(
+        place.title,
+        place.contentid,
+        place.title,
+        place.addr1,
+        "",
+        false,
+        place.firstimage
+    )
 
 fun mapperToUser(userEntity: List<UserEntity>): List<User> =
     userEntity.toList().map {

@@ -42,6 +42,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.app.seoullo_new.R
+import com.app.seoullo_new.utils.Constants.SELECTED_NEARBY_LIST
+import com.app.seoullo_new.utils.Constants.SELECTED_TOUR_LIST
 import com.app.seoullo_new.utils.Logging
 import com.app.seoullo_new.view.ui.theme.Color_92c8e0
 import com.app.seoullo_new.view.ui.theme.Color_Gray500
@@ -177,7 +179,7 @@ abstract class BaseComposeActivity<VM : BaseViewModel> : ComponentActivity() {
                                     }
                                 },
                                 onClick = {
-                                    viewModel.menuClickedPosition.value = 0
+                                    viewModel.menuClickedPosition.value = SELECTED_TOUR_LIST
                                     isMenuExpanded = false
                                 }
                             )
@@ -208,7 +210,7 @@ abstract class BaseComposeActivity<VM : BaseViewModel> : ComponentActivity() {
                                     }
                                 },
                                 onClick = {
-                                    viewModel.menuClickedPosition.value = 1
+                                    viewModel.menuClickedPosition.value = SELECTED_NEARBY_LIST
                                     isMenuExpanded = false
                                 }
                             )
