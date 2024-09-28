@@ -129,7 +129,7 @@ class LoginActivity : BaseActivity<ActivityLoginBinding, LoginViewModel>() {
             launchActivity<IntroActivity>()
         } else {
 //            launchActivity<PlacesListActivity>()
-            launchActivity<PlacesListActivity> {  }
+            launchActivity<MainActivity>()
         }
         finish()
 //        if (Build.VERSION.SDK_INT >= 34) {

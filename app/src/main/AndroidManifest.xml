@@ -28,9 +28,6 @@
             android:name=".view.IntroActivity"
             android:exported="false" />
         <activity
-            android:name=".view.TestActivity"
-            android:exported="false" />
-        <activity
             android:name=".view.LoginActivity"
             android:exported="true">
             <intent-filter>

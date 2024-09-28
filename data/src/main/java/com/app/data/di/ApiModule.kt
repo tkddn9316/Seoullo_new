@@ -3,6 +3,7 @@ package com.app.data.di
 import com.app.data.api.ApiClient
 import com.app.data.api.ApiInterface
 import com.app.data.api.ApiInterface2
+import com.app.data.api.ApiInterface3
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -22,6 +23,12 @@ class ApiModule {
     @Singleton
     fun provideApiInterfaceTourApi(): ApiInterface2 {
         return ApiClient.createSeoulTourApi()
+    }
+
+    @Provides
+    @Singleton
+    fun provideApiInterfaceOpenWeatherApi(): ApiInterface3 {
+        return ApiClient.createOpenWeatherApi()
     }
 }
 

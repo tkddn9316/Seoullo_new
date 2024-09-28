@@ -12,6 +12,32 @@ import com.app.seoullo_new.utils.Constants.INTENT_DATA
  * 각종 유틸 클래스
  */
 object Util {
+    // Intent(for Compose)
+    inline fun <reified T : Activity> Context.launchActivity(
+        model: BaseModel? = null,
+        options: Bundle? = null,
+        noinline init: Intent.() -> Unit = {}
+    ) {
+        launchActivity<T>(-1, model, options, init)
+    }
+
+    inline fun <reified T : Activity> Context.launchActivity(
+        requestCode: Int = -1,
+        model: BaseModel? = null,
+        options: Bundle? = null,
+        noinline init: Intent.() -> Unit = {}
+    ) {
+        val intent = Intent(this, T::class.java).apply {
+            model?.let { putExtra(INTENT_DATA, it) }
+            init()
+        }
+        if (this is Activity && requestCode > 0) {
+            startActivityForResult(intent, requestCode, options)
+        } else {
+            startActivity(intent, options)
+        }
+    }
+
     // Activity intent
     inline fun <reified T : Activity> Activity.launchActivity(
         model: BaseModel? = null,

@@ -28,6 +28,7 @@ android {
             "SEOULLO_GOOGLE_MAPS_API_KEY",
             getApiKey("SEOULLO_GOOGLE_MAPS_API_KEY")
         )
+        buildConfigField("String", "SEOUL_OPEN_API_KEY", getApiKey("SEOUL_OPEN_API_KEY"))
         vectorDrawables {
             useSupportLibrary = true
         }
@@ -89,6 +90,7 @@ dependencies {
     implementation("androidx.activity:activity-ktx:1.8.2")
     implementation("androidx.fragment:fragment-ktx:1.6.2")
     implementation("androidx.preference:preference-ktx:1.2.1")
+    implementation("joda-time:joda-time:2.12.7")
 
     // Compose
     implementation("androidx.activity:activity-compose:1.8.2")
@@ -150,4 +152,13 @@ dependencies {
     val paging_version = "3.2.1"
     implementation("androidx.paging:paging-runtime-ktx:$paging_version")
     implementation("androidx.paging:paging-compose:3.3.0-beta01")
+
+    // viewPager, bottomNav
+    implementation ("androidx.navigation:navigation-compose:2.7.7")
+    implementation ("com.google.accompanist:accompanist-pager:0.20.1")
+    implementation ("com.google.accompanist:accompanist-pager-indicators:0.20.1")
+
+    // lottie
+    val lottieVersion = "6.4.1"
+    implementation ("com.airbnb.android:lottie-compose:$lottieVersion")
 }

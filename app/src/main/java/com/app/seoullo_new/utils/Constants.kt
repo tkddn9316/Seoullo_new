@@ -1,5 +1,7 @@
 package com.app.seoullo_new.utils
 
+import com.app.seoullo_new.R
+
 /**
  * presentation 계층에서 사용하는 상수 및 enum class 모음
  */
@@ -7,6 +9,12 @@ object Constants {
     const val INTENT_DATA = "_data"
     const val SELECTED_TOUR_LIST = 0
     const val SELECTED_NEARBY_LIST = 1
+
+    sealed class Screen(val route: String, val label: String) {
+        object Home : Screen("home","Home")
+        object Travel : Screen("favorites", "Travel")
+        object Setting : Screen("profile", "Setting")
+    }
 
     enum class ContentTypeId(val id: String) {
         LEISURE_SPORTS("75"), TOURIST("76"), TRAFFIC("77"), CULTURE("78"),
