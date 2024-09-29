@@ -1,5 +1,6 @@
 package com.app.data.di
 
+import com.app.data.api.ApiAnnotation
 import com.app.data.api.ApiClient
 import com.app.data.api.ApiInterface
 import com.app.data.api.ApiInterface2
@@ -13,18 +14,21 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 @Module
 class ApiModule {
+    @ApiAnnotation.GoogleApi
     @Provides
     @Singleton
     fun provideApiInterfaceGoogle(): ApiInterface {
         return ApiClient.createGoogleApi()
     }
 
+    @ApiAnnotation.TourApi
     @Provides
     @Singleton
     fun provideApiInterfaceTourApi(): ApiInterface2 {
         return ApiClient.createSeoulTourApi()
     }
 
+    @ApiAnnotation.OpenWeatherApi
     @Provides
     @Singleton
     fun provideApiInterfaceOpenWeatherApi(): ApiInterface3 {

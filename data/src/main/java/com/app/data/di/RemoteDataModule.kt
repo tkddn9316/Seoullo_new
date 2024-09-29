@@ -1,5 +1,6 @@
 package com.app.data.di
 
+import com.app.data.api.ApiAnnotation
 import com.app.data.api.ApiInterface
 import com.app.data.api.ApiInterface2
 import com.app.data.api.ApiInterface3
@@ -23,25 +24,25 @@ class RemoteDataModule {
 
     @Provides
     @Singleton
-    fun providePlacesNearbyDataSource(apiInterface: ApiInterface): PlacesNearbyDataSource {
+    fun providePlacesNearbyDataSource(@ApiAnnotation.GoogleApi apiInterface: ApiInterface): PlacesNearbyDataSource {
         return PlacesNearbyDataSourceImpl(apiInterface)
     }
 
     @Provides
     @Singleton
-    fun providePlacesPhotoNearbyDataSource(apiInterface: ApiInterface): PlacesPhotoNearbyDataSource {
+    fun providePlacesPhotoNearbyDataSource(@ApiAnnotation.GoogleApi apiInterface: ApiInterface): PlacesPhotoNearbyDataSource {
         return PlacesPhotoNearbyDataSourceImpl(apiInterface)
     }
 
     @Provides
     @Singleton
-    fun providePlacesDataSource(apiInterface: ApiInterface2): PlacesDataSource {
+    fun providePlacesDataSource(@ApiAnnotation.TourApi apiInterface: ApiInterface2): PlacesDataSource {
         return PlacesDataSourceImpl(apiInterface)
     }
 
     @Provides
     @Singleton
-    fun provideWeatherDataSource(apiInterface: ApiInterface3): WeatherDataSource {
+    fun provideWeatherDataSource(@ApiAnnotation.OpenWeatherApi apiInterface: ApiInterface3): WeatherDataSource {
         return WeatherDataSourceImpl(apiInterface)
     }
 }
