@@ -12,8 +12,8 @@ import com.app.seoullo_new.base.BaseFragment
 import com.app.seoullo_new.databinding.FragmentIntro2Binding
 import com.app.seoullo_new.utils.PreferenceManager
 import com.app.seoullo_new.utils.Util.launchActivity
-import com.app.seoullo_new.view.IntroViewModel
-import com.app.seoullo_new.view.MainActivity
+import com.app.seoullo_new.view.intro.IntroViewModel
+import com.app.seoullo_new.view.main.MainActivity
 
 class Intro2Fragment : BaseFragment<FragmentIntro2Binding, IntroViewModel>() {
     override val viewModel: IntroViewModel by viewModels()

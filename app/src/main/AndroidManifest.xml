@@ -25,10 +25,10 @@
             android:label="@string/title_activity_places_list2"
             android:theme="@style/Theme.Seoullo_new" />
         <activity
-            android:name=".view.IntroActivity"
+            android:name=".view.intro.IntroActivity"
             android:exported="false" />
         <activity
-            android:name=".view.LoginActivity"
+            android:name=".view.login.LoginActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -37,7 +37,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".view.MainActivity"
+            android:name=".view.main.MainActivity"
             android:exported="true" />
         <activity
             android:name=".view.old.PlacesListActivity"

@@ -5,7 +5,7 @@
 
         <variable
             name="viewModel"
-            type="com.app.seoullo_new.view.IntroViewModel" />
+            type="com.app.seoullo_new.view.intro.IntroViewModel" />
 
         <variable
             name="view"

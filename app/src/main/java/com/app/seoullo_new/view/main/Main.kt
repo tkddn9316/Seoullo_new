@@ -1,4 +1,4 @@
-package com.app.seoullo_new.view.fragment
+package com.app.seoullo_new.view.main
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -8,9 +8,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -21,6 +23,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.LottieConstants
@@ -28,12 +34,17 @@ import com.airbnb.lottie.compose.rememberLottieAnimatable
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.app.domain.model.Weather
 import com.app.seoullo_new.R
+import com.app.seoullo_new.utils.Route
 import com.app.seoullo_new.view.ui.theme.Color_Cloudy
 import com.app.seoullo_new.view.ui.theme.Color_Rainy
 import com.app.seoullo_new.view.ui.theme.Color_Sunny
 
+// TODO: https://www.youtube.com/watch?v=GFhKfMY0L2E
+// 기온, 강수확률, 풍속, 습도, 내일/모래 날씨, 미세먼지 등등...
 @Composable
-fun Main(weather: List<Weather>) {
+fun Main(viewModel: MainViewModel = hiltViewModel()) {
+    val navController = rememberNavController()
+    val weather = viewModel.weatherListResult.collectAsState().value
     val skyWeather = weather.find { it.category == "SKY" }
     val ptyWeather = weather.find { it.category == "PTY" }
     val backgroundColor = when (skyWeather?.fcstValue) {
@@ -58,7 +69,6 @@ fun Main(weather: List<Weather>) {
             .background(backgroundColor)
             .padding(14.dp)
     ) {
-//        val context = LocalContext.current
         Text(
             text = stringResource(id = R.string.seoul),
             color = Color.White,
@@ -74,6 +84,14 @@ fun Main(weather: List<Weather>) {
         Spacer(modifier = Modifier.height(6.dp))
 
         Temperature(weather)
+
+        Button(
+            onClick = {
+                navController.navigate(Route.Route.PlacesList.name)
+            },
+        ) {
+            Text(text = "호로로로로ㅗㅗ로로뢀")
+        }
     }
 }
 

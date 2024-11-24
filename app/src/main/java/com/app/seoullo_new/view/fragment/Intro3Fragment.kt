@@ -10,8 +10,8 @@ import com.app.seoullo_new.base.BaseFragment
 import com.app.seoullo_new.databinding.FragmentIntro3Binding
 import com.app.seoullo_new.utils.PreferenceManager
 import com.app.seoullo_new.utils.Util.launchActivity
-import com.app.seoullo_new.view.IntroViewModel
-import com.app.seoullo_new.view.MainActivity
+import com.app.seoullo_new.view.intro.IntroViewModel
+import com.app.seoullo_new.view.main.MainActivity
 
 class Intro3Fragment : BaseFragment<FragmentIntro3Binding, IntroViewModel>() {
     override val viewModel: IntroViewModel by viewModels()

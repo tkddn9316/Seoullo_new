@@ -8,11 +8,11 @@
 
         <variable
             name="viewModel"
-            type="com.app.seoullo_new.view.IntroViewModel" />
+            type="com.app.seoullo_new.view.intro.IntroViewModel" />
 
         <variable
             name="view"
-            type="com.app.seoullo_new.view.IntroActivity" />
+            type="com.app.seoullo_new.view.intro.IntroActivity" />
     </data>
 
     <FrameLayout

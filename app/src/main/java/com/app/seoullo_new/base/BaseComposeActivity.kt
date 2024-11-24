@@ -75,7 +75,7 @@ abstract class BaseComposeActivity<VM : BaseViewModel> : ComponentActivity() {
                     modifier = Modifier.fillMaxSize() // 전체 화면을 채우도록 설정
                 ) {
                     Setup()
-                    CircularProgress()
+//                    CircularProgress()
                 }
             }
         }

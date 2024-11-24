@@ -1,4 +1,4 @@
-package com.app.seoullo_new.view
+package com.app.seoullo_new.view.main
 
 import androidx.activity.viewModels
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -25,9 +25,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import com.app.seoullo_new.base.BaseComposeActivity
 import com.app.seoullo_new.utils.Constants
-import com.app.seoullo_new.view.fragment.Main
+import com.app.seoullo_new.utils.Route
 import com.app.seoullo_new.view.ui.theme.Color_92c8e0
 import com.app.seoullo_new.view.ui.theme.Color_Gray500
 import dagger.hilt.android.AndroidEntryPoint
@@ -51,12 +54,26 @@ class MainActivity : BaseComposeActivity<MainViewModel>() {
             Constants.Screen.Setting,
         )
         val pagerState = rememberPagerState { items.size }
-        setViewPager(pagerState, items)
+        SetViewPager(pagerState, items)
+
+        InitNavHost()
+    }
+
+    @Composable
+    fun InitNavHost() {
+        val navController = rememberNavController()
+        NavHost(
+            navController = navController,
+            startDestination = Route.Route.Main.name
+        ) {
+            composable(route = Route.Route.Main.name) { Main() }
+            composable(route = Route.Route.PlacesList.name) { com.app.seoullo_new.view.placeList.Setup() }
+        }
     }
 
     @OptIn(ExperimentalFoundationApi::class)
     @Composable
-    fun setViewPager(pagerState: PagerState, tabs: List<Constants.Screen>) {
+    fun SetViewPager(pagerState: PagerState, tabs: List<Constants.Screen>) {
         val coroutineScope = rememberCoroutineScope()
         Column {
             HorizontalPager(
@@ -68,7 +85,9 @@ class MainActivity : BaseComposeActivity<MainViewModel>() {
                     horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
                     when (page) {
-                        0 -> Main(viewModel.weatherListResult.collectAsState().value)
+//                        0 -> Main(viewModel.weatherListResult.collectAsState().value)
+//                        1 -> com.app.seoullo_new.view.placeList.Setup()
+                        0 -> Main()
                         1 -> Screen2()
                         2 -> Screen3()
                     }

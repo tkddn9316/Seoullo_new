@@ -1,4 +1,4 @@
-package com.app.seoullo_new.view
+package com.app.seoullo_new.view.main
 
 import android.Manifest
 import com.app.domain.model.Weather

@@ -5,7 +5,7 @@ import androidx.activity.viewModels
 import com.app.seoullo_new.R
 import com.app.seoullo_new.base.BaseActivity
 import com.app.seoullo_new.databinding.ActivityPlacesListBinding
-import com.app.seoullo_new.view.PlacesListViewModel
+import com.app.seoullo_new.view.placeList.PlacesListViewModel
 import com.google.android.gms.location.LocationServices
 import dagger.hilt.android.AndroidEntryPoint
 

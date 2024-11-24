@@ -45,6 +45,7 @@ import com.app.seoullo_new.R
 import com.app.seoullo_new.base.BaseComposeActivity
 import com.app.seoullo_new.utils.Constants.SELECTED_NEARBY_LIST
 import com.app.seoullo_new.utils.Constants.SELECTED_TOUR_LIST
+import com.app.seoullo_new.view.placeList.PlacesListViewModel
 import com.app.seoullo_new.view.ui.theme.Color_ERROR
 import com.app.seoullo_new.view.ui.theme.Color_Gray500
 import com.google.android.gms.location.LocationServices

@@ -7,17 +7,17 @@
 
         <variable
             name="viewModel"
-            type="com.app.seoullo_new.view.LoginViewModel" />
+            type="com.app.seoullo_new.view.login.LoginViewModel" />
 
         <variable
             name="view"
-            type="com.app.seoullo_new.view.LoginActivity" />
+            type="com.app.seoullo_new.view.login.LoginActivity" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".view.LoginActivity">
+        tools:context=".view.login.LoginActivity">
 
         <VideoView
             android:id="@+id/background_"

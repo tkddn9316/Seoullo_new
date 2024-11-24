@@ -117,6 +117,7 @@ dependencies {
     // Hilt
     implementation("com.google.dagger:hilt-android:2.48.1")
     kapt("com.google.dagger:hilt-compiler:2.48.1")
+    implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
 
     // Retrofit
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
@@ -132,7 +133,7 @@ dependencies {
     implementation("androidx.room:room-ktx:2.6.1")
 
     // ViewModelScope
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.6")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.7")
 
     // Google Login
     implementation(platform("com.google.firebase:firebase-bom:33.3.0"))
@@ -144,17 +145,17 @@ dependencies {
     implementation("io.github.ParkSangGwon:tedpermission-coroutine:3.3.0")
 
     // navigation
-    val nav_version = "2.8.1"
+    val nav_version = "2.8.4"
     implementation("androidx.navigation:navigation-fragment-ktx:$nav_version")
     implementation("androidx.navigation:navigation-ui-ktx:$nav_version")
 
     // paging
-    val paging_version = "3.3.2"
+    val paging_version = "3.3.4"
     implementation("androidx.paging:paging-runtime-ktx:$paging_version")
     implementation("androidx.paging:paging-compose:$paging_version")
 
     // viewPager, bottomNav
-    implementation ("androidx.navigation:navigation-compose:2.8.1")
+    implementation ("androidx.navigation:navigation-compose:2.8.4")
     implementation ("com.google.accompanist:accompanist-pager:0.20.1")
     implementation ("com.google.accompanist:accompanist-pager-indicators:0.20.1")
 

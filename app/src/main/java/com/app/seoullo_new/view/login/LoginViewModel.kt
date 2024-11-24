@@ -1,4 +1,4 @@
-package com.app.seoullo_new.view
+package com.app.seoullo_new.view.login
 
 import com.app.domain.model.User
 import com.app.domain.usecase.user.DeleteUserUseCase

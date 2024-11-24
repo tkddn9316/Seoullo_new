@@ -1,4 +1,4 @@
-package com.app.seoullo_new.view
+package com.app.seoullo_new.view.intro
 
 import com.app.seoullo_new.base.BaseViewModel
 

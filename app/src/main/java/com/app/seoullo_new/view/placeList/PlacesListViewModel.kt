@@ -1,4 +1,4 @@
-package com.app.seoullo_new.view
+package com.app.seoullo_new.view.placeList
 
 import android.Manifest
 import androidx.lifecycle.viewModelScope
