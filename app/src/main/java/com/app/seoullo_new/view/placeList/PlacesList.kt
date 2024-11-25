@@ -42,6 +42,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.app.domain.model.Places
@@ -53,11 +54,14 @@ import com.app.seoullo_new.utils.Constants.SELECTED_TOUR_LIST
 import com.app.seoullo_new.view.ui.theme.Color_ERROR
 import com.app.seoullo_new.view.ui.theme.Color_Gray500
 import com.app.seoullo_new.view.ui.theme.Seoullo_newTheme
+import com.google.android.gms.location.LocationServices
 import com.skydoves.landscapist.glide.GlideImage
 
 @Composable
-fun Setup(viewModel: PlacesListViewModel = hiltViewModel()) {
-    val navController = rememberNavController()
+fun Setup(navController: NavHostController, viewModel: PlacesListViewModel = hiltViewModel()) {
+
+    val fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(LocalContext.current)
+    viewModel.checkPermission(fusedLocationProviderClient)
 
     Seoullo_newTheme {
         Surface(
@@ -65,7 +69,7 @@ fun Setup(viewModel: PlacesListViewModel = hiltViewModel()) {
             modifier = Modifier.fillMaxSize() // 전체 화면을 채우도록 설정
         ) {
             Scaffold(
-                topBar = { BaseTitle(navController) },
+                topBar = { BaseTitle(navController, viewModel) },
                 content = {
                     Column(
                         modifier = Modifier

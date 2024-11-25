@@ -53,7 +53,7 @@ class PlacesListViewModel @Inject constructor(
                 getMyLocation(fusedLocationProviderClient) {
                     Logging.e(lat.value!!)
                     Logging.e(lng.value!!)
-                    getPlacesList()
+//                    getPlacesList()
 //                    getPlacesNearbyList()
 
                     // TODO: TEST DATA
@@ -87,6 +87,8 @@ class PlacesListViewModel @Inject constructor(
     // TODO: 매번 같은 이미지 안불러오도록 이미지 캐싱 필요
     fun getPlacesNearbyList() {
         onIO {
+            Logging.e(lat.value!!)
+            Logging.e(lng.value!!)
             getPlacesNearbyListUseCase(
                 BuildConfig.SEOULLO_GOOGLE_MAPS_API_KEY,
                 PlacesNearbyRequest(

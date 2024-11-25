@@ -24,6 +24,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -35,6 +37,7 @@ import com.airbnb.lottie.compose.rememberLottieComposition
 import com.app.domain.model.Weather
 import com.app.seoullo_new.R
 import com.app.seoullo_new.utils.Route
+import com.app.seoullo_new.view.InitNavHost
 import com.app.seoullo_new.view.ui.theme.Color_Cloudy
 import com.app.seoullo_new.view.ui.theme.Color_Rainy
 import com.app.seoullo_new.view.ui.theme.Color_Sunny
@@ -42,8 +45,7 @@ import com.app.seoullo_new.view.ui.theme.Color_Sunny
 // TODO: https://www.youtube.com/watch?v=GFhKfMY0L2E
 // 기온, 강수확률, 풍속, 습도, 내일/모래 날씨, 미세먼지 등등...
 @Composable
-fun Main(viewModel: MainViewModel = hiltViewModel()) {
-    val navController = rememberNavController()
+fun Main(navController: NavHostController, viewModel: MainViewModel = hiltViewModel()) {
     val weather = viewModel.weatherListResult.collectAsState().value
     val skyWeather = weather.find { it.category == "SKY" }
     val ptyWeather = weather.find { it.category == "PTY" }

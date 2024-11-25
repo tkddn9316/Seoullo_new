@@ -25,6 +25,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -48,32 +50,33 @@ class MainActivity : BaseComposeActivity<MainViewModel>() {
     @OptIn(ExperimentalFoundationApi::class)
     @Composable
     override fun Setup() {
+        val navController = rememberNavController()
+
         val items = listOf(
             Constants.Screen.Home,
             Constants.Screen.Travel,
             Constants.Screen.Setting,
         )
         val pagerState = rememberPagerState { items.size }
-        SetViewPager(pagerState, items)
+        SetViewPager(pagerState, items, navController)
 
-        InitNavHost()
+        InitNavHost(navController)
     }
 
     @Composable
-    fun InitNavHost() {
-        val navController = rememberNavController()
+    fun InitNavHost(navController: NavHostController) {
         NavHost(
             navController = navController,
             startDestination = Route.Route.Main.name
         ) {
-            composable(route = Route.Route.Main.name) { Main() }
-            composable(route = Route.Route.PlacesList.name) { com.app.seoullo_new.view.placeList.Setup() }
+            composable(route = Route.Route.Main.name) { Main(navController) }
+            composable(route = Route.Route.PlacesList.name) { com.app.seoullo_new.view.placeList.Setup(navController) }
         }
     }
 
     @OptIn(ExperimentalFoundationApi::class)
     @Composable
-    fun SetViewPager(pagerState: PagerState, tabs: List<Constants.Screen>) {
+    fun SetViewPager(pagerState: PagerState, tabs: List<Constants.Screen>, navController: NavHostController) {
         val coroutineScope = rememberCoroutineScope()
         Column {
             HorizontalPager(
@@ -87,7 +90,7 @@ class MainActivity : BaseComposeActivity<MainViewModel>() {
                     when (page) {
 //                        0 -> Main(viewModel.weatherListResult.collectAsState().value)
 //                        1 -> com.app.seoullo_new.view.placeList.Setup()
-                        0 -> Main()
+                        0 -> Main(navController)
                         1 -> Screen2()
                         2 -> Screen3()
                     }

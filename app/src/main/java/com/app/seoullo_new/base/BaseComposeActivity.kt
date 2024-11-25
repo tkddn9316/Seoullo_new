@@ -45,6 +45,7 @@ import com.app.seoullo_new.R
 import com.app.seoullo_new.utils.Constants.SELECTED_NEARBY_LIST
 import com.app.seoullo_new.utils.Constants.SELECTED_TOUR_LIST
 import com.app.seoullo_new.utils.Logging
+import com.app.seoullo_new.view.InitNavHost
 import com.app.seoullo_new.view.ui.theme.Color_92c8e0
 import com.app.seoullo_new.view.ui.theme.Color_Gray500
 import com.app.seoullo_new.view.ui.theme.Seoullo_newTheme

@@ -35,6 +35,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.app.seoullo_new.R
 import com.app.seoullo_new.utils.Constants.SELECTED_NEARBY_LIST
@@ -42,7 +43,7 @@ import com.app.seoullo_new.utils.Constants.SELECTED_TOUR_LIST
 import com.app.seoullo_new.view.ui.theme.Color_Gray500
 
 @Composable
-fun BaseTitle(navController: NavController, viewModel: BaseViewModel = viewModel()) {
+fun BaseTitle(navController: NavHostController, viewModel: BaseViewModel = viewModel()) {
     var isMenuExpanded by remember { mutableStateOf(false) }
 
     Column(
