@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import com.app.seoullo_new.R
-import com.app.seoullo_new.base.BaseFragment
+import com.app.seoullo_new.view.base.BaseFragment
 import com.app.seoullo_new.databinding.FragmentIntro3Binding
 import com.app.seoullo_new.utils.PreferenceManager
 import com.app.seoullo_new.utils.Util.launchActivity

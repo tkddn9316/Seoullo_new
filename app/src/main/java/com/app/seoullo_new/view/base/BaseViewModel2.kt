@@ -1,4 +1,4 @@
-package com.app.seoullo_new.base
+package com.app.seoullo_new.view.base
 
 import androidx.lifecycle.viewModelScope
 import com.app.seoullo_new.di.DispatcherProvider

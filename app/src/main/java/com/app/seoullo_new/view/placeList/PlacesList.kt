@@ -43,12 +43,11 @@ import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.app.domain.model.Places
 import com.app.seoullo_new.R
-import com.app.seoullo_new.base.BaseTitle
-import com.app.seoullo_new.base.CircularProgress
+import com.app.seoullo_new.view.base.BaseTitle
+import com.app.seoullo_new.view.util.CircularProgress
 import com.app.seoullo_new.utils.Constants.SELECTED_NEARBY_LIST
 import com.app.seoullo_new.utils.Constants.SELECTED_TOUR_LIST
 import com.app.seoullo_new.view.ui.theme.Color_ERROR

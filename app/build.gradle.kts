@@ -15,7 +15,7 @@ android {
 
     defaultConfig {
         applicationId = "com.app.seoullo_new"
-        minSdk = 24
+        minSdk = 31
         targetSdk = 35
         versionCode = 1
         versionName = "1.0.1"
@@ -107,6 +107,8 @@ dependencies {
     implementation("androidx.constraintlayout:constraintlayout-compose:1.1.0")
     implementation("androidx.compose.runtime:runtime-livedata:1.7.5")
     implementation("androidx.compose.material:material-icons-extended:1.7.5")
+    // compose StatusBar Color
+    implementation("com.google.accompanist:accompanist-systemuicontroller:0.27.0")
 
     // Glide
     implementation("com.github.skydoves:landscapist-glide:1.4.7")

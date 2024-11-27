@@ -3,7 +3,7 @@ package com.app.seoullo_new.view.intro
 import android.os.Bundle
 import androidx.activity.viewModels
 import com.app.seoullo_new.R
-import com.app.seoullo_new.base.BaseActivity
+import com.app.seoullo_new.view.base.BaseActivity
 import com.app.seoullo_new.databinding.ActivityIntroBinding
 
 class IntroActivity : BaseActivity<ActivityIntroBinding, IntroViewModel>() {

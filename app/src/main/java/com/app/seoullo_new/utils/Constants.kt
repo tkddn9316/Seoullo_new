@@ -10,12 +10,6 @@ object Constants {
     const val SELECTED_TOUR_LIST = 0
     const val SELECTED_NEARBY_LIST = 1
 
-    sealed class Screen(val route: String, val label: String) {
-        object Home : Screen("home","Home")
-        object Travel : Screen("favorites", "Travel")
-        object Setting : Screen("profile", "Setting")
-    }
-
     enum class ContentTypeId(val id: String) {
         LEISURE_SPORTS("75"), TOURIST("76"), TRAFFIC("77"), CULTURE("78"),
         SHOPPING("79"), ACCOMMODATION("80"), RESTAURANT("82"), FESTIVAL("85")

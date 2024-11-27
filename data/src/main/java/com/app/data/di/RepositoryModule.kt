@@ -4,13 +4,16 @@ import com.app.data.source.PlacesNearbyDataSource
 import com.app.data.source.UserDataSource
 import com.app.data.repository.PlacesNearbyRepositoryImpl
 import com.app.data.repository.PlacesRepositoryImpl
+import com.app.data.repository.SettingRepositoryImpl
 import com.app.data.repository.UserRepositoryImpl
 import com.app.data.repository.WeatherRepositoryImpl
 import com.app.data.source.PlacesDataSource
 import com.app.data.source.PlacesPhotoNearbyDataSource
+import com.app.data.source.SettingDataSource
 import com.app.data.source.WeatherDataSource
 import com.app.domain.repository.PlacesNearbyRepository
 import com.app.domain.repository.PlacesRepository
+import com.app.domain.repository.SettingRepository
 import com.app.domain.repository.UserRepository
 import com.app.domain.repository.WeatherRepository
 import dagger.Module
@@ -48,5 +51,11 @@ class RepositoryModule {
     @Singleton
     fun provideWeatherRepository(weatherDataSource: WeatherDataSource): WeatherRepository {
         return WeatherRepositoryImpl(weatherDataSource)
+    }
+
+    @Provides
+    @Singleton
+    fun provideSettingRepository(settingDataSource: SettingDataSource): SettingRepository {
+        return SettingRepositoryImpl(settingDataSource)
     }
 }

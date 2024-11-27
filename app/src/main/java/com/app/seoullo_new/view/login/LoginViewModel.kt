@@ -4,7 +4,7 @@ import com.app.domain.model.User
 import com.app.domain.usecase.user.DeleteUserUseCase
 import com.app.domain.usecase.user.InsertUserUseCase
 import com.app.domain.usecase.user.SelectUserUseCase
-import com.app.seoullo_new.base.BaseViewModel2
+import com.app.seoullo_new.view.base.BaseViewModel2
 import com.app.seoullo_new.di.DispatcherProvider
 import com.app.seoullo_new.utils.Logging
 import com.app.seoullo_new.utils.LoginState

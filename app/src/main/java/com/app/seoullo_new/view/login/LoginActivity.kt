@@ -7,7 +7,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.core.net.toUri
 import com.app.seoullo_new.R
-import com.app.seoullo_new.base.BaseActivity
+import com.app.seoullo_new.view.base.BaseActivity
 import com.app.seoullo_new.databinding.ActivityLoginBinding
 import com.app.seoullo_new.utils.Logging
 import com.app.seoullo_new.utils.LoginState

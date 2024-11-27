@@ -8,7 +8,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.NavOptions
 import androidx.navigation.Navigation
 import com.app.seoullo_new.R
-import com.app.seoullo_new.base.BaseFragment
+import com.app.seoullo_new.view.base.BaseFragment
 import com.app.seoullo_new.databinding.FragmentIntro2Binding
 import com.app.seoullo_new.utils.PreferenceManager
 import com.app.seoullo_new.utils.Util.launchActivity

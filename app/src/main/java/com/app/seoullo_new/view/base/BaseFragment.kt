@@ -1,4 +1,4 @@
-package com.app.seoullo_new.base
+package com.app.seoullo_new.view.base
 
 import android.content.Context
 import android.os.Bundle

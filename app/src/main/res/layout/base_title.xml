@@ -7,11 +7,11 @@
 
         <variable
             name="viewModel"
-            type="com.app.seoullo_new.base.BaseViewModel2" />
+            type="com.app.seoullo_new.view.base.BaseViewModel2" />
 
         <variable
             name="view"
-            type="com.app.seoullo_new.base.BaseActivity" />
+            type="com.app.seoullo_new.view.base.BaseActivity" />
 
     </data>
 

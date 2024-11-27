@@ -4,7 +4,7 @@ import android.Manifest
 import com.app.domain.model.Weather
 import com.app.domain.usecase.weather.WeatherUseCase
 import com.app.seoullo_new.BuildConfig
-import com.app.seoullo_new.base.BaseViewModel2
+import com.app.seoullo_new.view.base.BaseViewModel2
 import com.app.seoullo_new.di.DispatcherProvider
 import com.app.seoullo_new.utils.CheckingManager
 import com.app.seoullo_new.utils.Logging

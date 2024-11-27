@@ -1,4 +1,4 @@
-package com.app.seoullo_new.view
+package com.app.seoullo_new.view.old
 
 import android.widget.Toast
 import androidx.activity.viewModels
@@ -42,7 +42,6 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.app.domain.model.Places
 import com.app.seoullo_new.R
-import com.app.seoullo_new.base.BaseComposeActivity
 import com.app.seoullo_new.utils.Constants.SELECTED_NEARBY_LIST
 import com.app.seoullo_new.utils.Constants.SELECTED_TOUR_LIST
 import com.app.seoullo_new.view.placeList.PlacesListViewModel
@@ -53,7 +52,7 @@ import com.skydoves.landscapist.glide.GlideImage
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class PlacesListActivity : BaseComposeActivity<PlacesListViewModel>() {
+class PlacesListActivity2 : BaseComposeActivity<PlacesListViewModel>() {
     override val viewModel: PlacesListViewModel by viewModels()
 
     @Composable

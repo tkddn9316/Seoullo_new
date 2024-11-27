@@ -1,4 +1,4 @@
-package com.app.seoullo_new.utils
+package com.app.seoullo_new.view.util
 
 import android.text.Html
 import android.text.Spanned
@@ -6,6 +6,7 @@ import android.view.View
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.app.seoullo_new.utils.LoginState
 
 object BindingAdapter {
     private fun Boolean?.gone(): Int {
