@@ -11,10 +11,13 @@ import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.tooling.preview.Preview
@@ -22,6 +25,7 @@ import androidx.core.view.WindowCompat
 import com.app.domain.model.theme.DynamicTheme
 import com.app.domain.model.theme.Language
 import com.app.domain.model.theme.ThemeMode
+import com.app.seoullo_new.view.util.theme.LocalLanguage
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import java.util.Locale
 
@@ -155,8 +159,8 @@ fun Seoullo_newTheme(
         ThemeMode.DARK -> true
         ThemeMode.LIGHT -> false
     }
-
     val context = LocalContext.current
+
     SideEffect {
         val locale = when (language) {
             Language.ENGLISH -> Locale.ENGLISH
@@ -169,12 +173,10 @@ fun Seoullo_newTheme(
 
     val colorScheme = when {
         useDynamicColor -> {
-            val context = LocalContext.current
             if (useDarkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
         }
-
-        useDarkTheme -> darkScheme
-        else -> lightScheme
+        useDarkTheme -> darkScheme.copy(background = Color.Black) // 강제로 다른 색상 추가(리컴포지션 강제)
+        else -> lightScheme.copy(background = Color.White) // 강제로 다른 색상 추가
     }
     val view = LocalView.current
     if (!view.isInEditMode) {
@@ -187,8 +189,7 @@ fun Seoullo_newTheme(
 
     val systemUiController = rememberSystemUiController()
     systemUiController.setStatusBarColor(
-        color = Color_92c8e0,
-        darkIcons = !useDarkTheme
+        color = Color_92c8e0
     )
 
     MaterialTheme(

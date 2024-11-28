@@ -18,32 +18,10 @@ class SettingRepositoryImpl @Inject constructor(
         language = settingDataSource.getLanguage() ?: Language.ENGLISH
     )
 
-//    override suspend fun fetchThemes(): ThemeSetting {
-//        Logging.e(settingDataSource.getDynamicTheme() ?: "노ㅓㄹ이다")
-//        Logging.e(settingDataSource.getThemeMode() ?: "노ㅓㄹ이다")
-//        Logging.e(settingDataSource.getLanguage() ?: "노ㅓㄹ이다")
-//        return ThemeSetting(
-//            dynamicTheme = settingDataSource.getDynamicTheme() ?: DynamicTheme.OFF,
-//            themeMode = settingDataSource.getThemeMode() ?: ThemeMode.SYSTEM,
-//            language = settingDataSource.getLanguage() ?: Language.ENGLISH
-//        )
-//    }
-
     override suspend fun updateThemes(themeSetting: ThemeSetting) {
         settingDataSource.updateDynamicTheme(themeSetting.dynamicTheme)
         settingDataSource.updateThemeMode(themeSetting.themeMode)
     }
-
-//    override suspend fun fetchLanguage(): ThemeSetting = ThemeSetting(
-//        language = settingDataSource.getLanguage() ?: Language.ENGLISH
-//    )
-
-//    override suspend fun fetchLanguage(): ThemeSetting {
-//        Logging.e(settingDataSource.getLanguage() ?: "노ㅓㄹ이다")
-//        return ThemeSetting(dynamicTheme = settingDataSource.getDynamicTheme() ?: DynamicTheme.OFF,
-//            themeMode = settingDataSource.getThemeMode() ?: ThemeMode.SYSTEM,
-//            language = settingDataSource.getLanguage() ?: Language.ENGLISH)
-//    }
 
     override suspend fun updateLanguage(themeSetting: ThemeSetting) {
         settingDataSource.updateLanguage(themeSetting.language)

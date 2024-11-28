@@ -6,6 +6,7 @@ import com.app.domain.model.theme.Language
 import com.app.domain.model.theme.ThemeMode
 import com.app.domain.model.theme.ThemeSetting
 import com.app.domain.repository.SettingRepository
+import com.app.seoullo_new.utils.Logging
 import com.app.seoullo_new.view.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -24,11 +25,11 @@ class ThemeViewModel @Inject constructor(
 
     init {
         fetchThemes()
-//        fetchLanguage()
     }
 
     private fun fetchThemes() {
         viewModelScope.launch {
+            Logging.e(settingRepository.fetchThemes())
             _themeSetting.update { settingRepository.fetchThemes() }
         }
     }
@@ -50,12 +51,6 @@ class ThemeViewModel @Inject constructor(
             settingRepository.updateThemes(_themeSetting.value)
         }
     }
-
-//    private fun fetchLanguage() {
-//        viewModelScope.launch {
-//            _themeSetting.update { settingRepository.fetchLanguage() }
-//        }
-//    }
 
     fun updateLanguage(language: Language) {
         _themeSetting.update { setting ->

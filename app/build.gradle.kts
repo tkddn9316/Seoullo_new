@@ -3,6 +3,7 @@ import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+    id("org.jetbrains.kotlin.plugin.compose")
     id("com.google.dagger.hilt.android")
     id("kotlin-kapt")
 //    id("dagger.hilt.android.plugin")
@@ -108,7 +109,7 @@ dependencies {
     implementation("androidx.compose.runtime:runtime-livedata:1.7.5")
     implementation("androidx.compose.material:material-icons-extended:1.7.5")
     // compose StatusBar Color
-    implementation("com.google.accompanist:accompanist-systemuicontroller:0.27.0")
+    implementation("com.google.accompanist:accompanist-systemuicontroller:0.32.0")
 
     // Glide
     implementation("com.github.skydoves:landscapist-glide:1.4.7")
@@ -117,9 +118,9 @@ dependencies {
     implementation("com.google.android.gms:play-services-location:21.3.0")
 
     // Hilt
-    implementation("com.google.dagger:hilt-android:2.49")
-    kapt("com.google.dagger:hilt-compiler:2.48.1")
-    implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
+    implementation(libs.hilt)
+    kapt(libs.hilt.compiler)
+    implementation(libs.hilt.navigation)
 
     // Retrofit
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
