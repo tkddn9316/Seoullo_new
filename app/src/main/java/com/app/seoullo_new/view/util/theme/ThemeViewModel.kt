@@ -2,6 +2,7 @@ package com.app.seoullo_new.view.util.theme
 
 import androidx.lifecycle.viewModelScope
 import com.app.domain.model.theme.DynamicTheme
+import com.app.domain.model.theme.Language
 import com.app.domain.model.theme.ThemeMode
 import com.app.domain.model.theme.ThemeSetting
 import com.app.domain.repository.SettingRepository
@@ -23,6 +24,7 @@ class ThemeViewModel @Inject constructor(
 
     init {
         fetchThemes()
+//        fetchLanguage()
     }
 
     private fun fetchThemes() {
@@ -46,6 +48,21 @@ class ThemeViewModel @Inject constructor(
         }
         viewModelScope.launch {
             settingRepository.updateThemes(_themeSetting.value)
+        }
+    }
+
+//    private fun fetchLanguage() {
+//        viewModelScope.launch {
+//            _themeSetting.update { settingRepository.fetchLanguage() }
+//        }
+//    }
+
+    fun updateLanguage(language: Language) {
+        _themeSetting.update { setting ->
+            setting.copy(language = language)
+        }
+        viewModelScope.launch {
+            settingRepository.updateLanguage(_themeSetting.value)
         }
     }
 }

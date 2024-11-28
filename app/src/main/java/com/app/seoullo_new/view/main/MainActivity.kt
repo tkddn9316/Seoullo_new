@@ -8,6 +8,7 @@ import androidx.navigation.compose.rememberNavController
 import com.app.seoullo_new.view.ui.theme.Seoullo_newTheme
 import com.app.seoullo_new.view.util.NavigationGraph
 import com.app.seoullo_new.view.util.theme.LocalDynamicTheme
+import com.app.seoullo_new.view.util.theme.LocalLanguage
 import com.app.seoullo_new.view.util.theme.LocalThemeMode
 import com.app.seoullo_new.view.util.theme.ThemeSettingProvider
 import dagger.hilt.android.AndroidEntryPoint
@@ -25,7 +26,8 @@ class MainActivity : ComponentActivity() {
             ThemeSettingProvider {
                 Seoullo_newTheme(
                     dynamicTheme = LocalDynamicTheme.current,
-                    themeMode = LocalThemeMode.current
+                    themeMode = LocalThemeMode.current,
+                    language = LocalLanguage.current
                 ) {
                     NavigationGraph(navController)
                 }

@@ -1,5 +1,6 @@
 package com.app.seoullo_new.view.main
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -70,9 +71,9 @@ fun MainScreen(
                 .padding(paddingValues) // 시스템 바에 따른 패딩 적용
         ) {
             val tabs = listOf(
-                Route.HOME,
-                Route.TRAVEL,
-                Route.SETTING
+                stringResource(R.string.tab_home),
+                stringResource(R.string.tab_travel),
+                stringResource(R.string.tab_setting)
             )
             TabWithPager(tabs = tabs)
         }
@@ -135,9 +136,9 @@ fun TabWithPager(
             modifier = Modifier.weight(1f) // 남은 공간 차지
         ) { page ->
             when (tabs[page]) {
-                Route.HOME -> HomeScreen()
-                Route.TRAVEL -> TravelScreen()
-                Route.SETTING -> SettingScreen()
+                stringResource(R.string.tab_home) -> HomeScreen()
+                stringResource(R.string.tab_travel) -> TravelScreen()
+                stringResource(R.string.tab_setting) -> SettingScreen()
             }
         }
 
@@ -146,7 +147,8 @@ fun TabWithPager(
         // Tab Bar
         TabRow(
             selectedTabIndex = pagerState.currentPage,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            containerColor = MaterialTheme.colorScheme.background
         ) {
             tabs.forEachIndexed { index, item ->
                 val isSelected = pagerState.currentPage == index
@@ -164,10 +166,11 @@ fun TabWithPager(
     }
 }
 
+@Composable
 fun getIcon(screen: String): ImageVector = when (screen) {
-    Route.HOME -> Icons.Default.Home
-    Route.TRAVEL -> Icons.Default.TravelExplore
-    Route.SETTING -> Icons.Default.Settings
+    stringResource(R.string.tab_home) -> Icons.Default.Home
+    stringResource(R.string.tab_travel) -> Icons.Default.TravelExplore
+    stringResource(R.string.tab_setting) -> Icons.Default.Settings
     else -> Icons.Default.Clear
 }
 

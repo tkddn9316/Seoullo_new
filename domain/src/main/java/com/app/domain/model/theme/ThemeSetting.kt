@@ -2,5 +2,6 @@ package com.app.domain.model.theme
 
 data class ThemeSetting(
     val dynamicTheme: DynamicTheme = DynamicTheme.OFF,
-    val themeMode: ThemeMode = ThemeMode.SYSTEM
+    val themeMode: ThemeMode = ThemeMode.SYSTEM,
+    val language: Language = Language.ENGLISH
 )

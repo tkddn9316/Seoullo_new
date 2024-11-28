@@ -3,6 +3,7 @@ package com.app.seoullo_new.utils
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import com.app.domain.model.theme.DynamicTheme
+import com.app.domain.model.theme.Language
 import com.app.domain.model.theme.ThemeMode
 import com.app.seoullo_new.R
 
@@ -43,5 +44,11 @@ object Constants {
         ThemeMode.SYSTEM -> stringResource(R.string.system_default)
         ThemeMode.DARK -> stringResource(R.string.on)
         ThemeMode.LIGHT -> stringResource(R.string.off)
+    }
+
+    @Composable
+    fun getLanguageTitle(language: Language) = when (language) {
+        Language.ENGLISH -> stringResource(R.string.language_ENGLISH)
+        Language.KOREA -> stringResource(R.string.language_KOREA)
     }
 }

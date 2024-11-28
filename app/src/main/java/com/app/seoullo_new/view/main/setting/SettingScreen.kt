@@ -27,12 +27,15 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.app.domain.model.theme.DynamicTheme
+import com.app.domain.model.theme.Language
 import com.app.domain.model.theme.ThemeMode
 import com.app.seoullo_new.R
 import com.app.seoullo_new.utils.Constants.getDynamicThemeTitle
+import com.app.seoullo_new.utils.Constants.getLanguageTitle
 import com.app.seoullo_new.utils.Constants.getThemeModeTitle
 import com.app.seoullo_new.view.util.RadioItem
 import com.app.seoullo_new.view.util.theme.LocalDynamicTheme
+import com.app.seoullo_new.view.util.theme.LocalLanguage
 import com.app.seoullo_new.view.util.theme.LocalThemeMode
 import com.app.seoullo_new.view.util.theme.LocalThemeViewModel
 
@@ -50,6 +53,7 @@ fun SettingScreen(
                 .padding(innerPadding)
                 .verticalScroll(scrollState)
         ) {
+            // 테마 설정
             Column(
                 modifier = Modifier.padding(start = 24.dp),
                 horizontalAlignment = Alignment.Start
@@ -59,13 +63,24 @@ fun SettingScreen(
                     fontWeight = FontWeight.Bold
                 )
             }
-            
+            Spacer(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(8.dp)
+            )
+
             ThemeSetting { viewModel.openThemeDialog() }
+            LanguageSetting { viewModel.openLanguageDialog() }
 
             HorizontalDivider(thickness = 1.dp, color = MaterialTheme.colorScheme.outlineVariant)
 
+            // About
+
             if (dialogState.isThemeDialogOpen) {
                 ThemeSettingDialog(viewModel)
+            }
+            if (dialogState.isLanguageDialogOpen) {
+                LanguageDialog(viewModel)
             }
         }
     }
@@ -150,7 +165,68 @@ fun ThemeSettingDialog(
             TextButton(
                 onClick = viewModel::closeThemeDialog
             ) {
-                Text(stringResource(R.string.confirm))
+                Text(stringResource(R.string.btn_close))
+            }
+        }
+    )
+}
+
+@Composable
+fun LanguageSetting(
+    onItemClick: () -> Unit
+) {
+    SettingItem(
+        title = stringResource(R.string.language_title),
+        description = getLanguageTitle(LocalLanguage.current),
+        onItemClick = onItemClick,
+        showTrailingIcon = false,
+        showLeadingIcon = true,
+        leadingIcon = {
+            Icon(
+                ImageVector.vectorResource(id = R.drawable.ic_setting_language),
+                contentDescription = stringResource(R.string.language_icon_description)
+            )
+        }
+    )
+}
+
+@Composable
+fun LanguageDialog(
+    viewModel: SettingViewModel = hiltViewModel()
+) {
+    val themeViewModel = LocalThemeViewModel.current
+    AlertDialog(
+        text = {
+            Column(
+                modifier = Modifier.verticalScroll(rememberScrollState())
+            ) {
+                Text(
+                    text = stringResource(R.string.language_title),
+                    style = MaterialTheme.typography.titleMedium
+                )
+                Spacer(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(16.dp)
+                )
+                Language.entries.forEach { language ->
+                    RadioItem(
+                        title = getLanguageTitle(language),
+                        description = null,
+                        value = language.name,
+                        selected = LocalLanguage.current == language
+                    ) {
+                        themeViewModel.updateLanguage(language)
+                    }
+                }
+            }
+        },
+        onDismissRequest = viewModel::closeLanguageDialog,
+        confirmButton = {
+            TextButton(
+                onClick = viewModel::closeLanguageDialog
+            ) {
+                Text(stringResource(R.string.btn_close))
             }
         }
     )

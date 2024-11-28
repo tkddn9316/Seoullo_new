@@ -19,6 +19,8 @@ class SettingViewModel @Inject constructor(
     val dialogState: StateFlow<DialogState> = _dialogState.asStateFlow()
 
     fun openThemeDialog() = _dialogState.update { it.copy(isThemeDialogOpen = true) }
+    fun openLanguageDialog() = _dialogState.update { it.copy(isLanguageDialogOpen = true) }
 
     fun closeThemeDialog() = _dialogState.update { it.copy(isThemeDialogOpen = false) }
+    fun closeLanguageDialog() = _dialogState.update { it.copy(isLanguageDialogOpen = false) }
 }

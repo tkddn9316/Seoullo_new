@@ -1,6 +1,7 @@
 package com.app.seoullo_new.view.ui.theme
 
 import android.app.Activity
+import android.content.res.Configuration
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
@@ -19,8 +20,10 @@ import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.view.WindowCompat
 import com.app.domain.model.theme.DynamicTheme
+import com.app.domain.model.theme.Language
 import com.app.domain.model.theme.ThemeMode
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import java.util.Locale
 
 private val DarkColorScheme = darkColorScheme(
     primary = Purple80,
@@ -143,6 +146,7 @@ data class ColorFamily(
 fun Seoullo_newTheme(
     dynamicTheme: DynamicTheme = DynamicTheme.OFF,
     themeMode: ThemeMode = ThemeMode.LIGHT,
+    language: Language = Language.ENGLISH,
     content: @Composable () -> Unit
 ) {
     val useDynamicColor = dynamicTheme == DynamicTheme.ON
@@ -150,6 +154,17 @@ fun Seoullo_newTheme(
         ThemeMode.SYSTEM -> isSystemInDarkTheme()
         ThemeMode.DARK -> true
         ThemeMode.LIGHT -> false
+    }
+
+    val context = LocalContext.current
+    SideEffect {
+        val locale = when (language) {
+            Language.ENGLISH -> Locale.ENGLISH
+            Language.KOREA -> Locale.KOREAN
+        }
+        val configuration = Configuration(context.resources.configuration)
+        configuration.setLocale(locale)
+        context.resources.updateConfiguration(configuration, context.resources.displayMetrics)
     }
 
     val colorScheme = when {
