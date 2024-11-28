@@ -41,7 +41,9 @@ import com.app.seoullo_new.view.util.Route
 // TODO: https://www.youtube.com/watch?v=GFhKfMY0L2E
 // 기온, 강수확률, 풍속, 습도, 내일/모래 날씨, 미세먼지 등등...
 @Composable
-fun HomeScreen(viewModel: MainViewModel = hiltViewModel()) {
+fun HomeScreen(
+    viewModel: HomeViewModel = hiltViewModel()
+) {
     val weather = viewModel.weatherListResult.collectAsState().value
     val skyWeather = weather.find { it.category == "SKY" }
     val ptyWeather = weather.find { it.category == "PTY" }

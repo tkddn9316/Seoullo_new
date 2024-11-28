@@ -1,4 +1,4 @@
-package com.app.seoullo_new.view.fragment
+package com.app.seoullo_new.view.legacy.intro
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -12,7 +12,6 @@ import com.app.seoullo_new.view.base.BaseFragment
 import com.app.seoullo_new.databinding.FragmentIntro1Binding
 import com.app.seoullo_new.utils.PreferenceManager
 import com.app.seoullo_new.utils.Util.launchActivity
-import com.app.seoullo_new.view.intro.IntroViewModel
 import com.app.seoullo_new.view.main.MainActivity
 
 class Intro1Fragment : BaseFragment<FragmentIntro1Binding, IntroViewModel>() {

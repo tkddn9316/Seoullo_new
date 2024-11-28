@@ -1,4 +1,4 @@
-package com.app.seoullo_new.view.login
+package com.app.seoullo_new.view.legacy.login
 
 import android.os.Bundle
 import android.view.View
@@ -13,7 +13,7 @@ import com.app.seoullo_new.utils.Logging
 import com.app.seoullo_new.utils.LoginState
 import com.app.seoullo_new.utils.PreferenceManager
 import com.app.seoullo_new.utils.Util.launchActivity
-import com.app.seoullo_new.view.intro.IntroActivity
+import com.app.seoullo_new.view.legacy.intro.IntroActivity
 import com.app.seoullo_new.view.main.MainActivity
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient

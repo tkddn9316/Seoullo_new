@@ -20,15 +20,15 @@
         android:networkSecurityConfig="@xml/network_security_config"
         tools:targetApi="31">
         <activity
-            android:name=".view.old.PlacesListActivity2"
+            android:name=".view.legacy.PlacesListActivity2"
             android:exported="false"
             android:label="@string/title_activity_places_list2"
             android:theme="@style/Theme.Seoullo_new" />
         <activity
-            android:name=".view.intro.IntroActivity"
+            android:name=".view.legacy.intro.IntroActivity"
             android:exported="false" />
         <activity
-            android:name=".view.login.LoginActivity"
+            android:name=".view.legacy.login.LoginActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -40,7 +40,7 @@
             android:name=".view.main.MainActivity"
             android:exported="true" />
         <activity
-            android:name=".view.old.PlacesListActivity"
+            android:name=".view.legacy.PlacesListActivity"
             android:exported="true" />
     </application>
 

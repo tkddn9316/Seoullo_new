@@ -5,11 +5,11 @@
 
         <variable
             name="viewModel"
-            type="com.app.seoullo_new.view.intro.IntroViewModel" />
+            type="com.app.seoullo_new.view.legacy.intro.IntroViewModel" />
 
         <variable
             name="view"
-            type="com.app.seoullo_new.view.fragment.Intro2Fragment" />
+            type="com.app.seoullo_new.view.legacy.intro.Intro2Fragment" />
     </data>
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -17,7 +17,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        tools:context=".view.fragment.Intro1Fragment">
+        tools:context=".view.legacy.intro.Intro1Fragment">
 
         <LinearLayout
             android:layout_width="match_parent"

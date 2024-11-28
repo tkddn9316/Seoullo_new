@@ -4,36 +4,62 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.TravelExplore
+import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.app.seoullo_new.R
+import com.app.seoullo_new.utils.Logging
 import com.app.seoullo_new.view.main.home.HomeScreen
 import com.app.seoullo_new.view.ui.theme.Color_92c8e0
 import com.app.seoullo_new.view.ui.theme.Color_Gray500
 import com.app.seoullo_new.view.util.Route
+import com.skydoves.landscapist.glide.GlideImage
 import kotlinx.coroutines.launch
 
 // 탭 3~4개
 // 탭1: 메인 배너, popular location
 // 탭2: travel info
-// 탭3: 설정 창(로그아웃)
+// 탭3: 설정 창(다크 모드, 언어 설정, 로그아웃 등)
 
 @Composable
-fun MainScreen() {
-    Scaffold { paddingValues ->
+fun MainScreen(
+    viewModel: MainViewModel = hiltViewModel()
+) {
+    Scaffold(
+        topBar = { MainTopBar(viewModel) }
+    ) { paddingValues ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -47,6 +73,48 @@ fun MainScreen() {
             TabWithPager(tabs = tabs)
         }
     }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun MainTopBar(
+    viewModel: MainViewModel
+) {
+    val profileImageUrl by viewModel.profileImageUrl.collectAsState()
+    val context = LocalContext.current
+    CenterAlignedTopAppBar(
+        title = {
+            Text(
+                text = context.getString(R.string.seoullo),
+                fontSize = 23.sp,
+                style = TextStyle(
+                    fontStyle = FontStyle.Italic,
+                    fontWeight = FontWeight.Bold
+                ),
+                textAlign = TextAlign.Center
+            )
+        },
+        colors = TopAppBarDefaults.topAppBarColors(
+            containerColor = Color_92c8e0,
+            titleContentColor = Color.White
+        ),
+        actions = {
+            CircularProfileImage(profileImageUrl ?: "")
+        }
+    )
+}
+
+@Composable
+fun CircularProfileImage(imageUrl: String, size: Dp = 40.dp) {
+    Logging.d(imageUrl)
+    GlideImage(
+        imageModel = imageUrl, // URL 또는 기본값
+        modifier = Modifier
+            .size(size)
+            .clip(CircleShape),
+        placeHolder = painterResource(R.drawable.baseline_person_24),
+        error = painterResource(R.drawable.baseline_person_24)
+    )
 }
 
 // 탭과 페이지를 연결하고, 사용자가 탭을 눌렀을 때 페이지를 전환하거나 스와이프 시 탭이 변경되도록 한다.

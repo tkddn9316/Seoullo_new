@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/intro1Fragment"
-        android:name="com.app.seoullo_new.view.fragment.Intro1Fragment"
+        android:name="com.app.seoullo_new.view.legacy.intro.Intro1Fragment"
         android:label="fragment_intro1"
         tools:layout="@layout/fragment_intro1">
         <action
@@ -16,7 +16,7 @@
     </fragment>
     <fragment
         android:id="@+id/intro2Fragment"
-        android:name="com.app.seoullo_new.view.fragment.Intro2Fragment"
+        android:name="com.app.seoullo_new.view.legacy.intro.Intro2Fragment"
         android:label="fragment_intro2"
         tools:layout="@layout/fragment_intro2">
         <action
@@ -25,7 +25,7 @@
     </fragment>
     <fragment
         android:id="@+id/intro3Fragment"
-        android:name="com.app.seoullo_new.view.fragment.Intro3Fragment"
+        android:name="com.app.seoullo_new.view.legacy.intro.Intro3Fragment"
         android:label="fragment_intro3"
         tools:layout="@layout/fragment_intro3" />
 </navigation>

@@ -1,4 +1,4 @@
-package com.app.seoullo_new.view.old
+package com.app.seoullo_new.view.legacy
 
 import android.os.Bundle
 import androidx.activity.viewModels
