@@ -14,8 +14,11 @@ import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.TravelExplore
 import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
@@ -29,8 +32,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -42,6 +45,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.app.seoullo_new.R
 import com.app.seoullo_new.utils.Logging
 import com.app.seoullo_new.view.main.home.HomeScreen
+import com.app.seoullo_new.view.main.setting.SettingScreen
 import com.app.seoullo_new.view.ui.theme.Color_92c8e0
 import com.app.seoullo_new.view.ui.theme.Color_Gray500
 import com.app.seoullo_new.view.util.Route
@@ -81,11 +85,10 @@ private fun MainTopBar(
     viewModel: MainViewModel
 ) {
     val profileImageUrl by viewModel.profileImageUrl.collectAsState()
-    val context = LocalContext.current
     CenterAlignedTopAppBar(
         title = {
             Text(
-                text = context.getString(R.string.seoullo),
+                text = stringResource(R.string.seoullo),
                 fontSize = 23.sp,
                 style = TextStyle(
                     fontStyle = FontStyle.Italic,
@@ -112,8 +115,8 @@ fun CircularProfileImage(imageUrl: String, size: Dp = 40.dp) {
         modifier = Modifier
             .size(size)
             .clip(CircleShape),
-        placeHolder = painterResource(R.drawable.baseline_person_24),
-        error = painterResource(R.drawable.baseline_person_24)
+        placeHolder = painterResource(R.drawable.ic_user_default),
+        error = painterResource(R.drawable.ic_user_default)
     )
 }
 
@@ -137,6 +140,8 @@ fun TabWithPager(
                 Route.SETTING -> SettingScreen()
             }
         }
+
+        HorizontalDivider(thickness = 1.dp, color = MaterialTheme.colorScheme.outlineVariant)
 
         // Tab Bar
         TabRow(
@@ -176,12 +181,12 @@ fun TravelScreen() {
     }
 }
 
-@Composable
-fun SettingScreen() {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-    ) {
-        Text("Screen 3")
-    }
-}
+//@Composable
+//fun SettingScreen() {
+//    Column(
+//        modifier = Modifier
+//            .fillMaxSize()
+//    ) {
+//        Text("Screen 3")
+//    }
+//}

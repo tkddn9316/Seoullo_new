@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">Seoullo_new</string>
     <string name="seoullo">SEOULLO</string>
+    <string name="empty"></string>
+    <string name="confirm">OK</string>
     <string name="yes">Y</string>
     <string name="no">N</string>
     <string name="sign_in_with_google">Sign in with Google</string>
@@ -14,6 +16,8 @@
     <string name="intro2_contents">"Seoullo" has various functions.\nThere are travel destinations and restaurants that will remain memorable if you go, and maps and translations to go there.</string>
     <string name="intro3_title">Let\'s going to Seoullo!</string>
     <string name="intro3_contents">Now start a happy tour of Seoul with "Seoullo"!</string>
+
+
     <string name="title_activity_places_list2">PlacesListActivity2</string>
     <string name="open">OPEN</string>
     <string name="close">CLOSE</string>
@@ -24,4 +28,15 @@
     <string name="nearby_list_description">A list of tourist attractions within a radius of 1 km is shown.(up to 20)</string>
     <string name="seoul">Seoul</string>
     <string name="temp_symbol">°</string>
+
+
+    <string name="setting_theme_setting">Theme Setting</string>
+    <string name="theme_settings_title">Theme</string>
+    <string name="theme_settings_description">You can set Dynamic Theme and Dark Mode.</string>
+    <string name="theme_settings_icon_description">Theme</string>
+    <string name="dynamic_theme">Dynamic Theme</string>
+    <string name="dark_mode">Dark Mode</string>
+    <string name="on">ON</string>
+    <string name="off">OFF</string>
+    <string name="system_default">System Default</string>
 </resources>

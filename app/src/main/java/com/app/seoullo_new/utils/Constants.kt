@@ -1,5 +1,9 @@
 package com.app.seoullo_new.utils
 
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.res.stringResource
+import com.app.domain.model.theme.DynamicTheme
+import com.app.domain.model.theme.ThemeMode
 import com.app.seoullo_new.R
 
 /**
@@ -26,5 +30,18 @@ object Constants {
         HOTEL("hotel"), MOTEL("motel"), GUEST_HOUSE("guest_house"),
         RESTAURANT("restaurant"), CAFE("cafe"),
         FESTIVAL("85")
+    }
+
+    @Composable
+    fun getDynamicThemeTitle(theme: DynamicTheme) = when (theme) {
+        DynamicTheme.ON -> stringResource(R.string.on)
+        DynamicTheme.OFF -> stringResource(R.string.off)
+    }
+
+    @Composable
+    fun getThemeModeTitle(theme: ThemeMode) = when (theme) {
+        ThemeMode.SYSTEM -> stringResource(R.string.system_default)
+        ThemeMode.DARK -> stringResource(R.string.on)
+        ThemeMode.LIGHT -> stringResource(R.string.off)
     }
 }
