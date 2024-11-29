@@ -1,4 +1,4 @@
-package com.app.seoullo_new.view.base
+package com.app.seoullo_new.view.legacy
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -34,12 +34,11 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import com.app.seoullo_new.R
 import com.app.seoullo_new.utils.Constants.SELECTED_NEARBY_LIST
 import com.app.seoullo_new.utils.Constants.SELECTED_TOUR_LIST
+import com.app.seoullo_new.view.base.BaseViewModel
 import com.app.seoullo_new.view.ui.theme.Color_Gray500
 
 @Composable

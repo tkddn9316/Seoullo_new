@@ -48,7 +48,7 @@ import com.app.domain.model.Places
 import com.app.seoullo_new.R
 import com.app.seoullo_new.utils.Constants.SELECTED_NEARBY_LIST
 import com.app.seoullo_new.utils.Constants.SELECTED_TOUR_LIST
-import com.app.seoullo_new.view.base.BaseTitle
+import com.app.seoullo_new.view.legacy.BaseTitle
 import com.app.seoullo_new.view.ui.theme.Color_ERROR
 import com.app.seoullo_new.view.ui.theme.Color_Gray500
 import com.app.seoullo_new.view.ui.theme.Seoullo_newTheme

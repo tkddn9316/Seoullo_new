@@ -4,6 +4,7 @@
     <string name="empty" translatable="false"></string>
     <string name="btn_close">Close</string>
     <string name="confirm">OK</string>
+    <string name="exit">Press \'back\' again to exit.</string>
     <string name="yes">Y</string>
     <string name="no">N</string>
     <string name="sign_in_with_google">Sign in with Google</string>
@@ -36,7 +37,7 @@
     <string name="temp_symbol">°</string>
 
 
-    <string name="setting_theme_setting">Theme Setting</string>
+    <string name="theme_title">Theme Setting</string>
     <string name="theme_settings_title">Theme</string>
     <string name="theme_settings_description">You can set Dynamic Theme and Dark Mode.</string>
     <string name="theme_settings_icon_description">Theme</string>
@@ -50,4 +51,10 @@
     <string name="language_icon_description">Language</string>
     <string name="language_ENGLISH">English</string>
     <string name="language_KOREA">Korea</string>
+
+    <string name="about_title">About</string>
+    <string name="license_title">License</string>
+    <string name="license_description">Open Source License</string>
+
+    <string name="account_title">Account</string>
 </resources>

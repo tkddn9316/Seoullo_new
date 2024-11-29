@@ -5,6 +5,7 @@
     <string name="empty"></string>
     <string name="btn_close">닫기</string>
     <string name="confirm">확인</string>
+    <string name="exit">\'뒤로\' 버튼을 한 번 더 누르면 앱이 종료됩니다.</string>
     <string name="yes">Y</string>
     <string name="no">N</string>
     <string name="sign_in_with_google">구글로 시작하기</string>
@@ -37,7 +38,7 @@
     <string name="temp_symbol">°</string>
 
 
-    <string name="setting_theme_setting">테마 설정</string>
+    <string name="theme_title">테마 설정</string>
     <string name="theme_settings_title">테마</string>
     <string name="theme_settings_description">다이나믹 테마 및 다크 모드를 설정할 수 있습니다.</string>
     <string name="theme_settings_icon_description">Theme</string>
@@ -51,4 +52,10 @@
     <string name="language_icon_description">Language</string>
     <string name="language_ENGLISH">영어</string>
     <string name="language_KOREA">한국어</string>
+
+    <string name="about_title">앱 정보</string>
+    <string name="license_title">라이선스</string>
+    <string name="license_description">오픈 소스 라이선스</string>
+
+    <string name="account_title">계정</string>
 </resources>

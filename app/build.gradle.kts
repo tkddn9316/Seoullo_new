@@ -4,10 +4,13 @@ plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("org.jetbrains.kotlin.plugin.compose")
-    id("com.google.dagger.hilt.android")
+//    id("com.google.dagger.hilt.android")
     id("kotlin-kapt")
 //    id("dagger.hilt.android.plugin")
     id("com.google.gms.google-services")
+
+    alias(libs.plugins.android.hilt)
+    alias(libs.plugins.auto.license)
 }
 
 android {
@@ -165,4 +168,8 @@ dependencies {
     // lottie
     val lottieVersion = "6.4.1"
     implementation ("com.airbnb.android:lottie-compose:$lottieVersion")
+
+    // License page UI
+    implementation(libs.auto.license.core)
+    implementation(libs.auto.license.ui)
 }

@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -24,7 +23,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavHostController
 import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.LottieConstants
@@ -32,11 +30,9 @@ import com.airbnb.lottie.compose.rememberLottieAnimatable
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.app.domain.model.Weather
 import com.app.seoullo_new.R
-import com.app.seoullo_new.view.main.MainViewModel
 import com.app.seoullo_new.view.ui.theme.Color_Cloudy
 import com.app.seoullo_new.view.ui.theme.Color_Rainy
 import com.app.seoullo_new.view.ui.theme.Color_Sunny
-import com.app.seoullo_new.view.util.Route
 
 // TODO: https://www.youtube.com/watch?v=GFhKfMY0L2E
 // 기온, 강수확률, 풍속, 습도, 내일/모래 날씨, 미세먼지 등등...

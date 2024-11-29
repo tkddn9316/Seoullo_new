@@ -6,7 +6,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.navigation.compose.rememberNavController
 import com.app.seoullo_new.view.ui.theme.Seoullo_newTheme
-import com.app.seoullo_new.view.util.NavigationGraph
+import com.app.seoullo_new.view.util.navigation.NavigationGraph
 import com.app.seoullo_new.view.util.theme.LocalDynamicTheme
 import com.app.seoullo_new.view.util.theme.LocalLanguage
 import com.app.seoullo_new.view.util.theme.LocalThemeMode

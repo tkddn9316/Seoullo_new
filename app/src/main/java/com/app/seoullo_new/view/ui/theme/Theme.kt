@@ -2,30 +2,22 @@ package com.app.seoullo_new.view.ui.theme
 
 import android.app.Activity
 import android.content.res.Configuration
-import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.Immutable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.toArgb
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.view.WindowCompat
 import com.app.domain.model.theme.DynamicTheme
 import com.app.domain.model.theme.Language
 import com.app.domain.model.theme.ThemeMode
-import com.app.seoullo_new.view.util.theme.LocalLanguage
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import java.util.Locale
 
@@ -62,6 +54,8 @@ private val LightColorScheme = lightColorScheme(
 //    val customColor2: ColorFamily
 //)
 
+
+// https://material-foundation.github.io/material-theme-builder/
 private val lightScheme = lightColorScheme(
     primary = Color_92c8e0,
     onPrimary = onPrimaryLight,
@@ -175,8 +169,8 @@ fun Seoullo_newTheme(
         useDynamicColor -> {
             if (useDarkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
         }
-        useDarkTheme -> darkScheme.copy(background = Color.Black) // 강제로 다른 색상 추가(리컴포지션 강제)
-        else -> lightScheme.copy(background = Color.White) // 강제로 다른 색상 추가
+        useDarkTheme -> darkScheme.copy(background = backgroundDark) // reComposition 강제
+        else -> lightScheme.copy(background = backgroundLight) // reComposition 강제
     }
     val view = LocalView.current
     if (!view.isInEditMode) {

@@ -1,5 +1,8 @@
 package com.app.seoullo_new.view.main
 
+import android.app.Activity
+import android.widget.Toast
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -31,6 +34,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
@@ -41,6 +45,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController
 import com.app.seoullo_new.R
 import com.app.seoullo_new.utils.Logging
 import com.app.seoullo_new.view.main.home.HomeScreen
@@ -57,8 +62,10 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun MainScreen(
-    viewModel: MainViewModel = hiltViewModel()
+    viewModel: MainViewModel = hiltViewModel(),
+    settingOnClick: (String) -> Unit
 ) {
+    BackOnPressed()
     Scaffold(
         topBar = { MainTopBar(viewModel) }
     ) { paddingValues ->
@@ -72,7 +79,49 @@ fun MainScreen(
                 stringResource(R.string.tab_travel),
                 stringResource(R.string.tab_setting)
             )
-            TabWithPager(tabs = tabs)
+
+            // 탭과 페이지를 연결하고, 사용자가 탭을 눌렀을 때 페이지를 전환하거나 스와이프 시 탭이 변경되도록 한다.
+            val pagerState = rememberPagerState { tabs.size }
+            val coroutineScope = rememberCoroutineScope()
+
+            Column(modifier = Modifier.fillMaxSize()) {
+                // ViewPager
+                HorizontalPager(
+                    state = pagerState,
+                    modifier = Modifier.weight(1f) // 남은 공간 차지
+                ) { page ->
+                    when (tabs[page]) {
+                        stringResource(R.string.tab_home) -> HomeScreen()
+                        stringResource(R.string.tab_travel) -> TravelScreen()
+                        stringResource(R.string.tab_setting) -> SettingScreen {
+                            settingOnClick(it)
+                            ""
+                        }
+                    }
+                }
+
+                HorizontalDivider(thickness = 1.dp, color = MaterialTheme.colorScheme.outlineVariant)
+
+                // Tab Bar
+                TabRow(
+                    selectedTabIndex = pagerState.currentPage,
+                    modifier = Modifier.fillMaxWidth(),
+                    containerColor = MaterialTheme.colorScheme.background
+                ) {
+                    tabs.forEachIndexed { index, item ->
+                        val isSelected = pagerState.currentPage == index
+                        val tabColor = if (isSelected) Color_92c8e0 else Color_Gray500
+                        Tab(
+                            text = { Text(text = item, color = tabColor) },
+                            icon = { Icon(imageVector = getIcon(item), contentDescription = null, tint = tabColor) },
+                            selected = isSelected,
+                            onClick = {
+                                coroutineScope.launch { pagerState.animateScrollToPage(index) }
+                            }
+                        )
+                    }
+                }
+            }
         }
     }
 }
@@ -118,51 +167,6 @@ fun CircularProfileImage(imageUrl: String, size: Dp = 40.dp) {
     )
 }
 
-// 탭과 페이지를 연결하고, 사용자가 탭을 눌렀을 때 페이지를 전환하거나 스와이프 시 탭이 변경되도록 한다.
-@Composable
-fun TabWithPager(
-    tabs: List<String>
-) {
-    val pagerState = rememberPagerState { tabs.size }
-    val coroutineScope = rememberCoroutineScope()
-
-    Column(modifier = Modifier.fillMaxSize()) {
-        // ViewPager
-        HorizontalPager(
-            state = pagerState,
-            modifier = Modifier.weight(1f) // 남은 공간 차지
-        ) { page ->
-            when (tabs[page]) {
-                stringResource(R.string.tab_home) -> HomeScreen()
-                stringResource(R.string.tab_travel) -> TravelScreen()
-                stringResource(R.string.tab_setting) -> SettingScreen()
-            }
-        }
-
-        HorizontalDivider(thickness = 1.dp, color = MaterialTheme.colorScheme.outlineVariant)
-
-        // Tab Bar
-        TabRow(
-            selectedTabIndex = pagerState.currentPage,
-            modifier = Modifier.fillMaxWidth(),
-            containerColor = MaterialTheme.colorScheme.background
-        ) {
-            tabs.forEachIndexed { index, item ->
-                val isSelected = pagerState.currentPage == index
-                val tabColor = if (isSelected) Color_92c8e0 else Color_Gray500
-                Tab(
-                    text = { Text(text = item, color = tabColor) },
-                    icon = { Icon(imageVector = getIcon(item), contentDescription = null, tint = tabColor) },
-                    selected = isSelected,
-                    onClick = {
-                        coroutineScope.launch { pagerState.animateScrollToPage(index) }
-                    }
-                )
-            }
-        }
-    }
-}
-
 @Composable
 fun getIcon(screen: String): ImageVector = when (screen) {
     stringResource(R.string.tab_home) -> Icons.Default.Home
@@ -190,3 +194,18 @@ fun TravelScreen() {
 //        Text("Screen 3")
 //    }
 //}
+
+@Composable
+fun BackOnPressed() {
+    val context = LocalContext.current
+    var backPressedTime = 0L
+
+    BackHandler(enabled = true) {
+        if(System.currentTimeMillis() - backPressedTime <= 400L) {
+            (context as Activity).finish() // 앱 종료
+        } else {
+            Toast.makeText(context, context.getString(R.string.exit), Toast.LENGTH_SHORT).show()
+        }
+        backPressedTime = System.currentTimeMillis()
+    }
+}
