@@ -60,7 +60,7 @@ fun SettingScreen(
         ) {
             // 테마 설정
             Column(
-                modifier = Modifier.padding(start = 24.dp),
+                modifier = Modifier.padding(start = 24.dp, top = 24.dp),
                 horizontalAlignment = Alignment.Start
             ) {
                 Text(
