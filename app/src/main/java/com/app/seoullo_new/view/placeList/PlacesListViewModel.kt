@@ -69,7 +69,8 @@ class PlacesListViewModel @Inject constructor(
         onIO {
             getPlacesListUseCase(
                 BuildConfig.TOUR_API_KEY,
-                ContentTypeId.RESTAURANT.id
+                ContentTypeId.KoreanRestaurant.id,
+                ContentTypeId.KoreanRestaurant.cat
             ).flowOn(Dispatchers.IO)
                 .cachedIn(viewModelScope)
                 .catch { Logging.e(it.message ?: "") }
@@ -93,8 +94,8 @@ class PlacesListViewModel @Inject constructor(
                 BuildConfig.SEOULLO_GOOGLE_MAPS_API_KEY,
                 PlacesNearbyRequest(
                     listOf(
-                        ContentType.RESTAURANT.type,
-                        ContentType.CAFE.type
+//                        ContentType.RESTAURANT.type,
+//                        ContentType.CAFE.type
                     ),
                     20,
                     PlacesNearbyRequest.LocationRestriction(

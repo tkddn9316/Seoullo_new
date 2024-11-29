@@ -50,6 +50,7 @@ import com.app.seoullo_new.R
 import com.app.seoullo_new.utils.Logging
 import com.app.seoullo_new.view.main.home.HomeScreen
 import com.app.seoullo_new.view.main.setting.SettingScreen
+import com.app.seoullo_new.view.main.travel.TravelScreen
 import com.app.seoullo_new.view.ui.theme.Color_92c8e0
 import com.app.seoullo_new.view.ui.theme.Color_Gray500
 import com.skydoves.landscapist.glide.GlideImage
@@ -92,11 +93,8 @@ fun MainScreen(
                 ) { page ->
                     when (tabs[page]) {
                         stringResource(R.string.tab_home) -> HomeScreen()
-                        stringResource(R.string.tab_travel) -> TravelScreen()
-                        stringResource(R.string.tab_setting) -> SettingScreen {
-                            settingOnClick(it)
-                            ""
-                        }
+                        stringResource(R.string.tab_travel) -> TravelScreen { }
+                        stringResource(R.string.tab_setting) -> SettingScreen { settingOnClick(it) }
                     }
                 }
 
@@ -175,15 +173,15 @@ fun getIcon(screen: String): ImageVector = when (screen) {
     else -> Icons.Default.Clear
 }
 
-@Composable
-fun TravelScreen() {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-    ) {
-        Text("Screen 2")
-    }
-}
+//@Composable
+//fun TravelScreen() {
+//    Column(
+//        modifier = Modifier
+//            .fillMaxSize()
+//    ) {
+//        Text("Screen 2")
+//    }
+//}
 
 //@Composable
 //fun SettingScreen() {

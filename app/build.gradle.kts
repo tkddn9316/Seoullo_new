@@ -8,6 +8,7 @@ plugins {
     id("kotlin-kapt")
 //    id("dagger.hilt.android.plugin")
     id("com.google.gms.google-services")
+    id("kotlinx-serialization")
 
     alias(libs.plugins.android.hilt)
     alias(libs.plugins.auto.license)
@@ -172,4 +173,7 @@ dependencies {
     // License page UI
     implementation(libs.auto.license.core)
     implementation(libs.auto.license.ui)
+
+    // kotlin json
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0")
 }

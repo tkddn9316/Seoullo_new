@@ -10,9 +10,11 @@ class GetPlacesListUseCase @Inject constructor(private val repository: PlacesRep
 
     operator fun invoke(
         serviceKey: String,
-        contentTypeId: String
+        contentTypeId: String,
+        category: String
     ): Flow<PagingData<Places>> = repository.getPlacesList(
         serviceKey = serviceKey,
-        contentTypeId = contentTypeId
+        contentTypeId = contentTypeId,
+        category = category
     )
 }

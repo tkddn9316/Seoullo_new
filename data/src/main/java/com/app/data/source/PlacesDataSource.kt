@@ -7,6 +7,7 @@ interface PlacesDataSource {
     fun getPlacesList(
         pageNo: Int,
         serviceKey: String,
-        contentTypeId: String
+        contentTypeId: String,
+        category: String
     ): Flow<PlacesResponseDTO>
 }

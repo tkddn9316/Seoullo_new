@@ -23,11 +23,12 @@ class PlacesRepositoryImpl @Inject constructor(
 
     override fun getPlacesList(
         serviceKey: String,
-        contentTypeId: String
+        contentTypeId: String,
+        category: String
     ): Flow<PagingData<Places>> {
         return Pager(
             config = PagingConfig(pageSize = PAGE_SIZE, enablePlaceholders = false),
-            pagingSourceFactory = { PlacesPagingSource(placesDataSource, serviceKey, contentTypeId) }
+            pagingSourceFactory = { PlacesPagingSource(placesDataSource, serviceKey, contentTypeId, category) }
         ).flow.map { pagingData ->
             pagingData.map { placesResponseDTO ->
                 mapperToPlace(placesResponseDTO)

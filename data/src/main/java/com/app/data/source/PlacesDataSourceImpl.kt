@@ -12,14 +12,16 @@ class PlacesDataSourceImpl @Inject constructor(private val apiInterface: ApiInte
     override fun getPlacesList(
         pageNo: Int,
         serviceKey: String,
-        contentTypeId: String
+        contentTypeId: String,
+        category: String
     ): Flow<PlacesResponseDTO> {
         return flow {
             emit(
                 apiInterface.getPlacesList(
                     pageNo = pageNo,
                     serviceKey = serviceKey,
-                    contentTypeId = contentTypeId
+                    contentTypeId = contentTypeId,
+                    category = category
                 )
             )
         }

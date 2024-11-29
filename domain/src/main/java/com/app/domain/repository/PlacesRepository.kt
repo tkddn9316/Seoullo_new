@@ -7,6 +7,7 @@ import kotlinx.coroutines.flow.Flow
 interface PlacesRepository {
     fun getPlacesList(
         serviceKey: String,
-        contentTypeId: String
+        contentTypeId: String,
+        category: String
     ): Flow<PagingData<Places>>
 }

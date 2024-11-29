@@ -12,7 +12,8 @@ import javax.inject.Inject
 class PlacesPagingSource @Inject constructor(
     private val placesDataSource: PlacesDataSource,
     private val serviceKey: String,
-    private val contentTypeId: String
+    private val contentTypeId: String,
+    private val category: String
 ) : PagingSource<Int, PlacesResponseDTO.Place>() {
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, PlacesResponseDTO.Place> {
@@ -21,7 +22,8 @@ class PlacesPagingSource @Inject constructor(
             val response = placesDataSource.getPlacesList(
                 pageNo = currentPage,
                 serviceKey = serviceKey,
-                contentTypeId = contentTypeId
+                contentTypeId = contentTypeId,
+                category = category
             )
             val places = response.single().response.body.items.items
             Logging.e(places)

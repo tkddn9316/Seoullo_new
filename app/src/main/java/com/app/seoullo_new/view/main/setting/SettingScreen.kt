@@ -18,10 +18,12 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
@@ -33,6 +35,8 @@ import androidx.navigation.NavHostController
 import com.app.domain.model.theme.DynamicTheme
 import com.app.domain.model.theme.Language
 import com.app.domain.model.theme.ThemeMode
+import com.app.domain.model.theme.ThemeSetting
+import com.app.domain.repository.SettingRepository
 import com.app.seoullo_new.R
 import com.app.seoullo_new.utils.Constants.getDynamicThemeTitle
 import com.app.seoullo_new.utils.Constants.getLanguageTitle
@@ -47,7 +51,7 @@ import com.app.seoullo_new.view.util.theme.LocalThemeViewModel
 @Composable
 fun SettingScreen(
     viewModel: SettingViewModel = hiltViewModel(),
-    settingOnClick: (String) -> String
+    settingOnClick: (String) -> Unit
 ) {
     val scrollState = rememberScrollState()
     val dialogState by viewModel.dialogState.collectAsStateWithLifecycle()
@@ -58,7 +62,7 @@ fun SettingScreen(
                 .padding(innerPadding)
                 .verticalScroll(scrollState)
         ) {
-            // 테마 설정
+            // Theme Setting
             Column(
                 modifier = Modifier.padding(start = 24.dp, top = 24.dp),
                 horizontalAlignment = Alignment.Start
@@ -101,6 +105,19 @@ fun SettingScreen(
                 leadingIcon = {
                     Icon(
                         ImageVector.vectorResource(id = R.drawable.ic_setting_license),
+                        contentDescription = null
+                    )
+                }
+            )
+            SettingItem(
+                title = stringResource(R.string.version_title),
+                description = getAppVersionName(),
+                onItemClick = { },
+                showTrailingIcon = false,
+                showLeadingIcon = true,
+                leadingIcon = {
+                    Icon(
+                        ImageVector.vectorResource(id = R.drawable.ic_setting_version),
                         contentDescription = null
                     )
                 }
@@ -268,4 +285,38 @@ fun LanguageDialog(
             }
         }
     )
+}
+
+@Composable
+fun getAppVersionName(): String {
+    val context = LocalContext.current
+    return try {
+        val packageInfo = context.packageManager.getPackageInfo(context.packageName, 0)
+        packageInfo.versionName ?: "Unknown"
+    } catch (e: Exception) {
+        "Unknown"
+    }
+}
+
+// Preview
+@Preview
+@Composable
+fun TestSettingScreen() {
+    val mockViewModel = SettingViewModel(FakeSettingRepository())
+    MaterialTheme {
+        SettingScreen(
+            viewModel = mockViewModel,
+            settingOnClick = {}
+        )
+    }
+}
+
+class FakeSettingRepository : SettingRepository {
+    override suspend fun fetchThemes(): ThemeSetting {
+        return ThemeSetting()
+    }
+
+    override suspend fun updateThemes(themeSetting: ThemeSetting) {}
+
+    override suspend fun updateLanguage(themeSetting: ThemeSetting) {}
 }

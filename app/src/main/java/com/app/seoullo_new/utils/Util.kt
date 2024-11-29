@@ -7,6 +7,9 @@ import android.os.Bundle
 import androidx.fragment.app.Fragment
 import com.app.domain.model.BaseModel
 import com.app.seoullo_new.utils.Constants.INTENT_DATA
+import com.app.seoullo_new.view.util.TravelItemData
+import com.app.seoullo_new.view.util.TravelJsonItemData
+import kotlinx.serialization.json.Json
 
 /**
  * 각종 유틸 클래스
@@ -119,4 +122,20 @@ object Util {
     fun Class<*>.getTag(): String {
         return this.simpleName
     }
+
+    fun loadTravelData(jsonString: String): TravelItemData {
+        return Json.decodeFromString(jsonString)
+    }
+
+    fun loadJsonFromAssets(context: Context): String {
+        return context.assets.open("content_data.json").bufferedReader().use { it.readText() }
+    }
+
+    fun getRestaurants(travelData: TravelItemData): List<TravelJsonItemData> {
+        return travelData.restaurant ?: emptyList()
+    }
+
+//    fun getFsdfsdfdssdf(travelData: TravelItemData): List<JsonItem> {
+//        return travelData.aaaaaaaaaa ?: emptyList()
+//    }
 }
