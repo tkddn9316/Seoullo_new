@@ -68,33 +68,33 @@ class PlacesListActivity2 : BaseComposeActivity<PlacesListViewModel>() {
 
     @Composable
     fun PlacesList() {
-        val menuClickedPosition by viewModel.menuClickedPosition.observeAsState(initial = 0)
-
-        when (menuClickedPosition) {
-            SELECTED_TOUR_LIST -> {
-                viewModel.getPlacesList()
-                val placesListResult = viewModel.placesListResult2.collectAsLazyPagingItems()
-                LazyColumn(contentPadding = PaddingValues(14.dp, 7.dp)) {
-                    items(
-                        count = placesListResult.itemCount,
-                        key = { placesListResult.peek(it)?.id ?: "" }
-                    ) { index ->
-                        val item = placesListResult[index]!!
-                        PlacesListItem(places = item)
-                    }
-                }
-            }
-
-            SELECTED_NEARBY_LIST -> {
-                viewModel.getPlacesNearbyList()
-                val placesListResult by viewModel.placesListResult.collectAsState(initial = emptyList())
-                LazyColumn(contentPadding = PaddingValues(14.dp, 7.dp)) {
-                    items(placesListResult) { places ->
-                        PlacesListItem(places = places)
-                    }
-                }
-            }
-        }
+//        val menuClickedPosition by viewModel.menuClickedPosition.observeAsState(initial = 0)
+//
+//        when (menuClickedPosition) {
+//            SELECTED_TOUR_LIST -> {
+//                viewModel.getPlacesList()
+//                val placesListResult = viewModel.placesListResult2.collectAsLazyPagingItems()
+//                LazyColumn(contentPadding = PaddingValues(14.dp, 7.dp)) {
+//                    items(
+//                        count = placesListResult.itemCount,
+//                        key = { placesListResult.peek(it)?.id ?: "" }
+//                    ) { index ->
+//                        val item = placesListResult[index]!!
+//                        PlacesListItem(places = item)
+//                    }
+//                }
+//            }
+//
+//            SELECTED_NEARBY_LIST -> {
+//                viewModel.getPlacesNearbyList()
+//                val placesListResult by viewModel.placesListResult.collectAsState(initial = emptyList())
+//                LazyColumn(contentPadding = PaddingValues(14.dp, 7.dp)) {
+//                    items(placesListResult) { places ->
+//                        PlacesListItem(places = places)
+//                    }
+//                }
+//            }
+//        }
     }
 
     @Composable

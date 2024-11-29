@@ -27,6 +27,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -48,50 +52,80 @@ import com.app.domain.model.Places
 import com.app.seoullo_new.R
 import com.app.seoullo_new.utils.Constants.SELECTED_NEARBY_LIST
 import com.app.seoullo_new.utils.Constants.SELECTED_TOUR_LIST
+import com.app.seoullo_new.utils.Logging
+import com.app.seoullo_new.view.base.SeoulloAppBar
 import com.app.seoullo_new.view.legacy.BaseTitle
 import com.app.seoullo_new.view.ui.theme.Color_ERROR
 import com.app.seoullo_new.view.ui.theme.Color_Gray500
 import com.app.seoullo_new.view.ui.theme.Seoullo_newTheme
 import com.app.seoullo_new.view.util.CircularProgress
+import com.app.seoullo_new.view.util.TravelJsonItemData
 import com.google.android.gms.location.LocationServices
+import com.mikepenz.aboutlibraries.ui.compose.m3.LibrariesContainer
 import com.skydoves.landscapist.glide.GlideImage
 
 @Composable
-fun Setup(navController: NavHostController, viewModel: PlacesListViewModel = hiltViewModel()) {
+fun PlacesListScreen(
+    viewModel: PlacesListViewModel = hiltViewModel(),
+    travelItem: TravelJsonItemData,
+    onNavigationClick: () -> Unit
+) {
+//
+//    Seoullo_newTheme {
+//        Surface(
+//            color = Color.White, // 배경색을 원하는 색상으로 지정
+//            modifier = Modifier.fillMaxSize() // 전체 화면을 채우도록 설정
+//        ) {
+//            Scaffold(
+//                topBar = {
+//
+//                },
+//                content = {
+//                    Column(
+//                        modifier = Modifier
+//                            .fillMaxSize()
+//                            .padding(it)
+//                    ) {
+//                        PlacesList(viewModel)
+//                    }
+//                }
+//            )
+//            CircularProgress()
+//        }
+//    }
 
+    Logging.d(travelItem)
+    var menuClickedPosition by remember { mutableIntStateOf(SELECTED_TOUR_LIST) }
     val fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(LocalContext.current)
     viewModel.checkPermission(fusedLocationProviderClient)
 
-    Seoullo_newTheme {
-        Surface(
-            color = Color.White, // 배경색을 원하는 색상으로 지정
-            modifier = Modifier.fillMaxSize() // 전체 화면을 채우도록 설정
+    Scaffold(
+        topBar = {
+            SeoulloAppBar(
+                title = stringResource(R.string.license_title),
+                onNavigationClick = onNavigationClick,
+                showAction = true,
+            ) { menuClickedPosition = it }
+        }
+    ) { innerPadding ->
+        Column(
+            modifier = Modifier.padding(innerPadding)
         ) {
-            Scaffold(
-                topBar = { BaseTitle(navController, viewModel) },
-                content = {
-                    Column(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(it)
-                    ) {
-                        PlacesList(viewModel)
-                    }
-                }
-            )
-            CircularProgress()
+            PlacesList(viewModel, travelItem, menuClickedPosition)
         }
     }
 }
 
 
 @Composable
-fun PlacesList(viewModel: PlacesListViewModel) {
-    val menuClickedPosition by viewModel.menuClickedPosition.observeAsState(initial = 0)
-
+fun PlacesList(
+    viewModel: PlacesListViewModel,
+    travelItem: TravelJsonItemData,
+    menuClickedPosition: Int
+) {
     when (menuClickedPosition) {
         SELECTED_TOUR_LIST -> {
-            viewModel.getPlacesList()
+            viewModel.getPlacesList(travelItem)
             val placesListResult = viewModel.placesListResult2.collectAsLazyPagingItems()
             LazyColumn(contentPadding = PaddingValues(14.dp, 7.dp)) {
                 items(
@@ -99,17 +133,17 @@ fun PlacesList(viewModel: PlacesListViewModel) {
                     key = { placesListResult.peek(it)?.id ?: "" }
                 ) { index ->
                     val item = placesListResult[index]!!
-                    PlacesListItem(viewModel, item)
+                    PlacesListItem(item, menuClickedPosition)
                 }
             }
         }
 
         SELECTED_NEARBY_LIST -> {
-            viewModel.getPlacesNearbyList()
+            viewModel.getPlacesNearbyList(travelItem)
             val placesListResult by viewModel.placesListResult.collectAsState(initial = emptyList())
             LazyColumn(contentPadding = PaddingValues(14.dp, 7.dp)) {
                 items(placesListResult) { places ->
-                    PlacesListItem(viewModel, places)
+                    PlacesListItem(places, menuClickedPosition)
                 }
             }
         }
@@ -117,7 +151,10 @@ fun PlacesList(viewModel: PlacesListViewModel) {
 }
 
 @Composable
-fun PlacesListItem(viewModel: PlacesListViewModel, places: Places) {
+fun PlacesListItem(
+    places: Places,
+    menuClickedPosition: Int
+) {
     val context = LocalContext.current
 
     Column(
@@ -189,7 +226,7 @@ fun PlacesListItem(viewModel: PlacesListViewModel, places: Places) {
                 maxLines = 1
             )
             // 오픈 여부
-            if (viewModel.menuClickedPosition.value!! == SELECTED_NEARBY_LIST) {
+            if (menuClickedPosition == SELECTED_NEARBY_LIST) {
                 Text(
                     style = MaterialTheme.typography.labelSmall.copy(
                         color = if (places.openNow) Color.Red else Color.Blue,
@@ -204,7 +241,7 @@ fun PlacesListItem(viewModel: PlacesListViewModel, places: Places) {
             }
         }
         // 장소 설명
-        if (viewModel.menuClickedPosition.value!! == SELECTED_NEARBY_LIST) {
+        if (menuClickedPosition == SELECTED_NEARBY_LIST) {
             Text(
                 style = MaterialTheme.typography.labelSmall.copy(
                     color = Color.Gray

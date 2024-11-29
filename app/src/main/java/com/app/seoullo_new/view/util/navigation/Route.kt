@@ -7,7 +7,11 @@ object Route {
     const val TRAVEL = "travel"
     const val SETTING = "setting"
 
-    const val PLACE_LIST = "place_list"
+    const val PLACE_LIST = "place_list/{item}"
 
     const val LICENSE = "license"
+
+    fun placeListParameter(item: String): String {
+        return "place_list/$item"
+    }
 }

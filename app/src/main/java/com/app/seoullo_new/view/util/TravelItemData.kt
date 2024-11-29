@@ -10,9 +10,9 @@ data class TravelItemData(
 
 @Serializable
 data class TravelJsonItemData(
-    val name: String,           // 이름
-    val color: Int,
-    val id: String,
-    val cat: String,       // 카테고리 코드
-    val type: String     // 타입 (구분자로 여러 값 포함)
+    val name: String = "",           // 이름
+    val color: Int = 0,
+    val id: String = "",
+    val cat: String = "",       // 카테고리 코드
+    val type: String = ""     // 타입 (구분자로 여러 값 포함)
 )

@@ -15,6 +15,7 @@ import com.app.seoullo_new.utils.CheckingManager
 import com.app.seoullo_new.utils.Constants.ContentType
 import com.app.seoullo_new.utils.Constants.ContentTypeId
 import com.app.seoullo_new.utils.Logging
+import com.app.seoullo_new.view.util.TravelJsonItemData
 import com.google.android.gms.location.FusedLocationProviderClient
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -25,6 +26,10 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
+// TODO: mutableStateFlow로 ProgressBar
+//  sealed class로 상태 감지
+//  paging 할 때마다 프로그래스 바
+//  실패 시 재시도 로직(스낵바)
 @HiltViewModel
 class PlacesListViewModel @Inject constructor(
     dispatcherProvider: DispatcherProvider,
@@ -38,11 +43,6 @@ class PlacesListViewModel @Inject constructor(
     private val _placesListResult2 = MutableStateFlow<PagingData<Places>>(PagingData.empty())
     val placesListResult2 = _placesListResult2.asStateFlow()
 
-    init {
-        title.value = "TEST"
-        menu.value = true
-    }
-
     fun checkPermission(fusedLocationProviderClient: FusedLocationProviderClient) {
         onMain {
             if (checkingManager.checkPermission(
@@ -53,11 +53,6 @@ class PlacesListViewModel @Inject constructor(
                 getMyLocation(fusedLocationProviderClient) {
                     Logging.e(lat.value!!)
                     Logging.e(lng.value!!)
-//                    getPlacesList()
-//                    getPlacesNearbyList()
-
-                    // TODO: TEST DATA
-//                    test()
                 }
             } else {
                 Logging.e("권한 X")
@@ -65,12 +60,12 @@ class PlacesListViewModel @Inject constructor(
         }
     }
 
-    fun getPlacesList() {
+    fun getPlacesList(travelItem: TravelJsonItemData) {
         onIO {
             getPlacesListUseCase(
                 BuildConfig.TOUR_API_KEY,
-                ContentTypeId.KoreanRestaurant.id,
-                ContentTypeId.KoreanRestaurant.cat
+                travelItem.id,
+                travelItem.cat
             ).flowOn(Dispatchers.IO)
                 .cachedIn(viewModelScope)
                 .catch { Logging.e(it.message ?: "") }
@@ -86,17 +81,15 @@ class PlacesListViewModel @Inject constructor(
 
     /** 위치 기반 리스트 검색(1Km) */
     // TODO: 매번 같은 이미지 안불러오도록 이미지 캐싱 필요
-    fun getPlacesNearbyList() {
+    fun getPlacesNearbyList(travelItem: TravelJsonItemData) {
         onIO {
+            val item = travelItem.type.split("|")
             Logging.e(lat.value!!)
             Logging.e(lng.value!!)
             getPlacesNearbyListUseCase(
                 BuildConfig.SEOULLO_GOOGLE_MAPS_API_KEY,
                 PlacesNearbyRequest(
-                    listOf(
-//                        ContentType.RESTAURANT.type,
-//                        ContentType.CAFE.type
-                    ),
+                    item,
                     20,
                     PlacesNearbyRequest.LocationRestriction(
                         PlacesNearbyRequest.Circle(
@@ -122,55 +115,5 @@ class PlacesListViewModel @Inject constructor(
     private fun clearData() {
         _placesListResult.value = emptyList()
         _placesListResult2.value = PagingData.empty()
-    }
-
-    fun test() {
-        _placesListResult.value = listOf(
-            Places(
-                "places/ChIJWX6IgJaffDURpwHX788tTrI, id=ChIJWX6IgJaffDURpwHX788tTrI",
-                "ChIJWX6IgJaffDURpwHX788tTrI",
-                "Jungdamun Bossam",
-                "주소",
-                "fds",
-                false,
-                ""
-            ),
-            Places(
-                "places/ChIJWX6IgJaffDURpwHX788tTrI, id=ChIJWX6IgJaffDURpwHX788tTrI",
-                "ChIJWX6IgJaffDURpwHX788tTrI",
-                "Jungdamun Bossam",
-                "주소",
-                "fds",
-                false,
-                ""
-            ),
-            Places(
-                "places/ChIJWX6IgJaffDURpwHX788tTrI, id=ChIJWX6IgJaffDURpwHX788tTrI",
-                "ChIJWX6IgJaffDURpwHX788tTrI",
-                "Jungdamun Bossam",
-                "주소",
-                "fds",
-                false,
-                ""
-            ),
-            Places(
-                "places/ChIJWX6IgJaffDURpwHX788tTrI, id=ChIJWX6IgJaffDURpwHX788tTrI",
-                "ChIJWX6IgJaffDURpwHX788tTrI",
-                "Jungdamun Bossam",
-                "주소",
-                "fds",
-                false,
-                ""
-            ),
-            Places(
-                "places/ChIJWX6IgJaffDURpwHX788tTrI, id=ChIJWX6IgJaffDURpwHX788tTrI",
-                "ChIJWX6IgJaffDURpwHX788tTrI",
-                "Jungdamun Bossam",
-                "주소",
-                "fds",
-                false,
-                ""
-            )
-        )
     }
 }

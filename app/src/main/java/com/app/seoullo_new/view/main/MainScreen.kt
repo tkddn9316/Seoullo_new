@@ -53,6 +53,7 @@ import com.app.seoullo_new.view.main.setting.SettingScreen
 import com.app.seoullo_new.view.main.travel.TravelScreen
 import com.app.seoullo_new.view.ui.theme.Color_92c8e0
 import com.app.seoullo_new.view.ui.theme.Color_Gray500
+import com.app.seoullo_new.view.util.TravelJsonItemData
 import com.skydoves.landscapist.glide.GlideImage
 import kotlinx.coroutines.launch
 
@@ -64,6 +65,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun MainScreen(
     viewModel: MainViewModel = hiltViewModel(),
+    travelOnClick: (TravelJsonItemData) -> Unit,
     settingOnClick: (String) -> Unit
 ) {
     BackOnPressed()
@@ -93,7 +95,7 @@ fun MainScreen(
                 ) { page ->
                     when (tabs[page]) {
                         stringResource(R.string.tab_home) -> HomeScreen()
-                        stringResource(R.string.tab_travel) -> TravelScreen { }
+                        stringResource(R.string.tab_travel) -> TravelScreen { travelOnClick(it) }
                         stringResource(R.string.tab_setting) -> SettingScreen { settingOnClick(it) }
                     }
                 }
