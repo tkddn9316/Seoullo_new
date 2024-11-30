@@ -161,12 +161,12 @@ fun PlacesListItem(
             .centerCrop()
 
         GlideImage(
-            imageModel = places.photoUrl.ifEmpty { "" },
-            requestOptions = { requestOptions },
             modifier = Modifier
                 .fillMaxWidth()
                 .height(230.dp)
                 .clip(RoundedCornerShape(10.dp)),
+            imageModel = places.photoUrl.ifEmpty { "" },
+            requestOptions = { requestOptions },
             contentScale = ContentScale.Crop,
             loading = { CircularProgressIndicator(modifier = Modifier.align(Alignment.Center)) },
             failure = {
@@ -174,7 +174,7 @@ fun PlacesListItem(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Image(
-                        painter = painterResource(id = R.drawable.seoul_symbol),
+                        painter = painterResource(id = R.drawable.ic_seoul_symbol),
                         contentDescription = null,
                         contentScale = ContentScale.Fit
                     )

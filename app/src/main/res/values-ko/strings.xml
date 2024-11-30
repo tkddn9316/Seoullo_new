@@ -20,13 +20,14 @@
     <string name="intro3_title">Let\'s going to Seoullo!</string>
     <string name="intro3_contents">Now start a happy tour of Seoul with Seoullo!</string>
 
-
+    <!--  main  -->
     <string name="tab_home">홈</string>
     <string name="tab_travel">여행</string>
     <string name="tab_setting">설정</string>
 
+    <!--  travel  -->
+    <string name="travel_title_restaurant">음식점 목록</string>
 
-    <string name="title_activity_places_list2">PlacesListActivity2</string>
     <string name="open">OPEN</string>
     <string name="close">CLOSE</string>
     <string name="image_loading_error">이미지가 존재하지 않습니다.</string>
@@ -37,7 +38,7 @@
     <string name="seoul">Seoul</string>
     <string name="temp_symbol">°</string>
 
-
+    <!--  setting  -->
     <string name="theme_title">테마 설정</string>
     <string name="theme_settings_title">테마</string>
     <string name="theme_settings_description">다이나믹 테마 및 다크 모드를 설정할 수 있습니다.</string>

@@ -127,10 +127,15 @@ object Util {
         return Json.decodeFromString(jsonString)
     }
 
+    fun loadDrawableResource(context: Context, iconName: String): Int {
+        return context.resources.getIdentifier(iconName, "drawable", context.packageName)
+    }
+
     fun loadJsonFromAssets(context: Context): String {
         return context.assets.open("content_data.json").bufferedReader().use { it.readText() }
     }
 
+    // 음식점 request data
     fun getRestaurants(travelData: TravelItemData): List<TravelJsonItemData> {
         return travelData.restaurant ?: emptyList()
     }

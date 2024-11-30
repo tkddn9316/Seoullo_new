@@ -1,16 +1,81 @@
 {
   "restaurant": [
-    { "name": "Korean\nRestaurant", "color": 0, "id": "82", "cat": "A05020100", "type": "korean_restaurant" },
-    { "name": "Japanese\nRestaurant", "color": 1, "id": "82", "cat": "A05020300", "type": "japanese_restaurant|sushi_restaurant" },
-    { "name": "Chinese\nRestaurant", "color": 2, "id": "82", "cat": "A05020400", "type": "chinese_restaurant" },
-    { "name": "Western\nRestaurants", "color": 3, "id": "82", "cat": "A05020200", "type": "american_restaurant|fast_food_restaurant|french_restaurant|italian_restaurant|mediterranean_restaurant|spanish_restaurant" },
-    { "name": "Bar\nCafe", "color": 4, "id": "82", "cat": "A05020900", "type": "cafe|cafeteria|bar" }
+    {
+      "name": "Korean\nRestaurant",
+      "color": 0,
+      "id": "82",
+      "cat": "A05020100",
+      "type": "korean_restaurant",
+      "icon": "ic_korean_restaurant"
+    },
+    {
+      "name": "Japanese\nRestaurant",
+      "color": 1,
+      "id": "82",
+      "cat": "A05020300",
+      "type": "japanese_restaurant|sushi_restaurant",
+      "icon": "ic_japanese_restaurant"
+    },
+    {
+      "name": "Chinese\nRestaurant",
+      "color": 2,
+      "id": "82",
+      "cat": "A05020400",
+      "type": "chinese_restaurant",
+      "icon": ""
+    },
+    {
+      "name": "Western\nRestaurants",
+      "color": 5,
+      "id": "82",
+      "cat": "A05020200",
+      "type": "american_restaurant|fast_food_restaurant|french_restaurant|italian_restaurant|mediterranean_restaurant|spanish_restaurant",
+      "icon": ""
+    },
+    {
+      "name": "Bar\nCafe",
+      "color": 6,
+      "id": "82",
+      "cat": "A05020900",
+      "type": "cafe|cafeteria|bar",
+      "icon": ""
+    }
   ],
   "aaaaaaaaaa": [
-    { "name": "KoreanRestaurant", "color": 0, "id": "82", "cat": "A05020100", "type": "korean_restaurant" },
-    { "name": "JapaneseRestaurant", "color": 1, "id": "82", "cat": "A05020300", "type": "japanese_restaurant|sushi_restaurant" },
-    { "name": "ChineseRestaurant", "color": 2, "id": "82", "cat": "A05020400", "type": "chinese_restaurant" },
-    { "name": "WesternRestaurants", "color": 3, "id": "82", "cat": "A05020200", "type": "american_restaurant|fast_food_restaurant|french_restaurant|italian_restaurant|mediterranean_restaurant|spanish_restaurant" },
-    { "name": "BarAndCafe", "color": 4, "id": "82", "cat": "A05020900", "type": "cafe|cafeteria|bar" }
+    {
+      "name": "KoreanRestaurant",
+      "color": 0,
+      "id": "82",
+      "cat": "A05020100",
+      "type": "korean_restaurant"
+    },
+    {
+      "name": "JapaneseRestaurant",
+      "color": 1,
+      "id": "82",
+      "cat": "A05020300",
+      "type": "japanese_restaurant|sushi_restaurant"
+    },
+    {
+      "name": "ChineseRestaurant",
+      "color": 2,
+      "id": "82",
+      "cat": "A05020400",
+      "type": "chinese_restaurant"
+    },
+    {
+      "name": "WesternRestaurants",
+      "color": 3,
+      "id": "82",
+      "cat": "A05020200",
+      "type": "american_restaurant|fast_food_restaurant|french_restaurant|italian_restaurant|mediterranean_restaurant|spanish_restaurant"
+    },
+    {
+      "name": "BarAndCafe",
+      "color": 4,
+      "id": "82",
+      "cat": "A05020900",
+      "type": "cafe|cafeteria|bar"
+    }
   ]
 }
