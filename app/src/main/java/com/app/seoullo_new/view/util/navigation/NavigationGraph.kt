@@ -10,7 +10,6 @@ import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.navigation
 import androidx.navigation.navArgument
 import com.app.seoullo_new.view.main.MainScreen
 import com.app.seoullo_new.view.main.setting.LicenseScreen

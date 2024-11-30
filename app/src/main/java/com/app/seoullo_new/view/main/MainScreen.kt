@@ -45,8 +45,8 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavHostController
 import com.app.seoullo_new.R
+import com.app.seoullo_new.utils.Constants.getTabTitle
 import com.app.seoullo_new.utils.Logging
 import com.app.seoullo_new.view.main.home.HomeScreen
 import com.app.seoullo_new.view.main.setting.SettingScreen
@@ -54,6 +54,7 @@ import com.app.seoullo_new.view.main.travel.TravelScreen
 import com.app.seoullo_new.view.ui.theme.Color_92c8e0
 import com.app.seoullo_new.view.ui.theme.Color_Gray500
 import com.app.seoullo_new.view.util.TravelJsonItemData
+import com.app.seoullo_new.view.util.theme.LocalLanguage
 import com.skydoves.landscapist.glide.GlideImage
 import kotlinx.coroutines.launch
 
@@ -77,11 +78,14 @@ fun MainScreen(
                 .fillMaxSize()
                 .padding(paddingValues) // 시스템 바에 따른 패딩 적용
         ) {
-            val tabs = listOf(
-                stringResource(R.string.tab_home),
-                stringResource(R.string.tab_travel),
-                stringResource(R.string.tab_setting)
-            )
+//            val tabs = listOf(
+//                stringResource(R.string.tab_home),
+//                stringResource(R.string.tab_travel),
+//                stringResource(R.string.tab_setting)
+//            )
+
+            val language = LocalLanguage.current
+            val tabs = getTabTitle(language)
 
             // 탭과 페이지를 연결하고, 사용자가 탭을 눌렀을 때 페이지를 전환하거나 스와이프 시 탭이 변경되도록 한다.
             val pagerState = rememberPagerState { tabs.size }
@@ -94,9 +98,10 @@ fun MainScreen(
                     modifier = Modifier.weight(1f) // 남은 공간 차지
                 ) { page ->
                     when (tabs[page]) {
-                        stringResource(R.string.tab_home) -> HomeScreen()
-                        stringResource(R.string.tab_travel) -> TravelScreen { travelOnClick(it) }
-                        stringResource(R.string.tab_setting) -> SettingScreen { settingOnClick(it) }
+                        // TODO: 추후 다른 방법이 있는 지 고민...
+                        "Home", "홈" -> HomeScreen()
+                        "Travel", "여행" -> TravelScreen { travelOnClick(it) }
+                        "Setting", "설정" -> SettingScreen { settingOnClick(it) }
                     }
                 }
 
@@ -169,31 +174,11 @@ fun CircularProfileImage(imageUrl: String, size: Dp = 40.dp) {
 
 @Composable
 fun getIcon(screen: String): ImageVector = when (screen) {
-    stringResource(R.string.tab_home) -> Icons.Default.Home
-    stringResource(R.string.tab_travel) -> Icons.Default.TravelExplore
-    stringResource(R.string.tab_setting) -> Icons.Default.Settings
+    "Home", "홈" -> Icons.Default.Home
+    "Travel", "여행" -> Icons.Default.TravelExplore
+    "Setting", "설정" -> Icons.Default.Settings
     else -> Icons.Default.Clear
 }
-
-//@Composable
-//fun TravelScreen() {
-//    Column(
-//        modifier = Modifier
-//            .fillMaxSize()
-//    ) {
-//        Text("Screen 2")
-//    }
-//}
-
-//@Composable
-//fun SettingScreen() {
-//    Column(
-//        modifier = Modifier
-//            .fillMaxSize()
-//    ) {
-//        Text("Screen 3")
-//    }
-//}
 
 @Composable
 fun BackOnPressed() {

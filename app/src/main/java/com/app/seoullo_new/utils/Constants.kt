@@ -45,6 +45,14 @@ object Constants {
         FESTIVAL("85")
     }
 
+    fun getTabTitle(language: Language): List<String> {
+        return if (language == Language.KOREA) {
+            listOf("홈", "여행", "설정")
+        } else {
+            listOf("Home", "Travel", "Setting")
+        }
+    }
+
     @Composable
     fun getDynamicThemeTitle(theme: DynamicTheme) = when (theme) {
         DynamicTheme.ON -> stringResource(R.string.on)
