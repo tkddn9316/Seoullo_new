@@ -14,21 +14,18 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Scaffold
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -44,9 +41,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavHostController
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.app.domain.model.Places
 import com.app.seoullo_new.R
@@ -54,14 +49,11 @@ import com.app.seoullo_new.utils.Constants.SELECTED_NEARBY_LIST
 import com.app.seoullo_new.utils.Constants.SELECTED_TOUR_LIST
 import com.app.seoullo_new.utils.Logging
 import com.app.seoullo_new.view.base.SeoulloAppBar
-import com.app.seoullo_new.view.legacy.BaseTitle
 import com.app.seoullo_new.view.ui.theme.Color_ERROR
-import com.app.seoullo_new.view.ui.theme.Color_Gray500
-import com.app.seoullo_new.view.ui.theme.Seoullo_newTheme
-import com.app.seoullo_new.view.util.CircularProgress
 import com.app.seoullo_new.view.util.TravelJsonItemData
+import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.request.RequestOptions
 import com.google.android.gms.location.LocationServices
-import com.mikepenz.aboutlibraries.ui.compose.m3.LibrariesContainer
 import com.skydoves.landscapist.glide.GlideImage
 
 @Composable
@@ -96,7 +88,8 @@ fun PlacesListScreen(
 
     Logging.d(travelItem)
     var menuClickedPosition by remember { mutableIntStateOf(SELECTED_TOUR_LIST) }
-    val fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(LocalContext.current)
+    val fusedLocationProviderClient =
+        LocationServices.getFusedLocationProviderClient(LocalContext.current)
     viewModel.checkPermission(fusedLocationProviderClient)
 
     Scaffold(
@@ -162,28 +155,20 @@ fun PlacesListItem(
             Toast.makeText(context, places.displayName, Toast.LENGTH_SHORT).show()
         }
     ) {
+        val requestOptions = RequestOptions()
+            .override(800, 600)
+            .diskCacheStrategy(DiskCacheStrategy.ALL)
+            .centerCrop()
+
         GlideImage(
             imageModel = places.photoUrl.ifEmpty { "" },
+            requestOptions = { requestOptions },
             modifier = Modifier
                 .fillMaxWidth()
                 .height(230.dp)
                 .clip(RoundedCornerShape(10.dp)),
             contentScale = ContentScale.Crop,
-            loading = {
-                ConstraintLayout(
-                    modifier = Modifier.fillMaxSize()
-                ) {
-                    val indicator = createRef()
-                    CircularProgressIndicator(
-                        modifier = Modifier.constrainAs(indicator) {
-                            top.linkTo(parent.top)
-                            bottom.linkTo(parent.bottom)
-                            start.linkTo(parent.start)
-                            end.linkTo(parent.end)
-                        }
-                    )
-                }
-            },
+            loading = { CircularProgressIndicator(modifier = Modifier.align(Alignment.Center)) },
             failure = {
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally
@@ -213,8 +198,8 @@ fun PlacesListItem(
             // 제목
             Text(
                 style = MaterialTheme.typography.labelMedium.copy(
-                    color = Color.Black,
-                    textAlign = TextAlign.Start
+                    textAlign = TextAlign.Start,
+                    color = MaterialTheme.colorScheme.primary
                 ),
                 modifier = Modifier
                     .fillMaxSize()
@@ -244,7 +229,7 @@ fun PlacesListItem(
         if (menuClickedPosition == SELECTED_NEARBY_LIST) {
             Text(
                 style = MaterialTheme.typography.labelSmall.copy(
-                    color = Color.Gray
+                    color = MaterialTheme.colorScheme.onBackground
                 ),
                 modifier = Modifier.fillMaxSize(),
                 text = places.description,
@@ -265,7 +250,7 @@ fun PlacesListItem(
             )
             Text(
                 style = MaterialTheme.typography.labelSmall.copy(
-                    color = Color.Gray
+                    color = MaterialTheme.colorScheme.onBackground
                 ),
                 modifier = Modifier.fillMaxSize(),
                 text = places.address,
@@ -277,6 +262,6 @@ fun PlacesListItem(
 
     }
     Spacer(modifier = Modifier.height(6.dp))
-    Divider(color = Color_Gray500)
+    HorizontalDivider(thickness = 1.dp, color = MaterialTheme.colorScheme.outlineVariant)
     Spacer(modifier = Modifier.height(6.dp))
 }
