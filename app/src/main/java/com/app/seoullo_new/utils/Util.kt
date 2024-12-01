@@ -6,6 +6,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import com.app.domain.model.BaseModel
+import com.app.seoullo_new.R
 import com.app.seoullo_new.utils.Constants.INTENT_DATA
 import com.app.seoullo_new.view.util.TravelItemData
 import com.app.seoullo_new.view.util.TravelJsonItemData
@@ -140,7 +141,23 @@ object Util {
         return travelData.restaurant ?: emptyList()
     }
 
-//    fun getFsdfsdfdssdf(travelData: TravelItemData): List<JsonItem> {
-//        return travelData.aaaaaaaaaa ?: emptyList()
-//    }
+    // 숙박시설 request data
+    fun getAccommodations(travelData: TravelItemData): List<TravelJsonItemData> {
+        return travelData.accommodation ?: emptyList()
+    }
+
+    fun getStringResourceKey(name: String): Int {
+        return when (name) {
+            "KoreanRestaurant" -> R.string.korean_restaurant
+            "JapaneseRestaurant" -> R.string.japanese_restaurant
+            "ChineseRestaurant" -> R.string.chinese_restaurant
+            "WesternRestaurant" -> R.string.western_restaurant
+            "Bar, Cafe" -> R.string.bar_cafe
+            "Hotel" -> R.string.hotel
+            "Motel" -> R.string.motel
+            "Guest House" -> R.string.guest_house
+            "Condominium" -> R.string.condominium
+            else -> R.string.empty
+        }
+    }
 }

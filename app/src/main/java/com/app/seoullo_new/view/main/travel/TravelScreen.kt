@@ -6,17 +6,14 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -27,21 +24,19 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.app.seoullo_new.R
-import com.app.seoullo_new.utils.Logging
+import com.app.seoullo_new.utils.Util.getAccommodations
 import com.app.seoullo_new.utils.Util.getRestaurants
 import com.app.seoullo_new.utils.Util.loadDrawableResource
 import com.app.seoullo_new.utils.Util.loadJsonFromAssets
 import com.app.seoullo_new.utils.Util.loadTravelData
-import com.app.seoullo_new.view.ui.theme.Color_92c8e0
 import com.app.seoullo_new.view.ui.theme.colorGridItem1
 import com.app.seoullo_new.view.ui.theme.colorGridItem2
 import com.app.seoullo_new.view.ui.theme.colorGridItem3
@@ -59,36 +54,53 @@ fun TravelScreen(
     travelOnClick: (TravelJsonItemData) -> Unit
 ) {
     Scaffold { innerPadding ->
-        Column(
-            Modifier.padding(innerPadding)
-        ) {
-            val context = LocalContext.current
-            val jsonString = loadJsonFromAssets(context)
-            val travelData = remember { loadTravelData(jsonString) }
+        val context = LocalContext.current
+        val jsonString = loadJsonFromAssets(context)
+        val travelData = remember { loadTravelData(jsonString) }
 
-            // 음식점 리스트
-            Column(
-                modifier = Modifier.padding(start = 24.dp, top = 24.dp),
-                horizontalAlignment = Alignment.Start
-            ) {
+        LazyColumn(
+            modifier = Modifier.padding(innerPadding),
+            contentPadding = PaddingValues(16.dp)
+        ) {
+            // 음식점 리스트 헤더
+            item {
                 Text(
                     text = stringResource(R.string.travel_title_restaurant),
                     fontWeight = FontWeight.Bold,
-                    fontFamily = notosansFont
+                    fontFamily = notosansFont,
+                    fontSize = 22.sp,
+                    modifier = Modifier.padding(start = 8.dp),
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+            }
+
+            // 음식점 리스트 항목
+            item {
+                TwoColumnGrid(
+                    items = getRestaurants(travelData),
+                    onItemClick = travelOnClick
                 )
             }
-            Spacer(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(8.dp)
-            )
-            TwoColumnGrid(
-                items = getRestaurants(travelData),
-                onItemClick = { item ->
-                    Logging.d("Clicked on: $item")
-                    travelOnClick(item)
-                }
-            )
+
+            // 숙박시설 리스트 헤더
+            item {
+                Text(
+                    text = stringResource(R.string.travel_title_accommodation),
+                    fontWeight = FontWeight.Bold,
+                    fontFamily = notosansFont,
+                    fontSize = 22.sp,
+                    modifier = Modifier.padding(start = 8.dp)
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+            }
+
+            // 숙박시설 리스트 항목
+            item {
+                TwoColumnGrid(
+                    items = getAccommodations(travelData),
+                    onItemClick = travelOnClick
+                )
+            }
         }
     }
 }
@@ -98,18 +110,29 @@ fun TwoColumnGrid(
     items: List<TravelJsonItemData>,
     onItemClick: (TravelJsonItemData) -> Unit
 ) {
-    LazyVerticalGrid(
-        columns = GridCells.Fixed(2),
-        modifier = Modifier.fillMaxSize(),
-        contentPadding = PaddingValues(16.dp),
-        horizontalArrangement = Arrangement.spacedBy(8.dp), // 열 간격
-        verticalArrangement = Arrangement.spacedBy(8.dp)   // 행 간격
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(8.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        items(items.size) { index ->
-            GridItem(
-                item = items[index],
-                onClick = { onItemClick(items[index]) }
-            )
+        items.chunked(2).forEach { rowItems ->
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                rowItems.forEach { item ->
+                    GridItem(
+                        item = item,
+                        onClick = { onItemClick(item) },
+                        modifier = Modifier.weight(1f)
+                    )
+                }
+                // If the row has only one item, fill the remaining space
+                if (rowItems.size < 2) {
+                    Spacer(modifier = Modifier.weight(1f))
+                }
+            }
         }
     }
 }
@@ -117,20 +140,21 @@ fun TwoColumnGrid(
 @Composable
 fun GridItem(
     item: TravelJsonItemData,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
     val context = LocalContext.current
     val colorOrBrush = generateColorOrBrush(item.color)
     val iconRes = remember { loadDrawableResource(context, item.icon) }
 
     Box(
-        modifier = Modifier
+        modifier = modifier
             .clip(RoundedCornerShape(10.dp))
             .height(150.dp)
             .let { baseModifier ->
                 when (colorOrBrush) {
-                    is ColorOrBrush.SolidColor -> baseModifier.background(colorOrBrush.color) // Solid color
-                    is ColorOrBrush.GradientBrush -> baseModifier.background(colorOrBrush.brush) // Gradient
+                    is ColorOrBrush.SolidColor -> baseModifier.background(colorOrBrush.color)
+                    is ColorOrBrush.GradientBrush -> baseModifier.background(colorOrBrush.brush)
                 }
             }
             .clickable(onClick = onClick)
@@ -151,7 +175,7 @@ fun GridItem(
             )
             if (iconRes != 0) {
                 GlideImage(
-                    imageModel = iconRes, // URL 또는 기본값
+                    imageModel = iconRes,
                     modifier = Modifier
                         .size(50.dp)
                         .align(Alignment.End),
@@ -185,6 +209,7 @@ private fun generateColorOrBrush(id: Int): ColorOrBrush {
                 )
             )
         )
+
         7 -> ColorOrBrush.SolidColor(colorGridItem8)
         else -> ColorOrBrush.SolidColor(colorGridItem1)
     }

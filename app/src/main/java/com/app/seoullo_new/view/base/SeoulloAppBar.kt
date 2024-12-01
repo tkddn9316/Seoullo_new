@@ -55,7 +55,7 @@ fun SeoulloAppBar(
                     text = title,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
-                    fontSize = 18.sp,
+                    fontSize = 18.sp
                 )
             },
             navigationIcon = {

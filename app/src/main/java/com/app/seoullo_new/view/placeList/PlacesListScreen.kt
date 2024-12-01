@@ -48,6 +48,7 @@ import com.app.seoullo_new.R
 import com.app.seoullo_new.utils.Constants.SELECTED_NEARBY_LIST
 import com.app.seoullo_new.utils.Constants.SELECTED_TOUR_LIST
 import com.app.seoullo_new.utils.Logging
+import com.app.seoullo_new.utils.Util.getStringResourceKey
 import com.app.seoullo_new.view.base.SeoulloAppBar
 import com.app.seoullo_new.view.ui.theme.Color_ERROR
 import com.app.seoullo_new.view.util.TravelJsonItemData
@@ -62,40 +63,20 @@ fun PlacesListScreen(
     travelItem: TravelJsonItemData,
     onNavigationClick: () -> Unit
 ) {
-//
-//    Seoullo_newTheme {
-//        Surface(
-//            color = Color.White, // 배경색을 원하는 색상으로 지정
-//            modifier = Modifier.fillMaxSize() // 전체 화면을 채우도록 설정
-//        ) {
-//            Scaffold(
-//                topBar = {
-//
-//                },
-//                content = {
-//                    Column(
-//                        modifier = Modifier
-//                            .fillMaxSize()
-//                            .padding(it)
-//                    ) {
-//                        PlacesList(viewModel)
-//                    }
-//                }
-//            )
-//            CircularProgress()
-//        }
-//    }
-
     Logging.d(travelItem)
+
     var menuClickedPosition by remember { mutableIntStateOf(SELECTED_TOUR_LIST) }
     val fusedLocationProviderClient =
         LocationServices.getFusedLocationProviderClient(LocalContext.current)
     viewModel.checkPermission(fusedLocationProviderClient)
 
+    val titleResId = getStringResourceKey(travelItem.title)
+    val title = stringResource(id = titleResId)
+
     Scaffold(
         topBar = {
             SeoulloAppBar(
-                title = stringResource(R.string.license_title),
+                title = title,
                 onNavigationClick = onNavigationClick,
                 showAction = true,
             ) { menuClickedPosition = it }
@@ -156,7 +137,7 @@ fun PlacesListItem(
         }
     ) {
         val requestOptions = RequestOptions()
-            .override(800, 600)
+            .override(900, 600)
             .diskCacheStrategy(DiskCacheStrategy.ALL)
             .centerCrop()
 

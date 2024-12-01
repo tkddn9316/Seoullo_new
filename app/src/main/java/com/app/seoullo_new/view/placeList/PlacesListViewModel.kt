@@ -30,6 +30,7 @@ import javax.inject.Inject
 //  sealed class로 상태 감지
 //  paging 할 때마다 프로그래스 바
 //  실패 시 재시도 로직(스낵바)
+//  getPlacesList만 데이터 DB 저장, 저장된 데이터 캐싱 불러오기, 하루 지나면 삭제(WorkManager)
 @HiltViewModel
 class PlacesListViewModel @Inject constructor(
     dispatcherProvider: DispatcherProvider,

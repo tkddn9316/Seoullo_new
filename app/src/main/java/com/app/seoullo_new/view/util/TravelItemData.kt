@@ -5,12 +5,13 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class TravelItemData(
     val restaurant: List<TravelJsonItemData>? = null,
-    val aaaaaaaaaa: List<TravelJsonItemData>? = null
+    val accommodation: List<TravelJsonItemData>? = null
 )
 
 @Serializable
 data class TravelJsonItemData(
     val name: String = "",           // 이름
+    val title: String = "",
     val color: Int = 0,
     val id: String = "",
     val cat: String = "",       // 카테고리 코드

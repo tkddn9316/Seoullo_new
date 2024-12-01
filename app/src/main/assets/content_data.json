@@ -2,6 +2,7 @@
   "restaurant": [
     {
       "name": "Korean\nRestaurant",
+      "title": "KoreanRestaurant",
       "color": 0,
       "id": "82",
       "cat": "A05020100",
@@ -10,6 +11,7 @@
     },
     {
       "name": "Japanese\nRestaurant",
+      "title": "JapaneseRestaurant",
       "color": 1,
       "id": "82",
       "cat": "A05020300",
@@ -18,22 +20,25 @@
     },
     {
       "name": "Chinese\nRestaurant",
+      "title": "ChineseRestaurant",
       "color": 2,
       "id": "82",
       "cat": "A05020400",
       "type": "chinese_restaurant",
-      "icon": ""
+      "icon": "ic_chinese_restaurant"
     },
     {
       "name": "Western\nRestaurants",
+      "title": "WesternRestaurant",
       "color": 5,
       "id": "82",
       "cat": "A05020200",
       "type": "american_restaurant|fast_food_restaurant|french_restaurant|italian_restaurant|mediterranean_restaurant|spanish_restaurant",
-      "icon": ""
+      "icon": "ic_western_restaurant"
     },
     {
       "name": "Bar\nCafe",
+      "title": "Bar, Cafe",
       "color": 6,
       "id": "82",
       "cat": "A05020900",
@@ -41,41 +46,42 @@
       "icon": ""
     }
   ],
-  "aaaaaaaaaa": [
+  "accommodation": [
     {
-      "name": "KoreanRestaurant",
-      "color": 0,
-      "id": "82",
-      "cat": "A05020100",
-      "type": "korean_restaurant"
-    },
-    {
-      "name": "JapaneseRestaurant",
-      "color": 1,
-      "id": "82",
-      "cat": "A05020300",
-      "type": "japanese_restaurant|sushi_restaurant"
-    },
-    {
-      "name": "ChineseRestaurant",
-      "color": 2,
-      "id": "82",
-      "cat": "A05020400",
-      "type": "chinese_restaurant"
-    },
-    {
-      "name": "WesternRestaurants",
+      "name": "Hotel",
+      "title": "Hotel",
       "color": 3,
-      "id": "82",
-      "cat": "A05020200",
-      "type": "american_restaurant|fast_food_restaurant|french_restaurant|italian_restaurant|mediterranean_restaurant|spanish_restaurant"
+      "id": "80",
+      "cat": "B02010100",
+      "type": "hotel|extended_stay_hotel|resort_hotel",
+      "icon": ""
     },
     {
-      "name": "BarAndCafe",
+      "name": "Motel",
+      "title": "Motel",
       "color": 4,
-      "id": "82",
-      "cat": "A05020900",
-      "type": "cafe|cafeteria|bar"
+      "id": "80",
+      "cat": "B02010900",
+      "type": "motel|inn",
+      "icon": ""
+    },
+    {
+      "name": "Guest\nHouse",
+      "title": "Guest House",
+      "color": 1,
+      "id": "80",
+      "cat": "B02011100",
+      "type": "guest_house_hostel",
+      "icon": ""
+    },
+    {
+      "name": "Condominium",
+      "title": "Condominium",
+      "color": 6,
+      "id": "80",
+      "cat": "B02010500",
+      "type": "condominium_complex",
+      "icon": ""
     }
   ]
 }

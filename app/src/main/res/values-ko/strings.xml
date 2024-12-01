@@ -26,7 +26,17 @@
     <string name="tab_setting">설정</string>
 
     <!--  travel  -->
-    <string name="travel_title_restaurant">음식점 목록</string>
+    <string name="travel_title_restaurant">음식점</string>
+    <string name="korean_restaurant">한식</string>
+    <string name="japanese_restaurant">일식</string>
+    <string name="chinese_restaurant">중식</string>
+    <string name="western_restaurant">양식</string>
+    <string name="bar_cafe">바, 카페</string>
+    <string name="travel_title_accommodation">숙박시설</string>
+    <string name="hotel">호텔</string>
+    <string name="motel">모텔</string>
+    <string name="guest_house">게스트하우스</string>
+    <string name="condominium">콘도미니엄</string>
 
     <string name="open">OPEN</string>
     <string name="close">CLOSE</string>
