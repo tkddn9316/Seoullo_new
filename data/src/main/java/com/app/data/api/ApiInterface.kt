@@ -29,8 +29,8 @@ interface ApiInterface {
     @GET("v1/{NAME}/media")
     suspend fun getPlacePhotoNearby(
         @Path(value = "NAME", encoded = true) name: String,
-        @Query("maxHeightPx") maxHeightPx: Int = 500,
-        @Query("maxWidthPx") maxWidthPx: Int = 500,
+        @Query("maxHeightPx") maxHeightPx: Int = 600,
+        @Query("maxWidthPx") maxWidthPx: Int = 900,
         @Query("key") key: String,
         @Query("skipHttpRedirect") skipHttpRedirect: Boolean = true     // JSON 응답값으로
     ): PlacesPhotoNearbyResponseDTO

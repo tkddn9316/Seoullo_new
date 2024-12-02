@@ -3,6 +3,7 @@ package com.app.domain.model
 data class PlacesNearbyRequest(
     var includedTypes: List<String>,
     var maxResultCount: Int,
+    var languageCode: String,
     var locationRestriction: LocationRestriction
 ) : BaseModel() {
     data class LocationRestriction(

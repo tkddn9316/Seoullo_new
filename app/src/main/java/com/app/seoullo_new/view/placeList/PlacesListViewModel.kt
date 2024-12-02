@@ -82,7 +82,10 @@ class PlacesListViewModel @Inject constructor(
 
     /** 위치 기반 리스트 검색(1Km) */
     // TODO: 매번 같은 이미지 안불러오도록 이미지 캐싱 필요
-    fun getPlacesNearbyList(travelItem: TravelJsonItemData) {
+    fun getPlacesNearbyList(
+        travelItem: TravelJsonItemData,
+        languageCode: String
+    ) {
         onIO {
             val item = travelItem.type.split("|")
             Logging.e(lat.value!!)
@@ -92,6 +95,7 @@ class PlacesListViewModel @Inject constructor(
                 PlacesNearbyRequest(
                     item,
                     20,
+                    languageCode,
                     PlacesNearbyRequest.LocationRestriction(
                         PlacesNearbyRequest.Circle(
                             PlacesNearbyRequest.Center(

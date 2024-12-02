@@ -19,9 +19,15 @@ import com.app.domain.model.Weather
 
 fun mapperToPlaceNearbyDTO(place: PlacesNearbyRequest): PlacesNearbyRequestDTO =
     PlacesNearbyRequestDTO(
-        place.includedTypes, place.maxResultCount, "en", PlacesNearbyRequestDTO.LocationRestriction(
+        place.includedTypes,
+        place.maxResultCount,
+        place.languageCode,
+        PlacesNearbyRequestDTO.LocationRestriction(
             circle = PlacesNearbyRequestDTO.Circle(
-                center = PlacesNearbyRequestDTO.Center(place.locationRestriction.circle.center.latitude, place.locationRestriction.circle.center.longitude),
+                center = PlacesNearbyRequestDTO.Center(
+                    place.locationRestriction.circle.center.latitude,
+                    place.locationRestriction.circle.center.longitude
+                ),
                 radius = place.locationRestriction.circle.radius
             )
         )

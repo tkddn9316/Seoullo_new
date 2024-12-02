@@ -44,6 +44,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.app.domain.model.Places
+import com.app.domain.model.theme.Language
 import com.app.seoullo_new.R
 import com.app.seoullo_new.utils.Constants.SELECTED_NEARBY_LIST
 import com.app.seoullo_new.utils.Constants.SELECTED_TOUR_LIST
@@ -52,6 +53,7 @@ import com.app.seoullo_new.utils.Util.getStringResourceKey
 import com.app.seoullo_new.view.base.SeoulloAppBar
 import com.app.seoullo_new.view.ui.theme.Color_ERROR
 import com.app.seoullo_new.view.util.TravelJsonItemData
+import com.app.seoullo_new.view.util.theme.LocalLanguage
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import com.google.android.gms.location.LocationServices
@@ -113,7 +115,10 @@ fun PlacesList(
         }
 
         SELECTED_NEARBY_LIST -> {
-            viewModel.getPlacesNearbyList(travelItem)
+            viewModel.getPlacesNearbyList(
+                travelItem,
+                if (LocalLanguage.current == Language.ENGLISH) "en" else "ko"
+            )
             val placesListResult by viewModel.placesListResult.collectAsState(initial = emptyList())
             LazyColumn(contentPadding = PaddingValues(14.dp, 7.dp)) {
                 items(placesListResult) { places ->
