@@ -110,8 +110,8 @@ fun MainScreen(
                 // Tab Bar
                 TabRow(
                     selectedTabIndex = pagerState.currentPage,
-                    modifier = Modifier.fillMaxWidth(),
-                    containerColor = MaterialTheme.colorScheme.background
+                    modifier = Modifier.fillMaxWidth()
+//                    containerColor = MaterialTheme.colorScheme.background
                 ) {
                     tabs.forEachIndexed { index, item ->
                         val isSelected = pagerState.currentPage == index

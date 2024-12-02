@@ -142,9 +142,9 @@ fun SeoulloAppBar(
                     }
                 }
             },
-            colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-                containerColor = MaterialTheme.colorScheme.background
-            )
+//            colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+//                containerColor = MaterialTheme.colorScheme.background
+//            )
         )
         HorizontalDivider(thickness = 1.dp, color = MaterialTheme.colorScheme.outlineVariant)
     }

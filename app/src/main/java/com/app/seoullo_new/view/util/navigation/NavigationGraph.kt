@@ -1,8 +1,6 @@
 package com.app.seoullo_new.view.util.navigation
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavGraphBuilder
@@ -22,8 +20,8 @@ import kotlinx.serialization.json.Json
 fun NavigationGraph(navController: NavHostController) {
     NavHost(
         modifier = Modifier
-            .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background),
+            .fillMaxSize(),
+//            .background(MaterialTheme.colorScheme.background),
         navController = navController,
         startDestination = Route.MAIN
     ) {

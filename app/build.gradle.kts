@@ -114,6 +114,8 @@ dependencies {
     implementation("androidx.compose.material:material-icons-extended:1.7.5")
     // compose StatusBar Color
     implementation("com.google.accompanist:accompanist-systemuicontroller:0.32.0")
+    // Compose Navigation Animation
+    implementation("com.google.accompanist:accompanist-navigation-animation:0.36.0")
 
     // Glide
     implementation("com.github.skydoves:landscapist-glide:1.4.7")

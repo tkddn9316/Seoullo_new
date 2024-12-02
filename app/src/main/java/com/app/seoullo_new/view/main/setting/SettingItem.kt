@@ -58,8 +58,8 @@ fun SettingItem(
             colors = ListItemDefaults.colors(
                 headlineColor = if (enabled) colors.headlineColor else colors.disabledHeadlineColor,
                 supportingColor = if (enabled) colors.supportingTextColor else colors.disabledHeadlineColor,
-                trailingIconColor = if (enabled) colors.trailingIconColor else colors.disabledTrailingIconColor,
-                containerColor = MaterialTheme.colorScheme.background
+                trailingIconColor = if (enabled) colors.trailingIconColor else colors.disabledTrailingIconColor
+//                containerColor = MaterialTheme.colorScheme.background
             )
         )
     } else {
@@ -80,8 +80,8 @@ fun SettingItem(
             colors = ListItemDefaults.colors(
                 headlineColor = if (enabled) colors.headlineColor else colors.disabledHeadlineColor,
                 supportingColor = if (enabled) colors.supportingTextColor else colors.disabledHeadlineColor,
-                trailingIconColor = if (enabled) colors.trailingIconColor else colors.disabledTrailingIconColor,
-                containerColor = MaterialTheme.colorScheme.background
+                trailingIconColor = if (enabled) colors.trailingIconColor else colors.disabledTrailingIconColor
+//                containerColor = MaterialTheme.colorScheme.background
             )
         )
     }

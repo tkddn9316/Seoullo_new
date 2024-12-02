@@ -45,20 +45,10 @@ private val LightColorScheme = lightColorScheme(
     */
 )
 
-
-
-//@Immutable
-//data class ExtendedColorScheme(
-//    val customColor1: ColorFamily,
-//    val chatGPTOfficialColor: ColorFamily,
-//    val customColor2: ColorFamily
-//)
-
-
 // https://material-foundation.github.io/material-theme-builder/
-private val lightScheme = lightColorScheme(
-    primary = Color_92c8e0,
-    onPrimary = onPrimaryLight,
+//private val lightScheme = lightColorScheme(
+//    primary = Color_92c8e0,
+//    onPrimary = onPrimaryLight,
 //    primaryContainer = primaryContainerLight,
 //    onPrimaryContainer = onPrimaryContainerLight,
 //    secondary = secondaryLight,
@@ -69,12 +59,12 @@ private val lightScheme = lightColorScheme(
 //    onTertiary = onTertiaryLight,
 //    tertiaryContainer = tertiaryContainerLight,
 //    onTertiaryContainer = onTertiaryContainerLight,
-    error = errorLight,
-    onError = onErrorLight,
-    errorContainer = errorContainerLight,
-    onErrorContainer = onErrorContainerLight,
-    background = backgroundLight,
-    onBackground = onBackgroundLight,
+//    error = errorLight,
+//    onError = onErrorLight,
+//    errorContainer = errorContainerLight,
+//    onErrorContainer = onErrorContainerLight,
+//    background = backgroundLight,
+//    onBackground = onBackgroundLight,
 //    surface = surfaceLight,
 //    onSurface = onSurfaceLight,
 //    surfaceVariant = surfaceVariantLight,
@@ -92,11 +82,11 @@ private val lightScheme = lightColorScheme(
 //    surfaceContainer = surfaceContainerLight,
 //    surfaceContainerHigh = surfaceContainerHighLight,
 //    surfaceContainerHighest = surfaceContainerHighestLight
-)
+//)
 
-private val darkScheme = darkColorScheme(
-    primary = Color_92c8e0,
-    onPrimary = onPrimaryDark,
+//private val darkScheme = darkColorScheme(
+//    primary = Color_92c8e0,
+//    onPrimary = onPrimaryDark,
 //    primaryContainer = primaryContainerDark,
 //    onPrimaryContainer = onPrimaryContainerDark,
 //    secondary = secondaryDark,
@@ -107,12 +97,12 @@ private val darkScheme = darkColorScheme(
 //    onTertiary = onTertiaryDark,
 //    tertiaryContainer = tertiaryContainerDark,
 //    onTertiaryContainer = onTertiaryContainerDark,
-    error = errorDark,
-    onError = onErrorDark,
-    errorContainer = errorContainerDark,
-    onErrorContainer = onErrorContainerDark,
-    background = backgroundDark,
-    onBackground = onBackgroundDark,
+//    error = errorDark,
+//    onError = onErrorDark,
+//    errorContainer = errorContainerDark,
+//    onErrorContainer = onErrorContainerDark,
+//    background = backgroundDark,
+//    onBackground = onBackgroundDark,
 //    surface = surfaceDark,
 //    onSurface = onSurfaceDark,
 //    surfaceVariant = surfaceVariantDark,
@@ -130,6 +120,44 @@ private val darkScheme = darkColorScheme(
 //    surfaceContainer = surfaceContainerDark,
 //    surfaceContainerHigh = surfaceContainerHighDark,
 //    surfaceContainerHighest = surfaceContainerHighestDark
+//)
+
+val lightScheme = lightColorScheme(
+    primary = primaryLight, // Primary 색상 (톤 60)
+    onPrimary = onPrimaryLight, // 흰색 텍스트 (톤 100)
+    primaryContainer = primaryContainerLight, // 밝은 배경용 컨테이너 (톤 90)
+    onPrimaryContainer = onPrimaryContainerLight, // 어두운 텍스트 (톤 10)
+    secondary = secondaryLight, // Secondary 색상 (톤 50)
+    onSecondary = onSecondaryLight, // 흰색 텍스트
+    secondaryContainer = secondaryContainerLight, // 밝은 Secondary 컨테이너
+    onSecondaryContainer = onSecondaryContainerLight, // 어두운 Secondary 텍스트
+    background = backgroundLight, // 앱의 배경색 (톤 98)
+    onBackground = onBackgroundLight, // 텍스트 색상 (톤 20)
+    surface = surfaceLight, // 서피스 배경색 (톤 98)
+    onSurface = onSurfaceLight, // 텍스트 색상 (톤 20)
+    error = errorLight, // 에러 색상
+    onError = onErrorLight, // 흰색 텍스트
+    errorContainer = errorContainerLight, // 밝은 에러 컨테이너
+    onErrorContainer = onErrorContainerLight // 어두운 에러 텍스트
+)
+
+val darkScheme = darkColorScheme(
+    primary = primaryDark, // Primary 색상 (톤 80)
+    onPrimary = onPrimaryDark, // 어두운 텍스트 (톤 20)
+    primaryContainer = primaryContainerDark, // 어두운 Primary 컨테이너 (톤 30)
+    onPrimaryContainer = onPrimaryContainerDark, // 밝은 텍스트 (톤 90)
+    secondary = secondaryDark, // Secondary 색상 (톤 70)
+    onSecondary = onSecondaryDark, // 어두운 Secondary 텍스트 (톤 30)
+    secondaryContainer = secondaryContainerDark, // 어두운 Secondary 컨테이너
+    onSecondaryContainer = onSecondaryContainerDark, // 밝은 텍스트
+    background = backgroundDark, // 어두운 배경색 (톤 10)
+    onBackground = onBackgroundDark, // 밝은 텍스트 (톤 90)
+    surface = surfaceDark, // 어두운 서피스 색상 (톤 10)
+    onSurface = onSurfaceDark, // 밝은 텍스트 (톤 90)
+    error = errorDark, // 에러 색상
+    onError = onErrorDark, // 어두운 텍스트
+    errorContainer = errorContainerDark, // 어두운 에러 컨테이너
+    onErrorContainer = onErrorContainerDark // 밝은 에러 텍스트
 )
 
 @Immutable
