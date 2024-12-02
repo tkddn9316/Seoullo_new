@@ -11,5 +11,8 @@ data class Places(
     val address: String,
     val description: String,
     val openNow: Boolean,
+    val weekdayDescriptions: List<String>,
+    val rating: Double,
+    val userRatingCount: Int,
     val photoUrl: String
 ) : BaseModel()

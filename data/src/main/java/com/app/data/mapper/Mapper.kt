@@ -43,6 +43,9 @@ fun mapperToPlaceNearby(place: PlacesNearbyResponseDTO): List<Places> =
             it.formattedAddress,
             it.primaryTypeDisplayName.text,
             it.regularOpeningHours?.openNow ?: run { false },
+            it.regularOpeningHours?.weekdayDescriptions ?: run { emptyList() },
+            it.rating,
+            it.userRatingCount,
             it.photoUrl
         )
     }
@@ -55,6 +58,9 @@ fun mapperToPlace(place: PlacesResponseDTO.Place): Places =
         place.addr1,
         "",
         false,
+        emptyList(),
+        0.0,
+        0,
         place.firstimage
     )
 

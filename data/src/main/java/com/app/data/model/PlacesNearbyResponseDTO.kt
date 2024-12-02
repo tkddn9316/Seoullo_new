@@ -21,6 +21,10 @@ data class PlacesNearbyResponseDTO(
         val primaryTypeDisplayName: PrimaryTypeDisplayName,
         @SerializedName("regularOpeningHours")
         val regularOpeningHours: RegularOpeningHours?,
+        @SerializedName("rating")
+        val rating: Double,
+        @SerializedName("userRatingCount")
+        val userRatingCount: Int,
         var photoUrl: String = ""
     )
 
@@ -49,7 +53,9 @@ data class PlacesNearbyResponseDTO(
 
     data class RegularOpeningHours(
         @SerializedName("openNow")
-        val openNow: Boolean = false
+        val openNow: Boolean = false,
+        @SerializedName("weekdayDescriptions")
+        val weekdayDescriptions: List<String>
     )
 }
 

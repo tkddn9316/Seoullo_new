@@ -1,0 +1,370 @@
+[
+  {
+    "name": "places/ChIJ_e2rpDV9ezURng7-3_dBgq4",
+    "id": "ChIJ_e2rpDV9ezURng7-3_dBgq4",
+    "displayName": "잇쇼니",
+    "address": "대한민국 경기도 부천시 원미구 중동 신흥로 170-1 위브더스테이트 601동 125호 KR",
+    "description": "일본라면 전문식당",
+    "openNow": true,
+    "weekdayDescriptions": [
+      "월요일: 오전 11:30 ~ 오후 3:00, 오후 5:00~8:30",
+      "화요일: 오전 11:30 ~ 오후 3:00, 오후 5:00~8:30",
+      "수요일: 오전 11:30 ~ 오후 3:00, 오후 5:00~8:30",
+      "목요일: 오전 11:30 ~ 오후 3:00, 오후 5:00~8:30",
+      "금요일: 오전 11:30 ~ 오후 3:00, 오후 5:00~8:30",
+      "토요일: 오전 11:30 ~ 오후 3:00, 오후 5:00~8:30",
+      "일요일: 오전 11:30 ~ 오후 3:00, 오후 5:00~8:30"
+    ],
+    "rating": 4.3,
+    "userRatingCount": 385,
+    "photoUrl": "https://lh3.googleusercontent.com/places/ANXAkqGKyBHt1w-CG0C7CaUjvwBOtBvGXaJT8P3YFUMkToRaXEP9rg1hmQ5Z41iHAmOXIHJdY11xhy-R8CoG3NKy5KjKXsVbOMEJHCA=s4800-w900-h600"
+  },
+  {
+    "name": "places/ChIJh-ZMSTR9ezURSWprsoQhNAc",
+    "id": "ChIJh-ZMSTR9ezURSWprsoQhNAc",
+    "displayName": "스시웨이 부천본점",
+    "address": "대한민국 경기도 부천시 중동 1113",
+    "description": "스시/초밥집",
+    "openNow": false,
+    "weekdayDescriptions": [
+      "월요일: 오전 11:30 ~ 오후 3:00, 오후 5:00~10:00",
+      "화요일: 오전 11:30 ~ 오후 3:00, 오후 5:00~10:00",
+      "수요일: 오전 11:30 ~ 오후 3:00, 오후 5:00~10:00",
+      "목요일: 오전 11:30 ~ 오후 3:00, 오후 5:00~10:00",
+      "금요일: 오전 11:30 ~ 오후 3:00, 오후 5:00~10:00",
+      "토요일: 오전 11:30 ~ 오후 10:00",
+      "일요일: 오전 11:30 ~ 오후 10:00"
+    ],
+    "rating": 4.0,
+    "userRatingCount": 605,
+    "photoUrl": "https://lh3.googleusercontent.com/places/ANXAkqF1ub5lNTaquN3ydmLXotrwQGWJNGuPVQFSnW0O1l9iTv5eOT839Y3HPBXNiFtqVcJNaAvmn5Sb9Eq0ZeDtPRdsHmEBCwqJmgs=s4800-w900-h600"
+  },
+  {
+    "name": "places/ChIJL6cR7TV9ezURRi9Me4F1yYk",
+    "id": "ChIJL6cR7TV9ezURRi9Me4F1yYk",
+    "displayName": "칸지돈부리",
+    "address": "대한민국 경기도 부천시 중2동 중동위브더스테이트아파트 302동 1층",
+    "description": "일본 음식점",
+    "openNow": false,
+    "weekdayDescriptions": [
+      "월요일: 오전 11:00 ~ 오후 9:00",
+      "화요일: 오전 11:00 ~ 오후 9:00",
+      "수요일: 오전 11:00 ~ 오후 9:00",
+      "목요일: 오전 11:00 ~ 오후 9:00",
+      "금요일: 오전 11:00 ~ 오후 9:00",
+      "토요일: 오전 11:00 ~ 오후 9:00",
+      "일요일: 오전 11:00 ~ 오후 8:30"
+    ],
+    "rating": 4.3,
+    "userRatingCount": 133,
+    "photoUrl": "https://lh3.googleusercontent.com/places/ANXAkqG8y7851AP-yRQJKlAI_y-y6S5nefpkihP9lqVISGYx53JlJ6mKbslW3GAjeDlulGqhHfGaWSdpttDVgwX2zR5d_j-MdmTfHyY=s4800-w900-h600"
+  },
+  {
+    "name": "places/ChIJj3voWDF9ezURb4Vfp_qqFKI",
+    "id": "ChIJj3voWDF9ezURb4Vfp_qqFKI",
+    "displayName": "스시하마",
+    "address": "대한민국 부천시",
+    "description": "스시/초밥집",
+    "openNow": false,
+    "weekdayDescriptions": [
+      "월요일: 오전 11:30 ~ 오후 10:00",
+      "화요일: 오전 11:30 ~ 오후 10:00",
+      "수요일: 오전 11:30 ~ 오후 10:00",
+      "목요일: 오전 11:30 ~ 오후 10:00",
+      "금요일: 오전 11:30 ~ 오후 10:00",
+      "토요일: 오전 11:30 ~ 오후 10:00",
+      "일요일: 오전 11:30 ~ 오후 10:00"
+    ],
+    "rating": 4.5,
+    "userRatingCount": 250,
+    "photoUrl": "https://lh3.googleusercontent.com/places/ANXAkqHS0iUMiqp9t-KLrVIVnYT9ih_kVjGIVC7j4Pnryx-fHwPvIIjQ4vTVD7PUQ0CH7A13Ue4smK5UvpNNnA1b2HWhJaMK0xEbIO0=s4800-w900-h600"
+  },
+  {
+    "name": "places/ChIJJ7KQDS19ezURLqf6gVAQD-k",
+    "id": "ChIJJ7KQDS19ezURLqf6gVAQD-k",
+    "displayName": "마찌카도",
+    "address": "대한민국 경기도 부천시 원미구 부천로47번길 56",
+    "description": "일본라면 전문식당",
+    "openNow": true,
+    "weekdayDescriptions": [
+      "월요일: 오전 11:30 ~ 오후 8:00",
+      "화요일: 오전 11:30 ~ 오후 8:00",
+      "수요일: 오전 11:30 ~ 오후 8:00",
+      "목요일: 오전 11:30 ~ 오후 8:00",
+      "금요일: 오전 11:30 ~ 오후 8:00",
+      "토요일: 오전 11:30 ~ 오후 8:00",
+      "일요일: 오전 11:30 ~ 오후 8:00"
+    ],
+    "rating": 4.3,
+    "userRatingCount": 163,
+    "photoUrl": "https://lh3.googleusercontent.com/places/ANXAkqFmJfNd7k6BKiE9pdnEz0RKYHcI_pOIxsZPGNeGtoDZmgFX0GKHObCugezQtaV3LLBH3KweBqCvlULrdOoCopQ2vRosm57J1do=s4800-w900-h600"
+  },
+  {
+    "name": "pplaces/ChIJtQun0zd9ezUR3ABuM1JsExE",
+    "id": "ChIJtQun0zd9ezUR3ABuM1JsExE",
+    "displayName": "샤브향",
+    "address": "대한민국 부천시",
+    "description": "일본 음식점",
+    "openNow": true,
+    "weekdayDescriptions": [
+      "월요일: 오전 11:00 ~ 오후 10:00",
+      "화요일: 오전 11:00 ~ 오후 10:00",
+      "수요일: 오전 11:00 ~ 오후 10:00",
+      "목요일: 오전 11:00 ~ 오후 10:00",
+      "금요일: 오전 11:00 ~ 오후 10:00",
+      "토요일: 오전 11:00 ~ 오후 10:00",
+      "일요일: 오전 11:00 ~ 오후 10:00"
+    ],
+    "rating": 4.0,
+    "userRatingCount": 263,
+    "photoUrl": "https://lh3.googleusercontent.com/places/ANXAkqGf7jm7ZGfj_0s7CGoxtYMats6jJkzLzKbVdrBe0P-5k-nRvb70CtIZaqisZh2DPVLJYCPRkhd3ZVCq71DR5vOtl4UOINc8aDk=s4800-w900-h600"
+  },
+  {
+    "name": "places/ChIJPcSNJzZ9ezUR53eiWASKWLw",
+    "id": "ChIJPcSNJzZ9ezUR53eiWASKWLw",
+    "displayName": "성북동왕돈까스",
+    "address": "대한민국 경기도 부천시 중동로254번길 104",
+    "description": "일본 음식점",
+    "openNow": false,
+    "weekdayDescriptions": [
+      "월요일: 오전 10:00 ~ 오후 9:30",
+      "화요일: 오전 10:00 ~ 오후 9:30",
+      "수요일: 오전 10:00 ~ 오후 9:30",
+      "목요일: 오전 10:00 ~ 오후 9:30",
+      "금요일: 오전 10:00 ~ 오후 9:30",
+      "토요일: 오전 10:00 ~ 오후 9:30",
+      "일요일: 오전 10:00 ~ 오후 9:30"
+    ],
+    "rating": 3.7,
+    "userRatingCount": 832,
+    "photoUrl": "https://lh3.googleusercontent.com/places/ANXAkqF5no0rOJbesYhNLtVlHkR1vTw6ezJlt_1x_HJiiovLZ9oW2aZ3dvK7OEojah9bpBiVZHV1fLatj6ekMG9fzVYH7f4IABm5opE=s4800-w900-h600"
+  },
+  {
+    "name": "places/ChIJWbhopzN9ezURu_JihfBmROk",
+    "id": "ChIJWbhopzN9ezURu_JihfBmROk",
+    "displayName": "숯불구이장어명가",
+    "address": "대한민국 경기도 부천시 원미구 심곡1동 신흥로118번길 18",
+    "description": "일본 음식점",
+    "openNow": false,
+    "weekdayDescriptions": [
+      "월요일: 오전 10:30 ~ 오후 10:30",
+      "화요일: 오전 10:30 ~ 오후 10:30",
+      "수요일: 오전 10:30 ~ 오후 10:30",
+      "목요일: 오전 10:30 ~ 오후 10:30",
+      "금요일: 오전 10:30 ~ 오후 10:30",
+      "토요일: 오전 10:30 ~ 오후 10:30",
+      "일요일: 오전 10:30 ~ 오후 10:30"
+    ],
+    "rating": 4.2,
+    "userRatingCount": 129,
+    "photoUrl": "https://lh3.googleusercontent.com/places/ANXAkqEu2jYlR24y14l8Kzt_GYPtqH9g58S93lS_8wCzZDnOoEPsIs8DvuVGy7Niyx7-A714KPwynrTp1GT4m3s3tTc2J3fRzFhmp68=s4800-w900-h600"
+  },
+  {
+    "name": "places/ChIJ576v8aF9ezUR69B4zQFqhgg",
+    "id": "ChIJ576v8aF9ezUR69B4zQFqhgg",
+    "displayName": "스시현",
+    "address": "대한민국 경기도 부천시 원미구 심곡동 403-3 1층 KR",
+    "description": "스시/초밥집",
+    "openNow": false,
+    "weekdayDescriptions": [
+      "월요일: 휴무일",
+      "화요일: 오후 12:00~9:30",
+      "수요일: 오후 12:00~9:30",
+      "목요일: 오후 12:00~9:30",
+      "금요일: 오후 12:00~9:30",
+      "토요일: 오후 12:00~9:30",
+      "일요일: 오후 12:00~9:30"
+    ],
+    "rating": 4.5,
+    "userRatingCount": 102,
+    "photoUrl": "https://lh3.googleusercontent.com/places/ANXAkqFLsvGjrk3xaWnt4Sfp4HxuKT0BS5qrx_SSUugtqef1RZdiMO_JR1uQKn9MnFypcw8bQH_KXo3_ygBHD9a42tVJg2M2S51N-no=s4800-w476-h600"
+  },
+  {
+    "name": "places/ChIJa7mIwxZ9ezURIjk2YbFi3GM",
+    "id": "ChIJa7mIwxZ9ezURIjk2YbFi3GM",
+    "displayName": "미우치",
+    "address": "대한민국 경기도 부천시 중동로248번길 52",
+    "description": "일본 음식점",
+    "openNow": false,
+    "weekdayDescriptions": [],
+    "rating": 4.1,
+    "userRatingCount": 21,
+    "photoUrl": "https://lh3.googleusercontent.com/places/ANXAkqGoAgzXD9Zaejx--Q_NL6Mupx3MXPXqQdq4J7bNBPRNfJW3qTCKUzvLcXWHTBlzGwttPr95r_XxreeLXICr7Vjs_0mhI_CcljM=s4800-w900-h600"
+  },
+  {
+    "name": "places/ChIJdcDA2jd9ezURVPjNoy_VM9w",
+    "id": "ChIJdcDA2jd9ezURVPjNoy_VM9w",
+    "displayName": "고젠",
+    "address": "대한민국 부천시",
+    "description": "일본 음식점",
+    "openNow": true,
+    "weekdayDescriptions": [
+      "월요일: 오전 11:30 ~ 오후 10:00",
+      "화요일: 오전 11:30 ~ 오후 10:00",
+      "수요일: 오전 11:30 ~ 오후 10:00",
+      "목요일: 오전 11:30 ~ 오후 10:00",
+      "금요일: 오전 11:30 ~ 오후 10:00",
+      "토요일: 오전 11:30 ~ 오후 10:00",
+      "일요일: 오전 11:30 ~ 오후 10:00"
+    ],
+    "rating": 4.0,
+    "userRatingCount": 9,
+    "photoUrl": "https://lh3.googleusercontent.com/places/ANXAkqG9aI9xdkxCwCL7SA-fSq4kbCOYoUVg-6MeuHZuNZjtu91BIHzZ289NB3ueQANjdZo0K_2UP_qXuMvqf3mXEAD20_0goteR4Us=s4800-w900-h600"
+  },
+  {
+    "name": "places/ChIJqaGNglF9ezUR_8g9Y17MmTA",
+    "id": "ChIJqaGNglF9ezUR_8g9Y17MmTA",
+    "displayName": "이자카야 지안",
+    "address": "대한민국 경기도 부천시 길주로 276",
+    "description": "일본 음식점",
+    "openNow": true,
+    "weekdayDescriptions": [
+      "월요일: 오후 5:30 ~ 오전 2:00",
+      "화요일: 오후 5:30 ~ 오전 2:00",
+      "수요일: 오후 5:30 ~ 오전 2:00",
+      "목요일: 오후 5:00 ~ 오전 2:00",
+      "금요일: 오후 5:00 ~ 오전 2:00",
+      "토요일: 오후 5:00 ~ 오전 2:00",
+      "일요일: 오후 7:00~10:00"
+    ],
+    "rating": 4.4,
+    "userRatingCount": 97,
+    "photoUrl": "https://lh3.googleusercontent.com/places/ANXAkqEgcgaEFhoPSrMHFZOdxcr4Zx9pOAyg_lm0jdGbJZgvsbHX1GJvp-Mht5Yh2o4SUxmzp0jGAjlYShV6Pit9kcPZCyeuhnaRt9w=s4800-w900-h600"
+  },
+  {
+    "name": "places/ChIJg6MADdp9ezURtvVZql0lvmU",
+    "id": "ChIJg6MADdp9ezURtvVZql0lvmU",
+    "displayName": "호윤",
+    "address": "대한민국 경기도 부천시 중동로254번길 64 110호 호윤",
+    "description": "일본 음식점",
+    "openNow": true,
+    "weekdayDescriptions": [
+      "월요일: 휴무일",
+      "화요일: 오후 5:30 ~ 오전 2:00",
+      "수요일: 오후 5:30 ~ 오전 2:00",
+      "목요일: 오후 5:30 ~ 오전 2:00",
+      "금요일: 오후 5:30 ~ 오전 2:00",
+      "토요일: 오후 5:30 ~ 오전 2:00",
+      "일요일: 오후 5:30 ~ 오전 2:00"
+    ],
+    "rating": 4.3,
+    "userRatingCount": 22,
+    "photoUrl": "https://lh3.googleusercontent.com/places/ANXAkqHsKwwvL69sXRtyotHPz7hEfwAvGcysPVJewSn43GwOXGCukBH-_eFxCXlT8oopcVpl-9oAXV7-rZ0WtoC5b1zqv2Iwj6CZrRI=s4800-w900-h600"
+  },
+  {
+    "name": "places/ChIJ5y6UDjR9ezURJC655_BHmEM",
+    "id": "ChIJ5y6UDjR9ezURJC655_BHmEM",
+    "displayName": "쿄이스시",
+    "address": "대한민국 경기도 부천시 원미구 중동 1125-1",
+    "description": "스시/초밥집",
+    "openNow": true,
+    "weekdayDescriptions": [
+      "월요일: 24시간 영업",
+      "화요일: 24시간 영업",
+      "수요일: 24시간 영업",
+      "목요일: 24시간 영업",
+      "금요일: 24시간 영업",
+      "토요일: 24시간 영업",
+      "일요일: 24시간 영업"
+    ],
+    "rating": 4.2,
+    "userRatingCount": 31,
+    "photoUrl": "https://lh3.googleusercontent.com/places/ANXAkqEZFODJ2Vbb35FCbPAri4vayjMulSFl0ob3gHjvUs1Qs2aZTGdSYc9xMB3uTCqcgEwr-BDiKkCLwlCEZVsM202zM1CJd0FWVg=s4800-w900-h600"
+  },
+  {
+    "name": "places/ChIJvWFQhLJ9ezUR2QVihBkEJgQ",
+    "id": "ChIJvWFQhLJ9ezUR2QVihBkEJgQ",
+    "displayName": "카츠오도 부천점",
+    "address": "대한민국 경기도 부천시 원미구 신흥로 178 위브더스테이트 대로변 상가 3동 108호",
+    "description": "일본 음식점",
+    "openNow": true,
+    "weekdayDescriptions": [],
+    "rating": 5.0,
+    "userRatingCount": 1,
+    "photoUrl": "https://lh3.googleusercontent.com/places/ANXAkqH-uaA7_O4nBCXU0QnMaPYal1Vkc5VyxWhlG1dl8Nlw34M8ufVYo0uvgqEh2ePKz-kwDP3JNqprL0aVEX4HuFZGx6Tyjw0aWTQ=s4800-w900-h600"
+  },
+  {
+    "name": "places/ChIJQdOzZDZ9ezURPHlRoP908m8",
+    "id": "ChIJQdOzZDZ9ezURPHlRoP908m8",
+    "displayName": "호우양꼬치",
+    "address": "대한민국 부천시 중동 1130번지 삼익프라자 102호 부천시 경기도 KR",
+    "description": "일본 음식점",
+    "openNow": true,
+    "weekdayDescriptions": [],
+    "rating": 4.2,
+    "userRatingCount": 46,
+    "photoUrl": "https://lh3.googleusercontent.com/places/ANXAkqFJq1wlcHYo29qQ1uUjJGHqQ7tOtoXzcaaBqvOLZM-aSHPykFtRdBKl-gUVmR4yLKAdp5u23fehjeSHNYmWGcvGUbNLABnfSfw=s4800-w900-h600"
+  },
+  {
+    "name": "places/ChIJJay_PzZ9ezURkHGVT0WuJ4o",
+    "id": "ChIJJay_PzZ9ezURkHGVT0WuJ4o",
+    "displayName": "충칭훠궈",
+    "address": "대한민국 경기도 부천시 중동 1134번지 2층 202 203호 KR",
+    "description": "일본 음식점",
+    "openNow": true,
+    "weekdayDescriptions": [
+      "월요일: 오전 11:00 ~ 오후 10:00",
+      "화요일: 오전 11:00 ~ 오후 10:00",
+      "수요일: 오전 11:00 ~ 오후 10:00",
+      "목요일: 오전 11:00 ~ 오후 10:00",
+      "금요일: 오전 11:00 ~ 오후 10:00",
+      "토요일: 오전 11:00 ~ 오후 10:00",
+      "일요일: 오전 11:00 ~ 오후 10:00"
+    ],
+    "rating": 4.8,
+    "userRatingCount": 4,
+    "photoUrl": "https://lh3.googleusercontent.com/places/ANXAkqHSiTT91owOtO4nJK6YG2WNCRPVqrnpItEFwW5n3g15U5UHmBfW86OSrTa9Y67tuyO1XYt1jw2vpPFwrNdoxczL0tp6W-FKEug=s4800-w900-h600"
+  },
+  {
+    "name": "places/ChIJuXl9GzZ9ezURfgXnFbziJJM",
+    "id": "ChIJuXl9GzZ9ezURfgXnFbziJJM",
+    "displayName": "갓포 이자카야 오가",
+    "address": "대한민국 경기도 부천시 원미구 소향로 251 2층 202호 KR",
+    "description": "일본 음식점",
+    "openNow": false,
+    "weekdayDescriptions": [
+      "월요일: 휴무일",
+      "화요일: 휴무일",
+      "수요일: 오후 5:00 ~ 오전 12:30",
+      "목요일: 오후 5:00 ~ 오전 12:30",
+      "금요일: 오후 5:00 ~ 오전 1:30",
+      "토요일: 오후 4:00 ~ 오전 1:30",
+      "일요일: 오후 4:00 ~ 오전 12:30"
+    ],
+    "rating": 4.1,
+    "userRatingCount": 24,
+    "photoUrl": "https://lh3.googleusercontent.com/places/ANXAkqF5FDrJnFzCP-WoZiVzhwZehjmvMI_jAyemdktrWRJsf0MfSm33KG7mgb99AajKJMduoSVOS2Xh-oHE34br35FPPAgH4Ygwvcg=s4800-w900-h600"
+  },
+  {
+    "name": "places/ChIJs0rFIgB9ezURLavXQ7V5-Ec",
+    "id": "ChIJs0rFIgB9ezURLavXQ7V5-Ec",
+    "displayName": "어다미준",
+    "address": "대한민국 경기도 부천시 소향로253번길 25",
+    "description": "일본 음식점",
+    "openNow": false,
+    "weekdayDescriptions": [],
+    "rating": 3.0,
+    "userRatingCount": 2,
+    "photoUrl": "https://lh3.googleusercontent.com/places/ANXAkqFTDZFDu2cZxPBN0UG7TMguLRscHfvf2UggWuFGaM7z8RhJU6srsewmU7FYz9rb8sFME4kmjJoRJoyuhASwBwg4vQnNYFGTwu8=s4800-w900-h600"
+  },
+  {
+    "name": "places/ChIJS5vQpsB9ezURkY6pcuc1gsw",
+    "id": "ChIJS5vQpsB9ezURkY6pcuc1gsw",
+    "displayName": "무공돈까스 신중동역점",
+    "address": "대한민국 경기도 부천시 원미구 소향로253번길 17 105 무공돈까스 신중동역점 106호 1층 KR",
+    "description": "일본 음식점",
+    "openNow": true,
+    "weekdayDescriptions": [
+      "월요일: 오전 11:00 ~ 오후 9:00",
+      "화요일: 오전 11:00 ~ 오후 9:00",
+      "수요일: 오전 11:00 ~ 오후 9:00",
+      "목요일: 오전 11:00 ~ 오후 9:00",
+      "금요일: 오전 11:00 ~ 오후 9:00",
+      "토요일: 오전 11:00 ~ 오후 9:00",
+      "일요일: 오전 11:00 ~ 오후 9:00"
+    ],
+    "rating": 4.1,
+    "userRatingCount": 28,
+    "photoUrl": "https://lh3.googleusercontent.com/places/ANXAkqFF4WnYnKjlm7HBYTx2OMwNRprE8RjZyyXqxekeZIygWNe3a4SZlNf8l_j_PRCn-3-THYICmtNqNfF8vU11k1Hc6IPCrPX5Eg=s4800-w900-h600"
+  }
+]
