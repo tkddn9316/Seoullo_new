@@ -1,6 +1,7 @@
 package com.app.seoullo_new.view.placeList
 
 import android.Manifest
+import android.content.Context
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
@@ -9,12 +10,10 @@ import com.app.domain.model.PlacesNearbyRequest
 import com.app.domain.usecase.places.GetPlacesListUseCase
 import com.app.domain.usecase.places.GetPlacesNearbyListUseCase
 import com.app.seoullo_new.BuildConfig
-import com.app.seoullo_new.view.base.BaseViewModel2
 import com.app.seoullo_new.di.DispatcherProvider
 import com.app.seoullo_new.utils.CheckingManager
-import com.app.seoullo_new.utils.Constants.ContentType
-import com.app.seoullo_new.utils.Constants.ContentTypeId
 import com.app.seoullo_new.utils.Logging
+import com.app.seoullo_new.view.base.BaseViewModel2
 import com.app.seoullo_new.view.util.TravelJsonItemData
 import com.google.android.gms.location.FusedLocationProviderClient
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -24,13 +23,9 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.withContext
+import kotlinx.serialization.json.Json
 import javax.inject.Inject
 
-// TODO: mutableStateFlow로 ProgressBar
-//  sealed class로 상태 감지
-//  paging 할 때마다 프로그래스 바
-//  실패 시 재시도 로직(스낵바)
-//  getPlacesList만 데이터 DB 저장, 저장된 데이터 캐싱 불러오기, 하루 지나면 삭제(WorkManager)
 @HiltViewModel
 class PlacesListViewModel @Inject constructor(
     dispatcherProvider: DispatcherProvider,
@@ -115,6 +110,13 @@ class PlacesListViewModel @Inject constructor(
                     _placesListResult.value = test
                 }
         }
+    }
+
+    fun getFakePlacesNearbyList(context: Context) {
+        // Debug Fake Data
+        val jsonString = context.assets.open("fake_nearby_places_data.json").bufferedReader().use { it.readText() }
+        val fakePlaces = Json.decodeFromString<List<Places>>(jsonString)
+        _placesListResult.value = fakePlaces
     }
 
     private fun clearData() {

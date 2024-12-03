@@ -3,6 +3,7 @@ plugins {
     id("org.jetbrains.kotlin.android")
 //    id("com.google.dagger.hilt.android")
     id("kotlin-kapt")
+    id("kotlinx-serialization")
 
     alias(libs.plugins.android.hilt)
 }
@@ -72,4 +73,7 @@ dependencies {
     // paging
     val paging_version = "3.3.4"
     implementation("androidx.paging:paging-common-ktx:$paging_version")
+
+    // kotlin json
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0")
 }

@@ -18,7 +18,7 @@ data class PlacesNearbyResponseDTO(
         @SerializedName("photos")
         val photos: List<Photos>?,
         @SerializedName("primaryTypeDisplayName")
-        val primaryTypeDisplayName: PrimaryTypeDisplayName,
+        val primaryTypeDisplayName: PrimaryTypeDisplayName?,
         @SerializedName("regularOpeningHours")
         val regularOpeningHours: RegularOpeningHours?,
         @SerializedName("rating")

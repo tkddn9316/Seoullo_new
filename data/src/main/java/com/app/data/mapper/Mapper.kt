@@ -35,13 +35,12 @@ fun mapperToPlaceNearbyDTO(place: PlacesNearbyRequest): PlacesNearbyRequestDTO =
 
 fun mapperToPlaceNearby(place: PlacesNearbyResponseDTO): List<Places> =
     place.place.toList().map {
-        Logging.e(it)
         Places(
             it.name,
             it.id,
             it.displayName.text,
             it.formattedAddress,
-            it.primaryTypeDisplayName.text,
+            it.primaryTypeDisplayName?.text ?: "",
             it.regularOpeningHours?.openNow ?: run { false },
             it.regularOpeningHours?.weekdayDescriptions ?: run { emptyList() },
             it.rating,

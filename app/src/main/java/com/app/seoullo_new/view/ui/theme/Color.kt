@@ -30,6 +30,8 @@ val colorGridItem6 = Color(0xFFf59a24)
 val colorGridItem7 = Color(0xFF768e9a)
 val colorGridItem8 = Color(0xFF9cbdcc)
 
+val colorRatingStar = Color(0xFFFFA500)
+
 val primaryLight = Color(0xFF92C8E0)
 val onPrimaryLight = Color(0xFFFFFFFF)
 val primaryContainerLight = Color(0xFFCCE4F0)
