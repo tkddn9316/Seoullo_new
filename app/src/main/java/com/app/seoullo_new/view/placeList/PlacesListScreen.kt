@@ -1,6 +1,6 @@
 package com.app.seoullo_new.view.placeList
 
-import android.widget.Toast
+import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -19,7 +19,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.filled.StarHalf
-import androidx.compose.material.icons.outlined.StarRate
+import androidx.compose.material.icons.outlined.StarOutline
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -65,12 +65,16 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import com.google.android.gms.location.LocationServices
 import com.skydoves.landscapist.glide.GlideImage
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 
 @Composable
 fun PlacesListScreen(
     viewModel: PlacesListViewModel = hiltViewModel(),
     travelItem: TravelJsonItemData,
-    onNavigationClick: () -> Unit
+    onNavigationClick: () -> Unit,
+    onNearbyItemClick: (places: String) -> Unit,
+    onItemClick: (places: String) -> Unit
 ) {
     Logging.d(travelItem)
 
@@ -94,7 +98,13 @@ fun PlacesListScreen(
         Column(
             modifier = Modifier.padding(innerPadding)
         ) {
-            PlacesList(viewModel, travelItem, menuClickedPosition)
+            PlacesList(
+                viewModel,
+                travelItem,
+                menuClickedPosition,
+                onNearbyItemClick,
+                onItemClick
+            )
         }
     }
 }
@@ -104,7 +114,9 @@ fun PlacesListScreen(
 fun PlacesList(
     viewModel: PlacesListViewModel,
     travelItem: TravelJsonItemData,
-    menuClickedPosition: Int
+    menuClickedPosition: Int,
+    onNearbyItemClick: (places: String) -> Unit,
+    onItemClick: (places: String) -> Unit
 ) {
     when (menuClickedPosition) {
         SELECTED_TOUR_LIST -> {
@@ -116,7 +128,12 @@ fun PlacesList(
                     key = { placesListResult.peek(it)?.id ?: "" }
                 ) { index ->
                     val item = placesListResult[index]!!
-                    PlacesListItem(travelItem.title, item, menuClickedPosition)
+                    PlacesListItem(
+                        travelItem.title,
+                        item,
+                        menuClickedPosition,
+                        onItemClick
+                    )
                 }
             }
         }
@@ -133,7 +150,12 @@ fun PlacesList(
             val placesListResult by viewModel.placesListResult.collectAsState(initial = emptyList())
             LazyColumn(contentPadding = PaddingValues(14.dp, 7.dp)) {
                 items(placesListResult) { places ->
-                    PlacesListItem(travelItem.title, places, menuClickedPosition)
+                    PlacesListItem(
+                        travelItem.title,
+                        places,
+                        menuClickedPosition,
+                        onNearbyItemClick
+                    )
                 }
             }
         }
@@ -144,13 +166,16 @@ fun PlacesList(
 fun PlacesListItem(
     title: String,
     places: Places,
-    menuClickedPosition: Int
+    menuClickedPosition: Int,
+    onItemClick: (places: String) -> Unit
 ) {
-    val context = LocalContext.current
+//    val context = LocalContext.current
 
     Column(
         Modifier.clickable {
-            Toast.makeText(context, places.displayName, Toast.LENGTH_SHORT).show()
+            val json = Json.encodeToString(places)
+            val encodedJson = Uri.encode(json)
+            onItemClick(encodedJson)
         }
     ) {
         val requestOptions = RequestOptions()
@@ -299,7 +324,7 @@ fun RatingBar(
         // 빈 별
         repeat(emptyStars) {
             Icon(
-                imageVector = Icons.Outlined.StarRate,
+                imageVector = Icons.Outlined.StarOutline,
                 contentDescription = null,
                 tint = colorRatingStar,
                 modifier = Modifier.size(15.dp)
@@ -339,6 +364,7 @@ fun PlacesListItemPreview() {
     PlacesListItem(
         title = "Dummy Title",
         places = samplePlaces,
-        menuClickedPosition = SELECTED_NEARBY_LIST
+        menuClickedPosition = SELECTED_NEARBY_LIST,
+        onItemClick = { }
     )
 }

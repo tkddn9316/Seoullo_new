@@ -1,5 +1,6 @@
 package com.app.seoullo_new.view.util.navigation
 
+import android.net.Uri
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -8,20 +9,25 @@ import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.navigation
 import androidx.navigation.navArgument
+import com.app.domain.model.Places
+import com.app.seoullo_new.utils.Logging
 import com.app.seoullo_new.view.main.MainScreen
 import com.app.seoullo_new.view.main.setting.LicenseScreen
+import com.app.seoullo_new.view.placeDetail.PlaceDetailNearbyScreen
+import com.app.seoullo_new.view.placeDetail.PlaceDetailScreen
 import com.app.seoullo_new.view.placeList.PlacesListScreen
 import com.app.seoullo_new.view.util.TravelJsonItemData
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
+import java.net.URLDecoder
 
 @Composable
 fun NavigationGraph(navController: NavHostController) {
     NavHost(
         modifier = Modifier
             .fillMaxSize(),
-//            .background(MaterialTheme.colorScheme.background),
         navController = navController,
         startDestination = Route.MAIN
     ) {
@@ -59,6 +65,36 @@ fun NavGraphBuilder.travelScreenNavigation(navController: NavHostController) {
 
         PlacesListScreen(
             travelItem = travelItem ?: TravelJsonItemData(),
+            onNavigationClick = { navController.navigateUp() },
+            onNearbyItemClick = {
+                navController.navigate(
+                    Route.PLACE_DETAIL_NEARBY
+                        .replace(oldValue = "{place}", newValue = it)
+                )
+            },
+            onItemClick = {
+                navController.navigate(
+                    Route.PLACE_DETAIL
+                        .replace(oldValue = "{place}", newValue = it)
+                )
+            }
+        )
+    }
+
+    composable(
+        Route.PLACE_DETAIL_NEARBY,
+        arguments = listOf(navArgument("place") { type = NavType.StringType })
+    ) {
+        PlaceDetailNearbyScreen(
+            onNavigationClick = { navController.navigateUp() }
+        )
+    }
+
+    composable(
+        Route.PLACE_DETAIL,
+        arguments = listOf(navArgument("place") { type = NavType.StringType })
+    ) {
+        PlaceDetailScreen(
             onNavigationClick = { navController.navigateUp() }
         )
     }

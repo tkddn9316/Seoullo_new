@@ -8,6 +8,8 @@ object Route {
     const val SETTING = "setting"
 
     const val PLACE_LIST = "place_list/{item}"
+    const val PLACE_DETAIL = "place_detail/{place}"
+    const val PLACE_DETAIL_NEARBY = "place_detail_nearby/{place}"
 
     const val LICENSE = "license"
 

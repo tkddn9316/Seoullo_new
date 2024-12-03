@@ -8,14 +8,14 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 data class Places(
-    val name: String,
-    val id: String,
-    val displayName: String,
-    val address: String,
-    val description: String,
-    val openNow: Boolean,
-    val weekdayDescriptions: List<String>,
-    val rating: Double,
-    val userRatingCount: Int,
-    val photoUrl: String
+    val name: String = "",
+    val id: String = "",
+    val displayName: String = "",
+    val address: String = "",
+    val description: String = "",
+    val openNow: Boolean = false,
+    val weekdayDescriptions: List<String> = emptyList(),
+    val rating: Double = 0.0,
+    val userRatingCount: Int = 0,
+    val photoUrl: String = ""
 ) : BaseModel()
