@@ -16,20 +16,32 @@ class PlacesPagingSource @Inject constructor(
     private val category: String
 ) : PagingSource<Int, PlacesResponseDTO.Place>() {
 
+    private var totalPageCount: Int? = null
+
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, PlacesResponseDTO.Place> {
         return try {
             val currentPage = params.key ?: 1
+            Logging.d("${javaClass.name}: $currentPage")
             val response = placesDataSource.getPlacesList(
                 pageNo = currentPage,
                 serviceKey = serviceKey,
                 contentTypeId = contentTypeId,
                 category = category
             )
-            val places = response.single().response.body.items.items
-            Logging.e(places)
+            val body = response.single().response.body
+            val places = body.items?.items ?: emptyList()   // 데이터
+            if (totalPageCount == null) {
+                // 총 페이지 수 계산
+                totalPageCount = if (body.numOfRows > 0) {
+                    (body.totalCount + body.numOfRows - 1) / body.numOfRows
+                } else {
+                    1
+                }
+            }
+            Logging.d("${javaClass.name}: $totalPageCount")
 
             // 다음 페이지 번호 계산
-            val nextPage = currentPage + 1
+            val nextPage = if (currentPage < totalPageCount!!) currentPage + 1 else null
 
             LoadResult.Page(
                 data = places,

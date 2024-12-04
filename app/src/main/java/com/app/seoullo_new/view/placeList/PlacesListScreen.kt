@@ -1,12 +1,15 @@
 package com.app.seoullo_new.view.placeList
 
 import android.net.Uri
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -47,6 +50,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.app.domain.model.Places
 import com.app.domain.model.theme.Language
@@ -99,20 +103,43 @@ fun PlacesListScreen(
         ) {
             when (menuClickedPosition) {
                 SELECTED_TOUR_LIST -> {
+                    // 페이징 처리 공식문서 참고
+                    // https://developer.android.com/develop/ui/compose/lists?hl=ko&_gl=1*1a4v78e*_up*MQ..*_ga*MTEwMzY5NzI1MC4xNzMzMjgwMjk2*_ga_6HH9YJMN9M*MTczMzI5NTEyOS4yLjAuMTczMzI5NTEyOS4wLjAuMTU3MzU2NjEyNA..#large-datasets
                     viewModel.getPlacesList(travelItem)
                     val placesListResult = viewModel.placesListResult2.collectAsLazyPagingItems()
-                    LazyColumn(contentPadding = PaddingValues(14.dp, 7.dp)) {
-                        items(
-                            count = placesListResult.itemCount,
-                            key = { placesListResult.peek(it)?.id ?: "" }
-                        ) { index ->
-                            val item = placesListResult[index]!!
-                            PlacesListItem(
-                                travelItem.title,
-                                item,
-                                menuClickedPosition,
-                                onItemClick
+
+                    Box(
+                        modifier = Modifier.fillMaxSize()
+                    ) {
+                        LazyColumn(contentPadding = PaddingValues(14.dp, 7.dp)) {
+                            items(
+                                count = placesListResult.itemCount,
+                                key = { placesListResult.peek(it)?.id ?: "" }
+                            ) { index ->
+                                val item = placesListResult[index]!!
+                                PlacesListItem(
+                                    travelItem.title,
+                                    item,
+                                    menuClickedPosition,
+                                    onItemClick
+                                )
+                            }
+                        }
+
+                        if (placesListResult.loadState.append == LoadState.Loading
+                            || placesListResult.loadState.refresh == LoadState.Loading
+                        ) {
+                            CircularProgressIndicator(
+                                modifier = Modifier.align(Alignment.Center)
                             )
+                        }
+
+                        val errorState = placesListResult.loadState.source.refresh as? LoadState.Error
+                            ?: placesListResult.loadState.source.append as? LoadState.Error
+                        errorState?.let { e ->
+                            // 에러 메시지 처리
+                            Logging.e(e.error.message ?: "")
+                            Toast.makeText(LocalContext.current, stringResource(R.string.error_failure_init_list, "${e.error.message}"), Toast.LENGTH_SHORT).show()
                         }
                     }
                 }
@@ -191,7 +218,6 @@ fun PlacesListItem(
                     )
                 }
             }
-//                placeHolder = ImageBitmap.imageResource(R.drawable.ic_back)
         )
         Spacer(modifier = Modifier.height(6.dp))
         Row(

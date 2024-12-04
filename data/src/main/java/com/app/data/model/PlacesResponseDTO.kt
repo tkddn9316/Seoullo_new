@@ -13,7 +13,7 @@ data class PlacesResponseDTO(
 
     data class Body(
         @SerializedName("items")
-        val items: Items,
+        val items: Items?,
         @SerializedName("numOfRows")
         val numOfRows: Int,
         @SerializedName("pageNo")
