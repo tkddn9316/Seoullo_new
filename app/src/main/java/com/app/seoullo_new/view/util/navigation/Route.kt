@@ -7,6 +7,7 @@ object Route {
     const val TRAVEL = "travel"
     const val SETTING = "setting"
 
+    const val TRAVEL_ROUTE = "travel_route"
     const val PLACE_LIST = "place_list/{item}"
     const val PLACE_DETAIL = "place_detail/{place}"
     const val PLACE_DETAIL_NEARBY = "place_detail_nearby/{place}"

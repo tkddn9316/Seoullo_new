@@ -7,6 +7,8 @@
     <string name="exit">Press \'back\' again to exit.</string>
     <string name="yes">Y</string>
     <string name="no">N</string>
+    <string name="en" translatable="false">en</string>
+    <string name="ko" translatable="false">ko</string>
     <string name="sign_in_with_google">Sign in with Google</string>
     <string name="permission_denied">If you reject permission, you cannot use this service. Please turn on permissions in settings.</string>
     <string name="skip">SKIP</string>

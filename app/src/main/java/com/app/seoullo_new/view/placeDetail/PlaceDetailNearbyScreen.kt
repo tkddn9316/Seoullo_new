@@ -18,7 +18,7 @@ fun PlaceDetailNearbyScreen(
             SeoulloAppBar(
                 title = viewModel.getTitle(),
                 onNavigationClick = onNavigationClick,
-                showAction = true,
+                showAction = false,
             ) { }
         }
     ) { innerPadding ->

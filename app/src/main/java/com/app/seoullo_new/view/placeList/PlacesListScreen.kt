@@ -30,7 +30,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -78,9 +78,8 @@ fun PlacesListScreen(
 ) {
     Logging.d(travelItem)
 
-    var menuClickedPosition by remember { mutableIntStateOf(SELECTED_TOUR_LIST) }
-    val fusedLocationProviderClient =
-        LocationServices.getFusedLocationProviderClient(LocalContext.current)
+    var menuClickedPosition by rememberSaveable { mutableIntStateOf(SELECTED_TOUR_LIST) }
+    val fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(LocalContext.current)
     viewModel.checkPermission(fusedLocationProviderClient)
 
     val titleResId = getStringResourceKey(travelItem.title)
@@ -98,64 +97,46 @@ fun PlacesListScreen(
         Column(
             modifier = Modifier.padding(innerPadding)
         ) {
-            PlacesList(
-                viewModel,
-                travelItem,
-                menuClickedPosition,
-                onNearbyItemClick,
-                onItemClick
-            )
-        }
-    }
-}
-
-
-@Composable
-fun PlacesList(
-    viewModel: PlacesListViewModel,
-    travelItem: TravelJsonItemData,
-    menuClickedPosition: Int,
-    onNearbyItemClick: (places: String) -> Unit,
-    onItemClick: (places: String) -> Unit
-) {
-    when (menuClickedPosition) {
-        SELECTED_TOUR_LIST -> {
-            viewModel.getPlacesList(travelItem)
-            val placesListResult = viewModel.placesListResult2.collectAsLazyPagingItems()
-            LazyColumn(contentPadding = PaddingValues(14.dp, 7.dp)) {
-                items(
-                    count = placesListResult.itemCount,
-                    key = { placesListResult.peek(it)?.id ?: "" }
-                ) { index ->
-                    val item = placesListResult[index]!!
-                    PlacesListItem(
-                        travelItem.title,
-                        item,
-                        menuClickedPosition,
-                        onItemClick
-                    )
+            when (menuClickedPosition) {
+                SELECTED_TOUR_LIST -> {
+                    viewModel.getPlacesList(travelItem)
+                    val placesListResult = viewModel.placesListResult2.collectAsLazyPagingItems()
+                    LazyColumn(contentPadding = PaddingValues(14.dp, 7.dp)) {
+                        items(
+                            count = placesListResult.itemCount,
+                            key = { placesListResult.peek(it)?.id ?: "" }
+                        ) { index ->
+                            val item = placesListResult[index]!!
+                            PlacesListItem(
+                                travelItem.title,
+                                item,
+                                menuClickedPosition,
+                                onItemClick
+                            )
+                        }
+                    }
                 }
-            }
-        }
 
-        SELECTED_NEARBY_LIST -> {
-            if (BuildConfig.DEBUG) {
-                viewModel.getFakePlacesNearbyList(LocalContext.current)
-            } else {
-                viewModel.getPlacesNearbyList(
-                    travelItem,
-                    if (LocalLanguage.current == Language.ENGLISH) "en" else "ko"
-                )
-            }
-            val placesListResult by viewModel.placesListResult.collectAsState(initial = emptyList())
-            LazyColumn(contentPadding = PaddingValues(14.dp, 7.dp)) {
-                items(placesListResult) { places ->
-                    PlacesListItem(
-                        travelItem.title,
-                        places,
-                        menuClickedPosition,
-                        onNearbyItemClick
-                    )
+                SELECTED_NEARBY_LIST -> {
+                    if (BuildConfig.DEBUG) {
+                        viewModel.getFakePlacesNearbyList(LocalContext.current)
+                    } else {
+                        viewModel.getPlacesNearbyList(
+                            travelItem,
+                            if (LocalLanguage.current == Language.ENGLISH) stringResource(R.string.en) else stringResource(R.string.ko)
+                        )
+                    }
+                    val placesListResult by viewModel.placesListResult.collectAsState(initial = emptyList())
+                    LazyColumn(contentPadding = PaddingValues(14.dp, 7.dp)) {
+                        items(placesListResult) { places ->
+                            PlacesListItem(
+                                travelItem.title,
+                                places,
+                                menuClickedPosition,
+                                onNearbyItemClick
+                            )
+                        }
+                    }
                 }
             }
         }
@@ -169,8 +150,6 @@ fun PlacesListItem(
     menuClickedPosition: Int,
     onItemClick: (places: String) -> Unit
 ) {
-//    val context = LocalContext.current
-
     Column(
         Modifier.clickable {
             val json = Json.encodeToString(places)

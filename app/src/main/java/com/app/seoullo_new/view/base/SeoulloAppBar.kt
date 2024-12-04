@@ -18,8 +18,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBarColors
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -141,10 +139,7 @@ fun SeoulloAppBar(
                         }
                     }
                 }
-            },
-//            colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-//                containerColor = MaterialTheme.colorScheme.background
-//            )
+            }
         )
         HorizontalDivider(thickness = 1.dp, color = MaterialTheme.colorScheme.outlineVariant)
     }

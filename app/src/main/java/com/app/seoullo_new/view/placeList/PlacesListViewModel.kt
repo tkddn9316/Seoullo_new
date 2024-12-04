@@ -39,6 +39,9 @@ class PlacesListViewModel @Inject constructor(
     private val _placesListResult2 = MutableStateFlow<PagingData<Places>>(PagingData.empty())
     val placesListResult2 = _placesListResult2.asStateFlow()
 
+    private var isPlacesListLoaded = false // 로드 상태 확인 플래그
+    private var isNearbyPlacesLoaded = false // 로드 상태 확인 플래그
+
     fun checkPermission(fusedLocationProviderClient: FusedLocationProviderClient) {
         onMain {
             if (checkingManager.checkPermission(
@@ -57,6 +60,8 @@ class PlacesListViewModel @Inject constructor(
     }
 
     fun getPlacesList(travelItem: TravelJsonItemData) {
+        if (isPlacesListLoaded) return
+
         onIO {
             getPlacesListUseCase(
                 BuildConfig.TOUR_API_KEY,
@@ -71,6 +76,8 @@ class PlacesListViewModel @Inject constructor(
 
                     Logging.e(loading.value!!)
                     withContext(Dispatchers.Main) { loading.value = false }
+
+                    isPlacesListLoaded = true
                 }
         }
     }
@@ -81,6 +88,8 @@ class PlacesListViewModel @Inject constructor(
         travelItem: TravelJsonItemData,
         languageCode: String
     ) {
+        if (isNearbyPlacesLoaded) return
+
         onIO {
             val item = travelItem.type.split("|")
             Logging.e(lat.value!!)
@@ -108,6 +117,7 @@ class PlacesListViewModel @Inject constructor(
                     clearData()
                     test.forEach { Logging.e(it.toString()) }
                     _placesListResult.value = test
+                    isNearbyPlacesLoaded = true
                 }
         }
     }
