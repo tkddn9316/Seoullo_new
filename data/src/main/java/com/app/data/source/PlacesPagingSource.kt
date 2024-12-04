@@ -46,7 +46,7 @@ class PlacesPagingSource @Inject constructor(
             LoadResult.Page(
                 data = places,
                 prevKey = if (currentPage == 1) null else currentPage - 1,
-                nextKey = if (places.isNotEmpty()) nextPage else null
+                nextKey = nextPage
             )
         } catch (e: IOException) {
             return LoadResult.Error(e)
