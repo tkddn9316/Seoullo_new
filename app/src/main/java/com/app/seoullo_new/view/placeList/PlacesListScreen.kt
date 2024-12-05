@@ -2,6 +2,7 @@ package com.app.seoullo_new.view.placeList
 
 import android.net.Uri
 import android.widget.Toast
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -17,11 +18,15 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.ArrowDropUp
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.filled.StarHalf
+import androidx.compose.material.icons.filled.Stars
 import androidx.compose.material.icons.outlined.StarOutline
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
@@ -31,18 +36,23 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -64,12 +74,18 @@ import com.app.seoullo_new.utils.Util.getStringResourceKey
 import com.app.seoullo_new.view.base.SeoulloAppBar
 import com.app.seoullo_new.view.ui.theme.Color_ERROR
 import com.app.seoullo_new.view.ui.theme.colorRatingStar
+import com.app.seoullo_new.view.util.FabItem
+import com.app.seoullo_new.view.util.MultipleFloatingActionButton
 import com.app.seoullo_new.view.util.TravelJsonItemData
 import com.app.seoullo_new.view.util.theme.LocalLanguage
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import com.google.android.gms.location.LocationServices
 import com.skydoves.landscapist.glide.GlideImage
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
@@ -83,14 +99,33 @@ fun PlacesListScreen(
 ) {
     Logging.d(travelItem)
 
+    // 드롭다운 클릭 상태
     var menuClickedPosition by rememberSaveable { mutableIntStateOf(SELECTED_TOUR_LIST) }
+
+    // 퍼미션 검사
     val fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(LocalContext.current)
     viewModel.checkPermission(fusedLocationProviderClient)
 
+    // 제목
     val titleResId = getStringResourceKey(travelItem.title)
     val title = stringResource(id = titleResId)
 
+    // 위치 기반 관광 정보 API 상태
     val placesNearbyState by viewModel.placesNearbyState.collectAsState()
+
+    // LazyColumn 스크롤 상태 저장
+    val scroll = rememberLazyListState()
+    val isAtEnd = remember {
+        derivedStateOf {
+            val lastVisibleItemIndex = scroll.layoutInfo.visibleItemsInfo.lastOrNull()?.index
+            val totalItems = scroll.layoutInfo.totalItemsCount
+            lastVisibleItemIndex == totalItems - 1
+        }
+    }
+    // Remember a CoroutineScope to be able to launch
+    val coroutineScope = rememberCoroutineScope()
+
+    val context = LocalContext.current
 
     Box(modifier = Modifier.fillMaxSize()) {
         Scaffold(
@@ -100,6 +135,50 @@ fun PlacesListScreen(
                     onNavigationClick = onNavigationClick,
                     showAction = true,
                 ) { menuClickedPosition = it }
+            },
+            floatingActionButton = {
+                AnimatedVisibility(
+                    visible = !isAtEnd.value
+                ) {
+                    MultipleFloatingActionButton(
+                        fabIcon = Icons.Default.Add,
+                        items = if (menuClickedPosition == SELECTED_TOUR_LIST) {
+                            arrayListOf(
+                                FabItem(
+                                    icon = Icons.Default.ArrowDropUp,
+                                    label = stringResource(R.string.go_to_top)
+                                ) {
+                                    coroutineScope.launch {
+                                        scroll.animateScrollToItem(0)
+                                    }
+                                }
+                            )
+                        } else {
+                            arrayListOf(
+                                FabItem(
+                                    icon = Icons.Default.ArrowDropUp,
+                                    label = stringResource(R.string.go_to_top)
+                                ) {
+                                    coroutineScope.launch {
+                                        scroll.animateScrollToItem(0)
+                                    }
+                                },
+                                FabItem(
+                                    icon = ImageVector.vectorResource(id = R.drawable.ic_review),
+                                    label = stringResource(R.string.sort_by_review)
+                                ) {
+                                    Toast.makeText(context,"Floating Button clicked",Toast.LENGTH_LONG).show()
+                                },
+                                FabItem(
+                                    icon = Icons.Default.Stars,
+                                    label = stringResource(R.string.sort_by_rating)
+                                ) {
+                                    Toast.makeText(context,"Floating Button clicked",Toast.LENGTH_LONG).show()
+                                }
+                            )
+                        }
+                    )
+                }
             }
         ) { innerPadding ->
             Column(
@@ -115,7 +194,10 @@ fun PlacesListScreen(
                         Box(
                             modifier = Modifier.fillMaxSize()
                         ) {
-                            LazyColumn(contentPadding = PaddingValues(14.dp, 7.dp)) {
+                            LazyColumn(
+                                state = scroll,
+                                contentPadding = PaddingValues(14.dp, 7.dp)
+                            ) {
                                 items(
                                     count = placesListResult.itemCount,
                                     key = { placesListResult.peek(it)?.id ?: "" }
@@ -163,7 +245,10 @@ fun PlacesListScreen(
                             is ApiState.Loading -> {}
                             is ApiState.Success -> {
                                 val places = (placesNearbyState as ApiState.Success<List<Places>>).data
-                                LazyColumn(contentPadding = PaddingValues(14.dp, 7.dp)) {
+                                LazyColumn(
+                                    state = scroll,
+                                    contentPadding = PaddingValues(14.dp, 7.dp)
+                                ) {
                                     items(places!!) { place ->
                                         PlacesListItem(
                                             title = travelItem.title,
@@ -384,9 +469,7 @@ fun LoadingOverlay(isLoading: Boolean) {
     }
 }
 
-/**
- * PREVIEW
- */
+/** PREVIEW */
 @Preview(showBackground = true, widthDp = 360, heightDp = 640)
 @Composable
 fun PlacesListItemPreview() {

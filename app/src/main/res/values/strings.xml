@@ -49,6 +49,9 @@
     <string name="nearby_list_description">A list of tourist attractions within a radius of 1 km is shown.(up to 20)</string>
     <string name="seoul">Seoul</string>
     <string name="temp_symbol">°</string>
+    <string name="go_to_top">Go to top</string>
+    <string name="sort_by_rating">Sort by rating</string>
+    <string name="sort_by_review">Sort by review</string>
 
     <!--  setting  -->
     <string name="theme_title">Theme Setting</string>
