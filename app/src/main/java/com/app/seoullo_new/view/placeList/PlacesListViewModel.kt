@@ -108,6 +108,22 @@ class PlacesListViewModel @Inject constructor(
         }
     }
 
+    fun sortPlacesByRating() {
+        val state = _placesNearbyState.value
+        if (state is ApiState.Success && !state.data.isNullOrEmpty()) {
+            val sortedList = state.data!!.sortedByDescending { it.rating }
+            _placesNearbyState.value = ApiState.Success(sortedList)
+        }
+    }
+
+    fun sortPlacesByReview() {
+        val state = _placesNearbyState.value
+        if (state is ApiState.Success && !state.data.isNullOrEmpty()) {
+            val sortedList = state.data!!.sortedByDescending { it.userRatingCount }
+            _placesNearbyState.value = ApiState.Success(sortedList)
+        }
+    }
+
     /** Debug Fake Data */
     fun getFakePlacesNearbyList(context: Context) {
         if (_placesNearbyState.value !is ApiState.Initial) return

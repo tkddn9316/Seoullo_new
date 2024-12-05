@@ -82,9 +82,6 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import com.google.android.gms.location.LocationServices
 import com.skydoves.landscapist.glide.GlideImage
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
@@ -116,18 +113,28 @@ fun PlacesListScreen(
     // LazyColumn 스크롤 상태 저장
     val tourListState = rememberLazyListState()
     val nearbyListState = rememberLazyListState()
-    val currentListState = if (menuClickedPosition == SELECTED_TOUR_LIST) tourListState else nearbyListState
-    val isAtEnd = remember {
+    val isTourListAtEnd by remember {
         derivedStateOf {
-            val lastVisibleItemIndex = currentListState.layoutInfo.visibleItemsInfo.lastOrNull()?.index
-            val totalItems = currentListState.layoutInfo.totalItemsCount
+            val lastVisibleItemIndex = tourListState.layoutInfo.visibleItemsInfo.lastOrNull()?.index
+            val totalItems = tourListState.layoutInfo.totalItemsCount
             lastVisibleItemIndex == totalItems - 1
         }
     }
+    val isNearbyListAtEnd by remember {
+        derivedStateOf {
+            val lastVisibleItemIndex = nearbyListState.layoutInfo.visibleItemsInfo.lastOrNull()?.index
+            val totalItems = nearbyListState.layoutInfo.totalItemsCount
+            lastVisibleItemIndex == totalItems - 1
+        }
+    }
+    val isAtEnd = if (menuClickedPosition == SELECTED_TOUR_LIST) {
+        isTourListAtEnd
+    } else {
+        isNearbyListAtEnd
+    }
+
     // Remember a CoroutineScope to be able to launch
     val coroutineScope = rememberCoroutineScope()
-
-    val context = LocalContext.current
 
     Box(modifier = Modifier.fillMaxSize()) {
         Scaffold(
@@ -140,7 +147,7 @@ fun PlacesListScreen(
             },
             floatingActionButton = {
                 AnimatedVisibility(
-                    visible = !isAtEnd.value
+                    visible = !isAtEnd
                 ) {
                     MultipleFloatingActionButton(
                         fabIcon = Icons.Default.Add,
@@ -151,7 +158,7 @@ fun PlacesListScreen(
                                     label = stringResource(R.string.go_to_top)
                                 ) {
                                     coroutineScope.launch {
-                                        currentListState.animateScrollToItem(0)
+                                        tourListState.animateScrollToItem(0)
                                     }
                                 }
                             )
@@ -162,20 +169,20 @@ fun PlacesListScreen(
                                     label = stringResource(R.string.go_to_top)
                                 ) {
                                     coroutineScope.launch {
-                                        currentListState.animateScrollToItem(0)
+                                        nearbyListState.animateScrollToItem(0)
                                     }
                                 },
                                 FabItem(
                                     icon = ImageVector.vectorResource(id = R.drawable.ic_review),
                                     label = stringResource(R.string.sort_by_review)
                                 ) {
-                                    Toast.makeText(context,"Floating Button clicked",Toast.LENGTH_LONG).show()
+                                    viewModel.sortPlacesByReview()
                                 },
                                 FabItem(
                                     icon = Icons.Default.Stars,
                                     label = stringResource(R.string.sort_by_rating)
                                 ) {
-                                    Toast.makeText(context,"Floating Button clicked",Toast.LENGTH_LONG).show()
+                                    viewModel.sortPlacesByRating()
                                 }
                             )
                         }
@@ -197,7 +204,7 @@ fun PlacesListScreen(
                             modifier = Modifier.fillMaxSize()
                         ) {
                             LazyColumn(
-                                state = currentListState,
+                                state = tourListState,
                                 contentPadding = PaddingValues(14.dp, 7.dp)
                             ) {
                                 items(
@@ -248,7 +255,7 @@ fun PlacesListScreen(
                             is ApiState.Success -> {
                                 val places = (placesNearbyState as ApiState.Success<List<Places>>).data
                                 LazyColumn(
-                                    state = currentListState,
+                                    state = nearbyListState,
                                     contentPadding = PaddingValues(14.dp, 7.dp)
                                 ) {
                                     items(places!!) { place ->
