@@ -1,7 +1,6 @@
 package com.app.data.api
 
 import com.google.gson.GsonBuilder
-import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -17,67 +16,47 @@ object ApiClient {
     private const val BASE_URL_OPEN_WEATHER = "https://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/"
     private const val TIMEOUT = 15
 
-    fun createGoogleApi(): ApiInterface {
-        return Retrofit.Builder()
-            .baseUrl(BASE_URL_GOOGLE)
-            .client(createLoggingClient())
-            .client(createHttpClient())
+    private val commonHttpClient: OkHttpClient by lazy {
+        createHttpClient()
+    }
+
+    private val retrofitBuilder: Retrofit.Builder by lazy {
+        Retrofit.Builder()
+            .client(commonHttpClient)
             .addConverterFactory(GsonConverterFactory.create(GsonBuilder().setLenient().create()))
+    }
+
+    fun createGoogleApi(): ApiInterface {
+        return retrofitBuilder
+            .baseUrl(BASE_URL_GOOGLE)
             .build()
             .create(ApiInterface::class.java)
     }
 
     fun createSeoulTourApi(): ApiInterface2 {
-        return Retrofit.Builder()
+        return retrofitBuilder
             .baseUrl(BASE_URL_TOUR_API)
-            .client(createLoggingClient())
-            .client(createHttpClient())
-            .addConverterFactory(GsonConverterFactory.create(GsonBuilder().setLenient().create()))
             .build()
             .create(ApiInterface2::class.java)
     }
 
     fun createOpenWeatherApi(): ApiInterface3 {
-        return Retrofit.Builder()
+        return retrofitBuilder
             .baseUrl(BASE_URL_OPEN_WEATHER)
-            .client(createLoggingClient())
-            .client(createHttpClient())
-            .addConverterFactory(GsonConverterFactory.create(GsonBuilder().setLenient().create()))
             .build()
             .create(ApiInterface3::class.java)
     }
 
-    private fun createLoggingClient(): OkHttpClient {
-        val logger = HttpLoggingInterceptor().apply {
-            level = HttpLoggingInterceptor.Level.BASIC
-        }
-
-        return OkHttpClient.Builder()
-            .addInterceptor(logger)
-            .build()
-    }
-
     private fun createHttpClient(): OkHttpClient {
-        val interceptors = ArrayList<Interceptor>()
-        return getOkHttpClient(interceptors)
-    }
+        val interceptors = listOf(
+            HttpLoggingInterceptor().apply { level = HttpLoggingInterceptor.Level.BODY }
+        )
+        val builder = OkHttpClient.Builder()
+            .connectTimeout(TIMEOUT.toLong(), TimeUnit.SECONDS)
+            .writeTimeout(TIMEOUT.toLong(), TimeUnit.SECONDS)
+            .readTimeout(TIMEOUT.toLong(), TimeUnit.SECONDS)
+        interceptors.forEach { builder.addInterceptor(it) }
 
-    private fun getOkHttpClient(interceptors: ArrayList<Interceptor>): OkHttpClient {
-        val loggingInterceptor = HttpLoggingInterceptor()
-        loggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
-        interceptors.add(loggingInterceptor)
-
-        val builder = getBuilder(0)
-        for (interceptor in interceptors) {
-            builder.addInterceptor(interceptor)
-        }
         return builder.build()
-    }
-
-    private fun getBuilder(time: Int): OkHttpClient.Builder {
-        return OkHttpClient.Builder()
-            .connectTimeout((if (time > 0) time else TIMEOUT).toLong(), TimeUnit.SECONDS)
-            .writeTimeout((if (time > 0) time else TIMEOUT).toLong(), TimeUnit.SECONDS)
-            .readTimeout((if (time > 0) time else TIMEOUT).toLong(), TimeUnit.SECONDS)
     }
 }

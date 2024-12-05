@@ -89,83 +89,96 @@ fun PlacesListScreen(
     val titleResId = getStringResourceKey(travelItem.title)
     val title = stringResource(id = titleResId)
 
-    Scaffold(
-        topBar = {
-            SeoulloAppBar(
-                title = title,
-                onNavigationClick = onNavigationClick,
-                showAction = true,
-            ) { menuClickedPosition = it }
-        }
-    ) { innerPadding ->
-        Column(
-            modifier = Modifier.padding(innerPadding)
-        ) {
-            when (menuClickedPosition) {
-                SELECTED_TOUR_LIST -> {
-                    // 페이징 처리 공식문서 참고
-                    // https://developer.android.com/develop/ui/compose/lists?hl=ko&_gl=1*1a4v78e*_up*MQ..*_ga*MTEwMzY5NzI1MC4xNzMzMjgwMjk2*_ga_6HH9YJMN9M*MTczMzI5NTEyOS4yLjAuMTczMzI5NTEyOS4wLjAuMTU3MzU2NjEyNA..#large-datasets
-                    viewModel.getPlacesList(travelItem)
-                    val placesListResult = viewModel.placesListResult2.collectAsLazyPagingItems()
+    // API 상태 관리
+    val isLoading by viewModel.loadingState.collectAsState()
+    val errorMessage by viewModel.errorMessage.collectAsState()
 
-                    Box(
-                        modifier = Modifier.fillMaxSize()
-                    ) {
-                        LazyColumn(contentPadding = PaddingValues(14.dp, 7.dp)) {
-                            items(
-                                count = placesListResult.itemCount,
-                                key = { placesListResult.peek(it)?.id ?: "" }
-                            ) { index ->
-                                val item = placesListResult[index]!!
-                                PlacesListItem(
-                                    travelItem.title,
-                                    item,
-                                    menuClickedPosition,
-                                    onItemClick
+    Box(modifier = Modifier.fillMaxSize()) {
+        Scaffold(
+            topBar = {
+                SeoulloAppBar(
+                    title = title,
+                    onNavigationClick = onNavigationClick,
+                    showAction = true,
+                ) { menuClickedPosition = it }
+            }
+        ) { innerPadding ->
+            Column(
+                modifier = Modifier.padding(innerPadding)
+            ) {
+                when (menuClickedPosition) {
+                    SELECTED_TOUR_LIST -> {
+                        // 페이징 처리 공식문서 참고
+                        // https://developer.android.com/develop/ui/compose/lists?hl=ko&_gl=1*1a4v78e*_up*MQ..*_ga*MTEwMzY5NzI1MC4xNzMzMjgwMjk2*_ga_6HH9YJMN9M*MTczMzI5NTEyOS4yLjAuMTczMzI5NTEyOS4wLjAuMTU3MzU2NjEyNA..#large-datasets
+                        viewModel.getPlacesList(travelItem)
+                        val placesListResult = viewModel.placesListResult2.collectAsLazyPagingItems()
+
+                        Box(
+                            modifier = Modifier.fillMaxSize()
+                        ) {
+                            LazyColumn(contentPadding = PaddingValues(14.dp, 7.dp)) {
+                                items(
+                                    count = placesListResult.itemCount,
+                                    key = { placesListResult.peek(it)?.id ?: "" }
+                                ) { index ->
+                                    val item = placesListResult[index]!!
+                                    PlacesListItem(
+                                        travelItem.title,
+                                        item,
+                                        menuClickedPosition,
+                                        onItemClick
+                                    )
+                                }
+                            }
+
+                            if (placesListResult.loadState.append == LoadState.Loading
+                                || placesListResult.loadState.refresh == LoadState.Loading
+                            ) {
+                                CircularProgressIndicator(
+                                    modifier = Modifier.align(Alignment.Center)
                                 )
                             }
-                        }
 
-                        if (placesListResult.loadState.append == LoadState.Loading
-                            || placesListResult.loadState.refresh == LoadState.Loading
-                        ) {
-                            CircularProgressIndicator(
-                                modifier = Modifier.align(Alignment.Center)
-                            )
-                        }
-
-                        val errorState = placesListResult.loadState.source.refresh as? LoadState.Error
-                            ?: placesListResult.loadState.source.append as? LoadState.Error
-                        errorState?.let { e ->
-                            // 에러 메시지 처리
-                            Logging.e(e.error.message ?: "")
-                            Toast.makeText(LocalContext.current, stringResource(R.string.error_failure_init_list, "${e.error.message}"), Toast.LENGTH_SHORT).show()
+                            val errorState = placesListResult.loadState.source.refresh as? LoadState.Error
+                                ?: placesListResult.loadState.source.append as? LoadState.Error
+                            errorState?.let { e ->
+                                // 에러 메시지 처리
+                                Toast.makeText(LocalContext.current, stringResource(R.string.error_failure_init_list, "${e.error.message}"), Toast.LENGTH_SHORT).show()
+                            }
                         }
                     }
-                }
 
-                SELECTED_NEARBY_LIST -> {
-                    if (BuildConfig.DEBUG) {
-                        viewModel.getFakePlacesNearbyList(LocalContext.current)
-                    } else {
-                        viewModel.getPlacesNearbyList(
-                            travelItem,
-                            if (LocalLanguage.current == Language.ENGLISH) stringResource(R.string.en) else stringResource(R.string.ko)
-                        )
-                    }
-                    val placesListResult by viewModel.placesListResult.collectAsState(initial = emptyList())
-                    LazyColumn(contentPadding = PaddingValues(14.dp, 7.dp)) {
-                        items(placesListResult) { places ->
-                            PlacesListItem(
-                                travelItem.title,
-                                places,
-                                menuClickedPosition,
-                                onNearbyItemClick
+                    SELECTED_NEARBY_LIST -> {
+                        if (!BuildConfig.DEBUG) {
+                            viewModel.getFakePlacesNearbyList(LocalContext.current)
+                        } else {
+                            viewModel.getPlacesNearbyList(
+                                travelItem,
+                                if (LocalLanguage.current == Language.ENGLISH) stringResource(R.string.en) else stringResource(R.string.ko)
                             )
+                        }
+                        val placesListResult by viewModel.placesListResult.collectAsState(initial = emptyList())
+                        LazyColumn(contentPadding = PaddingValues(14.dp, 7.dp)) {
+                            items(placesListResult) { places ->
+                                PlacesListItem(
+                                    travelItem.title,
+                                    places,
+                                    menuClickedPosition,
+                                    onNearbyItemClick
+                                )
+                            }
                         }
                     }
                 }
             }
+        }
+
+        // 로딩 처리
+        LoadingOverlay(isLoading)
+        // 에러 메시지 처리
+        errorMessage?.let { message ->
+            Toast.makeText(LocalContext.current, stringResource(R.string.error_failure_init_list, message), Toast.LENGTH_SHORT).show()
+            viewModel.resetErrorMessage()
         }
     }
 }
@@ -344,6 +357,21 @@ fun RatingBar(
             ),
             fontSize = 13.sp
         )
+    }
+}
+
+@Composable
+fun LoadingOverlay(isLoading: Boolean) {
+    if (isLoading) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .clickable(enabled = false) {}
+        ) {
+            CircularProgressIndicator(
+                modifier = Modifier.align(Alignment.Center)
+            )
+        }
     }
 }
 

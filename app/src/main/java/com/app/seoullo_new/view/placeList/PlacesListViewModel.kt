@@ -5,6 +5,7 @@ import android.content.Context
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
+import com.app.domain.model.ApiState
 import com.app.domain.model.Places
 import com.app.domain.model.PlacesNearbyRequest
 import com.app.domain.usecase.places.GetPlacesListUseCase
@@ -21,6 +22,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.conflate
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.Json
@@ -71,12 +73,7 @@ class PlacesListViewModel @Inject constructor(
                 .cachedIn(viewModelScope)
                 .catch { Logging.e(it.message ?: "") }
                 .collect {
-                    clearData()
                     _placesListResult2.value = it
-
-                    Logging.e(loading.value!!)
-                    withContext(Dispatchers.Main) { loading.value = false }
-
                     isPlacesListLoaded = true
                 }
         }
@@ -89,35 +86,43 @@ class PlacesListViewModel @Inject constructor(
         languageCode: String
     ) {
         if (isNearbyPlacesLoaded) return
+        isNearbyPlacesLoaded = true
 
         onIO {
             val item = travelItem.type.split("|")
-            Logging.e(lat.value!!)
-            Logging.e(lng.value!!)
             getPlacesNearbyListUseCase(
                 BuildConfig.SEOULLO_GOOGLE_MAPS_API_KEY,
                 PlacesNearbyRequest(
-                    item,
-                    20,
-                    languageCode,
+                    item, 20, languageCode,
                     PlacesNearbyRequest.LocationRestriction(
                         PlacesNearbyRequest.Circle(
-                            PlacesNearbyRequest.Center(
-                                lat.value!!,
-                                lng.value!!
-                            ),
+                            PlacesNearbyRequest.Center(lat.value!!, lng.value!!),
                             radius = 1000.0
                         )
                     )
                 )
             )
                 .flowOn(Dispatchers.IO)
-                .catch { Logging.e(it.message ?: "") }
-                .collect { test ->
-                    clearData()
-                    test.forEach { Logging.e(it.toString()) }
-                    _placesListResult.value = test
-                    isNearbyPlacesLoaded = true
+                .collect { state ->
+                    when (state) {
+                        is ApiState.Success -> {
+                            state.data?.let { response ->
+                                response.forEach { Logging.e(it.toString()) }
+                                _placesListResult.value = response
+
+                                loadingState.value = false
+                            }
+                        }
+                        is ApiState.Loading -> {
+                            loadingState.value = true
+                        }
+                        is ApiState.Error -> {
+//                            clearData()
+                            errorMessage.value = state.message
+
+                            loadingState.value = false
+                        }
+                    }
                 }
         }
     }
@@ -129,8 +134,8 @@ class PlacesListViewModel @Inject constructor(
         _placesListResult.value = fakePlaces
     }
 
-    private fun clearData() {
-        _placesListResult.value = emptyList()
-        _placesListResult2.value = PagingData.empty()
-    }
+//    private fun clearData() {
+//        _placesListResult.value = emptyList()
+//        _placesListResult2.value = PagingData.empty()
+//    }
 }
