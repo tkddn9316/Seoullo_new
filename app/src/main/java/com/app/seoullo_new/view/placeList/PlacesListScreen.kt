@@ -114,11 +114,13 @@ fun PlacesListScreen(
     val placesNearbyState by viewModel.placesNearbyState.collectAsState()
 
     // LazyColumn 스크롤 상태 저장
-    val scroll = rememberLazyListState()
+    val tourListState = rememberLazyListState()
+    val nearbyListState = rememberLazyListState()
+    val currentListState = if (menuClickedPosition == SELECTED_TOUR_LIST) tourListState else nearbyListState
     val isAtEnd = remember {
         derivedStateOf {
-            val lastVisibleItemIndex = scroll.layoutInfo.visibleItemsInfo.lastOrNull()?.index
-            val totalItems = scroll.layoutInfo.totalItemsCount
+            val lastVisibleItemIndex = currentListState.layoutInfo.visibleItemsInfo.lastOrNull()?.index
+            val totalItems = currentListState.layoutInfo.totalItemsCount
             lastVisibleItemIndex == totalItems - 1
         }
     }
@@ -149,7 +151,7 @@ fun PlacesListScreen(
                                     label = stringResource(R.string.go_to_top)
                                 ) {
                                     coroutineScope.launch {
-                                        scroll.animateScrollToItem(0)
+                                        currentListState.animateScrollToItem(0)
                                     }
                                 }
                             )
@@ -160,7 +162,7 @@ fun PlacesListScreen(
                                     label = stringResource(R.string.go_to_top)
                                 ) {
                                     coroutineScope.launch {
-                                        scroll.animateScrollToItem(0)
+                                        currentListState.animateScrollToItem(0)
                                     }
                                 },
                                 FabItem(
@@ -195,7 +197,7 @@ fun PlacesListScreen(
                             modifier = Modifier.fillMaxSize()
                         ) {
                             LazyColumn(
-                                state = scroll,
+                                state = currentListState,
                                 contentPadding = PaddingValues(14.dp, 7.dp)
                             ) {
                                 items(
@@ -246,7 +248,7 @@ fun PlacesListScreen(
                             is ApiState.Success -> {
                                 val places = (placesNearbyState as ApiState.Success<List<Places>>).data
                                 LazyColumn(
-                                    state = scroll,
+                                    state = currentListState,
                                     contentPadding = PaddingValues(14.dp, 7.dp)
                                 ) {
                                     items(places!!) { place ->
