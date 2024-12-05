@@ -12,13 +12,6 @@ import javax.inject.Inject
 
 class GetPlacesNearbyListUseCase @Inject constructor(private val repository: PlacesNearbyRepository) {
 
-//    operator fun invoke(
-//        apiKey: String,
-//        placesNearbyRequest: PlacesNearbyRequest
-//    ): Flow<List<Places>> = repository.getPlacesNearbyList(
-//        apiKey = apiKey,
-//        placesNearbyRequest = placesNearbyRequest
-//    )
     operator fun invoke(
         apiKey: String,
         placesNearbyRequest: PlacesNearbyRequest

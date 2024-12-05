@@ -4,7 +4,6 @@ import androidx.lifecycle.viewModelScope
 import com.app.seoullo_new.di.DispatcherProvider
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -13,9 +12,6 @@ import kotlinx.coroutines.withContext
  */
 open class BaseViewModel2(dispatcherProvider: DispatcherProvider) : BaseViewModel(),
     DispatcherProvider by dispatcherProvider {
-
-    val loadingState = MutableStateFlow(false)
-    val errorMessage = MutableStateFlow<String?>(null)
 
     /** viewModelScope Main Thread */
     inline fun BaseViewModel2.onMain(
@@ -42,9 +38,5 @@ open class BaseViewModel2(dispatcherProvider: DispatcherProvider) : BaseViewMode
         withContext(Dispatchers.Main) { loading.value = true }
         body(this)
         withContext(Dispatchers.Main) { loading.value = false }
-    }
-
-    fun resetErrorMessage() {
-        errorMessage.value = null
     }
 }

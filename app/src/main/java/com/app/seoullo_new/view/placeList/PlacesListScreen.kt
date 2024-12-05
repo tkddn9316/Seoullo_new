@@ -52,6 +52,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
+import com.app.domain.model.ApiState
 import com.app.domain.model.Places
 import com.app.domain.model.theme.Language
 import com.app.seoullo_new.BuildConfig
@@ -89,9 +90,7 @@ fun PlacesListScreen(
     val titleResId = getStringResourceKey(travelItem.title)
     val title = stringResource(id = titleResId)
 
-    // API 상태 관리
-    val isLoading by viewModel.loadingState.collectAsState()
-    val errorMessage by viewModel.errorMessage.collectAsState()
+    val placesNearbyState by viewModel.placesNearbyState.collectAsState()
 
     Box(modifier = Modifier.fillMaxSize()) {
         Scaffold(
@@ -111,7 +110,7 @@ fun PlacesListScreen(
                         // 페이징 처리 공식문서 참고
                         // https://developer.android.com/develop/ui/compose/lists?hl=ko&_gl=1*1a4v78e*_up*MQ..*_ga*MTEwMzY5NzI1MC4xNzMzMjgwMjk2*_ga_6HH9YJMN9M*MTczMzI5NTEyOS4yLjAuMTczMzI5NTEyOS4wLjAuMTU3MzU2NjEyNA..#large-datasets
                         viewModel.getPlacesList(travelItem)
-                        val placesListResult = viewModel.placesListResult2.collectAsLazyPagingItems()
+                        val placesListResult = viewModel.placesListResult.collectAsLazyPagingItems()
 
                         Box(
                             modifier = Modifier.fillMaxSize()
@@ -134,6 +133,7 @@ fun PlacesListScreen(
                             if (placesListResult.loadState.append == LoadState.Loading
                                 || placesListResult.loadState.refresh == LoadState.Loading
                             ) {
+                                // 페이징 로딩 처리
                                 CircularProgressIndicator(
                                     modifier = Modifier.align(Alignment.Center)
                                 )
@@ -149,7 +149,7 @@ fun PlacesListScreen(
                     }
 
                     SELECTED_NEARBY_LIST -> {
-                        if (!BuildConfig.DEBUG) {
+                        if (BuildConfig.DEBUG) {
                             viewModel.getFakePlacesNearbyList(LocalContext.current)
                         } else {
                             viewModel.getPlacesNearbyList(
@@ -157,15 +157,29 @@ fun PlacesListScreen(
                                 if (LocalLanguage.current == Language.ENGLISH) stringResource(R.string.en) else stringResource(R.string.ko)
                             )
                         }
-                        val placesListResult by viewModel.placesListResult.collectAsState(initial = emptyList())
-                        LazyColumn(contentPadding = PaddingValues(14.dp, 7.dp)) {
-                            items(placesListResult) { places ->
-                                PlacesListItem(
-                                    travelItem.title,
-                                    places,
-                                    menuClickedPosition,
-                                    onNearbyItemClick
-                                )
+
+                        when (placesNearbyState) {
+                            is ApiState.Initial -> {}
+                            is ApiState.Loading -> {}
+                            is ApiState.Success -> {
+                                val places = (placesNearbyState as ApiState.Success<List<Places>>).data
+                                LazyColumn(contentPadding = PaddingValues(14.dp, 7.dp)) {
+                                    items(places!!) { place ->
+                                        PlacesListItem(
+                                            title = travelItem.title,
+                                            places = place,
+                                            menuClickedPosition = SELECTED_NEARBY_LIST,
+                                            onItemClick = onNearbyItemClick
+                                        )
+                                    }
+                                }
+                            }
+                            is ApiState.Error -> {
+                                val error = (placesNearbyState as ApiState.Error).message
+                                error?.let { message ->
+                                    // 에러 메시지 처리
+                                    Toast.makeText(LocalContext.current, stringResource(R.string.error_failure_init_list, message), Toast.LENGTH_SHORT).show()
+                                }
                             }
                         }
                     }
@@ -173,13 +187,8 @@ fun PlacesListScreen(
             }
         }
 
-        // 로딩 처리
-        LoadingOverlay(isLoading)
-        // 에러 메시지 처리
-        errorMessage?.let { message ->
-            Toast.makeText(LocalContext.current, stringResource(R.string.error_failure_init_list, message), Toast.LENGTH_SHORT).show()
-            viewModel.resetErrorMessage()
-        }
+        // API 로딩 처리
+        LoadingOverlay(placesNearbyState is ApiState.Loading)
     }
 }
 

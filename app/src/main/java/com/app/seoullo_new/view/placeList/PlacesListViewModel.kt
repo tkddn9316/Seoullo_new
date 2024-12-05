@@ -20,11 +20,10 @@ import com.google.android.gms.location.FusedLocationProviderClient
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.conflate
 import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.Json
 import javax.inject.Inject
 
@@ -35,14 +34,13 @@ class PlacesListViewModel @Inject constructor(
     private val getPlacesNearbyListUseCase: GetPlacesNearbyListUseCase,
     private val checkingManager: CheckingManager
 ) : BaseViewModel2(dispatcherProvider) {
-    private val _placesListResult = MutableStateFlow<List<Places>>(emptyList())
+    private val _placesNearbyState = MutableStateFlow<ApiState<List<Places>>>(ApiState.Initial())
+    val placesNearbyState = _placesNearbyState.asStateFlow()
+
+    private val _placesListResult = MutableStateFlow<PagingData<Places>>(PagingData.empty())
     val placesListResult = _placesListResult.asStateFlow()
 
-    private val _placesListResult2 = MutableStateFlow<PagingData<Places>>(PagingData.empty())
-    val placesListResult2 = _placesListResult2.asStateFlow()
-
     private var isPlacesListLoaded = false // 로드 상태 확인 플래그
-    private var isNearbyPlacesLoaded = false // 로드 상태 확인 플래그
 
     fun checkPermission(fusedLocationProviderClient: FusedLocationProviderClient) {
         onMain {
@@ -73,7 +71,7 @@ class PlacesListViewModel @Inject constructor(
                 .cachedIn(viewModelScope)
                 .catch { Logging.e(it.message ?: "") }
                 .collect {
-                    _placesListResult2.value = it
+                    _placesListResult.value = it
                     isPlacesListLoaded = true
                 }
         }
@@ -85,8 +83,8 @@ class PlacesListViewModel @Inject constructor(
         travelItem: TravelJsonItemData,
         languageCode: String
     ) {
-        if (isNearbyPlacesLoaded) return
-        isNearbyPlacesLoaded = true
+        if (_placesNearbyState.value !is ApiState.Initial) return
+        _placesNearbyState.value = ApiState.Loading()
 
         onIO {
             val item = travelItem.type.split("|")
@@ -104,38 +102,19 @@ class PlacesListViewModel @Inject constructor(
             )
                 .flowOn(Dispatchers.IO)
                 .collect { state ->
-                    when (state) {
-                        is ApiState.Success -> {
-                            state.data?.let { response ->
-                                response.forEach { Logging.e(it.toString()) }
-                                _placesListResult.value = response
-
-                                loadingState.value = false
-                            }
-                        }
-                        is ApiState.Loading -> {
-                            loadingState.value = true
-                        }
-                        is ApiState.Error -> {
-//                            clearData()
-                            errorMessage.value = state.message
-
-                            loadingState.value = false
-                        }
-                    }
+                    // 상태 업데이트
+                    _placesNearbyState.value = state
                 }
         }
     }
 
+    /** Debug Fake Data */
     fun getFakePlacesNearbyList(context: Context) {
-        // Debug Fake Data
+        if (_placesNearbyState.value !is ApiState.Initial) return
+        _placesNearbyState.value = ApiState.Loading()
+
         val jsonString = context.assets.open("fake_nearby_places_data.json").bufferedReader().use { it.readText() }
         val fakePlaces = Json.decodeFromString<List<Places>>(jsonString)
-        _placesListResult.value = fakePlaces
+        _placesNearbyState.value = ApiState.Success(fakePlaces)
     }
-
-//    private fun clearData() {
-//        _placesListResult.value = emptyList()
-//        _placesListResult2.value = PagingData.empty()
-//    }
 }
