@@ -39,6 +39,7 @@ class LoginActivity : BaseActivity<ActivityLoginBinding, LoginViewModel>() {
 
     override fun onCreateView(savedInstanceState: Bundle?) {
         // TODO: 구글 로그인 변경 예정: https://soopeach.tistory.com/176
+        //  https://inblog.ai/code-with-me/기존-google-로그인-대신-credential-manager-api를-활용한-sign-in-with-google-로그인-구현하기-21777
         // Configure Google Sign In
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(getString(R.string.default_web_client_id))

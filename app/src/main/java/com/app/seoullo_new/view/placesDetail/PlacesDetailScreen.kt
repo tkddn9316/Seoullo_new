@@ -1,4 +1,4 @@
-package com.app.seoullo_new.view.placeDetail
+package com.app.seoullo_new.view.placesDetail
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
@@ -9,8 +9,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.app.seoullo_new.view.base.SeoulloAppBar
 
 @Composable
-fun PlaceDetailNearbyScreen(
-    viewModel: PlaceDetailViewModel = hiltViewModel(),
+fun PlaceDetailScreen(
+    viewModel: PlacesDetailViewModel = hiltViewModel(),
     onNavigationClick: () -> Unit
 ) {
     Scaffold(

@@ -1,4 +1,4 @@
-package com.app.seoullo_new.view.placeList
+package com.app.seoullo_new.view.placesList
 
 import android.net.Uri
 import android.widget.Toast
@@ -67,6 +67,7 @@ import com.app.domain.model.Places
 import com.app.domain.model.theme.Language
 import com.app.seoullo_new.BuildConfig
 import com.app.seoullo_new.R
+import com.app.seoullo_new.utils.Constants.SortCriteria
 import com.app.seoullo_new.utils.Constants.SELECTED_NEARBY_LIST
 import com.app.seoullo_new.utils.Constants.SELECTED_TOUR_LIST
 import com.app.seoullo_new.utils.Logging
@@ -149,43 +150,43 @@ fun PlacesListScreen(
                 AnimatedVisibility(
                     visible = !isAtEnd
                 ) {
+                    // 공통 FAB 요소
+                    val commonFabItems = listOf(
+                        FabItem(
+                            icon = Icons.Default.ArrowDropUp,
+                            label = stringResource(R.string.go_to_top)
+                        ) {
+                            coroutineScope.launch {
+                                if (menuClickedPosition == SELECTED_TOUR_LIST) {
+                                    tourListState.animateScrollToItem(0)
+                                } else {
+                                    nearbyListState.animateScrollToItem(0)
+                                }
+                            }
+                        }
+                    )
+
+                    // Nearby 전용 FAB 요소
+                    val specificFabItems = if (menuClickedPosition == SELECTED_NEARBY_LIST) listOf(
+                        FabItem(
+                            icon = ImageVector.vectorResource(id = R.drawable.ic_review),
+                            label = stringResource(R.string.sort_by_review)
+                        ) {
+                            viewModel.sortPlaces(SortCriteria.REVIEW)
+                        },
+                        FabItem(
+                            icon = Icons.Default.Stars,
+                            label = stringResource(R.string.sort_by_rating)
+                        ) {
+                            viewModel.sortPlaces(SortCriteria.RATING)
+                        }
+                    ) else emptyList()
+
+                    val fabItems = commonFabItems + specificFabItems
+
                     MultipleFloatingActionButton(
                         fabIcon = Icons.Default.Add,
-                        items = if (menuClickedPosition == SELECTED_TOUR_LIST) {
-                            arrayListOf(
-                                FabItem(
-                                    icon = Icons.Default.ArrowDropUp,
-                                    label = stringResource(R.string.go_to_top)
-                                ) {
-                                    coroutineScope.launch {
-                                        tourListState.animateScrollToItem(0)
-                                    }
-                                }
-                            )
-                        } else {
-                            arrayListOf(
-                                FabItem(
-                                    icon = Icons.Default.ArrowDropUp,
-                                    label = stringResource(R.string.go_to_top)
-                                ) {
-                                    coroutineScope.launch {
-                                        nearbyListState.animateScrollToItem(0)
-                                    }
-                                },
-                                FabItem(
-                                    icon = ImageVector.vectorResource(id = R.drawable.ic_review),
-                                    label = stringResource(R.string.sort_by_review)
-                                ) {
-                                    viewModel.sortPlacesByReview()
-                                },
-                                FabItem(
-                                    icon = Icons.Default.Stars,
-                                    label = stringResource(R.string.sort_by_rating)
-                                ) {
-                                    viewModel.sortPlacesByRating()
-                                }
-                            )
-                        }
+                        items = fabItems
                     )
                 }
             }
@@ -258,7 +259,9 @@ fun PlacesListScreen(
                                     state = nearbyListState,
                                     contentPadding = PaddingValues(14.dp, 7.dp)
                                 ) {
-                                    items(places!!) { place ->
+                                    items(
+                                        items = places!!
+                                    ) { place ->
                                         PlacesListItem(
                                             title = travelItem.title,
                                             places = place,

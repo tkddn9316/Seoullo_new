@@ -1,4 +1,4 @@
-package com.app.seoullo_new.view.placeList
+package com.app.seoullo_new.view.placesList
 
 import android.Manifest
 import android.content.Context
@@ -13,6 +13,7 @@ import com.app.domain.usecase.places.GetPlacesNearbyListUseCase
 import com.app.seoullo_new.BuildConfig
 import com.app.seoullo_new.di.DispatcherProvider
 import com.app.seoullo_new.utils.CheckingManager
+import com.app.seoullo_new.utils.Constants.SortCriteria
 import com.app.seoullo_new.utils.Logging
 import com.app.seoullo_new.view.base.BaseViewModel2
 import com.app.seoullo_new.view.util.TravelJsonItemData
@@ -20,7 +21,6 @@ import com.google.android.gms.location.FusedLocationProviderClient
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flowOn
@@ -41,6 +41,8 @@ class PlacesListViewModel @Inject constructor(
     val placesListResult = _placesListResult.asStateFlow()
 
     private var isPlacesListLoaded = false // 로드 상태 확인 플래그
+
+    private var lastSortCriteria: SortCriteria? = null      // 마지막 Sort 변경 기록
 
     fun checkPermission(fusedLocationProviderClient: FusedLocationProviderClient) {
         onMain {
@@ -108,19 +110,17 @@ class PlacesListViewModel @Inject constructor(
         }
     }
 
-    fun sortPlacesByRating() {
-        val state = _placesNearbyState.value
-        if (state is ApiState.Success && !state.data.isNullOrEmpty()) {
-            val sortedList = state.data!!.sortedByDescending { it.rating }
-            _placesNearbyState.value = ApiState.Success(sortedList)
-        }
-    }
+    fun sortPlaces(criteria: SortCriteria) {
+        if (lastSortCriteria == criteria) return
 
-    fun sortPlacesByReview() {
         val state = _placesNearbyState.value
         if (state is ApiState.Success && !state.data.isNullOrEmpty()) {
-            val sortedList = state.data!!.sortedByDescending { it.userRatingCount }
+            val sortedList = when (criteria) {
+                SortCriteria.RATING -> state.data!!.sortedByDescending { it.rating }
+                SortCriteria.REVIEW -> state.data!!.sortedByDescending { it.userRatingCount }
+            }
             _placesNearbyState.value = ApiState.Success(sortedList)
+            lastSortCriteria = criteria
         }
     }
 

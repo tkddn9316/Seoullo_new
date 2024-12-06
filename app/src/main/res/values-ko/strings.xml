@@ -52,6 +52,9 @@
     <string name="sort_by_rating">별점 순으로 정렬</string>
     <string name="sort_by_review">리뷰 순으로 정렬</string>
 
+    <string name="google_review_limit_notice">Google 리뷰는 최대 5개까지 제공됩니다.</string>
+    <string name="see_more">더 보기</string>
+
     <!--  setting  -->
     <string name="theme_title">테마 설정</string>
     <string name="theme_settings_title">테마</string>

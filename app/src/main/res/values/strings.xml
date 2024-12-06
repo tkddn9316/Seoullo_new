@@ -53,6 +53,9 @@
     <string name="sort_by_rating">Sort by rating</string>
     <string name="sort_by_review">Sort by review</string>
 
+    <string name="google_review_limit_notice">Up to 5 Google reviews are provided.</string>
+    <string name="see_more">See more</string>
+
     <!--  setting  -->
     <string name="theme_title">Theme Setting</string>
     <string name="theme_settings_title">Theme</string>

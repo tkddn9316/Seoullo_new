@@ -21,6 +21,7 @@
         <activity
             android:name=".view.legacy.intro.IntroActivity"
             android:exported="false" />
+
         <activity
             android:name=".view.legacy.login.LoginActivity"
             android:exported="true">
@@ -30,9 +31,18 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
             android:name=".view.main.MainActivity"
             android:exported="true" />
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="${SEOULLO_GOOGLE_MAPS_KEY}"/>
+
+        <meta-data
+            android:name="com.google.android.gms.maps.logging.enabled"
+            android:value="false" />
     </application>
 
 </manifest>

@@ -6,6 +6,8 @@ import com.app.data.api.ApiInterface2
 import com.app.data.api.ApiInterface3
 import com.app.data.source.PlacesDataSource
 import com.app.data.source.PlacesDataSourceImpl
+import com.app.data.source.PlacesDetailGoogleDataSource
+import com.app.data.source.PlacesDetailGoogleDataSourceImpl
 import com.app.data.source.PlacesNearbyDataSource
 import com.app.data.source.PlacesNearbyDataSourceImpl
 import com.app.data.source.PlacesPhotoNearbyDataSource
@@ -32,6 +34,12 @@ class RemoteDataModule {
     @Singleton
     fun providePlacesPhotoNearbyDataSource(@ApiAnnotation.GoogleApi apiInterface: ApiInterface): PlacesPhotoNearbyDataSource {
         return PlacesPhotoNearbyDataSourceImpl(apiInterface)
+    }
+
+    @Provides
+    @Singleton
+    fun providePlacesDetailGoogleDataSource(@ApiAnnotation.GoogleApi apiInterface: ApiInterface): PlacesDetailGoogleDataSource {
+        return PlacesDetailGoogleDataSourceImpl(apiInterface)
     }
 
     @Provides

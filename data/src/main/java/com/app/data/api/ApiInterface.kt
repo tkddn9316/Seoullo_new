@@ -1,5 +1,6 @@
 package com.app.data.api
 
+import com.app.data.model.PlacesDetailGoogleResponseDTO
 import com.app.data.model.PlacesNearbyRequestDTO
 import com.app.data.model.PlacesNearbyResponseDTO
 import com.app.data.model.PlacesPhotoNearbyResponseDTO
@@ -34,4 +35,13 @@ interface ApiInterface {
         @Query("key") key: String,
         @Query("skipHttpRedirect") skipHttpRedirect: Boolean = true     // JSON 응답값으로
     ): PlacesPhotoNearbyResponseDTO
+
+    // 상세 정보
+    @GET("v1/places/{placeId}")
+    suspend fun getPlacesDetail(
+        @Header("X-Goog-Api-Key") apiKey: String,
+        @Header("X-Goog-FieldMask") fieldMask: String = "location,reviews,googleMapsLinks",
+        @Path("placeId") placeId: String,
+        @Query("languageCode") languageCode: String
+    ): PlacesDetailGoogleResponseDTO
 }

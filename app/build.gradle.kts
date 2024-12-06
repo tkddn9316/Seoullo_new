@@ -33,6 +33,8 @@ android {
             "SEOULLO_GOOGLE_MAPS_API_KEY",
             getApiKey("SEOULLO_GOOGLE_MAPS_API_KEY")
         )
+        println(getApiKey("SEOULLO_GOOGLE_MAPS_API_KEY"))
+        manifestPlaceholders["SEOULLO_GOOGLE_MAPS_KEY"] = getApiKey("SEOULLO_GOOGLE_MAPS_API_KEY")
         buildConfigField("String", "SEOUL_OPEN_API_KEY", getApiKey("SEOUL_OPEN_API_KEY"))
         vectorDrawables {
             useSupportLibrary = true
@@ -122,6 +124,11 @@ dependencies {
 
     // 위치 구하기
     implementation("com.google.android.gms:play-services-location:21.3.0")
+    // Google Maps
+    implementation("com.google.android.gms:play-services-maps:19.0.0")
+    implementation("com.google.maps.android:maps-compose:6.3.0")
+    implementation("com.google.maps.android:maps-compose-utils:6.3.0")
+    implementation("com.google.maps.android:maps-compose-widgets:6.3.0")
 
     // Hilt
     implementation(libs.hilt)

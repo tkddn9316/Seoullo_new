@@ -1,0 +1,69 @@
+package com.app.seoullo_new.view.placesDetail
+
+import android.content.Context
+import androidx.lifecycle.SavedStateHandle
+import com.app.domain.model.ApiState
+import com.app.domain.model.Places
+import com.app.domain.model.PlacesDetailGoogle
+import com.app.domain.usecase.places.GetPlacesDetailGoogleUseCase
+import com.app.seoullo_new.BuildConfig
+import com.app.seoullo_new.di.DispatcherProvider
+import com.app.seoullo_new.view.base.BaseViewModel2
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.serialization.json.Json
+import javax.inject.Inject
+
+@HiltViewModel
+class PlacesDetailViewModel @Inject constructor(
+    savedStateHandle: SavedStateHandle,
+    dispatcherProvider: DispatcherProvider,
+    private val getPlacesDetailGoogleUseCase: GetPlacesDetailGoogleUseCase
+) : BaseViewModel2(dispatcherProvider) {
+    private val json: String = checkNotNull(savedStateHandle["place"])
+    private val places: Places by lazy { Json.decodeFromString<Places>(json) }
+
+    private val _placesState = MutableStateFlow(Places())
+    val placesState = _placesState.asStateFlow()
+
+    private val _placesDetailGoogleState = MutableStateFlow<ApiState<PlacesDetailGoogle>>(ApiState.Initial())
+    val placesDetailGoogleState = _placesDetailGoogleState.asStateFlow()
+
+    init {
+        _placesState.value = places
+    }
+
+    fun getTitle(): String = places.displayName
+
+    fun getPlacesDetailGoogle(languageCode: String) {
+        if (places.id.isEmpty()) return
+        if (_placesDetailGoogleState.value !is ApiState.Initial) return
+
+        onIO {
+            getPlacesDetailGoogleUseCase(
+                apiKey = BuildConfig.SEOULLO_GOOGLE_MAPS_API_KEY,
+                placeId = places.id,
+                languageCode = languageCode
+            )
+                .flowOn(Dispatchers.IO)
+                .collect { state ->
+                    // 상태 업데이트
+                    _placesDetailGoogleState.value = state
+                }
+        }
+    }
+
+
+    /** Debug Fake Data */
+    fun getFakePlacesDetailGoogle(context: Context) {
+        if (_placesDetailGoogleState.value !is ApiState.Initial) return
+        _placesDetailGoogleState.value = ApiState.Loading()
+
+        val jsonString = context.assets.open("fake_places_google_data.json").bufferedReader().use { it.readText() }
+        val fakePlaces = Json.decodeFromString<PlacesDetailGoogle>(jsonString)
+        _placesDetailGoogleState.value = ApiState.Success(fakePlaces)
+    }
+}

@@ -14,10 +14,10 @@ import androidx.navigation.compose.navigation
 import androidx.navigation.navArgument
 import com.app.seoullo_new.view.main.MainScreen
 import com.app.seoullo_new.view.main.setting.LicenseScreen
-import com.app.seoullo_new.view.placeDetail.PlaceDetailNearbyScreen
-import com.app.seoullo_new.view.placeDetail.PlaceDetailScreen
-import com.app.seoullo_new.view.placeList.PlacesListScreen
-import com.app.seoullo_new.view.placeList.PlacesListViewModel
+import com.app.seoullo_new.view.placesDetail.PlaceDetailNearbyScreen
+import com.app.seoullo_new.view.placesDetail.PlaceDetailScreen
+import com.app.seoullo_new.view.placesList.PlacesListScreen
+import com.app.seoullo_new.view.placesList.PlacesListViewModel
 import com.app.seoullo_new.view.util.TravelJsonItemData
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json

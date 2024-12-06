@@ -1,12 +1,13 @@
 package com.app.data.mapper
 
+import com.app.data.model.PlacesDetailGoogleResponseDTO
 import com.app.data.model.PlacesNearbyRequestDTO
 import com.app.data.model.PlacesNearbyResponseDTO
 import com.app.data.model.PlacesResponseDTO
 import com.app.data.model.UserEntity
 import com.app.data.model.WeatherDTO
-import com.app.data.utils.Logging
 import com.app.domain.model.Places
+import com.app.domain.model.PlacesDetailGoogle
 import com.app.domain.model.PlacesNearbyRequest
 import com.app.domain.model.User
 import com.app.domain.model.Weather
@@ -48,6 +49,22 @@ fun mapperToPlaceNearby(place: PlacesNearbyResponseDTO): List<Places> =
             it.photoUrl
         )
     }
+
+fun mapperToPlaceDetailGoogle(place: PlacesDetailGoogleResponseDTO): PlacesDetailGoogle =
+    PlacesDetailGoogle(
+        latitude = place.location.latitude,
+        longitude = place.location.longitude,
+        reviews = place.reviews.toList().map {
+            PlacesDetailGoogle.Review(
+                profileName = it.authorAttribution.profileName,
+                profilePhotoUrl = it.authorAttribution.profilePhotoUrl,
+                relativePublishTimeDescription = it.relativePublishTimeDescription,
+                rating = it.rating,
+                text = it.text.text
+            )
+        },
+        reviewsUri = place.googleMapsLinks.reviewsUri
+    )
 
 fun mapperToPlace(place: PlacesResponseDTO.Place): Places =
     Places(
