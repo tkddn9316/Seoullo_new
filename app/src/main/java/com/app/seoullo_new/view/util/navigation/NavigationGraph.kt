@@ -1,5 +1,7 @@
 package com.app.seoullo_new.view.util.navigation
 
+import androidx.compose.animation.AnimatedContentTransitionScope
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -28,7 +30,31 @@ fun NavigationGraph(navController: NavHostController) {
         modifier = Modifier
             .fillMaxSize(),
         navController = navController,
-        startDestination = Route.MAIN
+        startDestination = Route.MAIN,
+        enterTransition = {
+            slideIntoContainer(
+                AnimatedContentTransitionScope.SlideDirection.Left,
+                animationSpec = tween(500)
+            )
+        },
+        exitTransition = {
+            slideOutOfContainer(
+                AnimatedContentTransitionScope.SlideDirection.Left,
+                animationSpec = tween(500)
+            )
+        },
+        popEnterTransition = {
+            slideIntoContainer(
+                AnimatedContentTransitionScope.SlideDirection.Right,
+                animationSpec = tween(500)
+            )
+        },
+        popExitTransition = {
+            slideOutOfContainer(
+                AnimatedContentTransitionScope.SlideDirection.Right,
+                animationSpec = tween(500)
+            )
+        },
     ) {
         mainScreenNavigation(navController)
         travelScreenNavigation(navController)
@@ -53,59 +79,6 @@ fun NavGraphBuilder.mainScreenNavigation(navController: NavHostController) {
         )
     }
 }
-
-//fun NavGraphBuilder.travelScreenNavigation(navController: NavHostController) {
-//    composable(
-//        Route.PLACE_LIST,
-//        arguments = listOf(navArgument("item") { type = NavType.StringType })
-//    ) { backStackEntry ->
-//        val itemJson = backStackEntry.arguments?.getString("item")
-//        val travelItem = itemJson?.let { Json.decodeFromString<TravelJsonItemData>(it) }
-//
-//        PlacesListScreen(
-//            travelItem = travelItem ?: TravelJsonItemData(),
-//            onNavigationClick = { navController.navigateUp() },
-//            onNearbyItemClick = {
-//                navController.navigate(
-//                    Route.PLACE_DETAIL_NEARBY
-//                        .replace(oldValue = "{place}", newValue = it)
-//                ) {
-//                    popUpTo(Route.PLACE_LIST) { saveState = true }
-//                    launchSingleTop = true
-//                    restoreState = true
-//                }
-//            },
-//            onItemClick = {
-//                navController.navigate(
-//                    Route.PLACE_DETAIL
-//                        .replace(oldValue = "{place}", newValue = it)
-//                ) {
-//                    popUpTo(Route.PLACE_LIST) { saveState = true }
-//                    launchSingleTop = true
-//                    restoreState = true
-//                }
-//            }
-//        )
-//    }
-//
-//    composable(
-//        Route.PLACE_DETAIL_NEARBY,
-//        arguments = listOf(navArgument("place") { type = NavType.StringType })
-//    ) {
-//        PlaceDetailNearbyScreen(
-//            onNavigationClick = { navController.navigateUp() }
-//        )
-//    }
-//
-//    composable(
-//        Route.PLACE_DETAIL,
-//        arguments = listOf(navArgument("place") { type = NavType.StringType })
-//    ) {
-//        PlaceDetailScreen(
-//            onNavigationClick = { navController.navigateUp() }
-//        )
-//    }
-//}
 
 fun NavGraphBuilder.travelScreenNavigation(navController: NavHostController) {
     navigation(startDestination = Route.PLACE_LIST, route = Route.TRAVEL_ROUTE) {

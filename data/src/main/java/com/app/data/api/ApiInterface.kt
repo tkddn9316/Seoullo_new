@@ -40,7 +40,7 @@ interface ApiInterface {
     @GET("v1/places/{placeId}")
     suspend fun getPlacesDetail(
         @Header("X-Goog-Api-Key") apiKey: String,
-        @Header("X-Goog-FieldMask") fieldMask: String = "location,reviews,googleMapsLinks",
+        @Header("X-Goog-FieldMask") fieldMask: String = "location,reviews,googleMapsLinks,nationalPhoneNumber",
         @Path("placeId") placeId: String,
         @Query("languageCode") languageCode: String
     ): PlacesDetailGoogleResponseDTO

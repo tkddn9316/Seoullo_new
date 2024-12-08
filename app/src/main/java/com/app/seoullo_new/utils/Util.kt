@@ -1,9 +1,12 @@
 package com.app.seoullo_new.utils
 
+import android.Manifest
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.app.domain.model.BaseModel
 import com.app.seoullo_new.R
@@ -159,5 +162,15 @@ object Util {
             "Condominium" -> R.string.condominium
             else -> R.string.empty
         }
+    }
+
+    fun Context.hasLocationPermission(): Boolean {
+        return ContextCompat.checkSelfPermission(
+            this,
+            Manifest.permission.ACCESS_FINE_LOCATION
+        ) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(
+            this,
+            Manifest.permission.ACCESS_COARSE_LOCATION
+        ) == PackageManager.PERMISSION_GRANTED
     }
 }

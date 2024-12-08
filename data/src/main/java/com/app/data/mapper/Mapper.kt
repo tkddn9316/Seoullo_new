@@ -35,35 +35,40 @@ fun mapperToPlaceNearbyDTO(place: PlacesNearbyRequest): PlacesNearbyRequestDTO =
     )
 
 fun mapperToPlaceNearby(place: PlacesNearbyResponseDTO): List<Places> =
-    place.place.toList().map {
-        Places(
-            it.name,
-            it.id,
-            it.displayName.text,
-            it.formattedAddress,
-            it.primaryTypeDisplayName?.text ?: "",
-            it.regularOpeningHours?.openNow ?: run { false },
-            it.regularOpeningHours?.weekdayDescriptions ?: run { emptyList() },
-            it.rating,
-            it.userRatingCount,
-            it.photoUrl
-        )
-    }
+    place.place?.let { list ->
+        list.toList().map {
+            Places(
+                it.name,
+                it.id,
+                it.displayName.text,
+                it.formattedAddress,
+                it.primaryTypeDisplayName?.text ?: "",
+                it.regularOpeningHours?.openNow ?: run { false },
+                it.regularOpeningHours?.weekdayDescriptions ?: run { emptyList() },
+                it.rating,
+                it.userRatingCount,
+                it.photoUrl
+            )
+        }
+    } ?: run { emptyList() }
 
 fun mapperToPlaceDetailGoogle(place: PlacesDetailGoogleResponseDTO): PlacesDetailGoogle =
     PlacesDetailGoogle(
         latitude = place.location.latitude,
         longitude = place.location.longitude,
-        reviews = place.reviews.toList().map {
-            PlacesDetailGoogle.Review(
-                profileName = it.authorAttribution.profileName,
-                profilePhotoUrl = it.authorAttribution.profilePhotoUrl,
-                relativePublishTimeDescription = it.relativePublishTimeDescription,
-                rating = it.rating,
-                text = it.text.text
-            )
-        },
-        reviewsUri = place.googleMapsLinks.reviewsUri
+        reviews = place.reviews?.let { list ->
+            list.toList().map {
+                PlacesDetailGoogle.Review(
+                    profileName = it.authorAttribution.profileName,
+                    profilePhotoUrl = it.authorAttribution.profilePhotoUrl,
+                    relativePublishTimeDescription = it.relativePublishTimeDescription,
+                    rating = it.rating,
+                    text = it.text?.text ?: ""  // 텍스트 없는 리뷰
+                )
+            }
+        } ?: run { emptyList() },   // 리뷰가 아예 없을 경우
+        reviewsUri = place.googleMapsLinks.reviewsUri,
+        phoneNumber = place.nationalPhoneNumber ?: ""
     )
 
 fun mapperToPlace(place: PlacesResponseDTO.Place): Places =

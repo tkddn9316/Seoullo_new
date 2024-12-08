@@ -4,9 +4,7 @@ plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("org.jetbrains.kotlin.plugin.compose")
-//    id("com.google.dagger.hilt.android")
     id("kotlin-kapt")
-//    id("dagger.hilt.android.plugin")
     id("com.google.gms.google-services")
     id("kotlinx-serialization")
 
@@ -27,15 +25,20 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
+        // TourApi
         buildConfigField("String", "TOUR_API_KEY", getApiKey("TOUR_API_KEY"))
+        // Google Api
         buildConfigField(
             "String",
             "SEOULLO_GOOGLE_MAPS_API_KEY",
             getApiKey("SEOULLO_GOOGLE_MAPS_API_KEY")
         )
-        println(getApiKey("SEOULLO_GOOGLE_MAPS_API_KEY"))
-        manifestPlaceholders["SEOULLO_GOOGLE_MAPS_KEY"] = getApiKey("SEOULLO_GOOGLE_MAPS_API_KEY")
+        // 서울 공공데이터
         buildConfigField("String", "SEOUL_OPEN_API_KEY", getApiKey("SEOUL_OPEN_API_KEY"))
+        // naver 지도
+        buildConfigField("String", "NAVER_MAPS_CLIENT_ID", getApiKey("NAVER_MAPS_CLIENT_ID"))
+        buildConfigField("String", "NAVER_MAPS_CLIENT_SECRET", getApiKey("NAVER_MAPS_CLIENT_SECRET"))
+
         vectorDrawables {
             useSupportLibrary = true
         }
@@ -51,11 +54,11 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
     }
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "11"
     }
     dataBinding {
         enable = true
@@ -117,18 +120,20 @@ dependencies {
     // compose StatusBar Color
     implementation("com.google.accompanist:accompanist-systemuicontroller:0.32.0")
     // Compose Navigation Animation
-    implementation("com.google.accompanist:accompanist-navigation-animation:0.36.0")
+//    implementation("com.google.accompanist:accompanist-navigation-animation:0.36.0")
 
     // Glide
     implementation("com.github.skydoves:landscapist-glide:1.4.7")
 
     // 위치 구하기
     implementation("com.google.android.gms:play-services-location:21.3.0")
-    // Google Maps
     implementation("com.google.android.gms:play-services-maps:19.0.0")
-    implementation("com.google.maps.android:maps-compose:6.3.0")
-    implementation("com.google.maps.android:maps-compose-utils:6.3.0")
-    implementation("com.google.maps.android:maps-compose-widgets:6.3.0")
+
+    // naver map
+    // https://github.com/fornewid/naver-map-compose
+    implementation("com.naver.maps:map-sdk:3.18.0")
+    implementation("io.github.fornewid:naver-map-compose:1.8.0")
+    implementation("io.github.fornewid:naver-map-location:21.0.1")
 
     // Hilt
     implementation(libs.hilt)

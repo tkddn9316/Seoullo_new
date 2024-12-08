@@ -6,9 +6,11 @@ data class PlacesDetailGoogleResponseDTO(
     @SerializedName("location")
     val location: Location,
     @SerializedName("reviews")
-    val reviews: List<Review>,
+    val reviews: List<Review>?,
     @SerializedName("googleMapsLinks")
-    val googleMapsLinks: GoogleMapsLinks
+    val googleMapsLinks: GoogleMapsLinks,
+    @SerializedName("nationalPhoneNumber")
+    val nationalPhoneNumber: String?,
 ) {
     data class Location(
         @SerializedName("latitude")
@@ -23,14 +25,14 @@ data class PlacesDetailGoogleResponseDTO(
         @SerializedName("rating")
         val rating: Int,
         @SerializedName("text")
-        val text: Text,
+        val text: Text?,
         @SerializedName("authorAttribution")
         val authorAttribution: AuthorAttribution
     )
 
     data class Text(
         @SerializedName("text")
-        val text: String
+        val text: String?
     )
 
     data class AuthorAttribution(

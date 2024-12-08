@@ -77,4 +77,9 @@
     <string name="version_title">Version</string>
 
     <string name="account_title">Account</string>
+
+    <!-- error screen -->
+    <string name="screen_loading_failed">Screen loading failed.</string>
+    <string name="screen_loading_failed_reason">Reason: %s</string>
+    <string name="error_reason_no_result">No Result.</string>
 </resources>

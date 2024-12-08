@@ -35,6 +35,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -67,11 +68,12 @@ import com.app.domain.model.Places
 import com.app.domain.model.theme.Language
 import com.app.seoullo_new.BuildConfig
 import com.app.seoullo_new.R
-import com.app.seoullo_new.utils.Constants.SortCriteria
 import com.app.seoullo_new.utils.Constants.SELECTED_NEARBY_LIST
 import com.app.seoullo_new.utils.Constants.SELECTED_TOUR_LIST
-import com.app.seoullo_new.utils.Logging
+import com.app.seoullo_new.utils.Constants.SortCriteria
 import com.app.seoullo_new.utils.Util.getStringResourceKey
+import com.app.seoullo_new.utils.Util.hasLocationPermission
+import com.app.seoullo_new.view.base.ErrorScreen
 import com.app.seoullo_new.view.base.SeoulloAppBar
 import com.app.seoullo_new.view.ui.theme.Color_ERROR
 import com.app.seoullo_new.view.ui.theme.colorRatingStar
@@ -95,14 +97,16 @@ fun PlacesListScreen(
     onNearbyItemClick: (places: String) -> Unit,
     onItemClick: (places: String) -> Unit
 ) {
-    Logging.d(travelItem)
+    val context = LocalContext.current
 
     // 드롭다운 클릭 상태
     var menuClickedPosition by rememberSaveable { mutableIntStateOf(SELECTED_TOUR_LIST) }
 
     // 퍼미션 검사
-    val fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(LocalContext.current)
-    viewModel.checkPermission(fusedLocationProviderClient)
+    LaunchedEffect(key1 = !context.hasLocationPermission()) {
+        val fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(context)
+        viewModel.checkPermission(fusedLocationProviderClient)
+    }
 
     // 제목
     val titleResId = getStringResourceKey(travelItem.title)
@@ -255,28 +259,30 @@ fun PlacesListScreen(
                             is ApiState.Loading -> {}
                             is ApiState.Success -> {
                                 val places = (placesNearbyState as ApiState.Success<List<Places>>).data
-                                LazyColumn(
-                                    state = nearbyListState,
-                                    contentPadding = PaddingValues(14.dp, 7.dp)
-                                ) {
-                                    items(
-                                        items = places!!
-                                    ) { place ->
-                                        PlacesListItem(
-                                            title = travelItem.title,
-                                            places = place,
-                                            menuClickedPosition = SELECTED_NEARBY_LIST,
-                                            onItemClick = onNearbyItemClick
-                                        )
+                                if (places.isNullOrEmpty()) {
+                                    // 데이터가 없을 때
+                                    ErrorScreen(stringResource(R.string.error_reason_no_result))
+                                } else {
+                                    LazyColumn(
+                                        state = nearbyListState,
+                                        contentPadding = PaddingValues(14.dp, 7.dp)
+                                    ) {
+                                        items(
+                                            items = places
+                                        ) { place ->
+                                            PlacesListItem(
+                                                title = travelItem.title,
+                                                places = place,
+                                                menuClickedPosition = SELECTED_NEARBY_LIST,
+                                                onItemClick = onNearbyItemClick
+                                            )
+                                        }
                                     }
                                 }
                             }
                             is ApiState.Error -> {
                                 val error = (placesNearbyState as ApiState.Error).message
-                                error?.let { message ->
-                                    // 에러 메시지 처리
-                                    Toast.makeText(LocalContext.current, stringResource(R.string.error_failure_init_list, message), Toast.LENGTH_SHORT).show()
-                                }
+                                ErrorScreen(error ?: "")
                             }
                         }
                     }

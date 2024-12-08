@@ -5,5 +5,6 @@ package com.app.seoullo_new.view.util
  */
 data class DialogState(
     val isThemeDialogOpen: Boolean = false,
-    val isLanguageDialogOpen: Boolean = false
+    val isLanguageDialogOpen: Boolean = false,
+    val isReviewDetailDialogOpen: Boolean = false
 )

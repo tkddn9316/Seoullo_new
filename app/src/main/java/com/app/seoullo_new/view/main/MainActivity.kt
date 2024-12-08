@@ -3,7 +3,6 @@ package com.app.seoullo_new.view.main
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.viewModels
 import androidx.navigation.compose.rememberNavController
 import com.app.seoullo_new.view.ui.theme.Seoullo_newTheme
 import com.app.seoullo_new.view.util.navigation.NavigationGraph

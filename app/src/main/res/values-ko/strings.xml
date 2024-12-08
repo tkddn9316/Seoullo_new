@@ -77,4 +77,9 @@
     <string name="version_title">버전</string>
 
     <string name="account_title">계정</string>
+
+    <!-- error screen -->
+    <string name="screen_loading_failed">화면 로딩에 실패하였습니다.</string>
+    <string name="screen_loading_failed_reason">사유: %s</string>
+    <string name="error_reason_no_result">결과 값이 없습니다.</string>
 </resources>

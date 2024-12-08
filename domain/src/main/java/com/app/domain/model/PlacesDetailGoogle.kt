@@ -8,13 +8,14 @@ data class PlacesDetailGoogle(
     val longitude: Double = 0.0,
     val reviews: List<Review> = emptyList(),
     val reviewsUri: String = "",
+    val phoneNumber: String = ""
 ) : BaseModel() {
     @Serializable
     data class Review(
-        val profileName: String,
-        val profilePhotoUrl: String,
-        val relativePublishTimeDescription: String,
-        val rating: Int,
-        val text: String
+        val profileName: String = "",
+        val profilePhotoUrl: String = "",
+        val relativePublishTimeDescription: String = "",
+        val rating: Int = 0,
+        val text: String = ""
     )
 }

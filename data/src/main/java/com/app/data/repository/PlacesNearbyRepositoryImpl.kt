@@ -46,7 +46,7 @@ class PlacesNearbyRepositoryImpl @Inject constructor(
         data: PlacesNearbyResponseDTO
     ): Flow<PlacesNearbyResponseDTO> {
         return flow {
-            data.place.map { place ->
+            data.place?.map { place ->
                 if (!place.photos.isNullOrEmpty()) {
                     // 무조건 1번째 사진 사용
                     placesPhotoNearbyDataSource.getPlacePhotoNearby(place.photos[0].name, apiKey)
@@ -56,7 +56,7 @@ class PlacesNearbyRepositoryImpl @Inject constructor(
                 } else {
                     place.photoUrl = ""
                 }
-            }
+            } ?: run { emit(data) }
 
             emit(data)
         }

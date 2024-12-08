@@ -32,6 +32,15 @@ class PlacesDetailViewModel @Inject constructor(
     private val _placesDetailGoogleState = MutableStateFlow<ApiState<PlacesDetailGoogle>>(ApiState.Initial())
     val placesDetailGoogleState = _placesDetailGoogleState.asStateFlow()
 
+    private val _selectedReview = MutableStateFlow<PlacesDetailGoogle.Review?>(null)
+    val selectedReview = _selectedReview.asStateFlow()
+    fun openReviewDetailDialog(review: PlacesDetailGoogle.Review) {
+        _selectedReview.value = review
+    }
+    fun closeReviewDetailDialog() {
+        _selectedReview.value = null
+    }
+
     init {
         _placesState.value = places
     }

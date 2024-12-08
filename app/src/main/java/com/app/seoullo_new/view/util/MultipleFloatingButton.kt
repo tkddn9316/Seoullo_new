@@ -46,8 +46,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.app.seoullo_new.view.ui.theme.notosansFont
 
-@Composable
 @Preview
+@Composable
 fun FloatingButton() {
     FloatingActionButton(
         onClick = {},

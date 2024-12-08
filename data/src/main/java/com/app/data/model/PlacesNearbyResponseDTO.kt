@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName
 
 data class PlacesNearbyResponseDTO(
     @SerializedName("places")
-    val place: List<Place>
+    val place: List<Place>?
 ) {
     data class Place(
         @SerializedName("name")
