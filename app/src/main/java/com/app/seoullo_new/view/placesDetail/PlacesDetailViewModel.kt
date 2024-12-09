@@ -4,8 +4,10 @@ import android.content.Context
 import androidx.lifecycle.SavedStateHandle
 import com.app.domain.model.ApiState
 import com.app.domain.model.Places
+import com.app.domain.model.PlacesDetail
 import com.app.domain.model.PlacesDetailGoogle
 import com.app.domain.usecase.places.GetPlacesDetailGoogleUseCase
+import com.app.domain.usecase.places.GetPlacesDetailUseCase
 import com.app.seoullo_new.BuildConfig
 import com.app.seoullo_new.di.DispatcherProvider
 import com.app.seoullo_new.view.base.BaseViewModel2
@@ -21,6 +23,7 @@ import javax.inject.Inject
 class PlacesDetailViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     dispatcherProvider: DispatcherProvider,
+    private val getPlacesDetailUseCase: GetPlacesDetailUseCase,
     private val getPlacesDetailGoogleUseCase: GetPlacesDetailGoogleUseCase
 ) : BaseViewModel2(dispatcherProvider) {
     private val json: String = checkNotNull(savedStateHandle["place"])
@@ -28,6 +31,9 @@ class PlacesDetailViewModel @Inject constructor(
 
     private val _placesState = MutableStateFlow(Places())
     val placesState = _placesState.asStateFlow()
+
+    private val _placesDetailState = MutableStateFlow<ApiState<PlacesDetail>>(ApiState.Initial())
+    val placesDetailState = _placesDetailState.asStateFlow()
 
     private val _placesDetailGoogleState = MutableStateFlow<ApiState<PlacesDetailGoogle>>(ApiState.Initial())
     val placesDetailGoogleState = _placesDetailGoogleState.asStateFlow()
@@ -46,6 +52,24 @@ class PlacesDetailViewModel @Inject constructor(
     }
 
     fun getTitle(): String = places.displayName
+
+    fun getPlacesDetail() {
+        if (places.id.isEmpty()) return
+        if (_placesDetailState.value !is ApiState.Initial) return
+
+        onIO {
+            getPlacesDetailUseCase(
+                serviceKey = BuildConfig.TOUR_API_KEY,
+                contentId = places.id,
+                contentTypeId = places.contentTypeId
+            )
+                .flowOn(Dispatchers.IO)
+                .collect { state ->
+                    // 상태 업데이트
+                    _placesDetailState.value = state
+                }
+        }
+    }
 
     fun getPlacesDetailGoogle(languageCode: String) {
         if (places.id.isEmpty()) return

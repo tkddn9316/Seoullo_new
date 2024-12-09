@@ -1,12 +1,14 @@
 package com.app.data.mapper
 
 import com.app.data.model.PlacesDetailGoogleResponseDTO
+import com.app.data.model.PlacesDetailResponseDTO
 import com.app.data.model.PlacesNearbyRequestDTO
 import com.app.data.model.PlacesNearbyResponseDTO
 import com.app.data.model.PlacesResponseDTO
 import com.app.data.model.UserEntity
 import com.app.data.model.WeatherDTO
 import com.app.domain.model.Places
+import com.app.domain.model.PlacesDetail
 import com.app.domain.model.PlacesDetailGoogle
 import com.app.domain.model.PlacesNearbyRequest
 import com.app.domain.model.User
@@ -40,6 +42,7 @@ fun mapperToPlaceNearby(place: PlacesNearbyResponseDTO): List<Places> =
             Places(
                 it.name,
                 it.id,
+                "",
                 it.displayName.text,
                 it.formattedAddress,
                 it.primaryTypeDisplayName?.text ?: "",
@@ -73,16 +76,31 @@ fun mapperToPlaceDetailGoogle(place: PlacesDetailGoogleResponseDTO): PlacesDetai
 
 fun mapperToPlace(place: PlacesResponseDTO.Place): Places =
     Places(
-        place.title,
-        place.contentid,
-        place.title,
-        place.addr1,
-        "",
-        false,
-        emptyList(),
-        0.0,
-        0,
-        place.firstimage
+        name = place.title,
+        id = place.contentid,
+        contentTypeId = place.contenttypeid,
+        displayName = place.title,
+        address = place.addr1,
+        description = "",
+        openNow = false,
+        weekdayDescriptions = emptyList(),
+        rating = 0.0,
+        userRatingCount = 0,
+        photoUrl = place.firstimage
+    )
+
+fun mapperToPlaceDetail(placesDetail: PlacesDetailResponseDTO.PlacesDetail): PlacesDetail =
+    PlacesDetail(
+        contentId = placesDetail.contentid,
+        contentTypeId = placesDetail.contenttypeid,
+        displayName = placesDetail.title,
+        address = placesDetail.addr1,
+        description = placesDetail.overview,
+        photoUrl = placesDetail.firstimage,
+        latitude = placesDetail.mapy.toDouble(),
+        longitude = placesDetail.mapx.toDouble(),
+        phoneNum = placesDetail.tel,
+        homepage = placesDetail.homepage
     )
 
 fun mapperToUser(userEntity: List<UserEntity>): List<User> =

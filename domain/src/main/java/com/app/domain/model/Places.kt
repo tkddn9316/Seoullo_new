@@ -10,6 +10,7 @@ import kotlinx.serialization.Serializable
 data class Places(
     val name: String = "",
     val id: String = "",
+    val contentTypeId: String = "",
     val displayName: String = "",
     val address: String = "",
     val description: String = "",

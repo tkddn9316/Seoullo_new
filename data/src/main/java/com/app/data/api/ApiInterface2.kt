@@ -1,5 +1,6 @@
 package com.app.data.api
 
+import com.app.data.model.PlacesDetailResponseDTO
 import com.app.data.model.PlacesResponseDTO
 import retrofit2.http.GET
 import retrofit2.http.Query
@@ -32,5 +33,11 @@ interface ApiInterface2 {
         @Query("serviceKey") serviceKey: String,
         @Query("contentId") contentId: String,
         @Query("contentTypeId") contentTypeId: String,
-    )
+        @Query("_type") type: String = "JSON",
+        @Query("defaultYN") defaultYN: String = "Y",
+        @Query("firstImageYN") firstImageYN: String = "Y",
+        @Query("addrinfoYN") addrinfoYN: String = "Y",
+        @Query("mapinfoYN") mapinfoYN: String = "Y",
+        @Query("overviewYN") overviewYN: String = "Y",
+    ): PlacesDetailResponseDTO
 }
