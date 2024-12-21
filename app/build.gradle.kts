@@ -1,15 +1,16 @@
 import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
 
 plugins {
-    id("com.android.application")
-    id("org.jetbrains.kotlin.android")
-    id("org.jetbrains.kotlin.plugin.compose")
-    id("kotlin-kapt")
-    id("com.google.gms.google-services")
-    id("kotlinx-serialization")
-
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.jetbrains.kotlin.android)
+    alias(libs.plugins.compose.compiler)
+    alias(libs.plugins.gms.google.services)
     alias(libs.plugins.android.hilt)
     alias(libs.plugins.auto.license)
+    alias(libs.plugins.kotlin.ksp)
+    kotlin(libs.plugins.kotlin.serialization.get().pluginId).version(libs.versions.kotlin)
+
+    id("kotlin-kapt")   // 데이터바인딩 때문에 필요함..(추후 제거)
 }
 
 android {
@@ -54,11 +55,11 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = "11"
+        jvmTarget = "17"
     }
     dataBinding {
         enable = true
@@ -75,7 +76,6 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
-
     kapt {
         correctErrorTypes = true
     }
@@ -135,7 +135,7 @@ dependencies {
 
     // Hilt
     implementation(libs.hilt)
-    kapt(libs.hilt.compiler)
+    ksp(libs.hilt.compiler)
     implementation(libs.hilt.navigation)
 
     // Retrofit
@@ -146,7 +146,7 @@ dependencies {
 
     // Room
     implementation(libs.room.runtime)
-    kapt (libs.room.compiler)
+    ksp(libs.room.compiler)
     // Kotlin Extensions and Coroutines support for Room
     implementation(libs.room.ktx)
 

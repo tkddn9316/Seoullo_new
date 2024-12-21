@@ -2,6 +2,7 @@
 accompanistPager = "0.20.1"
 accompanistSystemuicontroller = "0.32.0"
 activityKtx = "1.9.3"
+app = "8.7.3"
 appcompat = "1.7.0"
 composeBom = "2024.12.01"
 constraintlayout = "2.2.0"
@@ -19,6 +20,8 @@ jodaTime = "2.12.7"
 junit = "4.13.2"
 junitVersion = "1.2.1"
 kotlinxSerializationJson = "1.7.3"
+kotlin = "2.0.20"
+ksp = "2.0.20-1.0.25"
 landscapistGlide = "1.4.7"
 lifecycleRuntimeKtx = "2.8.7"
 lifecycleViewmodelKtx = "2.8.7"
@@ -40,6 +43,8 @@ retrofit = "2.9.0"
 roomRuntime = "2.6.1"
 runtimeLivedata = "1.7.6"
 tedpermissionCoroutine = "3.3.0"
+androidLibrary = "8.7.3"
+googleServices = "4.4.2"
 
 [libraries]
 accompanist-pager = { module = "com.google.accompanist:accompanist-pager", version.ref = "accompanistPager" }
@@ -105,5 +110,12 @@ ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
 ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
 
 [plugins]
+android-application = { id = "com.android.application", version.ref = "app" }
+android-library = { id = "com.android.library", version.ref = "androidLibrary" }
+jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+kotlin-serialization = { id = "plugin.serialization", version.ref = "kotlin" }
 android-hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 auto-license = { id = "com.mikepenz.aboutlibraries.plugin", version.ref = "autoLicense" }
+kotlin-ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
+gms-google-services = { id = "com.google.gms.google-services", version.ref = "googleServices" }

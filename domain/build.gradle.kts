@@ -1,11 +1,9 @@
 plugins {
-    id("com.android.library")
-    id("org.jetbrains.kotlin.android")
-//    id("com.google.dagger.hilt.android")
-    id("kotlin-kapt")
-    id("kotlinx-serialization")
-
+    alias(libs.plugins.android.library)
+    alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.android.hilt)
+    alias(libs.plugins.kotlin.ksp)
+    kotlin(libs.plugins.kotlin.serialization.get().pluginId).version(libs.versions.kotlin)
 }
 
 android {
@@ -29,15 +27,11 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = "1.8"
-    }
-
-    kapt {
-        correctErrorTypes = true
+        jvmTarget = "17"
     }
 }
 
@@ -52,7 +46,7 @@ dependencies {
 
     // Hilt
     implementation(libs.hilt)
-    kapt(libs.hilt.compiler)
+    ksp(libs.hilt.compiler)
 
     // Retrofit
     implementation(libs.retrofit)
@@ -62,7 +56,7 @@ dependencies {
 
     // Room
     implementation(libs.room.runtime)
-    kapt (libs.room.compiler)
+    ksp(libs.room.compiler)
 
     // Kotlin Extensions and Coroutines support for Room
     implementation(libs.room.ktx)

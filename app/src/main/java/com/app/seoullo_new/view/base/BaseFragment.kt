@@ -15,7 +15,6 @@ import com.app.seoullo_new.utils.OnSingleClickListener
 import com.app.seoullo_new.utils.Util
 import com.app.seoullo_new.utils.Util.getTag
 import com.app.seoullo_new.BR
-import com.google.firebase.installations.Utils
 
 abstract class BaseFragment<VDB : ViewDataBinding, VM : BaseViewModel> : Fragment(), OnSingleClickListener {
     protected var TAG: String = BaseFragment::class.java.simpleName
