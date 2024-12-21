@@ -89,51 +89,49 @@ dependencies {
     implementation(project(":domain"))
     implementation(project(":data"))
 
-    implementation("androidx.core:core-ktx:1.15.0")
-    implementation("androidx.appcompat:appcompat:1.7.0")
-    implementation("com.google.android.material:material:1.12.0")
-    implementation("androidx.constraintlayout:constraintlayout:2.2.0")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.8.7")
-    testImplementation("junit:junit:4.13.2")
-    androidTestImplementation("androidx.test.ext:junit:1.2.1")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.6.1")
-    implementation("androidx.activity:activity-ktx:1.9.3")
-    implementation("androidx.fragment:fragment-ktx:1.8.5")
-    implementation("androidx.preference:preference-ktx:1.2.1")
-    implementation("joda-time:joda-time:2.12.7")
+    implementation(libs.core.ktx)
+    implementation(libs.appcompat)
+    implementation(libs.material)
+    implementation(libs.constraintlayout)
+    implementation(libs.lifecycle.runtime.ktx)
+    testImplementation(libs.junit)
+    androidTestImplementation(libs.ext.junit)
+    androidTestImplementation(libs.espresso.core)
+    implementation(libs.activity.ktx)
+    implementation(libs.fragment.ktx)
+    implementation(libs.preference.ktx)
+    implementation(libs.joda.time)
 
     // Compose
-    implementation("androidx.activity:activity-compose:1.9.3")
-    implementation(platform("androidx.compose:compose-bom:2024.11.00"))
-    implementation("androidx.compose.ui:ui")
-    implementation("androidx.compose.ui:ui-graphics")
-    debugImplementation("androidx.compose.ui:ui-tooling")
-    implementation("androidx.compose.ui:ui-tooling-preview")
-    implementation("androidx.compose.material3:material3")
-    androidTestImplementation(platform("androidx.compose:compose-bom:2024.11.00"))
-    androidTestImplementation("androidx.compose.ui:ui-test-junit4")
-    debugImplementation("androidx.compose.ui:ui-tooling")
-    debugImplementation("androidx.compose.ui:ui-test-manifest")
-    implementation("androidx.constraintlayout:constraintlayout-compose:1.1.0")
-    implementation("androidx.compose.runtime:runtime-livedata:1.7.5")
-    implementation("androidx.compose.material:material-icons-extended:1.7.5")
+    implementation(libs.activity.compose)
+    implementation(platform(libs.compose.bom))
+    implementation(libs.ui)
+    implementation(libs.ui.graphics)
+    debugImplementation(libs.ui.tooling)
+    implementation(libs.ui.tooling.preview)
+    implementation(libs.material3)
+    androidTestImplementation(platform(libs.compose.bom))
+    androidTestImplementation(libs.ui.test.junit4)
+    debugImplementation(libs.androidx.ui.tooling)
+    debugImplementation(libs.androidx.ui.test.manifest)
+    implementation(libs.androidx.constraintlayout.compose)
+    implementation(libs.androidx.runtime.livedata)
+    implementation(libs.androidx.material.icons.extended)
     // compose StatusBar Color
-    implementation("com.google.accompanist:accompanist-systemuicontroller:0.32.0")
-    // Compose Navigation Animation
-//    implementation("com.google.accompanist:accompanist-navigation-animation:0.36.0")
+    implementation(libs.accompanist.systemuicontroller)
 
     // Glide
-    implementation("com.github.skydoves:landscapist-glide:1.4.7")
+    implementation(libs.landscapist.glide)
 
     // 위치 구하기
-    implementation("com.google.android.gms:play-services-location:21.3.0")
-    implementation("com.google.android.gms:play-services-maps:19.0.0")
+    implementation(libs.play.services.location)
+    implementation(libs.play.services.maps)
 
     // naver map
     // https://github.com/fornewid/naver-map-compose
-    implementation("com.naver.maps:map-sdk:3.18.0")
-    implementation("io.github.fornewid:naver-map-compose:1.8.0")
-    implementation("io.github.fornewid:naver-map-location:21.0.1")
+    implementation(libs.map.sdk)
+    implementation(libs.naver.map.compose)
+    implementation(libs.naver.map.location)
 
     // Hilt
     implementation(libs.hilt)
@@ -141,53 +139,49 @@ dependencies {
     implementation(libs.hilt.navigation)
 
     // Retrofit
-    implementation("com.squareup.retrofit2:retrofit:2.9.0")
-    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
-    implementation("com.squareup.okhttp3:okhttp:5.0.0-alpha.2")
-    implementation("com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.2")
+    implementation(libs.retrofit)
+    implementation(libs.converter.gson)
+    implementation(libs.okhttp)
+    implementation(libs.logging.interceptor)
 
     // Room
-    implementation("androidx.room:room-runtime:2.6.1")
-    kapt("androidx.room:room-compiler:2.6.1")
-
+    implementation(libs.room.runtime)
+    kapt (libs.room.compiler)
     // Kotlin Extensions and Coroutines support for Room
-    implementation("androidx.room:room-ktx:2.6.1")
+    implementation(libs.room.ktx)
 
     // ViewModelScope
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.7")
+    implementation(libs.androidx.lifecycle.viewmodel.ktx)
 
     // Google Login
-    implementation(platform("com.google.firebase:firebase-bom:33.6.0"))
-    implementation("com.google.firebase:firebase-analytics")
-    implementation("com.google.firebase:firebase-auth-ktx")
-    implementation("com.google.android.gms:play-services-auth:21.2.0")
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.analytics)
+    implementation(libs.firebase.auth.ktx)
+    implementation(libs.play.services.auth)
 
     // Ted Permission
-    implementation("io.github.ParkSangGwon:tedpermission-coroutine:3.3.0")
+    implementation(libs.tedpermission.coroutine)
 
     // navigation
-    val nav_version = "2.8.4"
-    implementation("androidx.navigation:navigation-fragment-ktx:$nav_version")
-    implementation("androidx.navigation:navigation-ui-ktx:$nav_version")
+    implementation(libs.androidx.navigation.fragment.ktx)
+    implementation(libs.androidx.navigation.ui.ktx)
 
     // paging
-    val paging_version = "3.3.4"
-    implementation("androidx.paging:paging-runtime-ktx:$paging_version")
-    implementation("androidx.paging:paging-compose:$paging_version")
+    implementation(libs.androidx.paging.runtime.ktx)
+    implementation(libs.androidx.paging.compose)
 
     // viewPager, bottomNav
-    implementation ("androidx.navigation:navigation-compose:2.8.4")
-    implementation ("com.google.accompanist:accompanist-pager:0.20.1")
-    implementation ("com.google.accompanist:accompanist-pager-indicators:0.20.1")
+    implementation (libs.androidx.navigation.compose)
+    implementation (libs.accompanist.pager)
+    implementation (libs.accompanist.pager.indicators)
 
     // lottie
-    val lottieVersion = "6.4.1"
-    implementation ("com.airbnb.android:lottie-compose:$lottieVersion")
+    implementation (libs.lottie.compose)
 
     // License page UI
     implementation(libs.auto.license.core)
     implementation(libs.auto.license.ui)
 
     // kotlin json
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.3")
+    implementation(libs.kotlinx.serialization.json)
 }
