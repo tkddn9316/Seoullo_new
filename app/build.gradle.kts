@@ -113,6 +113,8 @@ dependencies {
     implementation(libs.androidx.material.icons.extended)
     // compose StatusBar Color
     implementation(libs.accompanist.systemuicontroller)
+    // compose permission
+    implementation(libs.accompanist.permission)
 
     // Glide
     implementation(libs.landscapist.glide)

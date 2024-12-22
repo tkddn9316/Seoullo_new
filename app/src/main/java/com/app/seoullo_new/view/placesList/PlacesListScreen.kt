@@ -1,5 +1,6 @@
 package com.app.seoullo_new.view.placesList
 
+import android.Manifest
 import android.net.Uri
 import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
@@ -83,12 +84,15 @@ import com.app.seoullo_new.view.util.TravelJsonItemData
 import com.app.seoullo_new.view.util.theme.LocalLanguage
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import com.google.android.gms.location.LocationServices
 import com.skydoves.landscapist.glide.GlideImage
 import kotlinx.coroutines.launch
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
+@OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun PlacesListScreen(
     viewModel: PlacesListViewModel = hiltViewModel(),
@@ -103,9 +107,14 @@ fun PlacesListScreen(
     var menuClickedPosition by rememberSaveable { mutableIntStateOf(SELECTED_TOUR_LIST) }
 
     // 퍼미션 검사
+    val locationPermissions = rememberMultiplePermissionsState(
+        permissions = listOf(
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.ACCESS_COARSE_LOCATION
+        )
+    )
     LaunchedEffect(key1 = !context.hasLocationPermission()) {
-        val fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(context)
-        viewModel.checkPermission(fusedLocationProviderClient)
+        locationPermissions.launchMultiplePermissionRequest()
     }
 
     // 제목
@@ -198,93 +207,109 @@ fun PlacesListScreen(
             Column(
                 modifier = Modifier.padding(innerPadding)
             ) {
-                when (menuClickedPosition) {
-                    SELECTED_TOUR_LIST -> {
-                        // 페이징 처리 공식문서 참고
-                        // https://developer.android.com/develop/ui/compose/lists?hl=ko&_gl=1*1a4v78e*_up*MQ..*_ga*MTEwMzY5NzI1MC4xNzMzMjgwMjk2*_ga_6HH9YJMN9M*MTczMzI5NTEyOS4yLjAuMTczMzI5NTEyOS4wLjAuMTU3MzU2NjEyNA..#large-datasets
-                        viewModel.getPlacesList(travelItem)
-                        val placesListResult = viewModel.placesListResult.collectAsLazyPagingItems()
+                val fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(context)
 
-                        Box(
-                            modifier = Modifier.fillMaxSize()
-                        ) {
-                            LazyColumn(
-                                state = tourListState,
-                                contentPadding = PaddingValues(14.dp, 7.dp)
-                            ) {
-                                items(
-                                    count = placesListResult.itemCount,
-                                    key = { placesListResult.peek(it)?.id ?: "" }
-                                ) { index ->
-                                    val item = placesListResult[index]!!
-                                    PlacesListItem(
-                                        travelItem.title,
-                                        item,
-                                        menuClickedPosition,
-                                        onItemClick
-                                    )
-                                }
-                            }
-
-                            if (placesListResult.loadState.append == LoadState.Loading
-                                || placesListResult.loadState.refresh == LoadState.Loading
-                            ) {
-                                // 페이징 로딩 처리
-                                CircularProgressIndicator(
-                                    modifier = Modifier.align(Alignment.Center)
+                when {
+                    locationPermissions.allPermissionsGranted -> {
+                        viewModel.getMyLocation(fusedLocationProviderClient) { }
+                        when (menuClickedPosition) {
+                            SELECTED_TOUR_LIST -> {
+                                // 페이징 처리 공식문서 참고
+                                // https://developer.android.com/develop/ui/compose/lists?hl=ko&_gl=1*1a4v78e*_up*MQ..*_ga*MTEwMzY5NzI1MC4xNzMzMjgwMjk2*_ga_6HH9YJMN9M*MTczMzI5NTEyOS4yLjAuMTczMzI5NTEyOS4wLjAuMTU3MzU2NjEyNA..#large-datasets
+                                viewModel.getPlacesList(
+                                    travelItem = travelItem
                                 )
-                            }
+                                val placesListResult = viewModel.placesListResult.collectAsLazyPagingItems()
 
-                            val errorState = placesListResult.loadState.source.refresh as? LoadState.Error
-                                ?: placesListResult.loadState.source.append as? LoadState.Error
-                            errorState?.let { e ->
-                                // 에러 메시지 처리
-                                Toast.makeText(LocalContext.current, stringResource(R.string.error_failure_init_list, "${e.error.message}"), Toast.LENGTH_SHORT).show()
-                            }
-                        }
-                    }
-
-                    SELECTED_NEARBY_LIST -> {
-                        if (BuildConfig.DEBUG) {
-                            viewModel.getFakePlacesNearbyList(LocalContext.current)
-                        } else {
-                            viewModel.getPlacesNearbyList(
-                                travelItem,
-                                if (LocalLanguage.current == Language.ENGLISH) stringResource(R.string.en) else stringResource(R.string.ko)
-                            )
-                        }
-
-                        when (placesNearbyState) {
-                            is ApiState.Initial -> {}
-                            is ApiState.Loading -> {}
-                            is ApiState.Success -> {
-                                val places = (placesNearbyState as ApiState.Success<List<Places>>).data
-                                if (places.isNullOrEmpty()) {
-                                    // 데이터가 없을 때
-                                    ErrorScreen(stringResource(R.string.error_reason_no_result))
-                                } else {
+                                Box(
+                                    modifier = Modifier.fillMaxSize()
+                                ) {
                                     LazyColumn(
-                                        state = nearbyListState,
+                                        state = tourListState,
                                         contentPadding = PaddingValues(14.dp, 7.dp)
                                     ) {
                                         items(
-                                            items = places
-                                        ) { place ->
+                                            count = placesListResult.itemCount,
+                                            key = { placesListResult.peek(it)?.id ?: "" }
+                                        ) { index ->
+                                            val item = placesListResult[index]!!
                                             PlacesListItem(
-                                                title = travelItem.title,
-                                                places = place,
-                                                menuClickedPosition = SELECTED_NEARBY_LIST,
-                                                onItemClick = onNearbyItemClick
+                                                travelItem.title,
+                                                item,
+                                                menuClickedPosition,
+                                                onItemClick
                                             )
                                         }
                                     }
+
+                                    if (placesListResult.loadState.append == LoadState.Loading
+                                        || placesListResult.loadState.refresh == LoadState.Loading
+                                    ) {
+                                        // 페이징 로딩 처리
+                                        CircularProgressIndicator(
+                                            modifier = Modifier.align(Alignment.Center)
+                                        )
+                                    }
+
+                                    val errorState = placesListResult.loadState.source.refresh as? LoadState.Error
+                                        ?: placesListResult.loadState.source.append as? LoadState.Error
+                                    errorState?.let { e ->
+                                        // 에러 메시지 처리
+                                        Toast.makeText(LocalContext.current, stringResource(R.string.error_failure_init_list, "${e.error.message}"), Toast.LENGTH_SHORT).show()
+                                    }
                                 }
                             }
-                            is ApiState.Error -> {
-                                val error = (placesNearbyState as ApiState.Error).message
-                                ErrorScreen(error ?: "")
+
+                            SELECTED_NEARBY_LIST -> {
+                                if (BuildConfig.DEBUG) {
+                                    viewModel.getFakePlacesNearbyList(LocalContext.current)
+                                } else {
+                                    viewModel.getPlacesNearbyList(
+                                        travelItem = travelItem,
+                                        languageCode = if (LocalLanguage.current == Language.ENGLISH) stringResource(R.string.en) else stringResource(R.string.ko)
+                                    )
+                                }
+
+                                when (placesNearbyState) {
+                                    is ApiState.Initial -> {}
+                                    is ApiState.Loading -> {}
+                                    is ApiState.Success -> {
+                                        val places = (placesNearbyState as ApiState.Success<List<Places>>).data
+                                        if (places.isNullOrEmpty()) {
+                                            // 데이터가 없을 때
+                                            ErrorScreen(stringResource(R.string.error_reason_no_result))
+                                        } else {
+                                            LazyColumn(
+                                                state = nearbyListState,
+                                                contentPadding = PaddingValues(14.dp, 7.dp)
+                                            ) {
+                                                items(
+                                                    items = places
+                                                ) { place ->
+                                                    PlacesListItem(
+                                                        title = travelItem.title,
+                                                        places = place,
+                                                        menuClickedPosition = SELECTED_NEARBY_LIST,
+                                                        onItemClick = onNearbyItemClick
+                                                    )
+                                                }
+                                            }
+                                        }
+                                    }
+                                    is ApiState.Error -> {
+                                        val error = (placesNearbyState as ApiState.Error).message
+                                        ErrorScreen(error ?: "")
+                                    }
+                                }
                             }
                         }
+                    }
+                    locationPermissions.shouldShowRationale -> {
+                        // Guide UI
+                    }
+                    !locationPermissions.allPermissionsGranted && !locationPermissions.shouldShowRationale -> {
+                        // 거부 상태
+                        viewModel.checkPermission(fusedLocationProviderClient)
                     }
                 }
             }

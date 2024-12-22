@@ -1,6 +1,7 @@
 [versions]
 accompanistPager = "0.20.1"
 accompanistSystemuicontroller = "0.32.0"
+accompanistPermission = "0.36.0"
 activityKtx = "1.9.3"
 app = "8.7.3"
 appcompat = "1.7.0"
@@ -48,6 +49,7 @@ googleMapsScrect = "2.0.1"
 [libraries]
 accompanist-pager = { module = "com.google.accompanist:accompanist-pager", version.ref = "accompanistPager" }
 accompanist-pager-indicators = { module = "com.google.accompanist:accompanist-pager-indicators", version.ref = "accompanistPager" }
+accompanist-permission = { module = "com.google.accompanist:accompanist-permissions", version.ref = "accompanistPermission" }
 accompanist-systemuicontroller = { module = "com.google.accompanist:accompanist-systemuicontroller", version.ref = "accompanistSystemuicontroller" }
 activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activityKtx" }
 activity-ktx = { module = "androidx.activity:activity-ktx", version.ref = "activityKtx" }
