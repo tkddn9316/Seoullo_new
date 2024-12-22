@@ -22,11 +22,9 @@ import com.airbnb.lottie.compose.rememberLottieAnimatable
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.app.domain.model.Weather
 import com.app.seoullo_new.R
-import com.naver.maps.map.compose.ExperimentalNaverMapApi
 
 // TODO: https://www.youtube.com/watch?v=GFhKfMY0L2E
 // 기온, 강수확률, 풍속, 습도, 내일/모래 날씨, 미세먼지 등등...
-@OptIn(ExperimentalNaverMapApi::class)
 @Composable
 fun HomeScreen(
     viewModel: HomeViewModel = hiltViewModel()

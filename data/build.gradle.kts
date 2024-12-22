@@ -49,16 +49,16 @@ dependencies {
     ksp(libs.hilt.compiler)
 
     // Retrofit
-    implementation (libs.retrofit)
-    implementation (libs.converter.gson)
-    implementation (libs.okhttp)
-    implementation( libs.logging.interceptor)
+    implementation(libs.retrofit)
+    implementation(libs.converter.gson)
+    implementation(libs.okhttp)
+    implementation(libs.logging.interceptor)
 
     // Room
     implementation(libs.room.runtime)
     ksp(libs.room.compiler)
     // Kotlin Extensions and Coroutines support for Room
-    implementation (libs.room.ktx)
+    implementation(libs.room.ktx)
 
     // paging
     implementation(libs.androidx.paging.runtime.ktx)

@@ -11,6 +11,7 @@ plugins {
     kotlin(libs.plugins.kotlin.serialization.get().pluginId).version(libs.versions.kotlin)
 
     id("kotlin-kapt")   // 데이터바인딩 때문에 필요함..(추후 제거)
+    id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
 }
 
 android {
@@ -29,16 +30,9 @@ android {
         // TourApi
         buildConfigField("String", "TOUR_API_KEY", getApiKey("TOUR_API_KEY"))
         // Google Api
-        buildConfigField(
-            "String",
-            "SEOULLO_GOOGLE_MAPS_API_KEY",
-            getApiKey("SEOULLO_GOOGLE_MAPS_API_KEY")
-        )
+        buildConfigField("String", "SEOULLO_GOOGLE_MAPS_API_KEY", getApiKey("SEOULLO_GOOGLE_MAPS_API_KEY"))
         // 서울 공공데이터
         buildConfigField("String", "SEOUL_OPEN_API_KEY", getApiKey("SEOUL_OPEN_API_KEY"))
-        // naver 지도
-        buildConfigField("String", "NAVER_MAPS_CLIENT_ID", getApiKey("NAVER_MAPS_CLIENT_ID"))
-        buildConfigField("String", "NAVER_MAPS_CLIENT_SECRET", getApiKey("NAVER_MAPS_CLIENT_SECRET"))
 
         vectorDrawables {
             useSupportLibrary = true
@@ -127,12 +121,6 @@ dependencies {
     implementation(libs.play.services.location)
     implementation(libs.play.services.maps)
 
-    // naver map
-    // https://github.com/fornewid/naver-map-compose
-    implementation(libs.map.sdk)
-    implementation(libs.naver.map.compose)
-    implementation(libs.naver.map.location)
-
     // Hilt
     implementation(libs.hilt)
     ksp(libs.hilt.compiler)
@@ -159,6 +147,14 @@ dependencies {
     implementation(libs.firebase.auth.ktx)
     implementation(libs.play.services.auth)
 
+    // google maps
+    implementation(libs.maps.compose)
+    // Optionally, you can include the Compose utils library for Clustering,
+    // Street View metadata checks, etc.
+    implementation(libs.maps.compose.utils)
+    // Optionally, you can include the widgets library for ScaleBar, etc.
+    implementation(libs.maps.compose.widgets)
+
     // Ted Permission
     implementation(libs.tedpermission.coroutine)
 
@@ -171,12 +167,12 @@ dependencies {
     implementation(libs.androidx.paging.compose)
 
     // viewPager, bottomNav
-    implementation (libs.androidx.navigation.compose)
-    implementation (libs.accompanist.pager)
-    implementation (libs.accompanist.pager.indicators)
+    implementation(libs.androidx.navigation.compose)
+    implementation(libs.accompanist.pager)
+    implementation(libs.accompanist.pager.indicators)
 
     // lottie
-    implementation (libs.lottie.compose)
+    implementation(libs.lottie.compose)
 
     // License page UI
     implementation(libs.auto.license.core)

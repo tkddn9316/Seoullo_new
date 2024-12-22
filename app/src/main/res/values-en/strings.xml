@@ -27,7 +27,7 @@
     <string name="tab_setting">Setting</string>
 
     <!--  travel  -->
-    <string name="travel_title_restaurant">Restaurant</string>
+    <string name="travel_title_restaurant">🍽 Restaurant</string>
     <string name="korean_restaurant">Korean Restaurant</string>
     <string name="japanese_restaurant">Japanese Restaurant</string>
     <string name="chinese_restaurant">Chinese Restaurant</string>
@@ -52,6 +52,7 @@
     <string name="sort_by_rating">Sort by rating</string>
     <string name="sort_by_review">Sort by review</string>
 
+    <string name="review_with_icon">✏ Review</string>
     <string name="google_review_limit_notice">Up to 5 Google reviews are provided.</string>
     <string name="see_more">See more</string>
 

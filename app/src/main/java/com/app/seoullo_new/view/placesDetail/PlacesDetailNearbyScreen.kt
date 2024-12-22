@@ -1,10 +1,7 @@
 package com.app.seoullo_new.view.placesDetail
 
-import android.graphics.PointF
 import android.widget.Toast
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -42,16 +39,18 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
@@ -66,6 +65,7 @@ import com.app.domain.model.theme.Language
 import com.app.seoullo_new.BuildConfig
 import com.app.seoullo_new.R
 import com.app.seoullo_new.utils.Logging
+import com.app.seoullo_new.view.base.ErrorScreen
 import com.app.seoullo_new.view.base.LoadingOverlay
 import com.app.seoullo_new.view.base.SeoulloAppBar
 import com.app.seoullo_new.view.ui.theme.Color_ERROR
@@ -74,16 +74,15 @@ import com.app.seoullo_new.view.ui.theme.notosansFont
 import com.app.seoullo_new.view.util.theme.LocalLanguage
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
-import com.naver.maps.geometry.LatLng
-import com.naver.maps.map.CameraPosition
-import com.naver.maps.map.CameraUpdate
-import com.naver.maps.map.compose.CameraPositionState
-import com.naver.maps.map.compose.ExperimentalNaverMapApi
-import com.naver.maps.map.compose.MapUiSettings
-import com.naver.maps.map.compose.Marker
-import com.naver.maps.map.compose.MarkerState
-import com.naver.maps.map.compose.NaverMap
-import com.naver.maps.map.compose.rememberCameraPositionState
+import com.google.android.gms.maps.model.CameraPosition
+import com.google.android.gms.maps.model.LatLng
+import com.google.maps.android.compose.AdvancedMarker
+import com.google.maps.android.compose.CameraPositionState
+import com.google.maps.android.compose.GoogleMap
+import com.google.maps.android.compose.MapProperties
+import com.google.maps.android.compose.MapUiSettings
+import com.google.maps.android.compose.rememberCameraPositionState
+import com.google.maps.android.compose.rememberMarkerState
 import com.skydoves.landscapist.glide.GlideImage
 
 @Composable
@@ -127,7 +126,7 @@ fun PlaceDetailNearbyScreen(
                         val placesDetail =
                             (detailState as ApiState.Success<PlacesDetailGoogle>).data
                                 ?: PlacesDetailGoogle()
-                        PlacesDetail(
+                        PlacesDetailView(
                             viewModel = viewModel,
                             placesDetail = placesDetail,
                             places = placesState
@@ -136,13 +135,7 @@ fun PlaceDetailNearbyScreen(
 
                     is ApiState.Error -> {
                         val error = (detailState as ApiState.Error).message
-                        error?.let { message ->
-                            Logging.e(message)
-                            // 에러 메시지 처리
-                            Toast.makeText(
-                                LocalContext.current, stringResource(R.string.error_failure_init_list, message), Toast.LENGTH_SHORT
-                            ).show()
-                        }
+                        ErrorScreen(error ?: "")
                     }
                 }
             }
@@ -153,9 +146,8 @@ fun PlaceDetailNearbyScreen(
     }
 }
 
-@OptIn(ExperimentalNaverMapApi::class)
 @Composable
-fun PlacesDetail(
+fun PlacesDetailView(
     viewModel: PlacesDetailViewModel = hiltViewModel(),
     placesDetail: PlacesDetailGoogle,
     places: Places
@@ -167,9 +159,20 @@ fun PlacesDetail(
 
     val verticalScrollState = rememberScrollState()
     val latLng = LatLng(placesDetail.latitude, placesDetail.longitude)
+    val markerState = rememberMarkerState(position = latLng)
     val cameraPositionState: CameraPositionState = rememberCameraPositionState {
         // 카메라 초기 위치를 설정합니다.
-        position = CameraPosition(latLng, 18.0)
+        position = CameraPosition.fromLatLngZoom(latLng, 18f)
+    }
+    val mapProperties by remember {
+        mutableStateOf(
+            MapProperties(maxZoomPreference = 20f, minZoomPreference = 5f)
+        )
+    }
+    val mapUiSettings by remember {
+        mutableStateOf(
+            MapUiSettings(mapToolbarEnabled = false)
+        )
     }
 
     Column(
@@ -261,31 +264,24 @@ fun PlacesDetail(
                     style = MaterialTheme.typography.bodyMedium
                 )
             }
+
             Spacer(modifier = Modifier.height(8.dp))
-            NaverMap(
+
+            GoogleMap(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(230.dp)
-                    .pointerInput(Unit) {
-                        detectDragGestures { _, dragAmount ->
-                            cameraPositionState.move(CameraUpdate.scrollBy(
-                                PointF(dragAmount.x, dragAmount.y)
-                            ))
-                        }
-                    },
+                    .height(230.dp),
                 cameraPositionState = cameraPositionState,
-                uiSettings = MapUiSettings(
-                    isScrollGesturesEnabled = true,
-                    isZoomGesturesEnabled = true,
-                    isZoomControlEnabled = true
-                )
+                properties = mapProperties,
+                uiSettings = mapUiSettings
             ) {
-                Marker(
-                    state = MarkerState(position = latLng)
+                AdvancedMarker(
+                    state = markerState
                 )
             }
 
             Spacer(modifier = Modifier.height(8.dp))
+
             Row(
                 verticalAlignment = Alignment.CenterVertically
             ) {
@@ -317,6 +313,15 @@ fun PlacesDetail(
         }
 
         // 리뷰 목록(최대 5개)
+        Spacer(modifier = Modifier.height(8.dp))
+        Text(
+            text = stringResource(R.string.review_with_icon),
+            style = MaterialTheme.typography.bodyLarge,
+            fontWeight = FontWeight.Bold,
+            fontFamily = notosansFont,
+            modifier = Modifier.padding(start = 16.dp),
+        )
+        Spacer(modifier = Modifier.height(8.dp))
         LazyRow(
             contentPadding = PaddingValues(horizontal = 16.dp),
             horizontalArrangement = Arrangement.spacedBy(10.dp)
