@@ -9,9 +9,9 @@ plugins {
     alias(libs.plugins.auto.license)
     alias(libs.plugins.kotlin.ksp)
     kotlin(libs.plugins.kotlin.serialization.get().pluginId).version(libs.versions.kotlin)
+    alias(libs.plugins.google.maps.sdk.screct)
 
     id("kotlin-kapt")   // 데이터바인딩 때문에 필요함..(추후 제거)
-    id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
 }
 
 android {

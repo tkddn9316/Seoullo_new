@@ -1,0 +1,902 @@
+{
+  "url" : "https://maps.googleapis.com/maps/api/directions/json?origin=37.495055,126.777836&destination=37.498194,126.551916&mode=transit&transit_mode=bus|subway&key=AIzaSyBsCjjoav7vyc8Mn56U4GUh27Bu8hz9EiE",
+  "geocoded_waypoints": [
+    {
+      "geocoder_status": "OK",
+      "place_id": "ChIJt4ng7DN9ezURKUpJcGjsHwc",
+      "types": [
+        "street_address"
+      ]
+    },
+    {
+      "geocoder_status": "OK",
+      "place_id": "ChIJHzIUzaSDezURG-uK6MOSKmo",
+      "types": [
+        "street_address"
+      ]
+    }
+  ],
+  "routes": [
+    {
+      "bounds": {
+        "northeast": {
+          "lat": 37.5696555,
+          "lng": 126.777836
+        },
+        "southwest": {
+          "lat": 37.49468,
+          "lng": 126.522424
+        }
+      },
+      "copyrights": "Map data ©2024 TMap Mobility",
+      "legs": [
+        {
+          "arrival_time": {
+            "text": "오후 9:23",
+            "time_zone": "Asia/Seoul",
+            "value": 1734956636
+          },
+          "departure_time": {
+            "text": "오후 7:49",
+            "time_zone": "Asia/Seoul",
+            "value": 1734950989
+          },
+          "distance": {
+            "text": "36.2 km",
+            "value": 36174
+          },
+          "duration": {
+            "text": "1시간 34분",
+            "value": 5647
+          },
+          "end_address": "대한민국 인천광역시 중구 중산동 1309-4",
+          "end_location": {
+            "lat": 37.498194,
+            "lng": 126.551916
+          },
+          "start_address": "대한민국 경기도 부천시 부흥로315번길 14",
+          "start_location": {
+            "lat": 37.495055,
+            "lng": 126.777836
+          },
+          "steps": [
+            {
+              "distance": {
+                "text": "69 m",
+                "value": 69
+              },
+              "duration": {
+                "text": "1분",
+                "value": 70
+              },
+              "end_location": {
+                "lat": 37.49468,
+                "lng": 126.777208
+              },
+              "html_instructions": "부천소방서까지 도보",
+              "polyline": {
+                "points": "cgzcFohxdWjA|B"
+              },
+              "start_location": {
+                "lat": 37.495055,
+                "lng": 126.777836
+              },
+              "steps": [
+                {
+                  "distance": {
+                    "text": "69 m",
+                    "value": 69
+                  },
+                  "duration": {
+                    "text": "1분",
+                    "value": 70
+                  },
+                  "end_location": {
+                    "lat": 37.49468,
+                    "lng": 126.777208
+                  },
+                  "polyline": {
+                    "points": "cgzcFohxdWjA|B"
+                  },
+                  "start_location": {
+                    "lat": 37.495055,
+                    "lng": 126.777836
+                  },
+                  "travel_mode": "WALKING"
+                }
+              ],
+              "travel_mode": "WALKING"
+            },
+            {
+              "distance": {
+                "text": "2.8 km",
+                "value": 2762
+              },
+              "duration": {
+                "text": "5분",
+                "value": 286
+              },
+              "end_location": {
+                "lat": 37.504094,
+                "lng": 126.756533
+              },
+              "html_instructions": "버스 부천터미널소풍(시외.고속)행",
+              "polyline": {
+                "points": "wdzcFqdxdWM~BK|AIfBc@`HOlCStDg@zHuAtRQNgGu@sEe@gAWiGw@YAoDk@SBOFSJMNKZc@jGkArPo@tJaAxN[fES`Dq@bJKnACH_Dc@DeACIAGEGGCQA?@"
+              },
+              "start_location": {
+                "lat": 37.49468,
+                "lng": 126.777208
+              },
+              "transit_details": {
+                "arrival_stop": {
+                  "location": {
+                    "lat": 37.504094,
+                    "lng": 126.756533
+                  },
+                  "name": "부천터미널소풍(시외.고속)"
+                },
+                "arrival_time": {
+                  "text": "오후 7:56",
+                  "time_zone": "Asia/Seoul",
+                  "value": 1734951360
+                },
+                "departure_stop": {
+                  "location": {
+                    "lat": 37.49468,
+                    "lng": 126.777208
+                  },
+                  "name": "부천소방서"
+                },
+                "departure_time": {
+                  "text": "오후 7:51",
+                  "time_zone": "Asia/Seoul",
+                  "value": 1734951074
+                },
+                "headsign": "부천터미널소풍(시외.고속)",
+                "line": {
+                  "agencies": [
+                    {
+                      "name": "경기도버스운송사업조합",
+                      "url": "http://www.odsay.com/bus/Kyeonggi_Main.asp?CID=1&LMenu=1"
+                    }
+                  ],
+                  "color": "#8ddef2",
+                  "name": "경기 공항버스",
+                  "short_name": "7001",
+                  "text_color": "#000000",
+                  "vehicle": {
+                    "icon": "//maps.gstatic.com/mapfiles/transit/iw2/6/bus2.png",
+                    "name": "버스",
+                    "type": "BUS"
+                  }
+                },
+                "num_stops": 1
+              },
+              "travel_mode": "TRANSIT"
+            },
+            {
+              "distance": {
+                "text": "0.4 km",
+                "value": 353
+              },
+              "duration": {
+                "text": "6분",
+                "value": 354
+              },
+              "end_location": {
+                "lat": 37.505814,
+                "lng": 126.753163
+              },
+              "html_instructions": "상동까지 도보",
+              "polyline": {
+                "points": "q_|cFictdWkHnPk@pB"
+              },
+              "start_location": {
+                "lat": 37.504094,
+                "lng": 126.756533
+              },
+              "steps": [
+                {
+                  "distance": {
+                    "text": "0.3 km",
+                    "value": 297
+                  },
+                  "duration": {
+                    "text": "5분",
+                    "value": 297
+                  },
+                  "end_location": {
+                    "lat": 37.505589,
+                    "lng": 126.753731
+                  },
+                  "polyline": {
+                    "points": "q_|cFictdWkHnP"
+                  },
+                  "start_location": {
+                    "lat": 37.504094,
+                    "lng": 126.756533
+                  },
+                  "travel_mode": "WALKING"
+                },
+                {
+                  "distance": {
+                    "text": "1 m",
+                    "value": 0
+                  },
+                  "duration": {
+                    "text": "1분",
+                    "value": 57
+                  },
+                  "end_location": {
+                    "lat": 37.505589,
+                    "lng": 126.753731
+                  },
+                  "html_instructions": "\u003Cspan class=\"location\"\u003E1\u003C/span\u003E 입구 이용",
+                  "polyline": {
+                    "points": "}h|cFyqsdW"
+                  },
+                  "start_location": {
+                    "lat": 37.505589,
+                    "lng": 126.753731
+                  },
+                  "travel_mode": "WALKING"
+                },
+                {
+                  "distance": {
+                    "text": "1 m",
+                    "value": 0
+                  },
+                  "duration": {
+                    "text": "1분",
+                    "value": 0
+                  },
+                  "end_location": {
+                    "lat": 37.505589,
+                    "lng": 126.753731
+                  },
+                  "polyline": {
+                    "points": "}h|cFyqsdW"
+                  },
+                  "start_location": {
+                    "lat": 37.505589,
+                    "lng": 126.753731
+                  },
+                  "travel_mode": "WALKING"
+                },
+                {
+                  "distance": {
+                    "text": "56 m",
+                    "value": 56
+                  },
+                  "duration": {
+                    "text": "1분",
+                    "value": 0
+                  },
+                  "end_location": {
+                    "lat": 37.505814,
+                    "lng": 126.753163
+                  },
+                  "polyline": {
+                    "points": "}h|cFyqsdWk@pB"
+                  },
+                  "start_location": {
+                    "lat": 37.505589,
+                    "lng": 126.753731
+                  },
+                  "travel_mode": "WALKING"
+                }
+              ],
+              "travel_mode": "WALKING"
+            },
+            {
+              "distance": {
+                "text": "7.0 km",
+                "value": 6968
+              },
+              "duration": {
+                "text": "11분",
+                "value": 660
+              },
+              "end_location": {
+                "lat": 37.506298,
+                "lng": 126.67492
+              },
+              "html_instructions": "지하철 761행",
+              "polyline": {
+                "points": "ij|cFgnsdWAb@G|CC^[lHM|DOzC_@|Gm@|JGnB?xA?`ABz@@`@@\\@dAFjB@z@@r@?DAjB?f@CjAk@xXWbLSbLExBEvB?v@Ap@ChBCjBEfBMtFUbMKpIErDAtACrAEhBEfBCvBEvBU|J[xLMpEMzE{@rZQjHUxGQrGMpEE~@EbAE`AEvAErAe@vLe@~KGvBCfB?dB?hABlABv@BnABhAH~ALhBL`BTpBLlARnAT~AX`BlAbG`A|EdAbFVpAZhBLn@ZzBXvBL`ALfAPxBLdBXnEFrBFbBDrB@fA?bA@~@AhBCfBClBKjECfDGvC"
+              },
+              "start_location": {
+                "lat": 37.505814,
+                "lng": 126.753163
+              },
+              "transit_details": {
+                "arrival_stop": {
+                  "location": {
+                    "lat": 37.506298,
+                    "lng": 126.67492
+                  },
+                  "name": "석남(거북시장)"
+                },
+                "arrival_time": {
+                  "text": "오후 8:15",
+                  "time_zone": "Asia/Seoul",
+                  "value": 1734952541
+                },
+                "departure_stop": {
+                  "location": {
+                    "lat": 37.505814,
+                    "lng": 126.753163
+                  },
+                  "name": "상동"
+                },
+                "departure_time": {
+                  "text": "오후 8:05",
+                  "time_zone": "Asia/Seoul",
+                  "value": 1734951905
+                },
+                "headsign": "761",
+                "line": {
+                  "agencies": [
+                    {
+                      "name": "서울도시철도공사",
+                      "url": "http://www.odsay.com/Subway/LineInfo.asp?CID=1000&LMenu=2/"
+                    }
+                  ],
+                  "color": "#606d00",
+                  "name": "서울지하철",
+                  "short_name": "7호선",
+                  "text_color": "#ffffff",
+                  "vehicle": {
+                    "icon": "//maps.gstatic.com/mapfiles/transit/iw2/6/subway2.png",
+                    "name": "지하철",
+                    "type": "SUBWAY"
+                  }
+                },
+                "num_stops": 5
+              },
+              "travel_mode": "TRANSIT"
+            },
+            {
+              "distance": {
+                "text": "1 m",
+                "value": 0
+              },
+              "duration": {
+                "text": "1분",
+                "value": 0
+              },
+              "end_location": {
+                "lat": 37.506298,
+                "lng": 126.67492
+              },
+              "html_instructions": "석남(거북시장)까지 도보",
+              "polyline": {
+                "points": "km|cFgeddW"
+              },
+              "start_location": {
+                "lat": 37.506298,
+                "lng": 126.67492
+              },
+              "steps": [
+                {
+                  "distance": {
+                    "text": "1 m",
+                    "value": 0
+                  },
+                  "duration": {
+                    "text": "1분",
+                    "value": 0
+                  },
+                  "end_location": {
+                    "lat": 37.506298,
+                    "lng": 126.67492
+                  },
+                  "polyline": {
+                    "points": "km|cFgeddW"
+                  },
+                  "start_location": {
+                    "lat": 37.506298,
+                    "lng": 126.67492
+                  },
+                  "travel_mode": "WALKING"
+                }
+              ],
+              "travel_mode": "WALKING"
+            },
+            {
+              "distance": {
+                "text": "7.4 km",
+                "value": 7419
+              },
+              "duration": {
+                "text": "12분",
+                "value": 720
+              },
+              "end_location": {
+                "lat": 37.569253,
+                "lng": 126.673636
+              },
+              "html_instructions": "지하철 20210행",
+              "polyline": {
+                "points": "km|cFgeddWB_GoDKcDG}AEaGOwJUiC?gAAW?}CI_GMyACuAEwDKaDKcEI{BGcISg@Dc@Na@Z]\\[j@wA|C_@Ze@^c@Fm@Bm@Am@Ag@?uAEsDKsDGuAEYAOAk@CWA]C]COAMAsBSeFe@wCYe@Ee@EmAKkBO{AImAGG?KA_BCeAEeACeCGa@Aa@AcACeCEuOY}JO{JQwBEyBCyAA_@AyBGmEGcDAwDEwDE{JMyDEmDIC?wAC}ACcEI_KS}AEaBE_BC_BAaKKeJKkACC?_@@_@AuBC}DEuDE}ACk@?m@Am@@m@Hw@R}@\\[NiB`Ao@Z_@RUJMHC?uFtCy@\\_@P_@PQHoAj@]JpAlH"
+              },
+              "start_location": {
+                "lat": 37.506298,
+                "lng": 126.67492
+              },
+              "transit_details": {
+                "arrival_stop": {
+                  "location": {
+                    "lat": 37.569253,
+                    "lng": 126.673636
+                  },
+                  "name": "검암역"
+                },
+                "arrival_time": {
+                  "text": "오후 8:34",
+                  "time_zone": "Asia/Seoul",
+                  "value": 1734953640
+                },
+                "departure_stop": {
+                  "location": {
+                    "lat": 37.506298,
+                    "lng": 126.67492
+                  },
+                  "name": "석남(거북시장)"
+                },
+                "departure_time": {
+                  "text": "오후 8:22",
+                  "time_zone": "Asia/Seoul",
+                  "value": 1734952920
+                },
+                "headsign": "20210",
+                "line": {
+                  "agencies": [
+                    {
+                      "name": "인천지하철공사",
+                      "url": "http://www.odsay.com/Subway/LineInfo.asp?CID=1000&LMenu=2/"
+                    }
+                  ],
+                  "color": "#ed8000",
+                  "name": "인천지하철",
+                  "short_name": "인천 2호선",
+                  "text_color": "#ffffff",
+                  "vehicle": {
+                    "icon": "//maps.gstatic.com/mapfiles/transit/iw2/6/subway2.png",
+                    "name": "지하철",
+                    "type": "SUBWAY"
+                  }
+                },
+                "num_stops": 6
+              },
+              "travel_mode": "TRANSIT"
+            },
+            {
+              "distance": {
+                "text": "1 m",
+                "value": 0
+              },
+              "duration": {
+                "text": "2분",
+                "value": 120
+              },
+              "end_location": {
+                "lat": 37.569253,
+                "lng": 126.673636
+              },
+              "html_instructions": "검암역까지 도보",
+              "polyline": {
+                "points": "yvhdFg}cdW"
+              },
+              "start_location": {
+                "lat": 37.569253,
+                "lng": 126.673636
+              },
+              "steps": [
+                {
+                  "distance": {
+                    "text": "1 m",
+                    "value": 0
+                  },
+                  "duration": {
+                    "text": "2분",
+                    "value": 120
+                  },
+                  "end_location": {
+                    "lat": 37.569253,
+                    "lng": 126.673636
+                  },
+                  "polyline": {
+                    "points": "yvhdFg}cdW"
+                  },
+                  "start_location": {
+                    "lat": 37.569253,
+                    "lng": 126.673636
+                  },
+                  "travel_mode": "WALKING"
+                },
+                {
+                  "distance": {
+                    "text": "1 m",
+                    "value": 0
+                  },
+                  "duration": {
+                    "text": "1분",
+                    "value": 0
+                  },
+                  "end_location": {
+                    "lat": 37.569253,
+                    "lng": 126.673636
+                  },
+                  "polyline": {
+                    "points": "yvhdFg}cdW"
+                  },
+                  "start_location": {
+                    "lat": 37.569253,
+                    "lng": 126.673636
+                  },
+                  "travel_mode": "WALKING"
+                },
+                {
+                  "distance": {
+                    "text": "1 m",
+                    "value": 0
+                  },
+                  "duration": {
+                    "text": "1분",
+                    "value": 0
+                  },
+                  "end_location": {
+                    "lat": 37.569253,
+                    "lng": 126.673636
+                  },
+                  "polyline": {
+                    "points": "yvhdFg}cdW"
+                  },
+                  "start_location": {
+                    "lat": 37.569253,
+                    "lng": 126.673636
+                  },
+                  "travel_mode": "WALKING"
+                }
+              ],
+              "travel_mode": "WALKING"
+            },
+            {
+              "distance": {
+                "text": "14.9 km",
+                "value": 14930
+              },
+              "duration": {
+                "text": "14분",
+                "value": 840
+              },
+              "end_location": {
+                "lat": 37.512081,
+                "lng": 126.525085
+              },
+              "html_instructions": "지하철 4013행",
+              "polyline": {
+                "points": "yvhdFg}cdWDdB@fBh@|ZXjOVvLRrLJpETjH^~Gd@bHp@lHbAxHb@pCZzBH\\t@|DNx@n@pCNt@ZrAhArEfA`E^vAbBtF`ArClArCrAzClB~DtDtHjBtDfBdCbFvIhAxB`AnBn@zAp@hBb@rAd@tAXbAv@vC\\|AHf@b@~BH`@DXF^XjBXzBz@vGn@jF|@zGP~ARzAb@|D|AtN~BnSvAxKlDlUdDpRjA`I|@pGz@jHh@zDb@zCjAvGpAbH|A~H`BhItCrNhAhFlAxFpCjM`DfNvGpYvDrPxFpV~AfHjBzHpEtRx@dD|@pDlAzET~@p@pB~A~Ep@jBXt@Pf@h@rATf@Zn@p@rAbAfBv@nAv@hAn@`ARXb@h@|@lA`BrBz@jApBdCnDpEr@`AxAtBjDbFfQxVrI`MxIfM`RbXrMdRnLrPhInLvBjDdBnDxAxClBfF|BxGbA|ChAvDpDrLZdA`@lA^lA^hA"
+              },
+              "start_location": {
+                "lat": 37.569253,
+                "lng": 126.673636
+              },
+              "transit_details": {
+                "arrival_stop": {
+                  "location": {
+                    "lat": 37.512081,
+                    "lng": 126.525085
+                  },
+                  "name": "영종역"
+                },
+                "arrival_time": {
+                  "text": "오후 8:54",
+                  "time_zone": "Asia/Seoul",
+                  "value": 1734954840
+                },
+                "departure_stop": {
+                  "location": {
+                    "lat": 37.569253,
+                    "lng": 126.673636
+                  },
+                  "name": "검암역"
+                },
+                "departure_time": {
+                  "text": "오후 8:40",
+                  "time_zone": "Asia/Seoul",
+                  "value": 1734954000
+                },
+                "headsign": "4013",
+                "line": {
+                  "agencies": [
+                    {
+                      "name": "공항철도",
+                      "url": "http://www.odsay.com/Subway/LineInfo.asp?CID=1000&LMenu=2/"
+                    }
+                  ],
+                  "color": "#0095d4",
+                  "name": "수도권전철",
+                  "short_name": "공항철도",
+                  "text_color": "#ffffff",
+                  "vehicle": {
+                    "icon": "//maps.gstatic.com/mapfiles/transit/iw2/6/subway2.png",
+                    "name": "지하철",
+                    "type": "SUBWAY"
+                  }
+                },
+                "num_stops": 2
+              },
+              "travel_mode": "TRANSIT"
+            },
+            {
+              "distance": {
+                "text": "0.1 km",
+                "value": 106
+              },
+              "duration": {
+                "text": "2분",
+                "value": 115
+              },
+              "end_location": {
+                "lat": 37.512349,
+                "lng": 126.524237
+              },
+              "html_instructions": "영종역까지 도보",
+              "polyline": {
+                "points": "oq}cFw|fcWErDo@K"
+              },
+              "start_location": {
+                "lat": 37.512081,
+                "lng": 126.525085
+              },
+              "steps": [
+                {
+                  "distance": {
+                    "text": "1 m",
+                    "value": 0
+                  },
+                  "duration": {
+                    "text": "1분",
+                    "value": 74
+                  },
+                  "end_location": {
+                    "lat": 37.512081,
+                    "lng": 126.525085
+                  },
+                  "polyline": {
+                    "points": "oq}cFw|fcW"
+                  },
+                  "start_location": {
+                    "lat": 37.512081,
+                    "lng": 126.525085
+                  },
+                  "travel_mode": "WALKING"
+                },
+                {
+                  "distance": {
+                    "text": "1 m",
+                    "value": 0
+                  },
+                  "duration": {
+                    "text": "1분",
+                    "value": 0
+                  },
+                  "end_location": {
+                    "lat": 37.512081,
+                    "lng": 126.525085
+                  },
+                  "polyline": {
+                    "points": "oq}cFw|fcW"
+                  },
+                  "start_location": {
+                    "lat": 37.512081,
+                    "lng": 126.525085
+                  },
+                  "travel_mode": "WALKING"
+                },
+                {
+                  "distance": {
+                    "text": "1 m",
+                    "value": 0
+                  },
+                  "duration": {
+                    "text": "1분",
+                    "value": 0
+                  },
+                  "end_location": {
+                    "lat": 37.512081,
+                    "lng": 126.525085
+                  },
+                  "polyline": {
+                    "points": "oq}cFw|fcW"
+                  },
+                  "start_location": {
+                    "lat": 37.512081,
+                    "lng": 126.525085
+                  },
+                  "travel_mode": "WALKING"
+                },
+                {
+                  "distance": {
+                    "text": "79 m",
+                    "value": 79
+                  },
+                  "duration": {
+                    "text": "1분",
+                    "value": 14
+                  },
+                  "end_location": {
+                    "lat": 37.512107,
+                    "lng": 126.52418
+                  },
+                  "html_instructions": "\u003Cspan class=\"location\"\u003E1\u003C/span\u003E 출구 이용",
+                  "polyline": {
+                    "points": "oq}cFw|fcWErD"
+                  },
+                  "start_location": {
+                    "lat": 37.512081,
+                    "lng": 126.525085
+                  },
+                  "travel_mode": "WALKING"
+                },
+                {
+                  "distance": {
+                    "text": "27 m",
+                    "value": 27
+                  },
+                  "duration": {
+                    "text": "1분",
+                    "value": 27
+                  },
+                  "end_location": {
+                    "lat": 37.512349,
+                    "lng": 126.524237
+                  },
+                  "polyline": {
+                    "points": "uq}cFcwfcWo@K"
+                  },
+                  "start_location": {
+                    "lat": 37.512107,
+                    "lng": 126.52418
+                  },
+                  "travel_mode": "WALKING"
+                }
+              ],
+              "travel_mode": "WALKING"
+            },
+            {
+              "distance": {
+                "text": "3.2 km",
+                "value": 3197
+              },
+              "duration": {
+                "text": "9분",
+                "value": 560
+              },
+              "end_location": {
+                "lat": 37.495709,
+                "lng": 126.549115
+              },
+              "html_instructions": "버스 신명스카이뷰행",
+              "polyline": {
+                "points": "es}cFowfcWB@@F`@rAJVFJLPFHTRLNDHRj@JVHXFHR`@\\R^@XQlBmCz@qAz@oAhH_JbDaEnAcB|GyInCmDjFaHfCkD~@yAr@sAX[DCHO@GHQLi@t@eBh@{Ah@eBrAaFb@qBBG^oBAg@RkAXUt@wD\\{BPe@Hi@@IBYH]XwAh@kCp@iDt@yCHWl@wBdAiDbBuERc@\\o@@ABIXw@r@_B~@iBVS|AuCz@cB`@u@@CJH"
+              },
+              "start_location": {
+                "lat": 37.512349,
+                "lng": 126.524237
+              },
+              "transit_details": {
+                "arrival_stop": {
+                  "location": {
+                    "lat": 37.495709,
+                    "lng": 126.549115
+                  },
+                  "name": "중산교차로"
+                },
+                "arrival_time": {
+                  "text": "오후 9:17",
+                  "time_zone": "Asia/Seoul",
+                  "value": 1734956265
+                },
+                "departure_stop": {
+                  "location": {
+                    "lat": 37.512349,
+                    "lng": 126.524237
+                  },
+                  "name": "영종역"
+                },
+                "departure_time": {
+                  "text": "오후 9:08",
+                  "time_zone": "Asia/Seoul",
+                  "value": 1734955705
+                },
+                "headsign": "신명스카이뷰",
+                "headway": 720,
+                "line": {
+                  "agencies": [
+                    {
+                      "name": "인천광역시버스운송사업조합",
+                      "url": "http://www.odsay.com/bus/Incheon_Main.asp?CID=2000&LMenu=1"
+                    }
+                  ],
+                  "color": "#0abb0c",
+                  "name": "인천 지선버스",
+                  "short_name": "2201",
+                  "text_color": "#ffffff",
+                  "vehicle": {
+                    "icon": "//maps.gstatic.com/mapfiles/transit/iw2/6/bus2.png",
+                    "name": "버스",
+                    "type": "BUS"
+                  }
+                },
+                "num_stops": 7
+              },
+              "travel_mode": "TRANSIT"
+            },
+            {
+              "distance": {
+                "text": "0.4 km",
+                "value": 370
+              },
+              "duration": {
+                "text": "6분",
+                "value": 371
+              },
+              "end_location": {
+                "lat": 37.498194,
+                "lng": 126.551916
+              },
+              "html_instructions": "대한민국 인천광역시 중구 중산동 1309-4까지 도보",
+              "polyline": {
+                "points": "ekzcF_skcWoNoP"
+              },
+              "start_location": {
+                "lat": 37.495709,
+                "lng": 126.549115
+              },
+              "steps": [
+                {
+                  "distance": {
+                    "text": "0.4 km",
+                    "value": 370
+                  },
+                  "duration": {
+                    "text": "6분",
+                    "value": 371
+                  },
+                  "end_location": {
+                    "lat": 37.498194,
+                    "lng": 126.551916
+                  },
+                  "polyline": {
+                    "points": "ekzcF_skcWoNoP"
+                  },
+                  "start_location": {
+                    "lat": 37.495709,
+                    "lng": 126.549115
+                  },
+                  "travel_mode": "WALKING"
+                }
+              ],
+              "travel_mode": "WALKING"
+            }
+          ],
+          "traffic_speed_entry": [],
+          "via_waypoint": []
+        }
+      ],
+      "overview_polyline": {
+        "points": "cgzcFohxdWjA|BM~BUdEs@nL{@pNuAtRQNgGu@sEe@gAWiGw@YAoDk@c@JSJMNKZc@jG{Bh\\}A`UeAdOKnACH_Dc@DeAEQMKQ?kHnPk@pBAb@K|D[lHM|Do@xLm@|JGnB?zCH`EHfD@x@ArCo@d[w@x`@ErEm@l[WnTOhIeA`c@qBts@k@hRQlFkAvYK~E?nDFdCFxCVhEb@rE`@|Cn@`EnC`N|AtHh@xCt@rFZhC^~EXnEFrBLvE@jC?hDGtEWjOB_GoDKaGMyRe@qEAoO[oL]_IQcISg@Dc@Na@Z]\\[j@wA|C_@Ze@^c@F{A@uAAiGQsDGkDMcBK_OuAeGg@}DSqJUmGMuv@qAiPOsPSgJO}JQ_Tc@ma@a@}NO{A?m@Hw@RyAl@yC|AgAh@uFtCy@\\_Ab@aBt@]JpAlHDdBj@d^pAhq@TjH^~Gd@bHp@lHbAxHb@pCd@xCdAvF~@fEdBfHfBxGbBtF`ArC`DnHbHtNjBtDfBdCbFvIhAxB`AnBn@zAtA|D~@xCtAtFl@fDp@fEbEz[hAxJ|Edc@vAxKlDlUdDpRjA`I|@pGz@jHlAvI|CzP~DhS~E|U~EdUxLxh@|Rh{@jGzWjClKfApDpCjIj@|A~@zBlAbCzBvD~CnElIrKbFrGdGxIvy@flAb[xc@hInLvBjD~DhIlBfF|BxGlCtIlExN`BdFErDo@KB@b@zARb@TZb@b@n@fBZj@\\R^@XQlBmCvBaDlMaPlJ}LzJoMfCkD~@yAr@sAX[NSJYLi@t@eBrAaErAaFb@qBb@wBAg@RkAXUt@wD\\{BPe@Js@Lw@bAcFp@iDt@yCv@oCdAiDbBuEp@sADKXw@r@_B~@iBVSxCyFb@y@JHoNoP"
+      },
+      "summary": "",
+      "warnings": [
+        "도보 경로는 베타 서비스입니다. 주의 – 이 경로에는 인도 또는 보행 경로가 누락되었을 수도 있습니다."
+      ],
+      "waypoint_order": []
+    }
+  ],
+  "status": "OK"
+}
