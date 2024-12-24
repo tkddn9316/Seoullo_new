@@ -14,7 +14,10 @@ class PlacesPhotoNearbyDataSourceImpl @Inject constructor(private val apiInterfa
     ): Flow<PlacesPhotoNearbyResponseDTO> {
         return flow {
             emit(
-                apiInterface.getPlacePhotoNearby(name = name, key = key)
+                apiInterface.getPlacePhotoNearby(
+                    name = name,
+                    key = key
+                )
             )
         }
     }

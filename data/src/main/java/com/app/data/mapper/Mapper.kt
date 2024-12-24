@@ -1,5 +1,6 @@
 package com.app.data.mapper
 
+import android.text.Html
 import com.app.data.model.PlacesDetailGoogleResponseDTO
 import com.app.data.model.PlacesDetailResponseDTO
 import com.app.data.model.PlacesNearbyRequestDTO
@@ -22,10 +23,10 @@ import com.app.domain.model.Weather
 
 fun mapperToPlaceNearbyDTO(place: PlacesNearbyRequest): PlacesNearbyRequestDTO =
     PlacesNearbyRequestDTO(
-        place.includedTypes,
-        place.maxResultCount,
-        place.languageCode,
-        PlacesNearbyRequestDTO.LocationRestriction(
+        includedTypes = place.includedTypes,
+        maxResultCount = place.maxResultCount,
+        languageCode = place.languageCode,
+        locationRestriction = PlacesNearbyRequestDTO.LocationRestriction(
             circle = PlacesNearbyRequestDTO.Circle(
                 center = PlacesNearbyRequestDTO.Center(
                     place.locationRestriction.circle.center.latitude,
@@ -40,17 +41,17 @@ fun mapperToPlaceNearby(place: PlacesNearbyResponseDTO): List<Places> =
     place.place?.let { list ->
         list.toList().map {
             Places(
-                it.name,
-                it.id,
-                "",
-                it.displayName.text,
-                it.formattedAddress,
-                it.primaryTypeDisplayName?.text ?: "",
-                it.regularOpeningHours?.openNow ?: run { false },
-                it.regularOpeningHours?.weekdayDescriptions ?: run { emptyList() },
-                it.rating,
-                it.userRatingCount,
-                it.photoUrl
+                name = it.name,
+                id = it.id,
+                contentTypeId = "",
+                displayName = it.displayName.text,
+                address = it.formattedAddress,
+                description = it.primaryTypeDisplayName?.text ?: "",
+                openNow = it.regularOpeningHours?.openNow ?: run { false },
+                weekdayDescriptions = it.regularOpeningHours?.weekdayDescriptions ?: run { emptyList() },
+                rating = it.rating,
+                userRatingCount = it.userRatingCount,
+                photoUrl = it.photoUrl
             )
         }
     } ?: run { emptyList() }
@@ -95,7 +96,7 @@ fun mapperToPlaceDetail(placesDetail: PlacesDetailResponseDTO.PlacesDetail): Pla
         contentTypeId = placesDetail.contenttypeid,
         displayName = placesDetail.title,
         address = placesDetail.addr1,
-        description = placesDetail.overview,
+        description = Html.fromHtml(placesDetail.overview, Html.FROM_HTML_MODE_LEGACY).toString(),
         photoUrl = placesDetail.firstimage,
         latitude = placesDetail.mapy.toDouble(),
         longitude = placesDetail.mapx.toDouble(),
@@ -106,24 +107,24 @@ fun mapperToPlaceDetail(placesDetail: PlacesDetailResponseDTO.PlacesDetail): Pla
 fun mapperToUser(userEntity: List<UserEntity>): List<User> =
     userEntity.toList().map {
         User(
-            it.index,
-            it.auto,
-            it.name,
-            it.email,
-            it.photoUrl
+            index = it.index,
+            auto = it.auto,
+            name = it.name,
+            email = it.email,
+            photoUrl = it.photoUrl
         )
     }
 
 fun mapperToWeather(weatherDTO: WeatherDTO): List<Weather> =
     weatherDTO.response.body.items.item.toList().map {
         Weather(
-            it.baseData,
-            it.baseTime,
-            it.category,
-            it.fcstDate,
-            it.fcstTime,
-            it.fcstValue,
-            it.nx,
-            it.ny
+            baseData = it.baseData,
+            baseTime = it.baseTime,
+            category = it.category,
+            fcstDate = it.fcstDate,
+            fcstTime = it.fcstTime,
+            fcstValue = it.fcstValue,
+            nx = it.nx,
+            ny = it.ny
         )
     }
