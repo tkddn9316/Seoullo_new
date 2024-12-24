@@ -11,6 +11,7 @@ import javax.inject.Inject
 
 class PlacesPagingSource @Inject constructor(
     private val placesDataSource: PlacesDataSource,
+    private val serviceUrl: String,
     private val serviceKey: String,
     private val contentTypeId: String,
     private val category: String
@@ -23,6 +24,7 @@ class PlacesPagingSource @Inject constructor(
             val currentPage = params.key ?: 1
             Logging.d("${javaClass.name}: $currentPage")
             val response = placesDataSource.getPlacesList(
+                serviceUrl = serviceUrl,
                 pageNo = currentPage,
                 serviceKey = serviceKey,
                 contentTypeId = contentTypeId,

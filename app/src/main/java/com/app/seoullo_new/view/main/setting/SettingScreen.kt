@@ -21,6 +21,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
@@ -49,6 +50,9 @@ fun SettingScreen(
     viewModel: SettingViewModel = hiltViewModel(),
     settingOnClick: (String) -> Unit
 ) {
+    val uriHandler = LocalUriHandler.current
+    val githubLink = stringResource(R.string.github_link)
+
     val scrollState = rememberScrollState()
     val dialogState by viewModel.dialogState.collectAsStateWithLifecycle()
 
@@ -93,6 +97,21 @@ fun SettingScreen(
                     .height(8.dp)
             )
             SettingItem(
+                modifier = Modifier.height(64.dp),
+                title = stringResource(R.string.version_title),
+                description = getAppVersionName(),
+                onItemClick = { },
+                showTrailingIcon = false,
+                showLeadingIcon = true,
+                leadingIcon = {
+                    Icon(
+                        ImageVector.vectorResource(id = R.drawable.ic_setting_version),
+                        contentDescription = null
+                    )
+                }
+            )
+            SettingItem(
+                modifier = Modifier.height(64.dp),
                 title = stringResource(R.string.license_title),
                 description = stringResource(R.string.license_description),
                 onItemClick = { settingOnClick(Route.LICENSE) },
@@ -106,14 +125,14 @@ fun SettingScreen(
                 }
             )
             SettingItem(
-                title = stringResource(R.string.version_title),
-                description = getAppVersionName(),
-                onItemClick = { },
-                showTrailingIcon = false,
+                modifier = Modifier.height(64.dp),
+                title = stringResource(R.string.github_title),
+                onItemClick = { uriHandler.openUri(githubLink) },
+                showTrailingIcon = true,
                 showLeadingIcon = true,
                 leadingIcon = {
                     Icon(
-                        ImageVector.vectorResource(id = R.drawable.ic_setting_version),
+                        ImageVector.vectorResource(id = R.drawable.ic_github),
                         contentDescription = null
                     )
                 }

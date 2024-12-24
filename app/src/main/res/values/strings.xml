@@ -74,9 +74,11 @@
     <string name="language_KOREA">Korea</string>
 
     <string name="about_title">About</string>
+    <string name="version_title">Version</string>
     <string name="license_title">License</string>
     <string name="license_description">Open Source License</string>
-    <string name="version_title">Version</string>
+    <string name="github_title" translatable="false">Github</string>
+    <string name="github_link" translatable="false">https://github.com/tkddn9316/Seoullo_new</string>
 
     <string name="account_title">Account</string>
 

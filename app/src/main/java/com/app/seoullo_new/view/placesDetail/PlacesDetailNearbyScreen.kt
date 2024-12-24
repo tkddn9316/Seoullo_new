@@ -121,18 +121,18 @@ fun PlaceDetailNearbyScreen(
             ) {
                 when (detailState) {
                     is ApiState.Initial -> {}
-                    is ApiState.Loading -> {}
+                    is ApiState.Loading -> {
+                        // API 로딩 처리
+                        LoadingOverlay()
+                    }
                     is ApiState.Success -> {
-                        val placesDetail =
-                            (detailState as ApiState.Success<PlacesDetailGoogle>).data
-                                ?: PlacesDetailGoogle()
+                        val placesDetail = (detailState as ApiState.Success<PlacesDetailGoogle>).data ?: PlacesDetailGoogle()
                         PlacesDetailView(
                             viewModel = viewModel,
                             placesDetail = placesDetail,
                             places = placesState
                         )
                     }
-
                     is ApiState.Error -> {
                         val error = (detailState as ApiState.Error).message
                         ErrorScreen(error ?: "")
@@ -140,9 +140,6 @@ fun PlaceDetailNearbyScreen(
                 }
             }
         }
-
-        // API 로딩 처리
-        LoadingOverlay(detailState is ApiState.Loading)
     }
 }
 

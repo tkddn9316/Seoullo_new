@@ -8,6 +8,7 @@ import androidx.paging.cachedIn
 import com.app.domain.model.ApiState
 import com.app.domain.model.Places
 import com.app.domain.model.PlacesNearbyRequest
+import com.app.domain.model.theme.Language
 import com.app.domain.usecase.places.GetPlacesListUseCase
 import com.app.domain.usecase.places.GetPlacesNearbyListUseCase
 import com.app.seoullo_new.BuildConfig
@@ -61,14 +62,18 @@ class PlacesListViewModel @Inject constructor(
         }
     }
 
-    fun getPlacesList(travelItem: TravelJsonItemData) {
+    fun getPlacesList(
+        travelItem: TravelJsonItemData,
+        languageCode: Language
+    ) {
         if (isPlacesListLoaded) return
 
         onIO {
             getPlacesListUseCase(
-                BuildConfig.TOUR_API_KEY,
-                travelItem.id,
-                travelItem.cat
+                serviceUrl = if (languageCode == Language.ENGLISH) "EngService1" else "KorService1",
+                serviceKey = BuildConfig.TOUR_API_KEY,
+                contentTypeId = if (languageCode == Language.ENGLISH) travelItem.id else travelItem.id_ko,
+                category = travelItem.cat
             ).flowOn(Dispatchers.IO)
                 .cachedIn(viewModelScope)
                 .catch { Logging.e(it.message ?: "") }
@@ -91,8 +96,8 @@ class PlacesListViewModel @Inject constructor(
         onIO {
             val item = travelItem.type.split("|")
             getPlacesNearbyListUseCase(
-                BuildConfig.SEOULLO_GOOGLE_MAPS_API_KEY,
-                PlacesNearbyRequest(
+                apiKey = BuildConfig.SEOULLO_GOOGLE_MAPS_API_KEY,
+                placesNearbyRequest = PlacesNearbyRequest(
                     item, 20, languageCode,
                     PlacesNearbyRequest.LocationRestriction(
                         PlacesNearbyRequest.Circle(

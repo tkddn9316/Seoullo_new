@@ -14,6 +14,7 @@ data class TravelJsonItemData(
     val title: String = "",
     val color: Int = 0,
     val id: String = "",
+    val id_ko: String = "",
     val cat: String = "",       // 카테고리 코드
     val type: String = "",     // 타입 (구분자로 여러 값 포함)
     val icon: String = ""

@@ -10,6 +10,7 @@ class PlacesDataSourceImpl @Inject constructor(private val apiInterface: ApiInte
     PlacesDataSource {
 
     override fun getPlacesList(
+        serviceUrl: String,
         pageNo: Int,
         serviceKey: String,
         contentTypeId: String,
@@ -18,6 +19,7 @@ class PlacesDataSourceImpl @Inject constructor(private val apiInterface: ApiInte
         return flow {
             emit(
                 apiInterface.getPlacesList(
+                    serviceUrl = serviceUrl,
                     pageNo = pageNo,
                     serviceKey = serviceKey,
                     contentTypeId = contentTypeId,

@@ -13,12 +13,14 @@ class PlacesDetailRepositoryImpl @Inject constructor(
 ): PlacesDetailRepository {
 
     override fun getPlacesDetail(
+        serviceUrl: String,
         serviceKey: String,
         contentId: String,
         contentTypeId: String
     ): Flow<PlacesDetail> {
         return flow {
             placesDetailDataSource.getPlacesDetail(
+                serviceUrl = serviceUrl,
                 serviceKey = serviceKey,
                 contentId = contentId,
                 contentTypeId = contentTypeId

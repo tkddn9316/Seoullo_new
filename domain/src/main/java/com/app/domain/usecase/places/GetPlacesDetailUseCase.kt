@@ -11,6 +11,7 @@ import javax.inject.Inject
 
 class GetPlacesDetailUseCase @Inject constructor(private val repository: PlacesDetailRepository) {
     operator fun invoke(
+        serviceUrl: String,
         serviceKey: String,
         contentId: String,
         contentTypeId: String
@@ -18,6 +19,7 @@ class GetPlacesDetailUseCase @Inject constructor(private val repository: PlacesD
         emit(ApiState.Loading())
         try {
             repository.getPlacesDetail(
+                serviceUrl = serviceUrl,
                 serviceKey = serviceKey,
                 contentId = contentId,
                 contentTypeId = contentTypeId

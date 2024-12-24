@@ -45,6 +45,7 @@ import com.app.seoullo_new.view.base.ErrorScreen
 import com.app.seoullo_new.view.base.LoadingOverlay
 import com.app.seoullo_new.view.base.SeoulloAppBar
 import com.app.seoullo_new.view.ui.theme.Color_ERROR
+import com.app.seoullo_new.view.util.theme.LocalLanguage
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import com.google.android.gms.maps.model.CameraPosition
@@ -63,11 +64,14 @@ fun PlaceDetailScreen(
     viewModel: PlacesDetailViewModel = hiltViewModel(),
     onNavigationClick: () -> Unit
 ) {
+    val language = LocalLanguage.current
     val placesState by viewModel.placesState.collectAsStateWithLifecycle()
     val detailState by viewModel.placesDetailState.collectAsStateWithLifecycle()
 
     LaunchedEffect(Unit) {
-        viewModel.getPlacesDetail()
+        viewModel.getPlacesDetail(
+            languageCode = language
+        )
     }
 
     Box(modifier = Modifier.fillMaxSize()) {
@@ -86,18 +90,18 @@ fun PlaceDetailScreen(
                 Logging.e(placesState)
                 when (detailState) {
                     is ApiState.Initial -> {}
-                    is ApiState.Loading -> {}
+                    is ApiState.Loading -> {
+                        // API 로딩 처리
+                        LoadingOverlay()
+                    }
                     is ApiState.Success -> {
-                        val placesDetail =
-                            (detailState as ApiState.Success<PlacesDetail>).data
-                                ?: PlacesDetail()
+                        val placesDetail = (detailState as ApiState.Success<PlacesDetail>).data ?: PlacesDetail()
                         PlacesDetailView(
                             viewModel = viewModel,
                             placesDetail = placesDetail,
                             places = placesState
                         )
                     }
-
                     is ApiState.Error -> {
                         val error = (detailState as ApiState.Error).message
                         ErrorScreen(error ?: "")
@@ -105,9 +109,6 @@ fun PlaceDetailScreen(
                 }
             }
         }
-
-        // API 로딩 처리
-        LoadingOverlay(detailState is ApiState.Loading)
     }
 }
 

@@ -9,10 +9,12 @@ import javax.inject.Inject
 class GetPlacesListUseCase @Inject constructor(private val repository: PlacesRepository) {
 
     operator fun invoke(
+        serviceUrl: String,
         serviceKey: String,
         contentTypeId: String,
         category: String
     ): Flow<PagingData<Places>> = repository.getPlacesList(
+        serviceUrl = serviceUrl,
         serviceKey = serviceKey,
         contentTypeId = contentTypeId,
         category = category

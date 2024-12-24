@@ -22,11 +22,11 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.StarHalf
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowDropUp
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Star
-import androidx.compose.material.icons.filled.StarHalf
 import androidx.compose.material.icons.filled.Stars
 import androidx.compose.material.icons.outlined.StarOutline
 import androidx.compose.material3.CircularProgressIndicator
@@ -75,6 +75,7 @@ import com.app.seoullo_new.utils.Constants.SortCriteria
 import com.app.seoullo_new.utils.Util.getStringResourceKey
 import com.app.seoullo_new.utils.Util.hasLocationPermission
 import com.app.seoullo_new.view.base.ErrorScreen
+import com.app.seoullo_new.view.base.LoadingOverlay
 import com.app.seoullo_new.view.base.SeoulloAppBar
 import com.app.seoullo_new.view.ui.theme.Color_ERROR
 import com.app.seoullo_new.view.ui.theme.colorRatingStar
@@ -102,6 +103,7 @@ fun PlacesListScreen(
     onItemClick: (places: String) -> Unit
 ) {
     val context = LocalContext.current
+    val language = LocalLanguage.current
 
     // 드롭다운 클릭 상태
     var menuClickedPosition by rememberSaveable { mutableIntStateOf(SELECTED_TOUR_LIST) }
@@ -217,7 +219,8 @@ fun PlacesListScreen(
                                 // 페이징 처리 공식문서 참고
                                 // https://developer.android.com/develop/ui/compose/lists?hl=ko&_gl=1*1a4v78e*_up*MQ..*_ga*MTEwMzY5NzI1MC4xNzMzMjgwMjk2*_ga_6HH9YJMN9M*MTczMzI5NTEyOS4yLjAuMTczMzI5NTEyOS4wLjAuMTU3MzU2NjEyNA..#large-datasets
                                 viewModel.getPlacesList(
-                                    travelItem = travelItem
+                                    travelItem = travelItem,
+                                    languageCode = language
                                 )
                                 val placesListResult = viewModel.placesListResult.collectAsLazyPagingItems()
 
@@ -272,7 +275,10 @@ fun PlacesListScreen(
 
                                 when (placesNearbyState) {
                                     is ApiState.Initial -> {}
-                                    is ApiState.Loading -> {}
+                                    is ApiState.Loading -> {
+                                        // API 로딩 처리
+                                        LoadingOverlay()
+                                    }
                                     is ApiState.Success -> {
                                         val places = (placesNearbyState as ApiState.Success<List<Places>>).data
                                         if (places.isNullOrEmpty()) {
@@ -314,9 +320,6 @@ fun PlacesListScreen(
                 }
             }
         }
-
-        // API 로딩 처리
-        LoadingOverlay(placesNearbyState is ApiState.Loading)
     }
 }
 
@@ -470,7 +473,7 @@ fun RatingBar(
         }
         if (halfStar) {
             Icon(
-                imageVector = Icons.Filled.StarHalf,
+                imageVector = Icons.AutoMirrored.Filled.StarHalf,
                 contentDescription = null,
                 tint = colorRatingStar,
                 modifier = Modifier.size(15.dp)
@@ -494,21 +497,6 @@ fun RatingBar(
             ),
             fontSize = 13.sp
         )
-    }
-}
-
-@Composable
-fun LoadingOverlay(isLoading: Boolean) {
-    if (isLoading) {
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .clickable(enabled = false) {}
-        ) {
-            CircularProgressIndicator(
-                modifier = Modifier.align(Alignment.Center)
-            )
-        }
     }
 }
 

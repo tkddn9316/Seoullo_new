@@ -6,6 +6,7 @@ import com.app.domain.model.ApiState
 import com.app.domain.model.Places
 import com.app.domain.model.PlacesDetail
 import com.app.domain.model.PlacesDetailGoogle
+import com.app.domain.model.theme.Language
 import com.app.domain.usecase.places.GetPlacesDetailGoogleUseCase
 import com.app.domain.usecase.places.GetPlacesDetailUseCase
 import com.app.seoullo_new.BuildConfig
@@ -53,12 +54,15 @@ class PlacesDetailViewModel @Inject constructor(
 
     fun getTitle(): String = places.displayName
 
-    fun getPlacesDetail() {
+    fun getPlacesDetail(
+        languageCode: Language
+    ) {
         if (places.id.isEmpty()) return
         if (_placesDetailState.value !is ApiState.Initial) return
 
         onIO {
             getPlacesDetailUseCase(
+                serviceUrl = if (languageCode == Language.ENGLISH) "EngService1" else "KorService1",
                 serviceKey = BuildConfig.TOUR_API_KEY,
                 contentId = places.id,
                 contentTypeId = places.contentTypeId

@@ -3,6 +3,7 @@ package com.app.data.api
 import com.app.data.model.PlacesDetailResponseDTO
 import com.app.data.model.PlacesResponseDTO
 import retrofit2.http.GET
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 /**
@@ -10,8 +11,9 @@ import retrofit2.http.Query
  */
 interface ApiInterface2 {
     // 지역기반(서울) 관광 정보 조회
-    @GET("areaBasedList1")
+    @GET("{serviceUrl}/areaBasedList1")
     suspend fun getPlacesList(
+        @Path("serviceUrl") serviceUrl: String,         // 영어: EngService1, 한글: KorService1
         @Query("numOfRows") numOfRows: Int = 10,
         @Query("pageNo") pageNo: Int,                   // 페이지 번호
         @Query("MobileOS") mobileOS: String = "AND",
@@ -26,8 +28,9 @@ interface ApiInterface2 {
     ): PlacesResponseDTO
 
     // 관광 상세 정보 조회
-    @GET("detailCommon1")
+    @GET("{serviceUrl}/detailCommon1")
     suspend fun getPlacesInfoDetail(
+        @Path("serviceUrl") serviceUrl: String,
         @Query("MobileOS") mobileOS: String = "AND",
         @Query("MobileApp") mobileApp: String = "Seoullo",
         @Query("serviceKey") serviceKey: String,
