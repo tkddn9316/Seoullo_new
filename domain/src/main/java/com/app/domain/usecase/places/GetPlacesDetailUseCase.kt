@@ -1,6 +1,6 @@
 package com.app.domain.usecase.places
 
-import com.app.domain.model.ApiState
+import com.app.domain.model.common.ApiState
 import com.app.domain.model.PlacesDetail
 import com.app.domain.repository.PlacesDetailRepository
 import com.google.gson.JsonSyntaxException

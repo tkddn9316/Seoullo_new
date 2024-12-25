@@ -8,7 +8,7 @@ import android.content.pm.PackageManager
 import android.os.Bundle
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import com.app.domain.model.BaseModel
+import com.app.domain.model.common.BaseModel
 import com.app.seoullo_new.R
 import com.app.seoullo_new.utils.Constants.INTENT_DATA
 import com.app.seoullo_new.view.util.TravelItemData

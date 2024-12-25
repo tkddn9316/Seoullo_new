@@ -2,6 +2,7 @@
     <string name="app_name">Seoullo_new</string>
     <string name="seoullo">SEOULLO</string>
     <string name="empty" translatable="false"></string>
+    <string name="line" translatable="false">-</string>
     <string name="btn_close">Close</string>
     <string name="confirm">OK</string>
     <string name="exit">Press \'back\' again to exit.</string>

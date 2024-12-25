@@ -11,7 +11,8 @@ import java.util.concurrent.TimeUnit
  * Api Module 에 사용할 API URL 선언
  */
 object ApiClient {
-    private const val BASE_URL_GOOGLE = "https://places.googleapis.com/"
+    private const val BASE_URL_GOOGLE_MAPS = "https://maps.googleapis.com/"
+    private const val BASE_URL_GOOGLE_PLACES = "https://places.googleapis.com/"
     private const val BASE_URL_TOUR_API = "https://apis.data.go.kr/B551011/"
     private const val BASE_URL_OPEN_WEATHER = "https://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/"
     private const val TIMEOUT = 15
@@ -26,9 +27,16 @@ object ApiClient {
             .addConverterFactory(GsonConverterFactory.create(GsonBuilder().setLenient().create()))
     }
 
-    fun createGoogleApi(): ApiInterface {
+    fun createGooglePlacesApi(): ApiInterface {
         return retrofitBuilder
-            .baseUrl(BASE_URL_GOOGLE)
+            .baseUrl(BASE_URL_GOOGLE_PLACES)
+            .build()
+            .create(ApiInterface::class.java)
+    }
+
+    fun createGoogleMapsApi(): ApiInterface {
+        return retrofitBuilder
+            .baseUrl(BASE_URL_GOOGLE_MAPS)
             .build()
             .create(ApiInterface::class.java)
     }

@@ -1,6 +1,7 @@
 package com.app.seoullo_new.view.placesDetail
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -14,6 +15,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Language
 import androidx.compose.material.icons.filled.NearMe
 import androidx.compose.material.icons.filled.Phone
 import androidx.compose.material3.CircularProgressIndicator
@@ -29,16 +31,18 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.app.domain.model.ApiState
 import com.app.domain.model.Places
 import com.app.domain.model.PlacesDetail
+import com.app.domain.model.common.ApiState
 import com.app.seoullo_new.R
 import com.app.seoullo_new.utils.Logging
 import com.app.seoullo_new.view.base.ErrorScreen
@@ -118,6 +122,7 @@ fun PlacesDetailView(
     placesDetail: PlacesDetail,
     places: Places
 ) {
+    val uriHandler = LocalUriHandler.current
     val verticalScrollState = rememberScrollState()
     val latLng = LatLng(placesDetail.latitude, placesDetail.longitude)
     val markerState = rememberMarkerState(position = latLng)
@@ -217,7 +222,7 @@ fun PlacesDetailView(
                 )
                 Spacer(modifier = Modifier.width(5.dp))
                 Text(
-                    text = places.address,
+                    text = placesDetail.address.ifEmpty { stringResource(R.string.line) },
                     style = MaterialTheme.typography.bodyMedium
                 )
             }
@@ -231,7 +236,28 @@ fun PlacesDetailView(
                 )
                 Spacer(modifier = Modifier.width(5.dp))
                 Text(
-                    text = placesDetail.phoneNum,
+                    text = placesDetail.phoneNum.ifEmpty { stringResource(R.string.line) },
+                    style = MaterialTheme.typography.bodyMedium
+                )
+            }
+            Row(
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Icon(
+                    imageVector = Icons.Filled.Language,
+                    contentDescription = null,
+                    modifier = Modifier.size(20.dp)
+                )
+                Spacer(modifier = Modifier.width(5.dp))
+                Text(
+                    modifier = Modifier.clickable(
+                        enabled = placesDetail.homepage.isNotEmpty(),
+                        onClick = {
+                            uriHandler.openUri(placesDetail.homepage)
+                        }
+                    ),
+                    text = placesDetail.homepage.ifEmpty { stringResource(R.string.line) },
+                    textDecoration = if (placesDetail.homepage.isNotEmpty()) TextDecoration.Underline else null,
                     style = MaterialTheme.typography.bodyMedium
                 )
             }

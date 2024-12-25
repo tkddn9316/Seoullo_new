@@ -1,5 +1,6 @@
 package com.app.data.api
 
+import com.app.data.model.DirectionResponseDTO
 import com.app.data.model.PlacesDetailGoogleResponseDTO
 import com.app.data.model.PlacesNearbyRequestDTO
 import com.app.data.model.PlacesNearbyResponseDTO
@@ -44,4 +45,16 @@ interface ApiInterface {
         @Path("placeId") placeId: String,
         @Query("languageCode") languageCode: String
     ): PlacesDetailGoogleResponseDTO
+
+    // 길 찾기
+    @GET("maps/api/directions/{outputFormat}")
+    suspend fun getDirection(
+        @Path("outputFormat") outputFormat: String = "json",
+        @Query("destination") destination: String,      // 위/경도, 주소 가능
+        @Query("origin") starting: String,
+        @Query("language") languageCode: String,
+        @Query("mode") mode: String = "transit",
+        @Query("transit_mode") transitMode: String = "bus|subway",
+        @Query("key") apiKey: String
+    ): DirectionResponseDTO
 }

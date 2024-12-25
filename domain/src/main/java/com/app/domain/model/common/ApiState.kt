@@ -1,4 +1,4 @@
-package com.app.domain.model
+package com.app.domain.model.common
 
 sealed class ApiState<T>(
     val data: T? = null,

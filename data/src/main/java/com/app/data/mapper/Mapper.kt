@@ -8,6 +8,7 @@ import com.app.data.model.PlacesNearbyResponseDTO
 import com.app.data.model.PlacesResponseDTO
 import com.app.data.model.UserEntity
 import com.app.data.model.WeatherDTO
+import com.app.data.utils.Util.addHttps
 import com.app.domain.model.Places
 import com.app.domain.model.PlacesDetail
 import com.app.domain.model.PlacesDetailGoogle
@@ -48,7 +49,8 @@ fun mapperToPlaceNearby(place: PlacesNearbyResponseDTO): List<Places> =
                 address = it.formattedAddress,
                 description = it.primaryTypeDisplayName?.text ?: "",
                 openNow = it.regularOpeningHours?.openNow ?: run { false },
-                weekdayDescriptions = it.regularOpeningHours?.weekdayDescriptions ?: run { emptyList() },
+                weekdayDescriptions = it.regularOpeningHours?.weekdayDescriptions
+                    ?: run { emptyList() },
                 rating = it.rating,
                 userRatingCount = it.userRatingCount,
                 photoUrl = it.photoUrl
@@ -101,7 +103,10 @@ fun mapperToPlaceDetail(placesDetail: PlacesDetailResponseDTO.PlacesDetail): Pla
         latitude = placesDetail.mapy.toDouble(),
         longitude = placesDetail.mapx.toDouble(),
         phoneNum = placesDetail.tel,
-        homepage = placesDetail.homepage
+        homepage = if (placesDetail.homepage.isNotEmpty()) Html.fromHtml(
+            placesDetail.homepage,
+            Html.FROM_HTML_MODE_LEGACY
+        ).toString().addHttps() else ""
     )
 
 fun mapperToUser(userEntity: List<UserEntity>): List<User> =

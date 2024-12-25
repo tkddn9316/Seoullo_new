@@ -4,6 +4,8 @@ import com.app.data.api.ApiAnnotation
 import com.app.data.api.ApiInterface
 import com.app.data.api.ApiInterface2
 import com.app.data.api.ApiInterface3
+import com.app.data.source.DirectionDataSource
+import com.app.data.source.DirectionDataSourceImpl
 import com.app.data.source.PlacesDataSource
 import com.app.data.source.PlacesDataSourceImpl
 import com.app.data.source.PlacesDetailDataSource
@@ -28,20 +30,26 @@ class RemoteDataModule {
 
     @Provides
     @Singleton
-    fun providePlacesNearbyDataSource(@ApiAnnotation.GoogleApi apiInterface: ApiInterface): PlacesNearbyDataSource {
+    fun providePlacesNearbyDataSource(@ApiAnnotation.GooglePlacesApi apiInterface: ApiInterface): PlacesNearbyDataSource {
         return PlacesNearbyDataSourceImpl(apiInterface)
     }
 
     @Provides
     @Singleton
-    fun providePlacesPhotoNearbyDataSource(@ApiAnnotation.GoogleApi apiInterface: ApiInterface): PlacesPhotoNearbyDataSource {
+    fun providePlacesPhotoNearbyDataSource(@ApiAnnotation.GooglePlacesApi apiInterface: ApiInterface): PlacesPhotoNearbyDataSource {
         return PlacesPhotoNearbyDataSourceImpl(apiInterface)
     }
 
     @Provides
     @Singleton
-    fun providePlacesDetailGoogleDataSource(@ApiAnnotation.GoogleApi apiInterface: ApiInterface): PlacesDetailGoogleDataSource {
+    fun providePlacesDetailGoogleDataSource(@ApiAnnotation.GooglePlacesApi apiInterface: ApiInterface): PlacesDetailGoogleDataSource {
         return PlacesDetailGoogleDataSourceImpl(apiInterface)
+    }
+
+    @Provides
+    @Singleton
+    fun provideDirectionDataSource(@ApiAnnotation.GoogleMapsApi apiInterface: ApiInterface): DirectionDataSource {
+        return DirectionDataSourceImpl(apiInterface)
     }
 
     @Provides

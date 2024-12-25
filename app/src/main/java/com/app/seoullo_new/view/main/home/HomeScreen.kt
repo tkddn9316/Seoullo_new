@@ -3,6 +3,9 @@ package com.app.seoullo_new.view.main.home
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -15,13 +18,18 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.rememberLottieAnimatable
 import com.airbnb.lottie.compose.rememberLottieComposition
+import com.app.domain.model.Direction
 import com.app.domain.model.Weather
+import com.app.domain.model.common.ApiState
 import com.app.seoullo_new.R
+import com.app.seoullo_new.view.base.LoadingOverlay
+import com.google.gson.Gson
 
 // TODO: https://www.youtube.com/watch?v=GFhKfMY0L2E
 // 기온, 강수확률, 풍속, 습도, 내일/모래 날씨, 미세먼지 등등...
@@ -70,6 +78,39 @@ fun HomeScreen(
 //
 //        Temperature(weather)
 //    }
+    val scrollState = rememberScrollState()
+    val state by viewModel.test.collectAsStateWithLifecycle()
+
+    Column(
+        Modifier.verticalScroll(scrollState)
+    ) {
+        Button(
+            onClick = {
+                viewModel.test()
+            }
+        ) {
+            Text(
+                text = "테스트"
+            )
+        }
+
+        when (state) {
+            is ApiState.Initial -> {}
+            is ApiState.Loading -> {
+                // API 로딩 처리
+                LoadingOverlay()
+            }
+            is ApiState.Success -> {
+                val placesDetail = (state as ApiState.Success<Direction>).data ?: Direction("", emptyList())
+                Text(
+                    text = Gson().toJson(placesDetail)
+                )
+            }
+            is ApiState.Error -> {
+            }
+        }
+    }
+
 }
 
 @Composable

@@ -5,9 +5,9 @@ import android.content.Context
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import com.app.domain.model.ApiState
 import com.app.domain.model.Places
 import com.app.domain.model.PlacesNearbyRequest
+import com.app.domain.model.common.ApiState
 import com.app.domain.model.theme.Language
 import com.app.domain.usecase.places.GetPlacesListUseCase
 import com.app.domain.usecase.places.GetPlacesNearbyListUseCase

@@ -1,4 +1,4 @@
-package com.app.domain.model
+package com.app.domain.model.common
 
 import android.os.Parcel
 import android.os.Parcelable

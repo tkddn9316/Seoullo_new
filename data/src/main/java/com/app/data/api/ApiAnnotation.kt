@@ -5,7 +5,11 @@ import javax.inject.Qualifier
 object ApiAnnotation {
     @Qualifier
     @Retention(AnnotationRetention.BINARY)
-    annotation class GoogleApi
+    annotation class GooglePlacesApi
+
+    @Qualifier
+    @Retention(AnnotationRetention.BINARY)
+    annotation class GoogleMapsApi
 
     @Qualifier
     @Retention(AnnotationRetention.BINARY)

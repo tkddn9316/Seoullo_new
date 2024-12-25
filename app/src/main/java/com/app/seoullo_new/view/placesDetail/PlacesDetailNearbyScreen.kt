@@ -1,6 +1,5 @@
 package com.app.seoullo_new.view.placesDetail
 
-import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -58,13 +57,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.app.domain.model.ApiState
 import com.app.domain.model.Places
 import com.app.domain.model.PlacesDetailGoogle
+import com.app.domain.model.common.ApiState
 import com.app.domain.model.theme.Language
 import com.app.seoullo_new.BuildConfig
 import com.app.seoullo_new.R
-import com.app.seoullo_new.utils.Logging
 import com.app.seoullo_new.view.base.ErrorScreen
 import com.app.seoullo_new.view.base.LoadingOverlay
 import com.app.seoullo_new.view.base.SeoulloAppBar

@@ -1,5 +1,7 @@
 package com.app.domain.model
 
+import com.app.domain.model.common.BaseModel
+
 data class PlacesDetail(
     val contentId: String = "",
     val contentTypeId: String = "",
@@ -11,4 +13,4 @@ data class PlacesDetail(
     val description: String = "",
     val phoneNum: String = "",
     val homepage: String = ""
-)
+) : BaseModel()

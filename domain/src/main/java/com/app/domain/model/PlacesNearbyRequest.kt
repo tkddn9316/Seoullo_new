@@ -1,5 +1,7 @@
 package com.app.domain.model
 
+import com.app.domain.model.common.BaseModel
+
 data class PlacesNearbyRequest(
     var includedTypes: List<String>,
     var maxResultCount: Int,

@@ -64,7 +64,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
-import com.app.domain.model.ApiState
+import com.app.domain.model.common.ApiState
 import com.app.domain.model.Places
 import com.app.domain.model.theme.Language
 import com.app.seoullo_new.BuildConfig

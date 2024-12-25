@@ -1,26 +1,28 @@
-package com.app.domain.usecase.places
+package com.app.domain.usecase.direction
 
+import com.app.domain.model.Direction
 import com.app.domain.model.common.ApiState
-import com.app.domain.model.Places
-import com.app.domain.model.PlacesNearbyRequest
-import com.app.domain.repository.PlacesNearbyRepository
+import com.app.domain.repository.DirectionRepository
 import com.google.gson.JsonSyntaxException
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import java.io.IOException
 import javax.inject.Inject
 
-class GetPlacesNearbyListUseCase @Inject constructor(private val repository: PlacesNearbyRepository) {
-
+class GetDirectionUseCase @Inject constructor(private val repository: DirectionRepository) {
     operator fun invoke(
-        apiKey: String,
-        placesNearbyRequest: PlacesNearbyRequest
-    ): Flow<ApiState<List<Places>>> = flow {
+        destination: String,
+        starting: String,
+        languageCode: String,
+        apiKey: String
+    ): Flow<ApiState<Direction>> = flow {
         emit(ApiState.Loading())
         try {
-            repository.getPlacesNearbyList(
-                apiKey = apiKey,
-                placesNearbyRequest = placesNearbyRequest
+            repository.getDirection(
+                destination = destination,
+                starting = starting,
+                languageCode = languageCode,
+                apiKey = apiKey
             ).collect {
                 emit(ApiState.Success(it))
             }
