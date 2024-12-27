@@ -11,6 +11,7 @@ data class PlacesDetailGoogle(
     val reviewsUri: String = "",
     val phoneNumber: String = ""
 ) : BaseModel() {
+
     @Serializable
     data class Review(
         val profileName: String = "",

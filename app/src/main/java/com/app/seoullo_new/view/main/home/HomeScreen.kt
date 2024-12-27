@@ -28,6 +28,7 @@ import com.app.domain.model.Direction
 import com.app.domain.model.Weather
 import com.app.domain.model.common.ApiState
 import com.app.seoullo_new.R
+import com.app.seoullo_new.utils.Logging
 import com.app.seoullo_new.view.base.LoadingOverlay
 import com.google.gson.Gson
 
@@ -78,6 +79,7 @@ fun HomeScreen(
 //
 //        Temperature(weather)
 //    }
+    // TODO: TEST
     val scrollState = rememberScrollState()
     val state by viewModel.test.collectAsStateWithLifecycle()
 
@@ -102,11 +104,15 @@ fun HomeScreen(
             }
             is ApiState.Success -> {
                 val placesDetail = (state as ApiState.Success<Direction>).data ?: Direction("", emptyList())
+                val result = Gson().toJson(placesDetail)
+                Logging.e(result)
                 Text(
-                    text = Gson().toJson(placesDetail)
+                    text = result
                 )
             }
             is ApiState.Error -> {
+                val error = (state as ApiState.Error).message
+                Logging.e(error!!)
             }
         }
     }

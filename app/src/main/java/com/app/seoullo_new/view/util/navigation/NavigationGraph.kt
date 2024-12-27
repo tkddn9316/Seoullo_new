@@ -16,6 +16,7 @@ import androidx.navigation.compose.navigation
 import androidx.navigation.navArgument
 import com.app.seoullo_new.view.main.MainScreen
 import com.app.seoullo_new.view.main.setting.LicenseScreen
+import com.app.seoullo_new.view.map.DirectionScreen
 import com.app.seoullo_new.view.placesDetail.PlaceDetailNearbyScreen
 import com.app.seoullo_new.view.placesDetail.PlaceDetailScreen
 import com.app.seoullo_new.view.placesList.PlacesListScreen
@@ -126,7 +127,13 @@ fun NavGraphBuilder.travelScreenNavigation(navController: NavHostController) {
             arguments = listOf(navArgument("place") { type = NavType.StringType })
         ) {
             PlaceDetailNearbyScreen(
-                onNavigationClick = { navController.navigateUp() }
+                onNavigationClick = { navController.navigateUp() },
+                onDirectionClick = {
+                    navController.navigate(
+                        Route.DIRECTION
+                            .replace(oldValue = "{latlng}", newValue = it)
+                    )
+                }
             )
         }
         composable(
@@ -134,6 +141,20 @@ fun NavGraphBuilder.travelScreenNavigation(navController: NavHostController) {
             arguments = listOf(navArgument("place") { type = NavType.StringType })
         ) {
             PlaceDetailScreen(
+                onNavigationClick = { navController.navigateUp() },
+                onDirectionClick = {
+                    navController.navigate(
+                        Route.DIRECTION
+                            .replace(oldValue = "{latlng}", newValue = it)
+                    )
+                }
+            )
+        }
+        composable(
+            Route.DIRECTION,
+            arguments = listOf(navArgument("latlng") { type = NavType.StringType })
+        ) {
+            DirectionScreen(
                 onNavigationClick = { navController.navigateUp() }
             )
         }

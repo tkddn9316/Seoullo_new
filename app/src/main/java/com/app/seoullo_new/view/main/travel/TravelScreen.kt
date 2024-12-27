@@ -209,7 +209,6 @@ private fun generateColorOrBrush(id: Int): ColorOrBrush {
                 )
             )
         )
-
         7 -> ColorOrBrush.SolidColor(colorGridItem8)
         else -> ColorOrBrush.SolidColor(colorGridItem1)
     }

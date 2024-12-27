@@ -58,6 +58,8 @@
     <string name="google_review_limit_notice">Up to 5 Google reviews are provided.</string>
     <string name="see_more">See more</string>
 
+    <string name="direction_title">Direction</string>
+
     <!--  setting  -->
     <string name="theme_title">Theme Setting</string>
     <string name="theme_settings_title">Theme</string>

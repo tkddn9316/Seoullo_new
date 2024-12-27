@@ -1,5 +1,6 @@
 package com.app.data.mapper
 
+import android.text.Html
 import com.app.data.model.DirectionResponseDTO
 import com.app.domain.model.Direction
 
@@ -52,7 +53,10 @@ private fun mapStep(stepDTO: DirectionResponseDTO.Route.Leg.Step): Direction.Rou
             lat = stepDTO.startLocation.lat,
             lng = stepDTO.startLocation.lng
         ),
-        instructions = stepDTO.htmlInstructions ?: "",
+        instructions = if (!stepDTO.htmlInstructions.isNullOrEmpty()) Html.fromHtml(
+            stepDTO.htmlInstructions,
+            Html.FROM_HTML_MODE_LEGACY
+        ).toString() else "",
         polyline = stepDTO.polyline.points,
         travelMode = stepDTO.travelMode,
         transitDetails = stepDTO.transitDetails?.let { transitDTO ->

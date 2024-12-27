@@ -1,5 +1,6 @@
 package com.app.seoullo_new.view.placesDetail
 
+import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -18,6 +19,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Language
 import androidx.compose.material.icons.filled.NearMe
 import androidx.compose.material.icons.filled.Phone
+import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -40,6 +42,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.app.domain.model.LatLngLiteral
 import com.app.domain.model.Places
 import com.app.domain.model.PlacesDetail
 import com.app.domain.model.common.ApiState
@@ -62,11 +65,14 @@ import com.google.maps.android.compose.MapUiSettings
 import com.google.maps.android.compose.rememberCameraPositionState
 import com.google.maps.android.compose.rememberMarkerState
 import com.skydoves.landscapist.glide.GlideImage
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 
 @Composable
 fun PlaceDetailScreen(
     viewModel: PlacesDetailViewModel = hiltViewModel(),
-    onNavigationClick: () -> Unit
+    onNavigationClick: () -> Unit,
+    onDirectionClick: (destination: String) -> Unit
 ) {
     val language = LocalLanguage.current
     val placesState by viewModel.placesState.collectAsStateWithLifecycle()
@@ -101,9 +107,9 @@ fun PlaceDetailScreen(
                     is ApiState.Success -> {
                         val placesDetail = (detailState as ApiState.Success<PlacesDetail>).data ?: PlacesDetail()
                         PlacesDetailView(
-                            viewModel = viewModel,
                             placesDetail = placesDetail,
-                            places = placesState
+                            places = placesState,
+                            onDirectionClick = onDirectionClick
                         )
                     }
                     is ApiState.Error -> {
@@ -118,9 +124,9 @@ fun PlaceDetailScreen(
 
 @Composable
 fun PlacesDetailView(
-    viewModel: PlacesDetailViewModel = hiltViewModel(),
     placesDetail: PlacesDetail,
-    places: Places
+    places: Places,
+    onDirectionClick: (destination: String) -> Unit
 ) {
     val uriHandler = LocalUriHandler.current
     val verticalScrollState = rememberScrollState()
@@ -261,6 +267,18 @@ fun PlacesDetailView(
                     style = MaterialTheme.typography.bodyMedium
                 )
             }
+        }
+
+        // TODO: TEST
+        Button(
+            onClick = {
+                val latLngLiteral = LatLngLiteral(placesDetail.latitude, placesDetail.longitude)
+                val json = Json.encodeToString(latLngLiteral)
+                val encodedJson = Uri.encode(json)
+                onDirectionClick(encodedJson)
+            }
+        ) {
+            Text(text = "버튼")
         }
     }
 

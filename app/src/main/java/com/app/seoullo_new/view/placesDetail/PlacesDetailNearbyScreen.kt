@@ -1,5 +1,6 @@
 package com.app.seoullo_new.view.placesDetail
 
+import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -57,6 +58,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.app.domain.model.LatLngLiteral
 import com.app.domain.model.Places
 import com.app.domain.model.PlacesDetailGoogle
 import com.app.domain.model.common.ApiState
@@ -82,11 +84,14 @@ import com.google.maps.android.compose.MapUiSettings
 import com.google.maps.android.compose.rememberCameraPositionState
 import com.google.maps.android.compose.rememberMarkerState
 import com.skydoves.landscapist.glide.GlideImage
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 
 @Composable
 fun PlaceDetailNearbyScreen(
     viewModel: PlacesDetailViewModel = hiltViewModel(),
-    onNavigationClick: () -> Unit
+    onNavigationClick: () -> Unit,
+    onDirectionClick: (destination: String) -> Unit
 ) {
     val placesState by viewModel.placesState.collectAsStateWithLifecycle()
     val detailState by viewModel.placesDetailGoogleState.collectAsStateWithLifecycle()
@@ -128,7 +133,8 @@ fun PlaceDetailNearbyScreen(
                         PlacesDetailView(
                             viewModel = viewModel,
                             placesDetail = placesDetail,
-                            places = placesState
+                            places = placesState,
+                            onDirectionClick = onDirectionClick
                         )
                     }
                     is ApiState.Error -> {
@@ -145,7 +151,8 @@ fun PlaceDetailNearbyScreen(
 fun PlacesDetailView(
     viewModel: PlacesDetailViewModel = hiltViewModel(),
     placesDetail: PlacesDetailGoogle,
-    places: Places
+    places: Places,
+    onDirectionClick: (destination: String) -> Unit
 ) {
     val selectedReview by viewModel.selectedReview.collectAsStateWithLifecycle()
     selectedReview?.let { review ->
@@ -389,6 +396,18 @@ fun PlacesDetailView(
                     text = stringResource(R.string.see_more)
                 )
             }
+        }
+
+        // TODO: TEST
+        Button(
+            onClick = {
+                val latLngLiteral = LatLngLiteral(placesDetail.latitude, placesDetail.longitude)
+                val json = Json.encodeToString(latLngLiteral)
+                val encodedJson = Uri.encode(json)
+                onDirectionClick(encodedJson)
+            }
+        ) {
+            Text(text = "버튼")
         }
     }
 }
