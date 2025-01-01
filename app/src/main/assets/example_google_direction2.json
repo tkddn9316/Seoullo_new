@@ -1,0 +1,563 @@
+{
+  "routes": [
+    {
+      "legs": [
+        {
+          "arrivalTime": "오후 11:32",
+          "departureTime": "오후 9:52",
+          "distance": "43.3 km",
+          "duration": "1시간 41분",
+          "endAddress": "대한민국 인천광역시 중구 중산동 1309-4",
+          "endLocation": {
+            "lat": 37.498194,
+            "lng": 126.551916
+          },
+          "startAddress": "대한민국 경기도 부천시 부흥로315번길 14",
+          "startLocation": {
+            "lat": 37.495055,
+            "lng": 126.777836
+          },
+          "steps": [
+            {
+              "distance": "0.1 km",
+              "duration": "2분",
+              "endLocation": {
+                "lat": 37.496271,
+                "lng": 126.77777
+              },
+              "instructions": "루미아트까지 도보",
+              "polyline": "cgzcFohxdWqFL",
+              "startLocation": {
+                "lat": 37.495055,
+                "lng": 126.777836
+              },
+              "steps": [
+                {
+                  "distance": "0.1 km",
+                  "duration": "2분",
+                  "endLocation": {
+                    "lat": 37.496271,
+                    "lng": 126.77777
+                  },
+                  "instructions": "",
+                  "polyline": "cgzcFohxdWqFL",
+                  "startLocation": {
+                    "lat": 37.495055,
+                    "lng": 126.777836
+                  },
+                  "steps": [],
+                  "travelMode": "WALKING"
+                }
+              ],
+              "travelMode": "WALKING"
+            },
+            {
+              "distance": "3.0 km",
+              "duration": "13분",
+              "endLocation": {
+                "lat": 37.482123,
+                "lng": 126.793621
+              },
+              "instructions": "버스 소사구청.부천소사푸르지오행",
+              "polyline": "unzcFahxdWr@MjBa@`DaAb@Kz@Dh@TlNpBb@F~NtBD?CACAB@l@HdOpB@@XDxIlA\\ATGLQHg@nA}LD]G\\F]Fq@H_AF}@P_IDaB?C?@VoKVwJ@c@L{FNuGJkDJaA?Ad@qGF_ANgD?q@DuBBwB?C",
+              "startLocation": {
+                "lat": 37.496271,
+                "lng": 126.77777
+              },
+              "steps": [],
+              "transitDetails": {
+                "arrivalStopLocation": {
+                  "lat": 37.482123,
+                  "lng": 126.793621
+                },
+                "arrivalStopName": "소사역",
+                "arrivalStopTime": "오후 10:08",
+                "departureStopLocation": {
+                  "lat": 37.496271,
+                  "lng": 126.77777
+                },
+                "departureStopName": "루미아트",
+                "departureStopTime": "오후 9:54",
+                "transitAgenciesName": "경기도버스운송사업조합",
+                "transitColor": "#374ff2",
+                "transitIcon": "//maps.gstatic.com/mapfiles/transit/iw2/6/bus2.png",
+                "transitName": "경기 일반버스 60-1",
+                "transitTextColor": "#ffffff"
+              },
+              "travelMode": "TRANSIT"
+            },
+            {
+              "distance": "0.3 km",
+              "duration": "5분",
+              "endLocation": {
+                "lat": 37.48277,
+                "lng": 126.795737
+              },
+              "instructions": "소사까지 도보",
+              "polyline": "gvwcFck{dWf@}JiDi@",
+              "startLocation": {
+                "lat": 37.482123,
+                "lng": 126.793621
+              },
+              "steps": [
+                {
+                  "distance": "0.2 km",
+                  "duration": "3분",
+                  "endLocation": {
+                    "lat": 37.481921,
+                    "lng": 126.795533
+                  },
+                  "instructions": "",
+                  "polyline": "gvwcFck{dWf@}J",
+                  "startLocation": {
+                    "lat": 37.482123,
+                    "lng": 126.793621
+                  },
+                  "steps": [],
+                  "travelMode": "WALKING"
+                },
+                {
+                  "distance": "1 m",
+                  "duration": "2분",
+                  "endLocation": {
+                    "lat": 37.481921,
+                    "lng": 126.795533
+                  },
+                  "instructions": "4 입구 이용",
+                  "polyline": "_uwcFaw{dW",
+                  "startLocation": {
+                    "lat": 37.481921,
+                    "lng": 126.795533
+                  },
+                  "steps": [],
+                  "travelMode": "WALKING"
+                },
+                {
+                  "distance": "1 m",
+                  "duration": "1분",
+                  "endLocation": {
+                    "lat": 37.481921,
+                    "lng": 126.795533
+                  },
+                  "instructions": "",
+                  "polyline": "_uwcFaw{dW",
+                  "startLocation": {
+                    "lat": 37.481921,
+                    "lng": 126.795533
+                  },
+                  "steps": [],
+                  "travelMode": "WALKING"
+                },
+                {
+                  "distance": "1 m",
+                  "duration": "1분",
+                  "endLocation": {
+                    "lat": 37.481921,
+                    "lng": 126.795533
+                  },
+                  "instructions": "",
+                  "polyline": "_uwcFaw{dW",
+                  "startLocation": {
+                    "lat": 37.481921,
+                    "lng": 126.795533
+                  },
+                  "steps": [],
+                  "travelMode": "WALKING"
+                },
+                {
+                  "distance": "0.1 km",
+                  "duration": "1분",
+                  "endLocation": {
+                    "lat": 37.48277,
+                    "lng": 126.795737
+                  },
+                  "instructions": "",
+                  "polyline": "_uwcFaw{dWiDi@",
+                  "startLocation": {
+                    "lat": 37.481921,
+                    "lng": 126.795533
+                  },
+                  "steps": [],
+                  "travelMode": "WALKING"
+                }
+              ],
+              "travelMode": "WALKING"
+            },
+            {
+              "distance": "9.1 km",
+              "duration": "11분",
+              "endLocation": {
+                "lat": 37.56224,
+                "lng": 126.801396
+              },
+              "instructions": "지하철 11412행",
+              "polyline": "izwcFkx{dWR`CM@e@FeANuAPsARkFv@kBXwAPmBT{AR_@Bc@Fs@Dm@Bm@Bm@@w@?e@Ag@Ao@CkAIu@IkAQq@Km@O]Ia@ISIaA]aFcBuE}AoBq@y@Q}@O}@SqB_@sGe@yEc@eN}@aF]sF]uCQmAGoEYE?A?m@EaCO}@EsBOwDY{BQYG]Ee@G]G[Im@Mw@Uk@Qe@Sk@Uq@[_@U_@SWQWOa@Yi@_@UWcAaAqH{HyHcIc@_@a@_@k@c@s@c@m@_@o@]k@Wq@Ye@Oc@Oi@Qa@Ia@G_@Gg@Kc@Ea@Ek@EgAEaC?iG@uJ@sDAA?_mFpT",
+              "startLocation": {
+                "lat": 37.48277,
+                "lng": 126.795737
+              },
+              "steps": [],
+              "transitDetails": {
+                "arrivalStopLocation": {
+                  "lat": 37.56224,
+                  "lng": 126.801396
+                },
+                "arrivalStopName": "김포공항",
+                "arrivalStopTime": "오후 10:27",
+                "departureStopLocation": {
+                  "lat": 37.48277,
+                  "lng": 126.795737
+                },
+                "departureStopName": "소사",
+                "departureStopTime": "오후 10:16",
+                "transitAgenciesName": "소사원시운영(주)",
+                "transitColor": "#80a62d",
+                "transitIcon": "//maps.gstatic.com/mapfiles/transit/iw2/6/subway2.png",
+                "transitName": "수도권전철 서해선",
+                "transitTextColor": "#ffffff"
+              },
+              "travelMode": "TRANSIT"
+            },
+            {
+              "distance": "0.1 km",
+              "duration": "2분",
+              "endLocation": {
+                "lat": 37.56224,
+                "lng": 126.801396
+              },
+              "instructions": "김포공항까지 도보",
+              "polyline": "_kgdFw{|dWgAaBfA`B",
+              "startLocation": {
+                "lat": 37.56224,
+                "lng": 126.801396
+              },
+              "steps": [
+                {
+                  "distance": "59 m",
+                  "duration": "1분",
+                  "endLocation": {
+                    "lat": 37.5626,
+                    "lng": 126.801895
+                  },
+                  "instructions": "",
+                  "polyline": "_kgdFw{|dWgAaB",
+                  "startLocation": {
+                    "lat": 37.56224,
+                    "lng": 126.801396
+                  },
+                  "steps": [],
+                  "travelMode": "WALKING"
+                },
+                {
+                  "distance": "1 m",
+                  "duration": "1분",
+                  "endLocation": {
+                    "lat": 37.5626,
+                    "lng": 126.801895
+                  },
+                  "instructions": "3 입구 이용",
+                  "polyline": "gmgdFy~|dW",
+                  "startLocation": {
+                    "lat": 37.5626,
+                    "lng": 126.801895
+                  },
+                  "steps": [],
+                  "travelMode": "WALKING"
+                },
+                {
+                  "distance": "1 m",
+                  "duration": "1분",
+                  "endLocation": {
+                    "lat": 37.5626,
+                    "lng": 126.801895
+                  },
+                  "instructions": "",
+                  "polyline": "gmgdFy~|dW",
+                  "startLocation": {
+                    "lat": 37.5626,
+                    "lng": 126.801895
+                  },
+                  "steps": [],
+                  "travelMode": "WALKING"
+                },
+                {
+                  "distance": "1 m",
+                  "duration": "1분",
+                  "endLocation": {
+                    "lat": 37.5626,
+                    "lng": 126.801895
+                  },
+                  "instructions": "",
+                  "polyline": "gmgdFy~|dW",
+                  "startLocation": {
+                    "lat": 37.5626,
+                    "lng": 126.801895
+                  },
+                  "steps": [],
+                  "travelMode": "WALKING"
+                },
+                {
+                  "distance": "1 m",
+                  "duration": "1분",
+                  "endLocation": {
+                    "lat": 37.5626,
+                    "lng": 126.801895
+                  },
+                  "instructions": "",
+                  "polyline": "gmgdFy~|dW",
+                  "startLocation": {
+                    "lat": 37.5626,
+                    "lng": 126.801895
+                  },
+                  "steps": [],
+                  "travelMode": "WALKING"
+                },
+                {
+                  "distance": "1 m",
+                  "duration": "1분",
+                  "endLocation": {
+                    "lat": 37.5626,
+                    "lng": 126.801895
+                  },
+                  "instructions": "",
+                  "polyline": "gmgdFy~|dW",
+                  "startLocation": {
+                    "lat": 37.5626,
+                    "lng": 126.801895
+                  },
+                  "steps": [],
+                  "travelMode": "WALKING"
+                },
+                {
+                  "distance": "59 m",
+                  "duration": "1분",
+                  "endLocation": {
+                    "lat": 37.56224,
+                    "lng": 126.801396
+                  },
+                  "instructions": "",
+                  "polyline": "gmgdFy~|dWfA`B",
+                  "startLocation": {
+                    "lat": 37.5626,
+                    "lng": 126.801895
+                  },
+                  "steps": [],
+                  "travelMode": "WALKING"
+                }
+              ],
+              "travelMode": "WALKING"
+            },
+            {
+              "distance": "27.0 km",
+              "duration": "26분",
+              "endLocation": {
+                "lat": 37.51208099999999,
+                "lng": 126.525085
+              },
+              "instructions": "지하철 4013행",
+              "polyline": "_kgdFw{|dWpAJOfLQxIObFInDAl@StBUtAk@tBq@dBeAnBaAlAg@j@_@`@sCbDsB|BsC~C}BjCkE`FoKrLuDfEeAjAoBzB}BfCgCtC_@b@}AlBc@p@c@r@gArB{@lBo@dBk@rBg@xBQhAMl@WzBObCK`CCbC@~BJvBN|BX~B^|BHd@Jf@Nr@pF~PpDbLlAvDp@tB\\bAlAnDd@|AVhA|@rDh@pC\\fBr@|Eh@~EZdFFdBH~BBjFIjFKbCKlBi@xGGv@W|BaA`JeCdUa@hFWnFKlGEfGCfG?xD@dB@bB?lB@hBBhLDvLL`IXjO\\lNV~Mr@d\\\\bQXhPZdP^xRb@b^Z`VZlURpNJlGTnPLrHJdH^bYJ|GB|L?vEBxABtB?BDdB@fBh@|ZXjOVvLRrLJpETjH^~Gd@bHp@lHbAxHb@pCZzBH\\t@|DNx@n@pCNt@ZrAhArEfA`E^vAbBtF`ArClArCrAzClB~DtDtHjBtDfBdCbFvIhAxB`AnBn@zAp@hBb@rAd@tAXbAv@vC\\|AHf@b@~BH`@DXF^XjBXzBz@vGn@jF|@zGP~ARzAb@|D|AtN~BnSvAxKlDlUdDpRjA`I|@pGz@jHh@zDb@zCjAvGpAbH|A~H`BhItCrNhAhFlAxFpCjM`DfNvGpYvDrPxFpV~AfHjBzHpEtRx@dD|@pDlAzET~@p@pB~A~Ep@jBXt@Pf@h@rATf@Zn@p@rAbAfBv@nAv@hAn@`ARXb@h@|@lA`BrBz@jApBdCnDpEr@`AxAtBjDbFfQxVrI`MxIfM`RbXrMdRnLrPhInLvBjDdBnDxAxClBfF|BxGbA|ChAvDpDrLZdA`@lA^lA^hA",
+              "startLocation": {
+                "lat": 37.56224,
+                "lng": 126.801396
+              },
+              "steps": [],
+              "transitDetails": {
+                "arrivalStopLocation": {
+                  "lat": 37.51208099999999,
+                  "lng": 126.525085
+                },
+                "arrivalStopName": "영종역",
+                "arrivalStopTime": "오후 11:03",
+                "departureStopLocation": {
+                  "lat": 37.56224,
+                  "lng": 126.801396
+                },
+                "departureStopName": "김포공항",
+                "departureStopTime": "오후 10:37",
+                "transitAgenciesName": "공항철도",
+                "transitColor": "#0095d4",
+                "transitIcon": "//maps.gstatic.com/mapfiles/transit/iw2/6/subway2.png",
+                "transitName": "수도권전철 공항철도",
+                "transitTextColor": "#ffffff"
+              },
+              "travelMode": "TRANSIT"
+            },
+            {
+              "distance": "0.1 km",
+              "duration": "2분",
+              "endLocation": {
+                "lat": 37.512349,
+                "lng": 126.524237
+              },
+              "instructions": "영종역까지 도보",
+              "polyline": "oq}cFw|fcWErDo@K",
+              "startLocation": {
+                "lat": 37.51208099999999,
+                "lng": 126.525085
+              },
+              "steps": [
+                {
+                  "distance": "1 m",
+                  "duration": "1분",
+                  "endLocation": {
+                    "lat": 37.51208099999999,
+                    "lng": 126.525085
+                  },
+                  "instructions": "",
+                  "polyline": "oq}cFw|fcW",
+                  "startLocation": {
+                    "lat": 37.51208099999999,
+                    "lng": 126.525085
+                  },
+                  "steps": [],
+                  "travelMode": "WALKING"
+                },
+                {
+                  "distance": "1 m",
+                  "duration": "1분",
+                  "endLocation": {
+                    "lat": 37.51208099999999,
+                    "lng": 126.525085
+                  },
+                  "instructions": "",
+                  "polyline": "oq}cFw|fcW",
+                  "startLocation": {
+                    "lat": 37.51208099999999,
+                    "lng": 126.525085
+                  },
+                  "steps": [],
+                  "travelMode": "WALKING"
+                },
+                {
+                  "distance": "1 m",
+                  "duration": "1분",
+                  "endLocation": {
+                    "lat": 37.51208099999999,
+                    "lng": 126.525085
+                  },
+                  "instructions": "",
+                  "polyline": "oq}cFw|fcW",
+                  "startLocation": {
+                    "lat": 37.51208099999999,
+                    "lng": 126.525085
+                  },
+                  "steps": [],
+                  "travelMode": "WALKING"
+                },
+                {
+                  "distance": "79 m",
+                  "duration": "1분",
+                  "endLocation": {
+                    "lat": 37.512107,
+                    "lng": 126.52418
+                  },
+                  "instructions": "1 출구 이용",
+                  "polyline": "oq}cFw|fcWErD",
+                  "startLocation": {
+                    "lat": 37.51208099999999,
+                    "lng": 126.525085
+                  },
+                  "steps": [],
+                  "travelMode": "WALKING"
+                },
+                {
+                  "distance": "27 m",
+                  "duration": "1분",
+                  "endLocation": {
+                    "lat": 37.512349,
+                    "lng": 126.524237
+                  },
+                  "instructions": "",
+                  "polyline": "uq}cFcwfcWo@K",
+                  "startLocation": {
+                    "lat": 37.512107,
+                    "lng": 126.52418
+                  },
+                  "steps": [],
+                  "travelMode": "WALKING"
+                }
+              ],
+              "travelMode": "WALKING"
+            },
+            {
+              "distance": "3.2 km",
+              "duration": "9분",
+              "endLocation": {
+                "lat": 37.495709,
+                "lng": 126.549115
+              },
+              "instructions": "버스 신명스카이뷰행",
+              "polyline": "es}cFowfcWB@@F`@rAJVFJLPFHTRLNDHRj@JVHXFHR`@\\R^@XQlBmCz@qAz@oAhH_JbDaEnAcB|GyInCmDjFaHfCkD~@yAr@sAX[DCHO@GHQLi@t@eBh@{Ah@eBrAaFb@qBBG^oBAg@RkAXUt@wD\\{BPe@Hi@@IBYH]XwAh@kCp@iDt@yCHWl@wBdAiDbBuERc@\\o@@ABIXw@r@_B~@iBVS|AuCz@cB`@u@@CJH",
+              "startLocation": {
+                "lat": 37.512349,
+                "lng": 126.524237
+              },
+              "steps": [],
+              "transitDetails": {
+                "arrivalStopLocation": {
+                  "lat": 37.495709,
+                  "lng": 126.549115
+                },
+                "arrivalStopName": "중산교차로",
+                "arrivalStopTime": "오후 11:26",
+                "departureStopLocation": {
+                  "lat": 37.512349,
+                  "lng": 126.524237
+                },
+                "departureStopName": "영종역",
+                "departureStopTime": "오후 11:17",
+                "transitAgenciesName": "인천광역시버스운송사업조합",
+                "transitColor": "#0abb0c",
+                "transitIcon": "//maps.gstatic.com/mapfiles/transit/iw2/6/bus2.png",
+                "transitName": "인천 지선버스 2201",
+                "transitTextColor": "#ffffff"
+              },
+              "travelMode": "TRANSIT"
+            },
+            {
+              "distance": "0.4 km",
+              "duration": "6분",
+              "endLocation": {
+                "lat": 37.498194,
+                "lng": 126.551916
+              },
+              "instructions": "대한민국 인천광역시 중구 중산동 1309-4까지 도보",
+              "polyline": "ekzcF_skcWoNoP",
+              "startLocation": {
+                "lat": 37.495709,
+                "lng": 126.549115
+              },
+              "steps": [
+                {
+                  "distance": "0.4 km",
+                  "duration": "6분",
+                  "endLocation": {
+                    "lat": 37.498194,
+                    "lng": 126.551916
+                  },
+                  "instructions": "",
+                  "polyline": "ekzcF_skcWoNoP",
+                  "startLocation": {
+                    "lat": 37.495709,
+                    "lng": 126.549115
+                  },
+                  "steps": [],
+                  "travelMode": "WALKING"
+                }
+              ],
+              "travelMode": "WALKING"
+            }
+          ]
+        }
+      ],
+      "northEastLat": 37.5754501,
+      "northEastLng": 126.80486,
+      "overviewPolyline": "cgzcFohxdWqFL~Co@dEmAz@Dh@TpOxBdOtBGCp@JzZfE\\ATGLQHg@tA{MG\\F]PqBF}@P_IDeBVmKf@wSZaMJcAl@qINyEHqFf@}JiDi@R`CM@kBViDd@wIpAeEf@{BVwAL{AFeB@mAC{BMaC[_B[_ASuAg@wLaEoBq@y@Q{Bc@qB_@sGe@yEc@eN}@uM{@yLs@oF[kHi@uCY}B_@eBc@qAe@}Aq@_Ai@o@a@kAy@yAyAkR_SeA_A_BgA}A}@}Aq@iA_@kA[mCa@mAKgAEaC?_SBuDA_mFpTgAaBfA`BpAJOfLQxIYrKUbDUtAk@tBq@dBeAnBiBxB{LbNo[h^uDfEeG|G}BpCgAdBcC`Fo@dBk@rBy@bEMl@WzB[dGCbC@~BJvBN|BX~B^|BTlANr@pF~P~FzQnAxDlAnDd@|AtA|FfAxFr@|Eh@~EZdFFdBH~BBjFIjFKbCKlBi@xG_@tDgEf`@a@hFWnFKlGEfGC`MBhED`SDvLL`Iv@x^bCrnAz@~c@~@du@pA|~@dAzt@BtSFnEp@na@pAhq@TjH^~Gd@bHp@lHbAxHb@pCd@xCdAvF~@fEdBfHfBxGbBtF`ArC`DnHbHtNjBtDfBdCbFvIhAxB`AnBn@zAtA|D~@xCtAtFl@fDp@fEbEz[hAxJ|Edc@vAxKlDlUdDpRjA`I|@pGz@jHlAvI|CzP~DhS~E|U~EdUxLxh@|Rh{@jGzWjClKfApDpCjIj@|A~@zBlAbCzBvD~CnElIrKbFrGdGxIvy@flAb[xc@hInLvBjD~DhIlBfF|BxGlCtIlExN`BdFErDo@KB@b@zARb@TZb@b@n@fBZj@\\R^@XQlBmCvBaDlMaPlJ}LzJoMfCkD~@yAr@sAX[NSJYLi@t@eBrAaErAaFb@qBb@wBAg@RkAXUt@wD\\{BPe@Js@Lw@bAcFp@iDt@yCv@oCdAiDbBuEp@sADKXw@r@_B~@iBVSxCyFb@y@JHoNoP",
+      "southWestLat": 37.481921,
+      "southWestLng": 126.522424,
+      "summary": "",
+      "warnings": "도보 경로는 베타 서비스입니다. 주의 – 이 경로에는 인도 또는 보행 경로가 누락되었을 수도 있습니다."
+    }
+  ],
+  "status": "OK"
+}

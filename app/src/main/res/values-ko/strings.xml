@@ -57,6 +57,14 @@
     <string name="see_more">더 보기</string>
 
     <string name="direction_title">길 찾기</string>
+    <string name="select_places_title">장소 선택</string>
+    <string name="starting">출발지</string>
+    <string name="starting_supporting">출발지를 입력해주세요.</string>
+    <string name="destination">목적지</string>
+    <string name="destination_supporting">목적지를 입력해주세요.</string>
+    <string name="current_location">내 위치</string>
+    <string name="current_location_error">출발지 또는 목적지 영역을 선택해주세요.</string>
+    <string name="enter">길 찾기</string>
 
     <!--  setting  -->
     <string name="theme_title">테마 설정</string>

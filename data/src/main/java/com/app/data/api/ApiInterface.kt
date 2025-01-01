@@ -5,6 +5,7 @@ import com.app.data.model.PlacesDetailGoogleResponseDTO
 import com.app.data.model.PlacesNearbyRequestDTO
 import com.app.data.model.PlacesNearbyResponseDTO
 import com.app.data.model.PlacesPhotoNearbyResponseDTO
+import com.app.data.model.ReverseGeocodingDTO
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Header
@@ -45,6 +46,16 @@ interface ApiInterface {
         @Path("placeId") placeId: String,
         @Query("languageCode") languageCode: String
     ): PlacesDetailGoogleResponseDTO
+
+    // 역 지오코딩(현재 위치의 주소 검색)
+    @GET("maps/api/geocode/{outputFormat}")
+    suspend fun getReverseGeocoding(
+        @Path("outputFormat") outputFormat: String = "json",
+        @Query("result_type") resultType: String = "street_address",
+        @Query("latlng") latLng: String,    // 형태: "40.714224,-73.961452"
+        @Query("language") languageCode: String,
+        @Query("key") apiKey: String
+    ): ReverseGeocodingDTO
 
     // 길 찾기
     @GET("maps/api/directions/{outputFormat}")

@@ -16,6 +16,8 @@ import com.app.data.source.PlacesNearbyDataSource
 import com.app.data.source.PlacesNearbyDataSourceImpl
 import com.app.data.source.PlacesPhotoNearbyDataSource
 import com.app.data.source.PlacesPhotoNearbyDataSourceImpl
+import com.app.data.source.ReverseGeocodingDataSource
+import com.app.data.source.ReverseGeocodingDataSourceImpl
 import com.app.data.source.WeatherDataSource
 import com.app.data.source.WeatherDataSourceImpl
 import dagger.Module
@@ -44,6 +46,12 @@ class RemoteDataModule {
     @Singleton
     fun providePlacesDetailGoogleDataSource(@ApiAnnotation.GooglePlacesApi apiInterface: ApiInterface): PlacesDetailGoogleDataSource {
         return PlacesDetailGoogleDataSourceImpl(apiInterface)
+    }
+
+    @Provides
+    @Singleton
+    fun provideReverseGeocodingDataSource(@ApiAnnotation.GoogleMapsApi apiInterface: ApiInterface): ReverseGeocodingDataSource {
+        return ReverseGeocodingDataSourceImpl(apiInterface)
     }
 
     @Provides

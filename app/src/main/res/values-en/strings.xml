@@ -57,6 +57,14 @@
     <string name="see_more">See more</string>
 
     <string name="direction_title">Direction</string>
+    <string name="select_places_title">Select Places</string>
+    <string name="starting">Starting</string>
+    <string name="starting_supporting">Input Starting Point.</string>
+    <string name="destination">Destination</string>
+    <string name="destination_supporting">Input Destination.</string>
+    <string name="current_location">Current Location</string>
+    <string name="current_location_error">Please select a starting or destination area.</string>
+    <string name="enter">enter</string>
 
     <!--  setting  -->
     <string name="theme_title">Theme Setting</string>

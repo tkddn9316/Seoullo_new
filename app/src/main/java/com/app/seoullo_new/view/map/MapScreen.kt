@@ -2,45 +2,33 @@ package com.app.seoullo_new.view.map
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Directions
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.app.domain.model.theme.Language
-import com.app.seoullo_new.R
-import com.app.seoullo_new.utils.Constants.getLanguageTitle
-import com.app.seoullo_new.view.main.setting.SettingViewModel
-import com.app.seoullo_new.view.util.RadioItem
 import com.app.seoullo_new.view.util.theme.LocalLanguage
-import com.app.seoullo_new.view.util.theme.LocalThemeViewModel
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
@@ -49,6 +37,7 @@ import com.google.maps.android.compose.GoogleMap
 import com.google.maps.android.compose.MapProperties
 import com.google.maps.android.compose.MapUiSettings
 import com.google.maps.android.compose.rememberCameraPositionState
+import kotlinx.coroutines.launch
 
 @Composable
 fun MapScreen(
@@ -99,6 +88,10 @@ fun MapScreen(
     // 팝업
     val dialogState by viewModel.dialogState.collectAsStateWithLifecycle()
 
+    // Direction 결과
+    val directionState by viewModel.direction.collectAsStateWithLifecycle()
+    var showBottomSheet by remember { mutableStateOf(false) }
+
     Box(Modifier.fillMaxSize()) {
         GoogleMap(
             cameraPositionState = cameraPositionState,
@@ -112,6 +105,7 @@ fun MapScreen(
         Column {
             CustomMyLocationButton {
                 viewModel.openDirectionSelectDialog()
+//                showBottomSheet = true
             }
         }
 
@@ -120,9 +114,17 @@ fun MapScreen(
                 viewModel = viewModel
             )
         }
+
+        // TODO: dialogState.isDirectionSelectDialogOpen 처럼 변경
+//        if (showBottomSheet) {
+//            DirectionBottomSheet {
+//                showBottomSheet = it
+//            }
+//        }
     }
 }
 
+/** 현재 위치로 이동 */
 @Composable
 fun CustomMyLocationButton(
     modifier: Modifier = Modifier,
@@ -145,32 +147,30 @@ fun CustomMyLocationButton(
     }
 }
 
+/** 경로 안내 Bottom Sheet */
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DirectionSelectDialog(
-    viewModel: MapViewModel = hiltViewModel()
+fun DirectionBottomSheet(
+    onClose: (isShowBottomSheet: Boolean) -> Unit
 ) {
-    AlertDialog(
-        text = {
-            Column(
-                modifier = Modifier.verticalScroll(rememberScrollState())
-            ) {
-                Text(
-                    text = stringResource(R.string.language_title),
-                    style = MaterialTheme.typography.titleMedium
-                )
-
-            }
+    val sheetState = rememberModalBottomSheetState()
+    val scope = rememberCoroutineScope()
+    ModalBottomSheet(
+        onDismissRequest = {
+            onClose(false)
         },
-        onDismissRequest = viewModel::closeDirectionSelectDialog,
-        confirmButton = {
-            TextButton(
-                onClick = viewModel::closeDirectionSelectDialog,
-                colors = ButtonDefaults.textButtonColors(
-                    contentColor = MaterialTheme.colorScheme.onBackground
-                )
-            ) {
-                Text(stringResource(R.string.btn_close))
+        scrimColor = Color.Transparent,
+        sheetState = sheetState
+    ) {
+        // Sheet content
+        Button(onClick = {
+            scope.launch { sheetState.hide() }.invokeOnCompletion {
+                if (!sheetState.isVisible) {
+                    onClose(false)
+                }
             }
+        }) {
+            Text("Hide bottom sheet")
         }
-    )
+    }
 }

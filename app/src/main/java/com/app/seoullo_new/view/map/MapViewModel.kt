@@ -4,9 +4,11 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.app.domain.model.Direction
 import com.app.domain.model.LatLngLiteral
+import com.app.domain.model.ReverseGeocoding
 import com.app.domain.model.common.ApiState
 import com.app.domain.repository.MapRepository
 import com.app.domain.usecase.direction.GetDirectionUseCase
+import com.app.domain.usecase.direction.GetReverseGeocodingUseCase
 import com.app.seoullo_new.BuildConfig
 import com.app.seoullo_new.di.DispatcherProvider
 import com.app.seoullo_new.utils.Logging
@@ -29,6 +31,7 @@ import javax.inject.Inject
 class MapViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     dispatcherProvider: DispatcherProvider,
+    private val reverseGeocodingUseCase: GetReverseGeocodingUseCase,
     private val directionUseCase: GetDirectionUseCase,
     private val locationService: LocationService,
     private val mapRepository: MapRepository
@@ -41,9 +44,15 @@ class MapViewModel @Inject constructor(
     private val _dialogState = MutableStateFlow(DialogState())
     val dialogState: StateFlow<DialogState> = _dialogState.asStateFlow()
 
+    // 현재 위치
     private val _currentLocation = MutableStateFlow<LatLng?>(null)
     val currentLocation = _currentLocation.asStateFlow()
 
+    // 지오코딩 결과
+    private val _currentAddress = MutableStateFlow<ApiState<ReverseGeocoding>>(ApiState.Initial())
+    val currentAddress = _currentAddress.asStateFlow()
+
+    // 길 찾기 결과
     private val _direction = MutableStateFlow<ApiState<Direction>>(ApiState.Initial())
     val direction = _direction.asStateFlow()
 
@@ -63,6 +72,26 @@ class MapViewModel @Inject constructor(
                         _currentLocation.value = it
                     }
                 }
+        }
+    }
+
+    fun getCurrentLocationAddress(
+        languageCode: String
+    ) {
+        _currentLocation.value?.let {
+            val currentLatLng = LatLngLiteral(
+                lat = it.latitude,
+                lng = it.longitude
+            )
+            onIO {
+                reverseGeocodingUseCase(
+                    latLng = mapRepository.setLatLng(currentLatLng),
+                    languageCode = languageCode,
+                    apiKey = BuildConfig.SEOULLO_GOOGLE_MAPS_API_KEY
+                ).collect { state ->
+                    _currentAddress.value = state
+                }
+            }
         }
     }
 

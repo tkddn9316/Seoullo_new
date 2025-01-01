@@ -272,7 +272,11 @@ fun PlacesDetailView(
         // TODO: TEST
         Button(
             onClick = {
-                val latLngLiteral = LatLngLiteral(placesDetail.latitude, placesDetail.longitude)
+                val latLngLiteral = LatLngLiteral(
+                    lat = placesDetail.latitude,
+                    lng = placesDetail.longitude,
+                    address = placesDetail.address
+                )
                 val json = Json.encodeToString(latLngLiteral)
                 val encodedJson = Uri.encode(json)
                 onDirectionClick(encodedJson)

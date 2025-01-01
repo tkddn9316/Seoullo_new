@@ -32,12 +32,11 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.app.domain.model.theme.DynamicTheme
 import com.app.domain.model.theme.Language
 import com.app.domain.model.theme.ThemeMode
-import com.app.domain.model.theme.ThemeSetting
-import com.app.domain.repository.SettingRepository
 import com.app.seoullo_new.R
 import com.app.seoullo_new.utils.Constants.getDynamicThemeTitle
 import com.app.seoullo_new.utils.Constants.getLanguageTitle
 import com.app.seoullo_new.utils.Constants.getThemeModeTitle
+import com.app.seoullo_new.view.base.FakeSettingRepository
 import com.app.seoullo_new.view.util.RadioItem
 import com.app.seoullo_new.view.util.navigation.Route
 import com.app.seoullo_new.view.util.theme.LocalDynamicTheme
@@ -324,14 +323,4 @@ fun TestSettingScreen() {
             settingOnClick = {}
         )
     }
-}
-
-class FakeSettingRepository : SettingRepository {
-    override suspend fun fetchThemes(): ThemeSetting {
-        return ThemeSetting()
-    }
-
-    override suspend fun updateThemes(themeSetting: ThemeSetting) {}
-
-    override suspend fun updateLanguage(themeSetting: ThemeSetting) {}
 }
