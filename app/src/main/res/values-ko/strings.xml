@@ -65,6 +65,7 @@
     <string name="current_location">내 위치</string>
     <string name="current_location_error">출발지 또는 목적지 영역을 선택해주세요.</string>
     <string name="enter">길 찾기</string>
+    <string name="enter_error">출발지와 목적지를 모두 입력해주세요.</string>
 
     <!--  setting  -->
     <string name="theme_title">테마 설정</string>

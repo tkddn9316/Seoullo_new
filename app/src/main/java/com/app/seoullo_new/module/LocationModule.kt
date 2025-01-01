@@ -1,8 +1,8 @@
 package com.app.seoullo_new.module
 
 import android.content.Context
-import com.app.seoullo_new.view.util.LocationService
-import com.app.seoullo_new.view.util.LocationServiceInterface
+import com.app.seoullo_new.utils.LocationService
+import com.app.seoullo_new.utils.LocationServiceInterface
 import com.google.android.gms.location.LocationServices
 import dagger.Binds
 import dagger.Module

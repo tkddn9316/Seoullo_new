@@ -1,4 +1,4 @@
-package com.app.seoullo_new.view.util
+package com.app.seoullo_new.utils
 
 import android.annotation.SuppressLint
 import android.content.Context

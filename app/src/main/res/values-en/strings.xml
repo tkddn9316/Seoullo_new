@@ -65,6 +65,7 @@
     <string name="current_location">Current Location</string>
     <string name="current_location_error">Please select a starting or destination area.</string>
     <string name="enter">enter</string>
+    <string name="enter_error">Please input both Starting and Destination.</string>
 
     <!--  setting  -->
     <string name="theme_title">Theme Setting</string>

@@ -41,24 +41,28 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewModelScope
+import com.app.domain.model.LatLngLiteral
 import com.app.domain.model.ReverseGeocoding
 import com.app.domain.model.common.ApiState
 import com.app.domain.model.theme.Language
 import com.app.seoullo_new.R
+import com.app.seoullo_new.view.util.singleClickable
 import com.app.seoullo_new.view.util.theme.LocalLanguage
 import kotlinx.coroutines.launch
 
 /** 위치 선택 다이얼로그 */
 @Composable
 fun DirectionSelectDialog(
-    viewModel: MapViewModel = hiltViewModel()
+    viewModel: MapViewModel = hiltViewModel(),
+    destination: String
 ) {
     val context = LocalContext.current
     val language = LocalLanguage.current
 
     var startingText by remember { mutableStateOf("") }
-    var destinationText by remember { mutableStateOf("") }
+    var destinationText by remember { mutableStateOf(destination.ifEmpty { "" }) }
 
     // FocusRequester 및 FocusManager 설정
     val textField1FocusRequester = FocusRequester()
@@ -66,6 +70,9 @@ fun DirectionSelectDialog(
     // 현재 Focus 상태 관리
     var isTextField1Focused by remember { mutableStateOf(false) }
     var isTextField2Focused by remember { mutableStateOf(false) }
+
+    val currentLocationErrorMessage = stringResource(R.string.current_location_error)
+    val enterErrorMessage = stringResource(R.string.enter_error)
 
     AlertDialog(
         title = { Text(text = stringResource(R.string.select_places_title)) },
@@ -145,39 +152,12 @@ fun DirectionSelectDialog(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     // current location
-                    val currentLocationError = stringResource(R.string.current_location_error)
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
                         modifier = Modifier
                             .weight(1f)
                             .fillMaxHeight()
-                            .clickable {
-//                                viewModel.getCurrentLocationAddress(
-//                                    languageCode = if (language == Language.ENGLISH) "en" else "ko"
-//                                )
-//                                when(currentAddress) {
-//                                    is ApiState.Initial -> {}
-//                                    is ApiState.Loading -> {}
-//                                    is ApiState.Success -> {
-//                                        val address = (currentAddress as ApiState.Success<ReverseGeocoding>).data ?: ReverseGeocoding()
-//                                        when {
-//                                            isTextField1Focused -> {
-//                                                startingText = address.address
-//                                            }
-//                                            isTextField2Focused -> {
-//                                                destinationText = address.address
-//                                            }
-//                                            else -> {
-//
-//                                            }
-//                                        }
-//                                    }
-//                                    is ApiState.Error -> {
-//                                        val error = (currentAddress as ApiState.Error).message
-//                                        Toast.makeText(context, error, Toast.LENGTH_SHORT).show()
-//                                    }
-//                                }
-
+                            .singleClickable {
                                 when {
                                     isTextField1Focused -> {
                                         viewModel.getAddressText(
@@ -196,7 +176,7 @@ fun DirectionSelectDialog(
                                         }
                                     }
                                     else -> {
-                                        Toast.makeText(context, currentLocationError, Toast.LENGTH_SHORT).show()
+                                        Toast.makeText(context, currentLocationErrorMessage, Toast.LENGTH_SHORT).show()
                                     }
                                 }
                             }
@@ -206,7 +186,7 @@ fun DirectionSelectDialog(
                             contentDescription = null
                         )
                         Text(
-                            modifier = Modifier.padding(10.dp,0.dp,0.dp,0.dp),
+                            modifier = Modifier.padding(10.dp, 0.dp, 0.dp, 0.dp),
                             text = stringResource(R.string.current_location)
                         )
                     }
@@ -218,12 +198,27 @@ fun DirectionSelectDialog(
                     )
 
                     // enter
+                    // TODO: 임시(지오코딩으로 수정)
+                    val currentPosition by viewModel.currentLocation.collectAsStateWithLifecycle()
+
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
                         modifier = Modifier
                             .weight(1f)
                             .fillMaxHeight()
                             .clickable {
+                                if (startingText.isNotEmpty() && destinationText.isNotEmpty()) {
+                                    viewModel.getDirection(
+                                        destination = viewModel.latLng,
+                                        starting = LatLngLiteral(
+                                            lat = currentPosition!!.latitude,
+                                            lng = currentPosition!!.longitude
+                                        ),
+                                        languageCode = if (language == Language.ENGLISH) "en" else "ko"
+                                    )
+                                } else {
+                                    Toast.makeText(context, enterErrorMessage, Toast.LENGTH_SHORT).show()
+                                }
                             }
                     ) {
                         Icon(

@@ -109,9 +109,15 @@ fun MapScreen(
             }
         }
 
+        // 이전 화면에서 입장 시
+        LaunchedEffect(key1 = viewModel.latLng.address.isNotEmpty()) {
+            viewModel.openDirectionSelectDialog()
+        }
+
         if (dialogState.isDirectionSelectDialogOpen) {
             DirectionSelectDialog(
-                viewModel = viewModel
+                viewModel = viewModel,
+                destination = viewModel.latLng.address
             )
         }
 

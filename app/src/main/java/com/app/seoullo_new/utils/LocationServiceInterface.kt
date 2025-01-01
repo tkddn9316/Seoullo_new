@@ -1,4 +1,4 @@
-package com.app.seoullo_new.view.util
+package com.app.seoullo_new.utils
 
 import com.google.android.gms.maps.model.LatLng
 import kotlinx.coroutines.flow.Flow
