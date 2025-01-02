@@ -43,12 +43,13 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewModelScope
-import com.app.domain.model.LatLngLiteral
+import com.app.domain.model.DirectionRequest
 import com.app.domain.model.ReverseGeocoding
 import com.app.domain.model.common.ApiState
 import com.app.domain.model.theme.Language
 import com.app.seoullo_new.R
 import com.app.seoullo_new.utils.Constants.FocusedField
+import com.app.seoullo_new.utils.Logging
 import com.app.seoullo_new.view.util.singleClickable
 import com.app.seoullo_new.view.util.theme.LocalLanguage
 import kotlinx.coroutines.launch
@@ -56,14 +57,23 @@ import kotlinx.coroutines.launch
 /** 위치 선택 다이얼로그 */
 @Composable
 fun DirectionSelectDialog(
-    viewModel: MapViewModel = hiltViewModel(),
-    destination: String
+    viewModel: MapViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
     val language = LocalLanguage.current
 
-    var startingText by remember { mutableStateOf("") }
-    var destinationText by remember { mutableStateOf(destination.ifEmpty { "" }) }
+    var startingRequest by remember { mutableStateOf(DirectionRequest()) }
+    var destinationRequest by remember { mutableStateOf(
+        DirectionRequest(
+            lat = viewModel.latLng.lat,
+            lng = viewModel.latLng.lng,
+            address = viewModel.latLng.address.ifEmpty { "" },
+            placeId = viewModel.latLng.placeId.ifEmpty { "" }
+        )
+    ) }
+
+    Logging.e(startingRequest)
+    Logging.e(destinationRequest)
 
     // FocusRequester 및 FocusManager 설정
     val textField1FocusRequester = FocusRequester()
@@ -84,9 +94,9 @@ fun DirectionSelectDialog(
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     IconButton(
                         onClick = {
-                            val tempText = startingText
-                            startingText = destinationText
-                            destinationText = tempText
+                            val tempRequest = startingRequest
+                            startingRequest = destinationRequest
+                            destinationRequest = tempRequest
                         }
                     ) {
                         Icon(
@@ -102,15 +112,27 @@ fun DirectionSelectDialog(
                                 .onFocusChanged { focusState ->
                                     if (focusState.isFocused) focusedField = FocusedField.STARTING
                                 },
-                            value = startingText,
-                            onValueChange = { startingText = it },
+                            value = startingRequest.address,
+                            onValueChange = { newAddress ->
+                                startingRequest = startingRequest.copy(
+                                    lat = 0.0,
+                                    lng = 0.0,
+                                    address = newAddress,
+                                    placeId = ""
+                                )
+                            },
                             label = { Text(text = stringResource(R.string.starting)) },
                             supportingText = { Text(text = stringResource(R.string.starting_supporting)) },
                             singleLine = true,
                             trailingIcon = {
-                                if (startingText.isNotEmpty()) {
+                                if (startingRequest.address.isNotEmpty()) {
                                     IconButton(
-                                        onClick = { startingText = "" }
+                                        onClick = { startingRequest = startingRequest.copy(
+                                            lat = 0.0,
+                                            lng = 0.0,
+                                            address = "",
+                                            placeId = ""
+                                        ) }
                                     ) {
                                         Icon(
                                             imageVector = Icons.Filled.Clear,
@@ -128,15 +150,27 @@ fun DirectionSelectDialog(
                                 .onFocusChanged { focusState ->
                                     if (focusState.isFocused) focusedField = FocusedField.DESTINATION
                                 },
-                            value = destinationText,
-                            onValueChange = { destinationText = it },
+                            value = destinationRequest.address,
+                            onValueChange = { newAddress ->
+                                destinationRequest = destinationRequest.copy(
+                                    lat = 0.0,
+                                    lng = 0.0,
+                                    address = newAddress,
+                                    placeId = ""
+                                )
+                            },
                             label = { Text(text = stringResource(R.string.destination)) },
                             supportingText = { Text(text = stringResource(R.string.destination_supporting)) },
                             singleLine = true,
                             trailingIcon = {
-                                if (destinationText.isNotEmpty()) {
+                                if (destinationRequest.address.isNotEmpty()) {
                                     IconButton(
-                                        onClick = { destinationText = "" }
+                                        onClick = { destinationRequest = destinationRequest.copy(
+                                            lat = 0.0,
+                                            lng = 0.0,
+                                            address = "",
+                                            placeId = ""
+                                        ) }
                                     ) {
                                         Icon(
                                             imageVector = Icons.Filled.Clear,
@@ -168,9 +202,19 @@ fun DirectionSelectDialog(
                                         language = if (language == Language.ENGLISH) "en" else "ko"
                                     ) { address ->
                                         if (focusedField == FocusedField.STARTING) {
-                                            startingText = address
+                                            startingRequest = startingRequest.copy(
+                                                lat = 0.0,
+                                                lng = 0.0,
+                                                address = address.address,
+                                                placeId = address.placeId
+                                            )
                                         } else if (focusedField == FocusedField.DESTINATION) {
-                                            destinationText = address
+                                            destinationRequest = destinationRequest.copy(
+                                                lat = 0.0,
+                                                lng = 0.0,
+                                                address = address.address,
+                                                placeId = address.placeId
+                                            )
                                         }
                                     }
                                 } else {
@@ -195,7 +239,7 @@ fun DirectionSelectDialog(
                     )
 
                     // enter
-                    // TODO: 임시(지오코딩으로 수정)
+                    // TODO: 임시
                     val currentPosition by viewModel.currentLocation.collectAsStateWithLifecycle()
 
                     Row(
@@ -204,13 +248,10 @@ fun DirectionSelectDialog(
                             .weight(1f)
                             .fillMaxHeight()
                             .clickable {
-                                if (startingText.isNotEmpty() && destinationText.isNotEmpty()) {
+                                if (startingRequest.address.isNotEmpty() && destinationRequest.address.isNotEmpty()) {
                                     viewModel.getDirection(
-                                        destination = viewModel.latLng,
-                                        starting = LatLngLiteral(
-                                            lat = currentPosition!!.latitude,
-                                            lng = currentPosition!!.longitude
-                                        ),
+                                        destination = destinationRequest,
+                                        starting = startingRequest,
                                         languageCode = if (language == Language.ENGLISH) "en" else "ko"
                                     )
                                 } else {
@@ -247,7 +288,7 @@ fun DirectionSelectDialog(
 fun MapViewModel.getAddressText(
     context: Context,
     language: String,
-    responseText: (response: String) -> Unit
+    responseText: (response: ReverseGeocoding) -> Unit
 ) {
     viewModelScope.launch {
         getCurrentLocationAddress(language)
@@ -255,7 +296,7 @@ fun MapViewModel.getAddressText(
             when (state) {
                 is ApiState.Success -> {
                     val address = state.data ?: ReverseGeocoding()
-                    responseText(address.address)
+                    responseText(address)
                 }
                 is ApiState.Error -> {
                     // 오류 처리

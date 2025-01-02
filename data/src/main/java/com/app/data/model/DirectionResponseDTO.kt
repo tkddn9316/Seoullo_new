@@ -15,7 +15,9 @@ data class DirectionResponseDTO(
     val routes: List<Route>,
     /** 요청 상태가 포함되어 있으며, 요청이 실패한 이유를 추적하는데 도움이 되는 디버깅 정보가 포함될 수 있습니다. */
     @SerializedName("status")
-    val status: String
+    val status: String,      // "OK", "INVALID_REQUEST"
+    @SerializedName("error_message")
+    val errorMessage: String
 ) {
     data class GeocodedWaypoint(
         /** 지오코딩 작업으로 인한 상태 코드를 나타냅니다. 이 필드에는 다음 값이 포함될 수 있습니다.

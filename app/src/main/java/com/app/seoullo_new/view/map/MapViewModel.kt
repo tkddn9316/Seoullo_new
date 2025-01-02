@@ -3,7 +3,7 @@ package com.app.seoullo_new.view.map
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.app.domain.model.Direction
-import com.app.domain.model.LatLngLiteral
+import com.app.domain.model.DirectionRequest
 import com.app.domain.model.ReverseGeocoding
 import com.app.domain.model.common.ApiState
 import com.app.domain.repository.MapRepository
@@ -38,7 +38,7 @@ class MapViewModel @Inject constructor(
 ) : BaseViewModel2(dispatcherProvider) {
     // 이전 화면(PlacesDetail)에서 가져온 목적지 위/경도
     private val json: String = checkNotNull(savedStateHandle["latlng"])
-    val latLng: LatLngLiteral by lazy { Json.decodeFromString<LatLngLiteral>(json) }
+    val latLng: DirectionRequest by lazy { Json.decodeFromString<DirectionRequest>(json) }
 
     // 목적지 선택 팝업
     private val _dialogState = MutableStateFlow(DialogState())
@@ -79,7 +79,7 @@ class MapViewModel @Inject constructor(
         languageCode: String
     ) {
         _currentLocation.value?.let {
-            val currentLatLng = LatLngLiteral(
+            val currentLatLng = DirectionRequest(
                 lat = it.latitude,
                 lng = it.longitude
             )
@@ -96,14 +96,14 @@ class MapViewModel @Inject constructor(
     }
 
     fun getDirection(
-        destination: LatLngLiteral,
-        starting: LatLngLiteral,
+        destination: DirectionRequest,
+        starting: DirectionRequest,
         languageCode: String
     ) {
         onIO {
             directionUseCase(
-                destination = mapRepository.setLatLng(destination),
-                starting = mapRepository.setLatLng(starting),
+                destination = mapRepository.onDirectionRequestProcess(destination),
+                starting = mapRepository.onDirectionRequestProcess(starting),
                 languageCode = languageCode,
                 apiKey = BuildConfig.SEOULLO_GOOGLE_MAPS_API_KEY
             ).flowOn(Dispatchers.IO)

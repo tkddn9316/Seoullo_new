@@ -38,7 +38,8 @@ fun directionMapper(directionResponseDTO: DirectionResponseDTO): Direction =
                 summary = routesDTO.summary,
                 warnings = routesDTO.warnings?.firstOrNull() ?: ""
             )
-        }
+        },
+//        errorMessage = directionResponseDTO.errorMessage.ifEmpty { "" }
     )
 
 private fun mapStep(stepDTO: DirectionResponseDTO.Route.Leg.Step): Direction.Route.Leg.Step =

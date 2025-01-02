@@ -58,7 +58,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.app.domain.model.LatLngLiteral
+import com.app.domain.model.DirectionRequest
 import com.app.domain.model.Places
 import com.app.domain.model.PlacesDetailGoogle
 import com.app.domain.model.common.ApiState
@@ -401,12 +401,13 @@ fun PlacesDetailView(
         // TODO: TEST
         Button(
             onClick = {
-                val latLngLiteral = LatLngLiteral(
+                val directionRequest = DirectionRequest(
                     lat = placesDetail.latitude,
                     lng = placesDetail.longitude,
-                    address = places.address
+                    address = places.address,
+                    placeId = places.id
                 )
-                val json = Json.encodeToString(latLngLiteral)
+                val json = Json.encodeToString(directionRequest)
                 val encodedJson = Uri.encode(json)
                 onDirectionClick(encodedJson)
             }

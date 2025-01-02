@@ -116,8 +116,7 @@ fun MapScreen(
 
         if (dialogState.isDirectionSelectDialogOpen) {
             DirectionSelectDialog(
-                viewModel = viewModel,
-                destination = viewModel.latLng.address
+                viewModel = viewModel
             )
         }
 
