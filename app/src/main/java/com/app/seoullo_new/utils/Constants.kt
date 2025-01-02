@@ -75,4 +75,8 @@ object Constants {
     enum class SortCriteria {
         RATING, REVIEW
     }
+
+    enum class FocusedField {
+        STARTING, DESTINATION
+    }
 }

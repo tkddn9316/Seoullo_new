@@ -36,7 +36,7 @@ import com.app.seoullo_new.R
 import com.app.seoullo_new.utils.Constants.getDynamicThemeTitle
 import com.app.seoullo_new.utils.Constants.getLanguageTitle
 import com.app.seoullo_new.utils.Constants.getThemeModeTitle
-import com.app.seoullo_new.view.base.FakeSettingRepository
+import com.app.seoullo_new.view.base.MockSettingRepository
 import com.app.seoullo_new.view.util.RadioItem
 import com.app.seoullo_new.view.util.navigation.Route
 import com.app.seoullo_new.view.util.theme.LocalDynamicTheme
@@ -316,7 +316,7 @@ fun getAppVersionName(): String {
 @Preview
 @Composable
 fun TestSettingScreen() {
-    val mockViewModel = SettingViewModel(FakeSettingRepository())
+    val mockViewModel = SettingViewModel(MockSettingRepository())
     MaterialTheme {
         SettingScreen(
             viewModel = mockViewModel,

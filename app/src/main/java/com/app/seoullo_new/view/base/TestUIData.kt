@@ -6,13 +6,13 @@ import com.app.seoullo_new.di.DispatcherProvider
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 
-class FakeDispatcherProvider : DispatcherProvider {
+class MockDispatcherProvider : DispatcherProvider {
     override val main: CoroutineDispatcher = Dispatchers.Main
     override val io: CoroutineDispatcher = Dispatchers.IO
     override val default: CoroutineDispatcher = Dispatchers.Default
 }
 
-class FakeSettingRepository : SettingRepository {
+class MockSettingRepository : SettingRepository {
     override suspend fun fetchThemes(): ThemeSetting {
         return ThemeSetting()
     }
@@ -21,4 +21,3 @@ class FakeSettingRepository : SettingRepository {
 
     override suspend fun updateLanguage(themeSetting: ThemeSetting) {}
 }
-

@@ -48,6 +48,7 @@ import com.app.domain.model.ReverseGeocoding
 import com.app.domain.model.common.ApiState
 import com.app.domain.model.theme.Language
 import com.app.seoullo_new.R
+import com.app.seoullo_new.utils.Constants.FocusedField
 import com.app.seoullo_new.view.util.singleClickable
 import com.app.seoullo_new.view.util.theme.LocalLanguage
 import kotlinx.coroutines.launch
@@ -68,8 +69,7 @@ fun DirectionSelectDialog(
     val textField1FocusRequester = FocusRequester()
     val textField2FocusRequester = FocusRequester()
     // 현재 Focus 상태 관리
-    var isTextField1Focused by remember { mutableStateOf(false) }
-    var isTextField2Focused by remember { mutableStateOf(false) }
+    var focusedField by remember { mutableStateOf<FocusedField?>(null) }
 
     val currentLocationErrorMessage = stringResource(R.string.current_location_error)
     val enterErrorMessage = stringResource(R.string.enter_error)
@@ -99,7 +99,9 @@ fun DirectionSelectDialog(
                         OutlinedTextField(
                             modifier = Modifier
                                 .focusRequester(textField1FocusRequester)
-                                .onFocusChanged { isTextField1Focused = it.isFocused },
+                                .onFocusChanged { focusState ->
+                                    if (focusState.isFocused) focusedField = FocusedField.STARTING
+                                },
                             value = startingText,
                             onValueChange = { startingText = it },
                             label = { Text(text = stringResource(R.string.starting)) },
@@ -123,7 +125,9 @@ fun DirectionSelectDialog(
                         OutlinedTextField(
                             modifier = Modifier
                                 .focusRequester(textField2FocusRequester)
-                                .onFocusChanged { isTextField2Focused = it.isFocused },
+                                .onFocusChanged { focusState ->
+                                    if (focusState.isFocused) focusedField = FocusedField.DESTINATION
+                                },
                             value = destinationText,
                             onValueChange = { destinationText = it },
                             label = { Text(text = stringResource(R.string.destination)) },
@@ -158,26 +162,19 @@ fun DirectionSelectDialog(
                             .weight(1f)
                             .fillMaxHeight()
                             .singleClickable {
-                                when {
-                                    isTextField1Focused -> {
-                                        viewModel.getAddressText(
-                                            context = context,
-                                            language = if (language == Language.ENGLISH) "en" else "ko"
-                                        ) {
-                                            startingText = it
+                                if (focusedField != null) {
+                                    viewModel.getAddressText(
+                                        context = context,
+                                        language = if (language == Language.ENGLISH) "en" else "ko"
+                                    ) { address ->
+                                        if (focusedField == FocusedField.STARTING) {
+                                            startingText = address
+                                        } else if (focusedField == FocusedField.DESTINATION) {
+                                            destinationText = address
                                         }
                                     }
-                                    isTextField2Focused -> {
-                                        viewModel.getAddressText(
-                                            context = context,
-                                            language = if (language == Language.ENGLISH) "en" else "ko"
-                                        ) {
-                                            destinationText = it
-                                        }
-                                    }
-                                    else -> {
-                                        Toast.makeText(context, currentLocationErrorMessage, Toast.LENGTH_SHORT).show()
-                                    }
+                                } else {
+                                    Toast.makeText(context, currentLocationErrorMessage, Toast.LENGTH_SHORT).show()
                                 }
                             }
                     ) {
