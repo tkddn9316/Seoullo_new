@@ -3,6 +3,7 @@ package com.app.seoullo_new.view.placesDetail
 import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -14,12 +15,15 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Directions
 import androidx.compose.material.icons.filled.Language
 import androidx.compose.material.icons.filled.NearMe
 import androidx.compose.material.icons.filled.Phone
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -104,14 +108,17 @@ fun PlaceDetailScreen(
                         // API 로딩 처리
                         LoadingOverlay()
                     }
+
                     is ApiState.Success -> {
-                        val placesDetail = (detailState as ApiState.Success<PlacesDetail>).data ?: PlacesDetail()
+                        val placesDetail =
+                            (detailState as ApiState.Success<PlacesDetail>).data ?: PlacesDetail()
                         PlacesDetailView(
                             placesDetail = placesDetail,
                             places = placesState,
                             onDirectionClick = onDirectionClick
                         )
                     }
+
                     is ApiState.Error -> {
                         val error = (detailState as ApiState.Error).message
                         ErrorScreen(error ?: "")
@@ -219,6 +226,42 @@ fun PlacesDetailView(
             Spacer(modifier = Modifier.height(8.dp))
 
             Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center      // 중앙 정렬
+            ) {
+                Button(
+                    modifier = Modifier.fillMaxWidth(0.5f),
+                    shape = RoundedCornerShape(6.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.surfaceVariant,
+                        contentColor = MaterialTheme.colorScheme.onBackground
+                    ),
+                    onClick = {
+                        val directionRequest = DirectionRequest(
+                            lat = placesDetail.latitude,
+                            lng = placesDetail.longitude,
+                            address = placesDetail.address,
+                            placeId = ""    // 구글 전용이라 비워둠
+                        )
+                        val json = Json.encodeToString(directionRequest)
+                        val encodedJson = Uri.encode(json)
+                        onDirectionClick(encodedJson)
+                    }
+                ) {
+                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                        Icon(
+                            imageVector = Icons.Filled.Directions,
+                            contentDescription = null
+                        )
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Text(text = stringResource(R.string.direction_title))
+                    }
+                }
+            }
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            Row(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Icon(
@@ -267,23 +310,6 @@ fun PlacesDetailView(
                     style = MaterialTheme.typography.bodyMedium
                 )
             }
-        }
-
-        // TODO: TEST
-        Button(
-            onClick = {
-                val directionRequest = DirectionRequest(
-                    lat = placesDetail.latitude,
-                    lng = placesDetail.longitude,
-                    address = placesDetail.address,
-                    placeId = ""    // 구글 전용이라 비워둠
-                )
-                val json = Json.encodeToString(directionRequest)
-                val encodedJson = Uri.encode(json)
-                onDirectionClick(encodedJson)
-            }
-        ) {
-            Text(text = "버튼")
         }
     }
 

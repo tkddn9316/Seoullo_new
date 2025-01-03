@@ -1,5 +1,6 @@
 package com.app.seoullo_new.view.map
 
+import android.content.Context
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.app.domain.model.Direction
@@ -18,6 +19,7 @@ import com.app.seoullo_new.view.util.DialogState
 import com.google.android.gms.maps.model.LatLng
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -63,6 +65,9 @@ class MapViewModel @Inject constructor(
 
     fun openDirectionSelectDialog() = _dialogState.update { it.copy(isDirectionSelectDialogOpen = true) }
     fun closeDirectionSelectDialog() = _dialogState.update { it.copy(isDirectionSelectDialogOpen = false) }
+
+    fun openDirectionBottomSheet() = _dialogState.update { it.copy(isDirectionBottomSheetOpen = true) }
+    fun closeDirectionBottomSheet() = _dialogState.update { it.copy(isDirectionBottomSheetOpen = false) }
 
     fun getCurrentLocation() {
         viewModelScope.launch {
@@ -111,5 +116,22 @@ class MapViewModel @Inject constructor(
                     _direction.value = state
                 }
         }
+    }
+
+    /** Debug Fake Data */
+    fun getFakeDirection(context: Context) {
+        viewModelScope.launch {
+            _direction.value = ApiState.Loading()
+
+            delay(1000)
+
+            val jsonString = context.assets.open("example_google_direction2.json").bufferedReader().use { it.readText() }
+            val fakePlaces = Json.decodeFromString<Direction>(jsonString)
+            _direction.value = ApiState.Success(fakePlaces)
+        }
+    }
+
+    fun handleDirectionSuccess() {
+        _direction.value = ApiState.Initial()
     }
 }

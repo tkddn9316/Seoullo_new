@@ -1,34 +1,43 @@
 package com.app.seoullo_new.view.map
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Directions
-import androidx.compose.material3.Button
+import androidx.compose.material3.BottomSheetScaffold
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
-import androidx.compose.material3.rememberModalBottomSheetState
+import androidx.compose.material3.rememberBottomSheetScaffoldState
+import androidx.compose.material3.rememberStandardBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.app.seoullo_new.view.util.theme.LocalLanguage
+import com.app.domain.model.Direction
+import com.app.domain.model.common.ApiState
+import com.app.seoullo_new.utils.Logging
+import com.app.seoullo_new.view.base.LoadingOverlay
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
@@ -37,21 +46,14 @@ import com.google.maps.android.compose.GoogleMap
 import com.google.maps.android.compose.MapProperties
 import com.google.maps.android.compose.MapUiSettings
 import com.google.maps.android.compose.rememberCameraPositionState
-import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MapScreen(
     viewModel: MapViewModel = hiltViewModel()
 ) {
-//    LaunchedEffect(key1 = destinationLatlng.lat > 0f && destinationLatlng.lng > 0f) {
-//        viewModel.getDirection(
-//            lat = latlng.lat,
-//            lng = latlng.lng,
-//            languageCode = if (language == Language.KOREA) "ko" else "en"
-//        )
-//    }
-    // 언어
-    val language = LocalLanguage.current
+    val context = LocalContext.current
+    val scope = rememberCoroutineScope()
 
     // 구글 맵 관련
     val cameraPositionState: CameraPositionState = rememberCameraPositionState {
@@ -79,6 +81,7 @@ fun MapScreen(
     val mapUiSettings by remember {
         mutableStateOf(
             MapUiSettings(
+                zoomControlsEnabled = false,
                 mapToolbarEnabled = false,
                 myLocationButtonEnabled = true
             )
@@ -90,42 +93,83 @@ fun MapScreen(
 
     // Direction 결과
     val directionState by viewModel.direction.collectAsStateWithLifecycle()
-    var showBottomSheet by remember { mutableStateOf(false) }
 
-    Box(Modifier.fillMaxSize()) {
-        GoogleMap(
-            cameraPositionState = cameraPositionState,
-            properties = mapProperties,
-            uiSettings = mapUiSettings,
-            onMyLocationButtonClick = {
-                viewModel.getCurrentLocation()
-                true
-            }
+    // BottomSheetScaffold 관련
+    val sheetState = rememberBottomSheetScaffoldState(
+        bottomSheetState = rememberStandardBottomSheetState(
+            skipHiddenState = true // Hidden 상태를 활성화
         )
-        Column {
+    )
+    LaunchedEffect(directionState) {
+        if (directionState is ApiState.Success) {
+            sheetState.bottomSheetState.expand() // Bottom Sheet 열기
+        } else {
+            sheetState.bottomSheetState.partialExpand() // Bottom Sheet 닫기
+        }
+    }
+
+    BottomSheetScaffold(
+        scaffoldState = sheetState,
+        sheetContent = {
+            DirectionBottomSheet(
+                viewModel = viewModel,
+                directionState = directionState
+            )
+        },
+        sheetPeekHeight = 64.dp
+    ) {
+        Box(Modifier.fillMaxSize()) {
+            GoogleMap(
+                cameraPositionState = cameraPositionState,
+                properties = mapProperties,
+                uiSettings = mapUiSettings,
+                onMyLocationButtonClick = {
+                    viewModel.getCurrentLocation()
+                    true
+                }
+            )
+
             CustomMyLocationButton {
                 viewModel.openDirectionSelectDialog()
-//                showBottomSheet = true
+            }
+
+            // 이전 화면에서 입장 시 팝업 바로 열리도록
+            LaunchedEffect(key1 = viewModel.latLng.address.isNotEmpty()) {
+                viewModel.openDirectionSelectDialog()
+            }
+
+            // 팝업
+            if (dialogState.isDirectionSelectDialogOpen) {
+                // 상태 초기화
+                DirectionSelectDialog(
+                    viewModel = viewModel
+                )
+            }
+
+            when (directionState) {
+                is ApiState.Initial -> {}
+                is ApiState.Loading -> {
+                    viewModel.closeDirectionSelectDialog()
+                    // API 로딩 처리
+                    LoadingOverlay()
+                }
+
+                is ApiState.Success -> {
+                    val direction =
+                        (directionState as ApiState.Success<Direction>).data ?: Direction(
+                            status = "INVALID_REQUEST",
+                            routes = emptyList()
+                        )
+                    Logging.e(direction)
+                }
+
+                is ApiState.Error -> {
+                    // TODO: ERROR Message 구글이 주는 걸로 사용 전환
+                    val error = (directionState as ApiState.Error).message
+                    Toast.makeText(context, error ?: "", Toast.LENGTH_SHORT).show()
+                }
             }
         }
-
-        // 이전 화면에서 입장 시
-        LaunchedEffect(key1 = viewModel.latLng.address.isNotEmpty()) {
-            viewModel.openDirectionSelectDialog()
-        }
-
-        if (dialogState.isDirectionSelectDialogOpen) {
-            DirectionSelectDialog(
-                viewModel = viewModel
-            )
-        }
-
-        // TODO: dialogState.isDirectionSelectDialogOpen 처럼 변경
-//        if (showBottomSheet) {
-//            DirectionBottomSheet {
-//                showBottomSheet = it
-//            }
-//        }
     }
 }
 
@@ -139,6 +183,7 @@ fun CustomMyLocationButton(
         onClick = onClick,
         modifier = modifier
             .size(56.dp)
+            .padding(8.dp)
             .shadow(8.dp, CircleShape),
         shape = CircleShape,
         containerColor = MaterialTheme.colorScheme.primary,
@@ -153,29 +198,27 @@ fun CustomMyLocationButton(
 }
 
 /** 경로 안내 Bottom Sheet */
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DirectionBottomSheet(
-    onClose: (isShowBottomSheet: Boolean) -> Unit
+    viewModel: MapViewModel = hiltViewModel(),
+    directionState: ApiState<Direction>
 ) {
-    val sheetState = rememberModalBottomSheetState()
-    val scope = rememberCoroutineScope()
-    ModalBottomSheet(
-        onDismissRequest = {
-            onClose(false)
-        },
-        scrimColor = Color.Transparent,
-        sheetState = sheetState
-    ) {
-        // Sheet content
-        Button(onClick = {
-            scope.launch { sheetState.hide() }.invokeOnCompletion {
-                if (!sheetState.isVisible) {
-                    onClose(false)
-                }
-            }
-        }) {
-            Text("Hide bottom sheet")
+    val context = LocalContext.current
+    if (directionState is ApiState.Success) {
+        val direction = directionState.data ?: Direction(
+            status = "INVALID_REQUEST",
+            routes = emptyList()
+        )
+
+        val a = rememberScrollState()
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .fillMaxHeight(0.4f)
+                .verticalScroll(a)
+                .padding(16.dp)
+        ) {
+            Text(direction.toString())
         }
     }
 }

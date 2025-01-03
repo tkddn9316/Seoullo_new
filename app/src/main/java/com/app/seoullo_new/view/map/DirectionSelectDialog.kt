@@ -41,12 +41,12 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewModelScope
 import com.app.domain.model.DirectionRequest
 import com.app.domain.model.ReverseGeocoding
 import com.app.domain.model.common.ApiState
 import com.app.domain.model.theme.Language
+import com.app.seoullo_new.BuildConfig
 import com.app.seoullo_new.R
 import com.app.seoullo_new.utils.Constants.FocusedField
 import com.app.seoullo_new.utils.Logging
@@ -239,9 +239,6 @@ fun DirectionSelectDialog(
                     )
 
                     // enter
-                    // TODO: 임시
-                    val currentPosition by viewModel.currentLocation.collectAsStateWithLifecycle()
-
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
                         modifier = Modifier
@@ -249,11 +246,15 @@ fun DirectionSelectDialog(
                             .fillMaxHeight()
                             .clickable {
                                 if (startingRequest.address.isNotEmpty() && destinationRequest.address.isNotEmpty()) {
-                                    viewModel.getDirection(
-                                        destination = destinationRequest,
-                                        starting = startingRequest,
-                                        languageCode = if (language == Language.ENGLISH) "en" else "ko"
-                                    )
+                                    if (BuildConfig.DEBUG) {
+                                        viewModel.getFakeDirection(context)
+                                    } else {
+                                        viewModel.getDirection(
+                                            destination = destinationRequest,
+                                            starting = startingRequest,
+                                            languageCode = if (language == Language.ENGLISH) "en" else "ko"
+                                        )
+                                    }
                                 } else {
                                     Toast.makeText(context, enterErrorMessage, Toast.LENGTH_SHORT).show()
                                 }

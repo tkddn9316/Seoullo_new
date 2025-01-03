@@ -18,9 +18,11 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccessTime
+import androidx.compose.material.icons.filled.Directions
 import androidx.compose.material.icons.filled.NearMe
 import androidx.compose.material.icons.filled.Phone
 import androidx.compose.material.icons.filled.Star
@@ -128,8 +130,11 @@ fun PlaceDetailNearbyScreen(
                         // API 로딩 처리
                         LoadingOverlay()
                     }
+
                     is ApiState.Success -> {
-                        val placesDetail = (detailState as ApiState.Success<PlacesDetailGoogle>).data ?: PlacesDetailGoogle()
+                        val placesDetail =
+                            (detailState as ApiState.Success<PlacesDetailGoogle>).data
+                                ?: PlacesDetailGoogle()
                         PlacesDetailView(
                             viewModel = viewModel,
                             placesDetail = placesDetail,
@@ -137,6 +142,7 @@ fun PlaceDetailNearbyScreen(
                             onDirectionClick = onDirectionClick
                         )
                     }
+
                     is ApiState.Error -> {
                         val error = (detailState as ApiState.Error).message
                         ErrorScreen(error ?: "")
@@ -285,6 +291,42 @@ fun PlacesDetailView(
             Spacer(modifier = Modifier.height(8.dp))
 
             Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center      // 중앙 정렬
+            ) {
+                Button(
+                    modifier = Modifier.fillMaxWidth(0.5f),
+                    shape = RoundedCornerShape(6.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.surfaceVariant,
+                        contentColor = MaterialTheme.colorScheme.onBackground
+                    ),
+                    onClick = {
+                        val directionRequest = DirectionRequest(
+                            lat = placesDetail.latitude,
+                            lng = placesDetail.longitude,
+                            address = places.address,
+                            placeId = places.id
+                        )
+                        val json = Json.encodeToString(directionRequest)
+                        val encodedJson = Uri.encode(json)
+                        onDirectionClick(encodedJson)
+                    }
+                ) {
+                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                        Icon(
+                            imageVector = Icons.Filled.Directions,
+                            contentDescription = null
+                        )
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Text(text = stringResource(R.string.direction_title))
+                    }
+                }
+            }
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            Row(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Icon(
@@ -396,23 +438,6 @@ fun PlacesDetailView(
                     text = stringResource(R.string.see_more)
                 )
             }
-        }
-
-        // TODO: TEST
-        Button(
-            onClick = {
-                val directionRequest = DirectionRequest(
-                    lat = placesDetail.latitude,
-                    lng = placesDetail.longitude,
-                    address = places.address,
-                    placeId = places.id
-                )
-                val json = Json.encodeToString(directionRequest)
-                val encodedJson = Uri.encode(json)
-                onDirectionClick(encodedJson)
-            }
-        ) {
-            Text(text = "버튼")
         }
     }
 }
