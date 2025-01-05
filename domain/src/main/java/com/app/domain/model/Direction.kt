@@ -68,7 +68,8 @@ data class Direction(
                     val transitColor: String = "",
                     val transitName: String = "",
                     val transitTextColor: String = "",
-                    val transitIcon: String = ""
+                    val transitIcon: String = "",
+                    val transitType: String = ""
                 ) {
                     @Serializable
                     data class LatLngLiteral(

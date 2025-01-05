@@ -78,7 +78,8 @@ private fun mapStep(stepDTO: DirectionResponseDTO.Route.Leg.Step): Direction.Rou
                 transitColor = transitDTO.line.color,
                 transitName = "${transitDTO.line.name} ${transitDTO.line.shortName}",
                 transitTextColor = transitDTO.line.textColor,
-                transitIcon = transitDTO.line.vehicle.icon
+                transitIcon = "https:${transitDTO.line.vehicle.icon}",
+                transitType = transitDTO.line.vehicle.type
             )
         },
         steps = stepDTO.steps?.map { nestedStepDTO ->

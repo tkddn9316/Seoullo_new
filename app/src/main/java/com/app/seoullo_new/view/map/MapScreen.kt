@@ -2,15 +2,10 @@ package com.app.seoullo_new.view.map
 
 import android.widget.Toast
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Directions
 import androidx.compose.material3.BottomSheetScaffold
@@ -18,7 +13,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.material3.rememberBottomSheetScaffoldState
 import androidx.compose.material3.rememberStandardBottomSheetState
 import androidx.compose.runtime.Composable
@@ -27,24 +21,31 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.app.domain.model.Direction
 import com.app.domain.model.common.ApiState
-import com.app.seoullo_new.utils.Logging
+import com.app.seoullo_new.R
+import com.app.seoullo_new.utils.Util.toColor
 import com.app.seoullo_new.view.base.LoadingOverlay
+import com.app.seoullo_new.view.ui.theme.colorGridItem7
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.model.CameraPosition
+import com.google.android.gms.maps.model.Dot
+import com.google.android.gms.maps.model.Gap
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.RoundCap
 import com.google.maps.android.compose.CameraPositionState
 import com.google.maps.android.compose.GoogleMap
 import com.google.maps.android.compose.MapProperties
 import com.google.maps.android.compose.MapUiSettings
+import com.google.maps.android.compose.Polyline
 import com.google.maps.android.compose.rememberCameraPositionState
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -61,7 +62,10 @@ fun MapScreen(
         position = CameraPosition.fromLatLngZoom(LatLng(37.5665, 126.9780), 18f)
     }
     val currentPosition by viewModel.currentLocation.collectAsStateWithLifecycle()
-    LaunchedEffect(currentPosition) {
+    val currentPositionBounds by viewModel.currentLocationBounds.collectAsStateWithLifecycle()
+    LaunchedEffect(
+        key1 = currentPosition
+    ) {
         currentPosition?.let { location ->
             cameraPositionState.animate(
                 CameraUpdateFactory.newLatLngZoom(location, 18f),
@@ -69,6 +73,17 @@ fun MapScreen(
             )
         }
     }
+    LaunchedEffect(
+        key1 = currentPositionBounds
+    ) {
+        currentPositionBounds?.let { bounds ->
+            cameraPositionState.animate(
+                CameraUpdateFactory.newLatLngBounds(bounds, 100),
+                1000 // 애니메이션 지속 시간 (밀리초)
+            )
+        }
+    }
+    val polyline by viewModel.polyline.collectAsStateWithLifecycle()
     val mapProperties by remember {
         mutableStateOf(
             MapProperties(
@@ -97,7 +112,7 @@ fun MapScreen(
     // BottomSheetScaffold 관련
     val sheetState = rememberBottomSheetScaffoldState(
         bottomSheetState = rememberStandardBottomSheetState(
-            skipHiddenState = true // Hidden 상태를 활성화
+            skipHiddenState = true
         )
     )
     LaunchedEffect(directionState) {
@@ -127,14 +142,28 @@ fun MapScreen(
                     viewModel.getCurrentLocation()
                     true
                 }
-            )
+            ) {
+                // Walking은 점선, 그 이외는 실선
+                Polyline(
+                    points = polyline.polyLine,
+                    color = if (polyline.transitColor.isNotEmpty()) polyline.transitColor.toColor() else colorGridItem7,
+                    width = 10f,
+                    startCap = RoundCap(),
+                    endCap = RoundCap(),
+                    pattern = if (polyline.transitType == stringResource(R.string.travel_mode_walking)) listOf(
+                        Dot(), Gap(10f)
+                    ) else null
+                )
+            }
 
-            CustomMyLocationButton {
+            DirectionSelectButton {
                 viewModel.openDirectionSelectDialog()
             }
 
             // 이전 화면에서 입장 시 팝업 바로 열리도록
-            LaunchedEffect(key1 = viewModel.latLng.address.isNotEmpty()) {
+            LaunchedEffect(
+                key1 = viewModel.latLng.address.isNotEmpty()
+            ) {
                 viewModel.openDirectionSelectDialog()
             }
 
@@ -146,6 +175,7 @@ fun MapScreen(
                 )
             }
 
+            var lastErrorMessage by remember { mutableStateOf<String?>(null) }
             when (directionState) {
                 is ApiState.Initial -> {}
                 is ApiState.Loading -> {
@@ -153,29 +183,24 @@ fun MapScreen(
                     // API 로딩 처리
                     LoadingOverlay()
                 }
-
                 is ApiState.Success -> {
-                    val direction =
-                        (directionState as ApiState.Success<Direction>).data ?: Direction(
-                            status = "INVALID_REQUEST",
-                            routes = emptyList()
-                        )
-                    Logging.e(direction)
-                }
 
+                }
                 is ApiState.Error -> {
                     // TODO: ERROR Message 구글이 주는 걸로 사용 전환
-                    val error = (directionState as ApiState.Error).message
-                    Toast.makeText(context, error ?: "", Toast.LENGTH_SHORT).show()
+                    val errorMessage = (directionState as ApiState.Error).message
+                    if (lastErrorMessage != errorMessage) {
+                        Toast.makeText(context, errorMessage ?: "", Toast.LENGTH_SHORT).show()
+                        lastErrorMessage = errorMessage
+                    }
                 }
             }
         }
     }
 }
 
-/** 현재 위치로 이동 */
 @Composable
-fun CustomMyLocationButton(
+fun DirectionSelectButton(
     modifier: Modifier = Modifier,
     onClick: () -> Unit
 ) {
@@ -194,31 +219,5 @@ fun CustomMyLocationButton(
             tint = Color.White,
             contentDescription = "My Location"
         )
-    }
-}
-
-/** 경로 안내 Bottom Sheet */
-@Composable
-fun DirectionBottomSheet(
-    viewModel: MapViewModel = hiltViewModel(),
-    directionState: ApiState<Direction>
-) {
-    val context = LocalContext.current
-    if (directionState is ApiState.Success) {
-        val direction = directionState.data ?: Direction(
-            status = "INVALID_REQUEST",
-            routes = emptyList()
-        )
-
-        val a = rememberScrollState()
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .fillMaxHeight(0.4f)
-                .verticalScroll(a)
-                .padding(16.dp)
-        ) {
-            Text(direction.toString())
-        }
     }
 }

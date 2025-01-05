@@ -65,7 +65,8 @@ interface ApiInterface {
         @Query("origin") starting: String,
         @Query("language") languageCode: String,
         @Query("mode") mode: String = "transit",
-        @Query("transit_mode") transitMode: String = "bus|subway",
+        @Query("transit_mode") transitMode: String = "bus|rail",
+        @Query("transit_routing_preference") preference: String = "fewer_transfers",
         @Query("key") apiKey: String
     ): DirectionResponseDTO
 }

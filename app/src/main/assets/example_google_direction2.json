@@ -80,9 +80,10 @@
                 "departureStopTime": "오후 9:54",
                 "transitAgenciesName": "경기도버스운송사업조합",
                 "transitColor": "#374ff2",
-                "transitIcon": "//maps.gstatic.com/mapfiles/transit/iw2/6/bus2.png",
+                "transitIcon": "https://maps.gstatic.com/mapfiles/transit/iw2/6/bus2.png",
                 "transitName": "경기 일반버스 60-1",
-                "transitTextColor": "#ffffff"
+                "transitTextColor": "#ffffff",
+                "transitType": "BUS"
               },
               "travelMode": "TRANSIT"
             },
@@ -212,9 +213,10 @@
                 "departureStopTime": "오후 10:16",
                 "transitAgenciesName": "소사원시운영(주)",
                 "transitColor": "#80a62d",
-                "transitIcon": "//maps.gstatic.com/mapfiles/transit/iw2/6/subway2.png",
+                "transitIcon": "https://maps.gstatic.com/mapfiles/transit/iw2/6/subway2.png",
                 "transitName": "수도권전철 서해선",
-                "transitTextColor": "#ffffff"
+                "transitTextColor": "#ffffff",
+                "transitType": "SUBWAY"
               },
               "travelMode": "TRANSIT"
             },
@@ -376,9 +378,10 @@
                 "departureStopTime": "오후 10:37",
                 "transitAgenciesName": "공항철도",
                 "transitColor": "#0095d4",
-                "transitIcon": "//maps.gstatic.com/mapfiles/transit/iw2/6/subway2.png",
+                "transitIcon": "https://maps.gstatic.com/mapfiles/transit/iw2/6/subway2.png",
                 "transitName": "수도권전철 공항철도",
-                "transitTextColor": "#ffffff"
+                "transitTextColor": "#ffffff",
+                "transitType": "SUBWAY"
               },
               "travelMode": "TRANSIT"
             },
@@ -508,9 +511,10 @@
                 "departureStopTime": "오후 11:17",
                 "transitAgenciesName": "인천광역시버스운송사업조합",
                 "transitColor": "#0abb0c",
-                "transitIcon": "//maps.gstatic.com/mapfiles/transit/iw2/6/bus2.png",
+                "transitIcon": "https://maps.gstatic.com/mapfiles/transit/iw2/6/bus2.png",
                 "transitName": "인천 지선버스 2201",
-                "transitTextColor": "#ffffff"
+                "transitTextColor": "#ffffff",
+                "transitType": "BUS"
               },
               "travelMode": "TRANSIT"
             },

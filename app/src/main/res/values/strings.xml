@@ -68,6 +68,15 @@
     <string name="current_location_error">Please select a starting or destination area.</string>
     <string name="enter">enter</string>
     <string name="enter_error">Please input both Starting and Destination.</string>
+    <string name="duration">Duration</string>
+    <string name="start2">Start</string>
+    <string name="arrival">Arrival</string>
+
+    <!--  type  -->
+    <string name="travel_mode_walking" translatable="false">WALKING</string>
+    <string name="travel_mode_transit" translatable="false">TRANSIT</string>
+    <string name="transit_type_bus" translatable="false">BUS</string>
+    <string name="transit_type_subway" translatable="false">SUBWAY</string>
 
     <!--  setting  -->
     <string name="theme_title">Theme Setting</string>

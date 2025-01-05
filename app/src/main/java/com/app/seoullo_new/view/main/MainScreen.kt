@@ -115,7 +115,7 @@ fun MainScreen(
                 ) {
                     tabs.forEachIndexed { index, item ->
                         val isSelected = pagerState.currentPage == index
-                        val tabColor = if (isSelected) Color_92c8e0 else Color_Gray500
+                        val tabColor = if (isSelected) MaterialTheme.colorScheme.primary else Color_Gray500
                         Tab(
                             text = { Text(text = item, color = tabColor) },
                             icon = { Icon(imageVector = getIcon(item), contentDescription = null, tint = tabColor) },

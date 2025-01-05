@@ -14,9 +14,12 @@ import com.app.seoullo_new.BuildConfig
 import com.app.seoullo_new.di.DispatcherProvider
 import com.app.seoullo_new.utils.LocationService
 import com.app.seoullo_new.utils.Logging
+import com.app.seoullo_new.utils.Util.decodePolyline
 import com.app.seoullo_new.view.base.BaseViewModel2
 import com.app.seoullo_new.view.util.DialogState
+import com.app.seoullo_new.view.util.PolyLine
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.LatLngBounds
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -50,6 +53,16 @@ class MapViewModel @Inject constructor(
     private val _currentLocation = MutableStateFlow<LatLng?>(null)
     val currentLocation = _currentLocation.asStateFlow()
 
+    // 지도 전체 영역
+    private val _currentLocationBounds = MutableStateFlow<LatLngBounds?>(null)
+    val currentLocationBounds = _currentLocationBounds.asStateFlow()
+
+    // 폴리라인
+//    private val _polyline = MutableStateFlow<List<LatLng>>(emptyList())
+//    val polyline = _polyline.asStateFlow()
+    private val _polyline = MutableStateFlow(PolyLine())
+    val polyline = _polyline.asStateFlow()
+
     // 역 지오코딩 결과
     private val _currentAddress = MutableStateFlow<ApiState<ReverseGeocoding>>(ApiState.Initial())
     val currentAddress = _currentAddress.asStateFlow()
@@ -66,9 +79,6 @@ class MapViewModel @Inject constructor(
     fun openDirectionSelectDialog() = _dialogState.update { it.copy(isDirectionSelectDialogOpen = true) }
     fun closeDirectionSelectDialog() = _dialogState.update { it.copy(isDirectionSelectDialogOpen = false) }
 
-    fun openDirectionBottomSheet() = _dialogState.update { it.copy(isDirectionBottomSheetOpen = true) }
-    fun closeDirectionBottomSheet() = _dialogState.update { it.copy(isDirectionBottomSheetOpen = false) }
-
     fun getCurrentLocation() {
         viewModelScope.launch {
             locationService.getCurrentLocation()
@@ -78,6 +88,34 @@ class MapViewModel @Inject constructor(
                     }
                 }
         }
+    }
+
+    fun setCurrentLocationBounds(
+        lat1: Double, lng1: Double,
+        lat2: Double, lng2: Double
+    ) {
+        val southWest = LatLng(minOf(lat1, lat2), minOf(lng1, lng2)) // 가장 작은 위도와 경도
+        val northEast = LatLng(maxOf(lat1, lat2), maxOf(lng1, lng2)) // 가장 큰 위도와 경도
+
+        val latLngBounds = LatLngBounds(southWest, northEast)
+        _currentLocationBounds.value = latLngBounds
+    }
+
+    fun setPolyLine(encodedPolyLine: String) {
+        val polyLine = PolyLine(
+            transitColor = "#FFA500",
+            polyLine = decodePolyline(encodedPolyLine)
+        )
+        _polyline.value = polyLine
+    }
+
+    fun setPolyLine(data: Direction.Route.Leg.Step) {
+        val polyLine = PolyLine(
+            transitType = data.travelMode,
+            transitColor = data.transitDetails?.transitColor ?: "",
+            polyLine = decodePolyline(data.polyline)
+        )
+        _polyline.value = polyLine
     }
 
     fun getCurrentLocationAddress(
@@ -126,12 +164,8 @@ class MapViewModel @Inject constructor(
             delay(1000)
 
             val jsonString = context.assets.open("example_google_direction2.json").bufferedReader().use { it.readText() }
-            val fakePlaces = Json.decodeFromString<Direction>(jsonString)
-            _direction.value = ApiState.Success(fakePlaces)
+            val fakeDirection = Json.decodeFromString<Direction>(jsonString)
+            _direction.value = ApiState.Success(fakeDirection)
         }
-    }
-
-    fun handleDirectionSuccess() {
-        _direction.value = ApiState.Initial()
     }
 }
