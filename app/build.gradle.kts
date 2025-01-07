@@ -182,4 +182,7 @@ dependencies {
 
     // kotlin json
     implementation(libs.kotlinx.serialization.json)
+
+    // balloon
+    implementation(libs.balloon)
 }
