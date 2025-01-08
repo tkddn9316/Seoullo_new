@@ -21,6 +21,8 @@
     <string name="intro3_title">Let\'s going to Seoullo!</string>
     <string name="intro3_contents">Now start a happy tour of Seoul with "Seoullo"!</string>
 
+    <string name="balloon_info_text">Also try the “NearBySearch” feature!</string>
+
     <!--  main  -->
     <string name="tab_home">Home</string>
     <string name="tab_travel">Travel</string>

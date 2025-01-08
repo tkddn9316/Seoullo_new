@@ -21,6 +21,8 @@
     <string name="intro3_title">Let\'s going to Seoullo!</string>
     <string name="intro3_contents">Now start a happy tour of Seoul with Seoullo!</string>
 
+    <string name="balloon_info_text">“내 주변 찾기” 기능도 사용해보세요!</string>
+
     <!--  main  -->
     <string name="tab_home">홈</string>
     <string name="tab_travel">여행</string>

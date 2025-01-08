@@ -22,6 +22,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -53,6 +54,8 @@ fun SeoulloAppBar(
     onActionClick: (Int) -> Unit
 ) {
     var isMenuExpanded by remember { mutableStateOf(false) }
+
+    var isOpenBalloon by rememberSaveable { mutableStateOf(true) }
     val builder = rememberBalloonBuilder {
         setCircularDuration(500)
         setArrowSize(10)
@@ -95,13 +98,18 @@ fun SeoulloAppBar(
             },
             actions = {
                 if (showAction) {
-                    Balloon (
+                    Balloon(
                         builder = builder,
-                        onBalloonWindowInitialized = { balloonWindow = it },
-                        onComposedAnchor = { balloonWindow?.showAlignBottom() },
+                        onBalloonWindowInitialized = {
+                            if (isOpenBalloon) balloonWindow = it
+                        },
+                        onComposedAnchor = {
+                            balloonWindow?.showAlignBottom()
+                            isOpenBalloon = false   // 최초 1번만 오픈
+                        },
                         balloonContent = {
                             Text(
-                                text = "aaaaaaaaaaaaaaaaaaaaaaaaa",
+                                text = stringResource(R.string.balloon_info_text),
                                 color = Color.White
                             )
                         }
