@@ -25,11 +25,8 @@ class HomeViewModel @Inject constructor(
     private val checkingManager: CheckingManager,
     private val weatherUseCase: WeatherUseCase
 ) : BaseViewModel2(dispatcherProvider) {
-    private val _weatherListResult = MutableStateFlow<List<Weather>>(emptyList())
+    private val _weatherListResult = MutableStateFlow<ApiState<List<Weather>>>(ApiState.Initial())
     val weatherListResult = _weatherListResult.asStateFlow()
-
-    private val _test = MutableStateFlow<ApiState<Direction>>(ApiState.Initial())
-    val test = _test.asStateFlow()
 
     init {
         checkPermission()
@@ -45,6 +42,7 @@ class HomeViewModel @Inject constructor(
         }
     }
 
+    // TODO: 스플래시에서도 날씨 정보 가지고 오도록?
     private fun getWeatherList() {
         val date = DateTime.now().toString("yyyyMMdd")
         onIO {
@@ -53,7 +51,6 @@ class HomeViewModel @Inject constructor(
             ).flowOn(Dispatchers.IO)
                 .catch { Logging.e(it.message ?: "") }
                 .collect {
-                    Logging.e(it)
                     _weatherListResult.value = it
                 }
         }

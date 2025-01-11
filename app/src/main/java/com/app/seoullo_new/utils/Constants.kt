@@ -45,6 +45,21 @@ object Constants {
 //        FESTIVAL("85")
 //    }
 
+    enum class WeatherCategory(val category: String) {
+        Sky("SKY"),     // 하늘 상태
+        PTY("PTY"),     // 강수 형태
+        Temperature("TMP"),     // 1시간 기온
+        UUU("UUU"),     // 풍속(동서성분)
+        VVV("VVV"),     // 풍속(남북성분)
+        WindDirection("VEC"),     // 풍향
+        WindSpeed("WSD"),   // 풍속
+        POP("POP"),     // 강수확률
+        Wave("WAV"),     // 파고
+        Precipitation("PCP"),   // 강수량
+        Humidity("REH"),     // 습도
+        Snow("SNO")     // 눈의 양
+    }
+
     fun getTabTitle(language: Language): List<String> {
         return if (language == Language.KOREA) {
             listOf("홈", "여행", "설정")

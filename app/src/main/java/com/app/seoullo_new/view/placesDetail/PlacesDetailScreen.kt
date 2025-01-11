@@ -312,33 +312,4 @@ fun PlacesDetailView(
             }
         }
     }
-
-//    Box(Modifier.fillMaxSize()) {
-//        GoogleMap(
-//            cameraPositionState = cameraPositionState,
-//            properties = mapProperties,
-//            uiSettings = mapUiSettings
-//        )
-//        Column {
-//            Button(onClick = {
-//                mapProperties = mapProperties.copy(
-//                    isBuildingEnabled = !mapProperties.isBuildingEnabled
-//                )
-//            }) {
-//                Text(text = "Toggle isBuildingEnabled")
-//            }
-//            Button(onClick = {
-//                mapUiSettings = mapUiSettings.copy(
-//                    mapToolbarEnabled = !mapUiSettings.mapToolbarEnabled
-//                )
-//            }) {
-//                Text(text = "Toggle mapToolbarEnabled")
-//            }
-//        }
-//    }
-//    GoogleMap(
-//        googleMapOptionsFactory = {
-//            GoogleMapOptions().mapId("MyMapId")
-//        }
-//    )
 }
