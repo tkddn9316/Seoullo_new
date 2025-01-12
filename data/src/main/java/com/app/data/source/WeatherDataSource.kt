@@ -6,6 +6,7 @@ import kotlinx.coroutines.flow.Flow
 interface WeatherDataSource {
     fun getWeather(
         serviceKey: String,
-        baseDate: String
+        baseDate: String,
+        baseTime: String
     ): Flow<WeatherDTO>
 }

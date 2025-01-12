@@ -11,14 +11,12 @@ import javax.inject.Inject
 
 class WeatherUseCase @Inject constructor(private val weatherRepository: WeatherRepository) {
     operator fun invoke(
-        serviceKey: String,
-        baseDate: String
+        serviceKey: String
     ): Flow<ApiState<List<Weather>>> = flow {
         emit(ApiState.Loading())
         try {
             weatherRepository.getWeather(
-                serviceKey = serviceKey,
-                baseDate = baseDate
+                serviceKey = serviceKey
             ).collect {
                 emit(ApiState.Success(it))
             }

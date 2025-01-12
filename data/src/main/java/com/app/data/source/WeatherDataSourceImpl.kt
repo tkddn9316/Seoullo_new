@@ -8,12 +8,17 @@ import javax.inject.Inject
 
 class WeatherDataSourceImpl @Inject constructor(private val apiInterface: ApiInterface3) :
     WeatherDataSource {
-    override fun getWeather(serviceKey: String, baseDate: String): Flow<WeatherDTO> {
+    override fun getWeather(
+        serviceKey: String,
+        baseDate: String,
+        baseTime: String
+    ): Flow<WeatherDTO> {
         return flow {
             emit(
                 apiInterface.getWeather(
                     serviceKey = serviceKey,
-                    baseDate = baseDate
+                    baseDate = baseDate,
+                    baseTime = baseTime
                 )
             )
         }

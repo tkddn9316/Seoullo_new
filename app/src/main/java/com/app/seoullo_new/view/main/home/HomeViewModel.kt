@@ -1,7 +1,6 @@
 package com.app.seoullo_new.view.main.home
 
 import android.Manifest
-import com.app.domain.model.Direction
 import com.app.domain.model.Weather
 import com.app.domain.model.common.ApiState
 import com.app.domain.usecase.weather.WeatherUseCase
@@ -16,7 +15,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flowOn
-import org.joda.time.DateTime
 import javax.inject.Inject
 
 @HiltViewModel
@@ -44,10 +42,9 @@ class HomeViewModel @Inject constructor(
 
     // TODO: 스플래시에서도 날씨 정보 가지고 오도록?
     private fun getWeatherList() {
-        val date = DateTime.now().toString("yyyyMMdd")
         onIO {
             weatherUseCase(
-                BuildConfig.TOUR_API_KEY, date
+                serviceKey = BuildConfig.TOUR_API_KEY
             ).flowOn(Dispatchers.IO)
                 .catch { Logging.e(it.message ?: "") }
                 .collect {
