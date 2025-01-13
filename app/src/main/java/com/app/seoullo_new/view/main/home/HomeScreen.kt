@@ -1,5 +1,6 @@
 package com.app.seoullo_new.view.main.home
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -21,6 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -46,8 +48,10 @@ import com.app.seoullo_new.view.ui.theme.Color_Weather_Sunny_Dinner2
 // 기온, 강수확률, 풍속, 습도, 내일/모래 날씨, 미세먼지 등등...
 @Composable
 fun HomeScreen(
-    viewModel: HomeViewModel = hiltViewModel()
+    viewModel: HomeViewModel = hiltViewModel(),
+    modifier: Modifier = Modifier
 ) {
+    val context = LocalContext.current
 //    val skyWeather = weather.find { it.category == "SKY" }
 //    val ptyWeather = weather.find { it.category == "PTY" }
 //    val backgroundColor = when (skyWeather?.fcstValue) {
@@ -90,52 +94,27 @@ fun HomeScreen(
 //    }
 
     // 날씨 결과
-    val weatherState by viewModel.weatherListResult.collectAsStateWithLifecycle()
-    var lastErrorMessage by remember { mutableStateOf<String?>(null) }
+    val weatherList by viewModel.weatherListResult.collectAsStateWithLifecycle()
+    val backgroundColor by viewModel.homeBackgroundColor.collectAsStateWithLifecycle()
+    val errorMessage by viewModel.errorMessages.collectAsStateWithLifecycle()
 
-    when (weatherState) {
-        is ApiState.Initial -> {}
-        is ApiState.Loading -> {
-            // API 로딩 처리
-            LoadingOverlay()
-        }
-
-        is ApiState.Success -> {
-            val weatherList = (weatherState as ApiState.Success<List<Weather>>).data ?: emptyList()
-            WeatherScreen(
-                weatherList = weatherList
-            )
-        }
-
-        is ApiState.Error -> {
-            val errorMessage = (weatherState as ApiState.Error).message
-            if (lastErrorMessage != errorMessage) {
-                ErrorScreen(errorMessage ?: "")
-                lastErrorMessage = errorMessage
-            }
-        }
-    }
-}
-
-@Composable
-fun WeatherScreen(
-    modifier: Modifier = Modifier,
-    weatherList: List<Weather>
-) {
-//    val backgroundColor = weatherList.
     Scaffold { innerPadding ->
         LazyColumn(
             modifier = modifier
                 .fillMaxSize()
                 .background(
                     Brush.linearGradient(
-                        colors = listOf(Color_Weather_Sunny_Afternoon1, Color_Weather_Sunny_Afternoon2)
+                        colors = backgroundColor
                     )
                 )
                 .padding(innerPadding),
             contentPadding = PaddingValues(8.dp)
         ) {
 
+        }
+
+        if (!errorMessage.isNullOrEmpty()) {
+            Toast.makeText(context, errorMessage, Toast.LENGTH_SHORT).show()
         }
     }
 }

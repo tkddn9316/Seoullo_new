@@ -1,14 +1,19 @@
 package com.app.seoullo_new.view.main.home
 
 import android.Manifest
+import android.widget.Toast
+import androidx.compose.ui.graphics.Color
 import com.app.domain.model.Weather
 import com.app.domain.model.common.ApiState
+import com.app.domain.repository.HomeScreenRepository
 import com.app.domain.usecase.weather.WeatherUseCase
 import com.app.seoullo_new.BuildConfig
 import com.app.seoullo_new.di.DispatcherProvider
 import com.app.seoullo_new.utils.CheckingManager
 import com.app.seoullo_new.utils.Logging
 import com.app.seoullo_new.view.base.BaseViewModel2
+import com.app.seoullo_new.view.ui.theme.Color_Weather_Sunny_Afternoon1
+import com.app.seoullo_new.view.ui.theme.Color_Weather_Sunny_Afternoon2
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -20,11 +25,18 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     dispatcherProvider: DispatcherProvider,
+    private val homeScreenRepository: HomeScreenRepository,
     private val checkingManager: CheckingManager,
     private val weatherUseCase: WeatherUseCase
 ) : BaseViewModel2(dispatcherProvider) {
-    private val _weatherListResult = MutableStateFlow<ApiState<List<Weather>>>(ApiState.Initial())
+    private val _weatherListResult = MutableStateFlow<List<Weather>>(emptyList())
     val weatherListResult = _weatherListResult.asStateFlow()
+
+    private val _homeBackgroundColor = MutableStateFlow(listOf(Color_Weather_Sunny_Afternoon1, Color_Weather_Sunny_Afternoon2))
+    val homeBackgroundColor = _homeBackgroundColor.asStateFlow()
+
+    private val _errorMessages = MutableStateFlow<String?>(null)
+    val errorMessages = _errorMessages.asStateFlow()
 
     init {
         checkPermission()
@@ -47,9 +59,25 @@ class HomeViewModel @Inject constructor(
                 serviceKey = BuildConfig.TOUR_API_KEY
             ).flowOn(Dispatchers.IO)
                 .catch { Logging.e(it.message ?: "") }
-                .collect {
-                    _weatherListResult.value = it
+                .collect { state ->
+                    when (state) {
+                        is ApiState.Success -> {
+                            val weatherList = state.data ?: emptyList()
+                            _weatherListResult.value = weatherList
+                        }
+                        is ApiState.Error -> {
+                            val errorMessage = state.message
+                            if (_errorMessages.value != errorMessage) {
+                                _errorMessages.value = errorMessage
+                            }
+                        }
+                        else -> {}
+                    }
                 }
         }
     }
+
+//    fun setHomeBackgroundColor(): Color {
+//
+//    }
 }

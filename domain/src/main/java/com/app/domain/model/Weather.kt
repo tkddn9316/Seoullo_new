@@ -3,14 +3,14 @@ package com.app.domain.model
 import com.app.domain.model.common.BaseModel
 
 data class Weather(
-    val baseData: Int,
-    val baseTime: Int,
-    val category: String,
-    val fcstDate : Int,
-    val fcstTime : Int,
-    val fcstValue : String,
-    val nx : Int,
-    val ny : Int
+    val baseData: Int = 0,
+    val baseTime: Int = 0,
+    val category: String = "",
+    val fcstDate : Int = 0,
+    val fcstTime : Int = 0,
+    val fcstValue : String = "",
+    val nx : Int = 0,
+    val ny : Int = 0
 ) : BaseModel()
 
 

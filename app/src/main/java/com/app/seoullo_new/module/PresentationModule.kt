@@ -1,6 +1,7 @@
 package com.app.seoullo_new.module
 
 import android.content.Context
+import com.app.domain.repository.HomeScreenRepository
 import com.app.domain.repository.MapRepository
 import com.app.seoullo_new.utils.CheckingManager
 import dagger.Module
@@ -23,5 +24,11 @@ class PresentationModule {
     @Singleton
     fun provideMapRepository(): MapRepository {
         return MapRepository()
+    }
+
+    @Provides
+    @Singleton
+    fun provideHomeScreenRepository(): HomeScreenRepository {
+        return HomeScreenRepository()
     }
 }

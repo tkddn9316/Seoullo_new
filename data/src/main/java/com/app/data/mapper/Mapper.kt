@@ -9,6 +9,7 @@ import com.app.data.model.PlacesResponseDTO
 import com.app.data.model.ReverseGeocodingDTO
 import com.app.data.model.UserEntity
 import com.app.data.model.WeatherDTO
+import com.app.data.utils.Util.ApiSuccessCode
 import com.app.data.utils.Util.addHttps
 import com.app.domain.model.Places
 import com.app.domain.model.PlacesDetail
@@ -130,16 +131,24 @@ fun mapperToUser(userEntity: List<UserEntity>): List<User> =
         )
     }
 
-fun mapperToWeather(weatherDTO: WeatherDTO): List<Weather> =
-    weatherDTO.response.body.items.item.toList().map {
-        Weather(
-            baseData = it.baseData,
-            baseTime = it.baseTime,
-            category = it.category,
-            fcstDate = it.fcstDate,
-            fcstTime = it.fcstTime,
-            fcstValue = it.fcstValue,
-            nx = it.nx,
-            ny = it.ny
-        )
+fun mapperToWeather(weatherDTO: WeatherDTO): List<Weather> {
+    val header = weatherDTO.response.header
+    if (header.resultCode != ApiSuccessCode.Weather.code) {
+        throw Exception("${header.resultCode}: ${header.resultMsg}")
     }
+
+    return weatherDTO.response.body?.items?.let { items ->
+        items.item.toList().map {
+            Weather(
+                baseData = it.baseData,
+                baseTime = it.baseTime,
+                category = it.category,
+                fcstDate = it.fcstDate,
+                fcstTime = it.fcstTime,
+                fcstValue = it.fcstValue,
+                nx = it.nx,
+                ny = it.ny
+            )
+        }
+    } ?: run { emptyList() }
+}
