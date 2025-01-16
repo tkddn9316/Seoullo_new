@@ -1,11 +1,10 @@
 package com.app.seoullo_new.view.main.home
 
 import android.Manifest
-import android.widget.Toast
 import androidx.compose.ui.graphics.Color
 import com.app.domain.model.Weather
 import com.app.domain.model.common.ApiState
-import com.app.domain.repository.HomeScreenRepository
+import com.app.seoullo_new.view.util.WeatherUIRepository
 import com.app.domain.usecase.weather.WeatherUseCase
 import com.app.seoullo_new.BuildConfig
 import com.app.seoullo_new.di.DispatcherProvider
@@ -25,7 +24,7 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     dispatcherProvider: DispatcherProvider,
-    private val homeScreenRepository: HomeScreenRepository,
+    private val weatherUIRepository: WeatherUIRepository,
     private val checkingManager: CheckingManager,
     private val weatherUseCase: WeatherUseCase
 ) : BaseViewModel2(dispatcherProvider) {
@@ -34,6 +33,9 @@ class HomeViewModel @Inject constructor(
 
     private val _homeBackgroundColor = MutableStateFlow(listOf(Color_Weather_Sunny_Afternoon1, Color_Weather_Sunny_Afternoon2))
     val homeBackgroundColor = _homeBackgroundColor.asStateFlow()
+
+    private val _weatherIcon = MutableStateFlow(0)
+    val weatherIcon = _weatherIcon.asStateFlow()
 
     private val _errorMessages = MutableStateFlow<String?>(null)
     val errorMessages = _errorMessages.asStateFlow()
@@ -64,6 +66,8 @@ class HomeViewModel @Inject constructor(
                         is ApiState.Success -> {
                             val weatherList = state.data ?: emptyList()
                             _weatherListResult.value = weatherList
+                            _homeBackgroundColor.value = setHomeBackgroundColor(weatherList)
+                            _weatherIcon.value = setWeatherIcon(weatherList)
                         }
                         is ApiState.Error -> {
                             val errorMessage = state.message
@@ -77,7 +81,9 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-//    fun setHomeBackgroundColor(): Color {
-//
-//    }
+    fun setHomeBackgroundColor(items: List<Weather>): List<Color> =
+        weatherUIRepository.setColor(items = items)
+
+    fun setWeatherIcon(items: List<Weather>): Int =
+        weatherUIRepository.setWeatherIcon(items = items)
 }

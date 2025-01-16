@@ -8,6 +8,7 @@
     <string name="exit">\'뒤로\' 버튼을 한 번 더 누르면 앱이 종료됩니다.</string>
     <string name="yes">Y</string>
     <string name="no">N</string>
+    <string name="retry">다시 시도</string>
     <string name="error_failure_init_list">리스트 생성에 실패하였습니다.: %s</string>
     <string name="sign_in_with_google">구글로 시작하기</string>
     <string name="permission_denied">권한을 거부하면 이 서비스를 사용할 수 없습니다. 설정에서 권한을 켜주세요.</string>
@@ -49,7 +50,6 @@
     <string name="nearby_list">Nearby List</string>
     <string name="nearby_list_description">반경 1km 이내의 관광 명소 목록이 표시됩니다.(최대 20개)</string>
     <string name="seoul">Seoul</string>
-    <string name="temp_symbol">°</string>
     <string name="go_to_top">맨 위로 이동</string>
     <string name="sort_by_rating">별점 순으로 정렬</string>
     <string name="sort_by_review">리뷰 순으로 정렬</string>
