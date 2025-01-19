@@ -30,14 +30,17 @@ class PlacesNearbyRepositoryImpl @Inject constructor(
     ): Flow<List<Places>> {
         return flow {
             placesNearbyDataSource.getPlacesNearbyList(
-                apiKey,
-                mapperToPlaceNearbyDTO(placesNearbyRequest)
-            )
-                .flatMapConcat { getPhotoUrl(apiKey, it) }
-                .collect {
-                    // mapper로 변환하기(TourInfoDTO -> TourInfo)
-                    emit(mapperToPlaceNearby(it))
-                }
+                apiKey = apiKey,
+                placesNearbyRequestDTO = mapperToPlaceNearbyDTO(placesNearbyRequest)
+            ).flatMapConcat {
+                getPhotoUrl(
+                    apiKey = apiKey,
+                    data = it
+                )
+            }.collect {
+                // mapper로 변환하기(TourInfoDTO -> TourInfo)
+                emit(mapperToPlaceNearby(it))
+            }
         }
     }
 
@@ -48,11 +51,12 @@ class PlacesNearbyRepositoryImpl @Inject constructor(
         return flow {
             data.place?.map { place ->
                 if (!place.photos.isNullOrEmpty()) {
-                    // 무조건 1번째 사진 사용
-                    placesPhotoNearbyDataSource.getPlacePhotoNearby(place.photos[0].name, apiKey)
-                        .collect { response ->
-                            place.photoUrl = response.photoUri
-                        }
+                    placesPhotoNearbyDataSource.getPlacePhotoNearby(
+                        name = place.photos[0].name,    // 무조건 1번째 사진 사용
+                        key = apiKey
+                    ).collect { response ->
+                        place.photoUrl = response.photoUri
+                    }
                 } else {
                     place.photoUrl = ""
                 }

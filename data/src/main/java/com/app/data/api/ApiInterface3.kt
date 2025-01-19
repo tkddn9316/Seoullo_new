@@ -1,23 +1,31 @@
 package com.app.data.api
 
+import com.app.data.model.DustDTO
 import com.app.data.model.WeatherDTO
 import retrofit2.http.GET
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 /**
  * 서버와 통신 할 API 리스트(기상 관련)
  */
 interface ApiInterface3 {
-    // 단기 예보 조회
-    @GET("getVilageFcst")
+    @GET("onecall")
     suspend fun getWeather(
-        @Query("serviceKey") serviceKey: String,
-        @Query("dataType") dataType : String = "JSON",
-        @Query("numOfRows") numOfRows : Int = 12,
-        @Query("pageNo") pageNo : Int = 1,
-        @Query("base_date") baseDate : String,
-        @Query("base_time") baseTime : String,
-        @Query("nx") nx : String = "60",    // 서울 중구 기준
-        @Query("ny") ny : String = "127"
+        @Query("lat") lat: String = "37.567022",
+        @Query("lon") lon: String = "126.978640",      // 서울시청 위도/경도 고정
+        @Query("appid") apiKey: String,
+        @Query("exclude") exclude: String = "minutely,hourly,alerts",    // 분 단위 예보, 시간별 예보 제외
+        @Query("units") units: String = "metric",   // 단위: 섭씨
+        @Query("lang") languageCode: String
     ): WeatherDTO
+
+    @GET("{KEY}/{TYPE}/{SERVICE}/{START_INDEX}/{END_INDEX}")
+    suspend fun getDustData(
+        @Path("KEY") apiKey: String,
+        @Path("TYPE") type: String = "json",
+        @Path("SERVICE") service: String = "ListAvgOfSeoulAirQualityService",
+        @Path("START_INDEX") startIndex: Int = 1,
+        @Path("END_INDEX") endIndex: Int = 5
+    ): DustDTO
 }

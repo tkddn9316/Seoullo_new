@@ -10,6 +10,7 @@ import com.app.data.repository.SettingRepositoryImpl
 import com.app.data.repository.UserRepositoryImpl
 import com.app.data.repository.WeatherRepositoryImpl
 import com.app.data.source.DirectionDataSource
+import com.app.data.source.DustDataSource
 import com.app.data.source.PlacesDataSource
 import com.app.data.source.PlacesDetailDataSource
 import com.app.data.source.PlacesDetailGoogleDataSource
@@ -43,7 +44,10 @@ class RepositoryModule {
 
     @Provides
     @Singleton
-    fun providePlacesNearbyRepository(placesNearbyDataSource: PlacesNearbyDataSource, placesPhotoNearbyDataSource: PlacesPhotoNearbyDataSource): PlacesNearbyRepository {
+    fun providePlacesNearbyRepository(
+        placesNearbyDataSource: PlacesNearbyDataSource,
+        placesPhotoNearbyDataSource: PlacesPhotoNearbyDataSource
+    ): PlacesNearbyRepository {
         return PlacesNearbyRepositoryImpl(placesNearbyDataSource, placesPhotoNearbyDataSource)
     }
 
@@ -85,8 +89,11 @@ class RepositoryModule {
 
     @Provides
     @Singleton
-    fun provideWeatherRepository(weatherDataSource: WeatherDataSource): WeatherRepository {
-        return WeatherRepositoryImpl(weatherDataSource)
+    fun provideWeatherRepository(
+        weatherDataSource: WeatherDataSource,
+        dustDataSource: DustDataSource
+    ): WeatherRepository {
+        return WeatherRepositoryImpl(weatherDataSource, dustDataSource)
     }
 
     @Provides

@@ -5,6 +5,8 @@ import kotlinx.coroutines.flow.Flow
 
 interface WeatherRepository {
     fun getWeather(
-        serviceKey: String
-    ): Flow<List<Weather>>
+        weatherApiKey: String,
+        dustApiKey: String,
+        languageCode: String
+    ): Flow<Weather>
 }

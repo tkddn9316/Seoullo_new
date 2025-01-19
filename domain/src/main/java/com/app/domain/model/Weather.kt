@@ -3,152 +3,107 @@ package com.app.domain.model
 import com.app.domain.model.common.BaseModel
 
 data class Weather(
-    val baseData: Int = 0,
-    val baseTime: Int = 0,
-    val category: String = "",
-    val fcstDate : Int = 0,
-    val fcstTime : Int = 0,
-    val fcstValue : String = "",
-    val nx : Int = 0,
-    val ny : Int = 0
-) : BaseModel()
+    val lat: Double = 0.0,
+    val lng: Double = 0.0,
+    val clouds: Int = 0,
+    val dewPoint: Double = 0.0,
+    val currentTime: Int = 0,
+    val feelsLike: Double = 0.0,
+    val humidity: Int = 0,
+    val pressure: Int = 0,
+    val sunrise: Int = 0,
+    val sunset: Int = 0,
+    val temp: Double = 0.0,
+    val uvi: Double = 0.0,
+    val todayWeatherId: Int = 0,
+    val todayWeatherName: String = "",
+    val precipitation: Double = 0.0,
+    val dailyList: List<DailyWeather> = emptyList(),
+    val fineDust: Int = -1,
+    val ultraFineDust: Int = -1
+) : BaseModel() {
+    data class DailyWeather(
+        val dailyWeatherId: Int,
+        val dailyWeatherName: String,
+        val rainPercent: Double,
+        val maxTemp: Double,
+        val minTemp: Double
+    ) : BaseModel()
+}
 
 
 //{
-//  "response": {
-//    "header": {
-//      "resultCode": "00",
-//      "resultMsg": "NORMAL_SERVICE"
+//  "lat": 37.567,
+//  "lng": 126.9786,
+//  "clouds": 21,
+//  "dewPoint": -12.91,
+//  "currentTime": 1737226050,
+//  "feelsLike": -0.1,
+//  "humidity": 33,
+//  "pressure": 1020,
+//  "sunrise": 1737240255,
+//  "sunset": 1737276048,
+//  "temp": -0.1,
+//  "uvi": 0.0,
+//  "todayWeatherId": 801,
+//  "todayWeatherName": "Clouds",
+//  "precipitation": 0.0,
+//  "dailyList": [
+//    {
+//      "dailyWeatherId": 804,
+//      "dailyWeatherName": "Clouds",
+//      "rainPercent": 0.0,
+//      "maxTemp": 3.02,
+//      "minTemp": -0.15
 //    },
-//    "body": {
-//      "dataType": "JSON",
-//      "items": {
-//        "item": [
-//          {
-//            "baseDate": "20250111",
-//            "baseTime": "1100",
-//            "category": "TMP",
-//            "fcstDate": "20250111",
-//            "fcstTime": "1200",
-//            "fcstValue": "-3",
-//            "nx": 60,
-//            "ny": 127
-//          },
-//          {
-//            "baseDate": "20250111",
-//            "baseTime": "1100",
-//            "category": "UUU",
-//            "fcstDate": "20250111",
-//            "fcstTime": "1200",
-//            "fcstValue": "1.4",
-//            "nx": 60,
-//            "ny": 127
-//          },
-//          {
-//            "baseDate": "20250111",
-//            "baseTime": "1100",
-//            "category": "VVV",
-//            "fcstDate": "20250111",
-//            "fcstTime": "1200",
-//            "fcstValue": "-0.2",
-//            "nx": 60,
-//            "ny": 127
-//          },
-//          {
-//            "baseDate": "20250111",
-//            "baseTime": "1100",
-//            "category": "VEC",
-//            "fcstDate": "20250111",
-//            "fcstTime": "1200",
-//            "fcstValue": "278",
-//            "nx": 60,
-//            "ny": 127
-//          },
-//          {
-//            "baseDate": "20250111",
-//            "baseTime": "1100",
-//            "category": "WSD",
-//            "fcstDate": "20250111",
-//            "fcstTime": "1200",
-//            "fcstValue": "1.4",
-//            "nx": 60,
-//            "ny": 127
-//          },
-//          {
-//            "baseDate": "20250111",
-//            "baseTime": "1100",
-//            "category": "SKY",
-//            "fcstDate": "20250111",
-//            "fcstTime": "1200",
-//            "fcstValue": "1",
-//            "nx": 60,
-//            "ny": 127
-//          },
-//          {
-//            "baseDate": "20250111",
-//            "baseTime": "1100",
-//            "category": "PTY",
-//            "fcstDate": "20250111",
-//            "fcstTime": "1200",
-//            "fcstValue": "0",
-//            "nx": 60,
-//            "ny": 127
-//          },
-//          {
-//            "baseDate": "20250111",
-//            "baseTime": "1100",
-//            "category": "POP",
-//            "fcstDate": "20250111",
-//            "fcstTime": "1200",
-//            "fcstValue": "0",
-//            "nx": 60,
-//            "ny": 127
-//          },
-//          {
-//            "baseDate": "20250111",
-//            "baseTime": "1100",
-//            "category": "WAV",
-//            "fcstDate": "20250111",
-//            "fcstTime": "1200",
-//            "fcstValue": "-999",
-//            "nx": 60,
-//            "ny": 127
-//          },
-//          {
-//            "baseDate": "20250111",
-//            "baseTime": "1100",
-//            "category": "PCP",
-//            "fcstDate": "20250111",
-//            "fcstTime": "1200",
-//            "fcstValue": "강수없음",
-//            "nx": 60,
-//            "ny": 127
-//          },
-//          {
-//            "baseDate": "20250111",
-//            "baseTime": "1100",
-//            "category": "REH",
-//            "fcstDate": "20250111",
-//            "fcstTime": "1200",
-//            "fcstValue": "50",
-//            "nx": 60,
-//            "ny": 127
-//          },
-//          {
-//            "baseDate": "20250111",
-//            "baseTime": "1100",
-//            "category": "SNO",
-//            "fcstDate": "20250111",
-//            "fcstTime": "1200",
-//            "fcstValue": "적설없음",
-//            "nx": 60,
-//            "ny": 127
-//          }
-//        ]
-//      },
-//      "pageNo": 1,
-//      "numOfRows": 12,
-//      "totalCount": 835
+//    {
+//      "dailyWeatherId": 804,
+//      "dailyWeatherName": "Clouds",
+//      "rainPercent": 0.0,
+//      "maxTemp": 5.27,
+//      "minTemp": 0.6
+//    },
+//    {
+//      "dailyWeatherId": 804,
+//      "dailyWeatherName": "Clouds",
+//      "rainPercent": 0.0,
+//      "maxTemp": 5.06,
+//      "minTemp": 0.08
+//    },
+//    {
+//      "dailyWeatherId": 804,
+//      "dailyWeatherName": "Clouds",
+//      "rainPercent": 0.0,
+//      "maxTemp": 4.51,
+//      "minTemp": 0.37
+//    },
+//    {
+//      "dailyWeatherId": 801,
+//      "dailyWeatherName": "Clouds",
+//      "rainPercent": 0.0,
+//      "maxTemp": 6.36,
+//      "minTemp": 0.75
+//    },
+//    {
+//      "dailyWeatherId": 800,
+//      "dailyWeatherName": "Clear",
+//      "rainPercent": 0.0,
+//      "maxTemp": 5.77,
+//      "minTemp": 0.41
+//    },
+//    {
+//      "dailyWeatherId": 800,
+//      "dailyWeatherName": "Clear",
+//      "rainPercent": 0.0,
+//      "maxTemp": 5.61,
+//      "minTemp": -0.02
+//    },
+//    {
+//      "dailyWeatherId": 601,
+//      "dailyWeatherName": "Snow",
+//      "rainPercent": 1.0,
+//      "maxTemp": 2.97,
+//      "minTemp": -2.61
 //    }
-//  }
+//  ]
 //}

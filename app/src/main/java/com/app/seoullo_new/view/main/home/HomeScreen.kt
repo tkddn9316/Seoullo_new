@@ -24,10 +24,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -40,24 +37,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.rememberLottieAnimatable
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.airbnb.lottie.compose.rememberLottieRetrySignal
-import com.app.domain.model.Weather
-import com.app.domain.model.common.ApiState
 import com.app.seoullo_new.R
-import com.app.seoullo_new.utils.Constants.WeatherCategory
 import com.app.seoullo_new.utils.Logging
-import com.app.seoullo_new.view.base.ErrorScreen
-import com.app.seoullo_new.view.base.LoadingOverlay
-import com.app.seoullo_new.view.ui.theme.Color_Weather_Sunny_Afternoon1
-import com.app.seoullo_new.view.ui.theme.Color_Weather_Sunny_Afternoon2
-import com.app.seoullo_new.view.ui.theme.Color_Weather_Sunny_Dinner1
-import com.app.seoullo_new.view.ui.theme.Color_Weather_Sunny_Dinner2
 import com.app.seoullo_new.view.ui.theme.notosansFont
 import kotlinx.coroutines.launch
 
@@ -70,7 +57,7 @@ fun HomeScreen(
 ) {
     val context = LocalContext.current
     // 날씨 결과
-    val weatherList by viewModel.weatherListResult.collectAsStateWithLifecycle()
+    val weatherList by viewModel.weatherResult.collectAsStateWithLifecycle()
     val backgroundColor by viewModel.homeBackgroundColor.collectAsStateWithLifecycle()
     val errorMessage by viewModel.errorMessages.collectAsStateWithLifecycle()
 
@@ -92,7 +79,8 @@ fun HomeScreen(
                         viewModel = viewModel
                     )
                     Spacer(modifier = Modifier.width(8.dp))
-                    val temperature = weatherList.find { it.category == WeatherCategory.Temperature.category }?.fcstValue ?: "0"
+//                    val temperature = weatherList.find { it.category == WeatherCategory.Temperature.category }?.fcstValue ?: "0"
+                    val temperature = "0"
                     Text(
                         text = stringResource(id = R.string.temp_symbol, temperature),
                         color = Color.White,
@@ -113,7 +101,8 @@ fun HomeScreen(
                         containerColor = Color.White.copy(alpha = 0.2f)
                     )
                 ) {
-                    val temperature = weatherList.find { it.category == WeatherCategory.Temperature.category }?.fcstValue ?: "0"
+//                    val temperature = weatherList.find { it.category == WeatherCategory.Temperature.category }?.fcstValue ?: "0"
+                    val temperature = "0"
                     Row (
                         modifier = Modifier
                             .height(IntrinsicSize.Min)

@@ -3,6 +3,7 @@ package com.app.data.di
 import com.app.data.api.ApiAnnotation.GoogleMapsApi
 import com.app.data.api.ApiAnnotation.GooglePlacesApi
 import com.app.data.api.ApiAnnotation.OpenWeatherApi
+import com.app.data.api.ApiAnnotation.SeoulOpenApi
 import com.app.data.api.ApiAnnotation.TourApi
 import com.app.data.api.ApiClient
 import com.app.data.api.ApiInterface
@@ -43,6 +44,13 @@ class ApiModule {
     @Singleton
     fun provideApiInterfaceOpenWeatherApi(): ApiInterface3 {
         return ApiClient.createOpenWeatherApi()
+    }
+
+    @SeoulOpenApi
+    @Provides
+    @Singleton
+    fun provideApiInterfaceSeoulOpenApi(): ApiInterface3 {
+        return ApiClient.createSeoulOpenApi()
     }
 }
 

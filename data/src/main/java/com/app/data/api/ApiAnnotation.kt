@@ -18,4 +18,8 @@ object ApiAnnotation {
     @Qualifier
     @Retention(AnnotationRetention.BINARY)
     annotation class OpenWeatherApi
+
+    @Qualifier
+    @Retention(AnnotationRetention.BINARY)
+    annotation class SeoulOpenApi
 }

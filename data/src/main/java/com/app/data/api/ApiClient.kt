@@ -14,7 +14,8 @@ object ApiClient {
     private const val BASE_URL_GOOGLE_MAPS = "https://maps.googleapis.com/"
     private const val BASE_URL_GOOGLE_PLACES = "https://places.googleapis.com/"
     private const val BASE_URL_TOUR_API = "https://apis.data.go.kr/B551011/"
-    private const val BASE_URL_OPEN_WEATHER = "https://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/"
+    private const val BASE_URL_OPEN_WEATHER_MAP = "https://api.openweathermap.org/data/3.0/"
+    private const val BASE_URL_SEOUL_OPEN_API = "http://openapi.seoul.go.kr:8088/"
     private const val TIMEOUT = 15
 
     private val commonHttpClient: OkHttpClient by lazy {
@@ -50,7 +51,14 @@ object ApiClient {
 
     fun createOpenWeatherApi(): ApiInterface3 {
         return retrofitBuilder
-            .baseUrl(BASE_URL_OPEN_WEATHER)
+            .baseUrl(BASE_URL_OPEN_WEATHER_MAP)
+            .build()
+            .create(ApiInterface3::class.java)
+    }
+
+    fun createSeoulOpenApi(): ApiInterface3 {
+        return retrofitBuilder
+            .baseUrl(BASE_URL_SEOUL_OPEN_API)
             .build()
             .create(ApiInterface3::class.java)
     }

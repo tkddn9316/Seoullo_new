@@ -6,6 +6,8 @@ import com.app.data.api.ApiInterface2
 import com.app.data.api.ApiInterface3
 import com.app.data.source.DirectionDataSource
 import com.app.data.source.DirectionDataSourceImpl
+import com.app.data.source.DustDataSource
+import com.app.data.source.DustDataSourceImpl
 import com.app.data.source.PlacesDataSource
 import com.app.data.source.PlacesDataSourceImpl
 import com.app.data.source.PlacesDetailDataSource
@@ -76,5 +78,11 @@ class RemoteDataModule {
     @Singleton
     fun provideWeatherDataSource(@ApiAnnotation.OpenWeatherApi apiInterface: ApiInterface3): WeatherDataSource {
         return WeatherDataSourceImpl(apiInterface)
+    }
+
+    @Provides
+    @Singleton
+    fun provideDustDataSource(@ApiAnnotation.SeoulOpenApi apiInterface: ApiInterface3): DustDataSource {
+        return DustDataSourceImpl(apiInterface)
     }
 }
