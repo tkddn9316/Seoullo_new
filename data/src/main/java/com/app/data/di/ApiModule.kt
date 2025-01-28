@@ -4,6 +4,7 @@ import com.app.data.api.ApiAnnotation.GoogleMapsApi
 import com.app.data.api.ApiAnnotation.GooglePlacesApi
 import com.app.data.api.ApiAnnotation.OpenWeatherApi
 import com.app.data.api.ApiAnnotation.SeoulOpenApi
+import com.app.data.api.ApiAnnotation.SeoulSunriseApi
 import com.app.data.api.ApiAnnotation.TourApi
 import com.app.data.api.ApiClient
 import com.app.data.api.ApiInterface
@@ -51,6 +52,13 @@ class ApiModule {
     @Singleton
     fun provideApiInterfaceSeoulOpenApi(): ApiInterface3 {
         return ApiClient.createSeoulOpenApi()
+    }
+
+    @SeoulSunriseApi
+    @Provides
+    @Singleton
+    fun provideApiInterfaceSeoulSunriseApi(): ApiInterface3 {
+        return ApiClient.createSeoulSunriseApi()
     }
 }
 

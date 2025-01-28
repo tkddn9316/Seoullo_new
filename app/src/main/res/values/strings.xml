@@ -10,6 +10,7 @@
     <string name="no">N</string>
     <string name="en" translatable="false">en</string>
     <string name="ko" translatable="false">ko</string>
+    <string name="percent_d" translatable="false">%d%%</string>
     <string name="retry">Retry</string>
     <string name="error_failure_init_list">Failed to create list.: %s</string>
     <string name="sign_in_with_google">Sign in with Google</string>
@@ -30,6 +31,24 @@
     <string name="tab_home">Home</string>
     <string name="tab_travel">Travel</string>
     <string name="tab_setting">Setting</string>
+
+    <!-- home -->
+    <string name="feels_like">Feels Like: %s°</string>
+    <string name="humidity">Humidity(%)</string>
+    <string name="precipitation">Precipitation(mm)</string>
+    <string name="fine_dust">Fine Dust</string>
+    <string name="ultra_fine_dust">Ultra Fine Dust</string>
+    <string name="fine_dust_good">Good(%d㎍/㎥)</string>
+    <string name="fine_dust_normal">Normal(%d㎍/㎥)</string>
+    <string name="fine_dust_bad">Bad(%d㎍/㎥)</string>
+    <string name="fine_dust_very_bad">Very Bad(%d㎍/㎥)</string>
+    <string name="wind_speed">Wind Speed(m/s)</string>
+    <string name="uv">UV</string>
+    <string name="sunrise">Sunrise</string>
+    <string name="sunset">Sunset</string>
+    <string name="am" translatable="false">%s AM</string>
+    <string name="pm" translatable="false">%s PM</string>
+    <string name="current_seoul">in Seoul: %s</string>
 
     <!--  travel  -->
     <string name="travel_title_restaurant">🍽 Restaurant</string>

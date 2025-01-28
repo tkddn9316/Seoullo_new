@@ -7,6 +7,6 @@ interface WeatherRepository {
     fun getWeather(
         weatherApiKey: String,
         dustApiKey: String,
-        languageCode: String
+        sunriseApiKey: String
     ): Flow<Weather>
 }

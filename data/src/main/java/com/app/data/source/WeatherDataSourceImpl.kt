@@ -9,14 +9,12 @@ import javax.inject.Inject
 class WeatherDataSourceImpl @Inject constructor(private val apiInterface: ApiInterface3) :
     WeatherDataSource {
     override fun getWeather(
-        apiKey: String,
-        languageCode: String
+        apiKey: String
     ): Flow<WeatherDTO> {
         return flow {
             emit(
                 apiInterface.getWeather(
-                    apiKey = apiKey,
-                    languageCode = languageCode
+                    apiKey = apiKey
                 )
             )
         }

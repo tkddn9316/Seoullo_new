@@ -20,7 +20,9 @@ data class WeatherDTO(
     @SerializedName("message")
     val errorMessage: String?,
     var fineDust: Int = -1,  // 미세먼지
-    var ultraFineDust: Int = -1  // 초미세먼지
+    var ultraFineDust: Int = -1,  // 초미세먼지
+    var sunrise: String,    // 일출(0746)
+    var sunset: String,     // 일몰(1723)
 ) {
     data class Current(
         @SerializedName("clouds")
@@ -35,10 +37,6 @@ data class WeatherDTO(
         val humidity: Int,      // 습도
         @SerializedName("pressure")
         val pressure: Int,      // 대기압
-        @SerializedName("sunrise")
-        val sunrise: Int,       // 일출 시간, Unix, UTC
-        @SerializedName("sunset")
-        val sunset: Int,        // 일몰 시간, Unix, UTC
         @SerializedName("temp")
         val temp: Double,       // 온도
         @SerializedName("uvi")

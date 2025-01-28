@@ -29,6 +29,22 @@
     <string name="tab_travel">Travel</string>
     <string name="tab_setting">Setting</string>
 
+    <!-- home -->
+    <string name="feels_like">Feels Like: %s°</string>
+    <string name="humidity">humidity(%)</string>
+    <string name="precipitation">Precipitation(mm)</string>
+    <string name="fine_dust">Fine Dust</string>
+    <string name="ultra_fine_dust">Ultra Fine Dust</string>
+    <string name="fine_dust_good">Good(%d㎍/㎥)</string>
+    <string name="fine_dust_normal">Normal(%d㎍/㎥)</string>
+    <string name="fine_dust_bad">Bad(%d㎍/㎥)</string>
+    <string name="fine_dust_very_bad">Very Bad(%d㎍/㎥)</string>
+    <string name="wind_speed">Wind Speed(m/s)</string>
+    <string name="uv">UV</string>
+    <string name="sunrise">Sunrise</string>
+    <string name="sunset">Sunset</string>
+    <string name="current_seoul">in Seoul: %s</string>
+
     <!--  travel  -->
     <string name="travel_title_restaurant">🍽 Restaurant</string>
     <string name="korean_restaurant">Korean Restaurant</string>

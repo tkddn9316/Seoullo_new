@@ -1,6 +1,7 @@
 package com.app.data.api
 
 import com.app.data.model.DustDTO
+import com.app.data.model.SunriseDTO
 import com.app.data.model.WeatherDTO
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -17,7 +18,7 @@ interface ApiInterface3 {
         @Query("appid") apiKey: String,
         @Query("exclude") exclude: String = "minutely,hourly,alerts",    // 분 단위 예보, 시간별 예보 제외
         @Query("units") units: String = "metric",   // 단위: 섭씨
-        @Query("lang") languageCode: String
+        @Query("lang") languageCode: String = "en"
     ): WeatherDTO
 
     @GET("{KEY}/{TYPE}/{SERVICE}/{START_INDEX}/{END_INDEX}")
@@ -28,4 +29,11 @@ interface ApiInterface3 {
         @Path("START_INDEX") startIndex: Int = 1,
         @Path("END_INDEX") endIndex: Int = 5
     ): DustDTO
+
+    @GET("openapi/service/RiseSetInfoService/getAreaRiseSetInfo")
+    suspend fun getSunriseTime(
+        @Query("locdate") currentDate: String,
+        @Query("location") location: String = "서울",
+        @Query("ServiceKey") apiKey: String
+    ): SunriseDTO
 }

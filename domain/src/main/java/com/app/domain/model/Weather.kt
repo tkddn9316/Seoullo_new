@@ -11,8 +11,8 @@ data class Weather(
     val feelsLike: Double = 0.0,
     val humidity: Int = 0,
     val pressure: Int = 0,
-    val sunrise: Int = 0,
-    val sunset: Int = 0,
+    val sunrise: String = "",
+    val sunset: String = "",
     val temp: Double = 0.0,
     val uvi: Double = 0.0,
     val todayWeatherId: Int = 0,
@@ -20,14 +20,16 @@ data class Weather(
     val precipitation: Double = 0.0,
     val dailyList: List<DailyWeather> = emptyList(),
     val fineDust: Int = -1,
-    val ultraFineDust: Int = -1
+    val ultraFineDust: Int = -1,
+    val windSpeed: Double = 0.0
 ) : BaseModel() {
     data class DailyWeather(
         val dailyWeatherId: Int,
         val dailyWeatherName: String,
         val rainPercent: Double,
         val maxTemp: Double,
-        val minTemp: Double
+        val minTemp: Double,
+        val month: String
     ) : BaseModel()
 }
 

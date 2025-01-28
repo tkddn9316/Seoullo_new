@@ -17,6 +17,8 @@ import com.app.domain.model.PlacesNearbyRequest
 import com.app.domain.model.ReverseGeocoding
 import com.app.domain.model.User
 import com.app.domain.model.Weather
+import org.joda.time.DateTime
+import org.joda.time.format.DateTimeFormat
 
 /**
  * Data Entity to Data Model
@@ -155,6 +157,10 @@ fun mapperToWeather(weatherDTO: WeatherDTO): Weather {
     if (errorCode != null && errorMessage != null) {
         throw Exception("$errorCode: $errorMessage")
     }
+
+    val formatter = DateTimeFormat.forPattern("MM-dd")
+    val today = DateTime.now()
+
     return Weather(
         lat = weatherDTO.lat,
         lng = weatherDTO.lng,
@@ -164,23 +170,25 @@ fun mapperToWeather(weatherDTO: WeatherDTO): Weather {
         feelsLike = weatherDTO.current.feelsLike,
         humidity = weatherDTO.current.humidity,
         pressure = weatherDTO.current.pressure,
-        sunrise = weatherDTO.current.sunrise,
-        sunset = weatherDTO.current.sunset,
+        sunrise = StringBuilder().append(weatherDTO.sunrise.trim()).insert(2, ":").toString(),
+        sunset = StringBuilder().append(weatherDTO.sunset.trim()).insert(2, ":").toString(),
         temp = weatherDTO.current.temp,
         uvi = weatherDTO.current.uvi,
         todayWeatherId = weatherDTO.current.weather.first().id,
         todayWeatherName = weatherDTO.current.weather.first().main,
         precipitation = weatherDTO.current.rain?.precipitation ?: 0.0,
-        dailyList = weatherDTO.daily.toList().map {
+        dailyList = weatherDTO.daily.toList().mapIndexed { index, daily ->
             Weather.DailyWeather(
-                dailyWeatherId = it.weather.first().id,
-                dailyWeatherName = it.weather.first().main,
-                rainPercent = it.pop,
-                maxTemp = it.temp.max,
-                minTemp = it.temp.min
+                dailyWeatherId = daily.weather.first().id,
+                dailyWeatherName = daily.weather.first().main,
+                rainPercent = daily.pop,
+                maxTemp = daily.temp.max,
+                minTemp = daily.temp.min,
+                month = today.plusDays(index + 1).toString(formatter)
             )
         },
         fineDust = weatherDTO.fineDust,
-        ultraFineDust = weatherDTO.ultraFineDust
+        ultraFineDust = weatherDTO.ultraFineDust,
+        windSpeed = weatherDTO.current.windSpeed
     )
 }

@@ -5,6 +5,7 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.converter.simplexml.SimpleXmlConverterFactory
 import java.util.concurrent.TimeUnit
 
 /**
@@ -16,6 +17,7 @@ object ApiClient {
     private const val BASE_URL_TOUR_API = "https://apis.data.go.kr/B551011/"
     private const val BASE_URL_OPEN_WEATHER_MAP = "https://api.openweathermap.org/data/3.0/"
     private const val BASE_URL_SEOUL_OPEN_API = "http://openapi.seoul.go.kr:8088/"
+    private const val BASE_URL_SEOUL_SUNRISE_API = "https://apis.data.go.kr/B090041/"
     private const val TIMEOUT = 15
 
     private val commonHttpClient: OkHttpClient by lazy {
@@ -59,6 +61,15 @@ object ApiClient {
     fun createSeoulOpenApi(): ApiInterface3 {
         return retrofitBuilder
             .baseUrl(BASE_URL_SEOUL_OPEN_API)
+            .build()
+            .create(ApiInterface3::class.java)
+    }
+
+    fun createSeoulSunriseApi(): ApiInterface3 {
+        return Retrofit.Builder()
+            .baseUrl(BASE_URL_SEOUL_SUNRISE_API)
+            .client(commonHttpClient)
+            .addConverterFactory(SimpleXmlConverterFactory.create())
             .build()
             .create(ApiInterface3::class.java)
     }

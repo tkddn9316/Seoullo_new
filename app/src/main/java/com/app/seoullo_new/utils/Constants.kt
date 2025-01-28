@@ -2,6 +2,7 @@ package com.app.seoullo_new.utils
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
+import androidx.core.util.toRange
 import com.app.domain.model.theme.DynamicTheme
 import com.app.domain.model.theme.Language
 import com.app.domain.model.theme.ThemeMode
@@ -78,5 +79,32 @@ object Constants {
 
     enum class FocusedField {
         STARTING, DESTINATION
+    }
+
+    enum class WeatherStatus(val id: IntRange) {
+        Thunderstorm(200..299),
+        Drizzle(300..399),
+        Rain(500..599),
+        Snow(600..699),
+        Atmosphere(700..799),
+        Clear(800..800),
+        Clouds(801..899);
+
+        companion object {
+            // 범위 찾기
+            fun fromId(id: Int): WeatherStatus? {
+                return entries.find { id in it.id.toRange() }
+            }
+        }
+
+        fun getIconRes(): Int {
+            return when (this) {
+                Clear -> R.raw.weather_sun
+                Rain, Drizzle -> R.raw.weather_rainy_sun
+                Snow -> R.raw.weather_snowy
+                Thunderstorm -> R.raw.weather_thunderstorm
+                Clouds, Atmosphere -> R.raw.weather_cloudy
+            }
+        }
     }
 }

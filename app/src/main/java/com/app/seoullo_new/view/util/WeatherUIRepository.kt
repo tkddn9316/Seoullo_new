@@ -1,120 +1,130 @@
 package com.app.seoullo_new.view.util
 
+import androidx.compose.ui.graphics.Color
+import com.app.domain.model.Weather
+import com.app.seoullo_new.R
+import com.app.seoullo_new.utils.Constants.WeatherStatus
+import com.app.seoullo_new.utils.Logging
+import com.app.seoullo_new.view.ui.theme.Color_Weather_Cloudy
+import com.app.seoullo_new.view.ui.theme.Color_Weather_Rainy
+import com.app.seoullo_new.view.ui.theme.Color_Weather_Snowy
+import com.app.seoullo_new.view.ui.theme.Color_Weather_Sunny_Afternoon1
+import com.app.seoullo_new.view.ui.theme.Color_Weather_Sunny_Afternoon2
+import com.app.seoullo_new.view.ui.theme.Color_Weather_Sunny_Dinner1
+import com.app.seoullo_new.view.ui.theme.Color_Weather_Sunny_Dinner2
+import com.app.seoullo_new.view.ui.theme.Color_Weather_Sunny_Night1
+import com.app.seoullo_new.view.ui.theme.Color_Weather_Sunny_Night2
+import org.joda.time.DateTime
+import org.joda.time.format.DateTimeFormat
+
 class WeatherUIRepository {
 
     // 배경 색
-//    fun setColor(items: List<Weather>): List<Color> {
-//        val defaultColor = listOf(Color_Weather_Sunny_Afternoon1, Color_Weather_Sunny_Afternoon2)
-//        if (items.isNotEmpty()) {
-//            val sky = items.find { it.category == WeatherCategory.Sky.category }
-//            val pty = items.find { it.category == WeatherCategory.PTY.category }
-//
-//            if (sky == null || pty == null) {
-//                return defaultColor
-//            }
-//
-//            // Sky = 맑음(1), 구름많음(3), 흐림(4)
-//            // PTY = 강수형태(0=없음, 1=비, 2=비/눈, 3=눈, 4=소나기)
-//            val skyValue = sky.fcstValue.toIntOrNull() ?: -1
-//            val ptyValue = pty.fcstValue.toIntOrNull() ?: -1
-//
-//            // TODO: API 통하여 일출/일몰 시간 가져오기 필요
-//            val currentTime = DateTime.now().toString("HH:mm:ss")
-//            Logging.e("currentTime: $currentTime")
-//
-//            val backgroundColor =
-//                when (currentTime) {
-//                    in "07:00:00".."16:59:59" -> {
-//                        // 아침 and 낮
-//                        when {
-//                            (ptyValue == 2 || ptyValue == 3) -> listOf(
-//                                Color_Weather_Snowy,
-//                                Color_Weather_Snowy
-//                            )
-//
-//                            (ptyValue == 1 || ptyValue == 4) -> listOf(
-//                                Color_Weather_Rainy,
-//                                Color_Weather_Rainy
-//                            )
-//
-//                            ptyValue == 0 -> {
-//                                when (skyValue) {
-//                                    1 -> listOf(        // 맑음
-//                                        Color_Weather_Sunny_Afternoon1,
-//                                        Color_Weather_Sunny_Afternoon2
-//                                    )
-//                                    3, 4 -> listOf(     // 구름많음(3), 흐림(4)
-//                                        Color_Weather_Cloudy,
-//                                        Color_Weather_Cloudy
-//                                    )
-//                                    else -> defaultColor
-//                                }
-//                            }
-//
-//                            else -> defaultColor
-//                        }
-//                    }
-//
-//                    in "17:00:00".."18:59:59" -> {
-//                        // 저녁
-//                        listOf(Color_Weather_Sunny_Dinner1, Color_Weather_Sunny_Dinner2)
-//                    }
-//
-//                    else -> {
-//                        // 밤
-//                        listOf(Color_Weather_Sunny_Night1, Color_Weather_Sunny_Night2)
-//                    }
-//                }
-//
-//            return backgroundColor
-//        } else {
-//            return defaultColor
-//        }
-//    }
+    fun setWeatherColor(weather: Weather): List<Color> {
+        val defaultColor = listOf(Color_Weather_Sunny_Afternoon1, Color_Weather_Sunny_Afternoon2)
+        val currentTime = DateTime.now()
+        val timeFormatter = DateTimeFormat.forPattern("HH:mm")
+        val sunrise = runCatching {
+            DateTime.parse(weather.sunrise, timeFormatter)
+                .withDate(currentTime.toLocalDate())
+        }.getOrElse {
+            // 기본 0시
+            DateTime.now().withTimeAtStartOfDay()
+        }
+        val sunset = runCatching {
+            DateTime.parse(weather.sunset, timeFormatter)
+                .withDate(currentTime.toLocalDate())
+        }.getOrElse {
+            // 기본 18시
+            DateTime.now().withTime(18, 0, 0, 0)
+        }
+        val currentWeather = WeatherStatus.fromId(weather.todayWeatherId) ?: WeatherStatus.Clear
+
+        return when {
+            currentTime.isAfter(sunset.plusHours(1)) || currentTime.isBefore(sunrise) -> {
+                // 밤
+                listOf(Color_Weather_Sunny_Night1, Color_Weather_Sunny_Night2)
+            }
+
+            currentTime.isAfter(sunset) -> {
+                // 저녁
+                listOf(Color_Weather_Sunny_Dinner1, Color_Weather_Sunny_Dinner2)
+            }
+
+            else -> {
+                // 아침 and 낮
+                when {
+                    currentWeather == WeatherStatus.Clear -> listOf(
+                        Color_Weather_Sunny_Afternoon1,
+                        Color_Weather_Sunny_Afternoon2
+                    )
+
+                    currentWeather == WeatherStatus.Snow -> listOf(
+                        Color_Weather_Snowy,
+                        Color_Weather_Snowy
+                    )
+
+                    (currentWeather == WeatherStatus.Rain ||
+                            currentWeather == WeatherStatus.Drizzle ||
+                            currentWeather == WeatherStatus.Thunderstorm) -> listOf(
+                        Color_Weather_Rainy,
+                        Color_Weather_Rainy
+                    )
+
+                    (currentWeather == WeatherStatus.Clouds ||
+                            currentWeather == WeatherStatus.Atmosphere) -> listOf(
+                        Color_Weather_Cloudy,
+                        Color_Weather_Cloudy
+                    )
+
+                    else -> defaultColor
+                }
+            }
+        }
+    }
 
     // 아이콘
-//    fun setWeatherIcon(items: List<Weather>): Int {
-//        if (items.isNotEmpty()) {
-//            val sky = items.find { it.category == WeatherCategory.Sky.category }
-//            val pty = items.find { it.category == WeatherCategory.PTY.category }
-//
-//            if (sky == null || pty == null) {
-//                return 0
-//            }
-//
-//            // Sky = 맑음(1), 구름많음(3), 흐림(4)
-//            // PTY = 강수형태(0=없음, 1=비, 2=비/눈, 3=눈, 4=소나기)
-//            val skyValue = sky.fcstValue.toIntOrNull() ?: -1
-//            val ptyValue = pty.fcstValue.toIntOrNull() ?: -1
-//
-//            // TODO: API 통하여 일출/일몰 시간 가져오기 필요
-//            val currentTime = DateTime.now().toString("HH:mm:ss")
-//            Logging.e("currentTime: $currentTime")
-//
-//            val weatherIcon = when {
-//                (ptyValue == 2 || ptyValue == 3) -> R.raw.weather_snowy
-//                (ptyValue == 1 || ptyValue == 4) -> when (currentTime) {
-//                    in "07:00:00".."18:59:59" -> R.raw.weather_rainy_sun
-//                    else -> R.raw.weather_rainy_night
-//                }
-//                ptyValue == 0 -> {
-//                    when (skyValue) {
-//                        1 -> when (currentTime) {   // 맑음
-//                            in "07:00:00".."18:59:59" -> R.raw.weather_sun
-//                            else -> R.raw.weather_moon
-//                        }
-//
-//                        3, 4 -> R.raw.weather_cloudy  // 구름많음(3), 흐림(4)
-//                        else -> 0
-//                    }
-//                }
-//
-//                else -> 0
-//            }
-//
-//            return weatherIcon
-//        } else {
-//            return 0
-//        }
-//    }
+    fun setWeatherIcon(weather: Weather): Int {
+        val currentTime = DateTime.now()
+        val timeFormatter = DateTimeFormat.forPattern("HH:mm")
+        val sunrise = runCatching {
+            DateTime.parse(weather.sunrise, timeFormatter)
+                .withDate(currentTime.toLocalDate())
+        }.getOrElse {
+            // 기본 0시
+            DateTime.now().withTimeAtStartOfDay()
+        }
+        val sunset = runCatching {
+            DateTime.parse(weather.sunset, timeFormatter).withDate(currentTime.toLocalDate())
+        }.getOrElse {
+            // 기본 18시
+            DateTime.now().withTime(18, 0, 0, 0)
+        }
+        Logging.e("setWeatherIcon TIME: $sunrise, $sunset")
+        Logging.e("setWeatherIcon TIME: $currentTime")
+        val currentWeather = WeatherStatus.fromId(weather.todayWeatherId) ?: WeatherStatus.Clear
+
+        return when {
+            (currentWeather == WeatherStatus.Clouds || currentWeather == WeatherStatus.Atmosphere) -> R.raw.weather_cloudy
+            (currentWeather == WeatherStatus.Rain || currentWeather == WeatherStatus.Drizzle) -> {
+                if (currentTime.isAfter(sunrise) && currentTime.isBefore(sunset)) {
+                    R.raw.weather_rainy_sun // 낮
+                } else {
+                    R.raw.weather_rainy_night // 밤
+                }
+            }
+
+            currentWeather == WeatherStatus.Snow -> R.raw.weather_snowy
+            currentWeather == WeatherStatus.Thunderstorm -> R.raw.weather_thunderstorm
+            currentWeather == WeatherStatus.Clear -> {
+                if (currentTime.isAfter(sunrise) && currentTime.isBefore(sunset)) {
+                    R.raw.weather_sun // 낮
+                } else {
+                    R.raw.weather_moon // 밤
+                }
+            }
+
+            else -> 0
+        }
+    }
 }

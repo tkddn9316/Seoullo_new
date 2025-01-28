@@ -13,14 +13,14 @@ class WeatherUseCase @Inject constructor(private val weatherRepository: WeatherR
     operator fun invoke(
         weatherApiKey: String,
         dustApiKey: String,
-        languageCode: String
+        sunriseApiKey: String
     ): Flow<ApiState<Weather>> = flow {
         emit(ApiState.Loading())
         try {
             weatherRepository.getWeather(
                 weatherApiKey = weatherApiKey,
                 dustApiKey = dustApiKey,
-                languageCode = languageCode
+                sunriseApiKey = sunriseApiKey
             ).collect {
                 emit(ApiState.Success(it))
             }

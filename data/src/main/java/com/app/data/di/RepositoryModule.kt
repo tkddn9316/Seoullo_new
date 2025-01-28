@@ -18,6 +18,7 @@ import com.app.data.source.PlacesNearbyDataSource
 import com.app.data.source.PlacesPhotoNearbyDataSource
 import com.app.data.source.ReverseGeocodingDataSource
 import com.app.data.source.SettingDataSource
+import com.app.data.source.SunriseDataSource
 import com.app.data.source.UserDataSource
 import com.app.data.source.WeatherDataSource
 import com.app.domain.repository.DirectionRepository
@@ -91,9 +92,10 @@ class RepositoryModule {
     @Singleton
     fun provideWeatherRepository(
         weatherDataSource: WeatherDataSource,
-        dustDataSource: DustDataSource
+        dustDataSource: DustDataSource,
+        sunriseDataSource: SunriseDataSource
     ): WeatherRepository {
-        return WeatherRepositoryImpl(weatherDataSource, dustDataSource)
+        return WeatherRepositoryImpl(weatherDataSource, dustDataSource, sunriseDataSource)
     }
 
     @Provides

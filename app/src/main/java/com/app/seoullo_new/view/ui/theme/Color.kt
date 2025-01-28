@@ -22,7 +22,12 @@ val Color_Weather_Sunny_Night1 = Color(0xFF1a2d63)
 val Color_Weather_Sunny_Night2 = Color(0xFF2c4c73)
 val Color_Weather_Cloudy = Color(0xFFb8ccd9)
 val Color_Weather_Rainy = Color(0xFF7c8ea6)
-val Color_Weather_Snowy = Color(0xFFe9eff2)
+val Color_Weather_Snowy = Color(0xFFc1d7e3)
+
+val Color_Fine_Dust_Good = Color(0xFF3c83ef)
+val Color_Fine_Dust_Normal = Color(0xFF048a24)
+val Color_Fine_Dust_Bad = Color(0xFFffb505)
+val Color_Fine_Dust_Very_Bad = Color(0xFFec1c1c)
 
 val colorGridItem1 = Color(0xFFeb1d31)
 val colorGridItem2 = Color(0xFF4100f5)

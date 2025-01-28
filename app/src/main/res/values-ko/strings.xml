@@ -29,6 +29,22 @@
     <string name="tab_travel">여행</string>
     <string name="tab_setting">설정</string>
 
+    <!-- home -->
+    <string name="feels_like">체감: %s°</string>
+    <string name="humidity">습도(%)</string>
+    <string name="precipitation">강수량(mm)</string>
+    <string name="fine_dust">미세먼지</string>
+    <string name="ultra_fine_dust">초미세먼지</string>
+    <string name="fine_dust_good">좋음(%d㎍/㎥)</string>
+    <string name="fine_dust_normal">보통(%d㎍/㎥)</string>
+    <string name="fine_dust_bad">나쁨(%d㎍/㎥)</string>
+    <string name="fine_dust_very_bad">매우나쁨(%d㎍/㎥)</string>
+    <string name="wind_speed">풍속(m/s)</string>
+    <string name="uv">자외선지수</string>
+    <string name="sunrise">일출</string>
+    <string name="sunset">일몰</string>
+    <string name="current_seoul">서울: %s</string>
+
     <!--  travel  -->
     <string name="travel_title_restaurant">🍽 음식점</string>
     <string name="korean_restaurant">한식</string>

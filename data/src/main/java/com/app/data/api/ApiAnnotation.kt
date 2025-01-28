@@ -22,4 +22,8 @@ object ApiAnnotation {
     @Qualifier
     @Retention(AnnotationRetention.BINARY)
     annotation class SeoulOpenApi
+
+    @Qualifier
+    @Retention(AnnotationRetention.BINARY)
+    annotation class SeoulSunriseApi
 }
