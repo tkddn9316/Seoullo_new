@@ -43,6 +43,7 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
+    implementation(libs.joda.time)
 
     // Hilt
     implementation(libs.hilt)
@@ -65,4 +66,8 @@ dependencies {
 
     // DataStore
     implementation(libs.androidx.datastore.preferences)
+
+    // XML
+    implementation(libs.converter.simplexml)
+    implementation(libs.simple.xml)
 }

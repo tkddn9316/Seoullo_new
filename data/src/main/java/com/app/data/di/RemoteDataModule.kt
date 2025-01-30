@@ -6,6 +6,8 @@ import com.app.data.api.ApiInterface2
 import com.app.data.api.ApiInterface3
 import com.app.data.source.DirectionDataSource
 import com.app.data.source.DirectionDataSourceImpl
+import com.app.data.source.DustDataSource
+import com.app.data.source.DustDataSourceImpl
 import com.app.data.source.PlacesDataSource
 import com.app.data.source.PlacesDataSourceImpl
 import com.app.data.source.PlacesDetailDataSource
@@ -18,6 +20,8 @@ import com.app.data.source.PlacesPhotoNearbyDataSource
 import com.app.data.source.PlacesPhotoNearbyDataSourceImpl
 import com.app.data.source.ReverseGeocodingDataSource
 import com.app.data.source.ReverseGeocodingDataSourceImpl
+import com.app.data.source.SunriseDataSource
+import com.app.data.source.SunriseDataSourceImpl
 import com.app.data.source.WeatherDataSource
 import com.app.data.source.WeatherDataSourceImpl
 import dagger.Module
@@ -76,5 +80,17 @@ class RemoteDataModule {
     @Singleton
     fun provideWeatherDataSource(@ApiAnnotation.OpenWeatherApi apiInterface: ApiInterface3): WeatherDataSource {
         return WeatherDataSourceImpl(apiInterface)
+    }
+
+    @Provides
+    @Singleton
+    fun provideDustDataSource(@ApiAnnotation.SeoulOpenApi apiInterface: ApiInterface3): DustDataSource {
+        return DustDataSourceImpl(apiInterface)
+    }
+
+    @Provides
+    @Singleton
+    fun provideSunriseDataSource(@ApiAnnotation.SeoulSunriseApi apiInterface: ApiInterface3): SunriseDataSource {
+        return SunriseDataSourceImpl(apiInterface)
     }
 }

@@ -8,6 +8,7 @@
     <string name="exit">\'뒤로\' 버튼을 한 번 더 누르면 앱이 종료됩니다.</string>
     <string name="yes">Y</string>
     <string name="no">N</string>
+    <string name="retry">다시 시도</string>
     <string name="error_failure_init_list">리스트 생성에 실패하였습니다.: %s</string>
     <string name="sign_in_with_google">구글로 시작하기</string>
     <string name="permission_denied">권한을 거부하면 이 서비스를 사용할 수 없습니다. 설정에서 권한을 켜주세요.</string>
@@ -21,10 +22,28 @@
     <string name="intro3_title">Let\'s going to Seoullo!</string>
     <string name="intro3_contents">Now start a happy tour of Seoul with Seoullo!</string>
 
+    <string name="balloon_info_text">“내 주변 찾기” 기능도 사용해보세요!</string>
+
     <!--  main  -->
     <string name="tab_home">홈</string>
     <string name="tab_travel">여행</string>
     <string name="tab_setting">설정</string>
+
+    <!-- home -->
+    <string name="feels_like">체감: %s°</string>
+    <string name="humidity">습도(%)</string>
+    <string name="precipitation">강수량(mm)</string>
+    <string name="fine_dust">미세먼지</string>
+    <string name="ultra_fine_dust">초미세먼지</string>
+    <string name="fine_dust_good">좋음(%d㎍/㎥)</string>
+    <string name="fine_dust_normal">보통(%d㎍/㎥)</string>
+    <string name="fine_dust_bad">나쁨(%d㎍/㎥)</string>
+    <string name="fine_dust_very_bad">매우나쁨(%d㎍/㎥)</string>
+    <string name="wind_speed">풍속(m/s)</string>
+    <string name="uv">자외선지수</string>
+    <string name="sunrise">일출</string>
+    <string name="sunset">일몰</string>
+    <string name="current_seoul">서울: %s</string>
 
     <!--  travel  -->
     <string name="travel_title_restaurant">🍽 음식점</string>
@@ -47,7 +66,6 @@
     <string name="nearby_list">Nearby List</string>
     <string name="nearby_list_description">반경 1km 이내의 관광 명소 목록이 표시됩니다.(최대 20개)</string>
     <string name="seoul">Seoul</string>
-    <string name="temp_symbol">°</string>
     <string name="go_to_top">맨 위로 이동</string>
     <string name="sort_by_rating">별점 순으로 정렬</string>
     <string name="sort_by_review">리뷰 순으로 정렬</string>

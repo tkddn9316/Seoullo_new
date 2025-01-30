@@ -21,6 +21,7 @@ import com.app.seoullo_new.view.placesDetail.PlaceDetailNearbyScreen
 import com.app.seoullo_new.view.placesDetail.PlaceDetailScreen
 import com.app.seoullo_new.view.placesList.PlacesListScreen
 import com.app.seoullo_new.view.placesList.PlacesListViewModel
+import com.app.seoullo_new.view.splash.SplashScreen
 import com.app.seoullo_new.view.util.TravelJsonItemData
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
@@ -31,7 +32,7 @@ fun NavigationGraph(navController: NavHostController) {
         modifier = Modifier
             .fillMaxSize(),
         navController = navController,
-        startDestination = Route.MAIN,
+        startDestination = Route.SPLASH,
         enterTransition = {
             slideIntoContainer(
                 AnimatedContentTransitionScope.SlideDirection.Left,
@@ -57,14 +58,31 @@ fun NavigationGraph(navController: NavHostController) {
             )
         },
     ) {
+        splashScreenNavigation(navController)
         mainScreenNavigation(navController)
         travelScreenNavigation(navController)
         settingScreenNavigation(navController)
     }
 }
 
+fun NavGraphBuilder.splashScreenNavigation(navController: NavHostController) {
+    composable(Route.SPLASH) {
+        SplashScreen(
+            onMoveMain = { weatherItem ->
+                navController.navigate(
+                    Route.MAIN
+                        .replace(oldValue = "{weather}", newValue = weatherItem)
+                )
+            }
+        )
+    }
+}
+
 fun NavGraphBuilder.mainScreenNavigation(navController: NavHostController) {
-    composable(Route.MAIN) {
+    composable(
+        Route.MAIN,
+        arguments = listOf(navArgument("weather") { type = NavType.StringType })
+    ) {
         MainScreen(
             travelOnClick = { travelItem ->
                 val itemJson = Json.encodeToString(travelItem)

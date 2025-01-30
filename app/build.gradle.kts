@@ -33,6 +33,10 @@ android {
         buildConfigField("String", "SEOULLO_GOOGLE_MAPS_API_KEY", getApiKey("SEOULLO_GOOGLE_MAPS_API_KEY"))
         // 서울 공공데이터
         buildConfigField("String", "SEOUL_OPEN_API_KEY", getApiKey("SEOUL_OPEN_API_KEY"))
+        // Open Weather Map
+        buildConfigField("String","OPEN_WEATHER_MAP_KEY", getApiKey("OPEN_WEATHER_MAP_KEY"))
+        // GOOGLE_CLIENT_ID
+        buildConfigField("String", "GOOGLE_CLIENT_ID", getApiKey("GOOGLE_CLIENT_ID"))
 
         vectorDrawables {
             useSupportLibrary = true
@@ -182,4 +186,7 @@ dependencies {
 
     // kotlin json
     implementation(libs.kotlinx.serialization.json)
+
+    // balloon
+    implementation(libs.balloon)
 }

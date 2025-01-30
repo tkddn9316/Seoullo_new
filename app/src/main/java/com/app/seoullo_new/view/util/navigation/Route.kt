@@ -1,7 +1,9 @@
 package com.app.seoullo_new.view.util.navigation
 
 object Route {
-    const val MAIN = "main"
+    const val SPLASH = "splash"
+
+    const val MAIN = "main/{weather}"
 
     const val HOME = "home"
     const val TRAVEL = "travel"

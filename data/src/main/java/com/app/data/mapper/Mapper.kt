@@ -17,6 +17,8 @@ import com.app.domain.model.PlacesNearbyRequest
 import com.app.domain.model.ReverseGeocoding
 import com.app.domain.model.User
 import com.app.domain.model.Weather
+import org.joda.time.DateTime
+import org.joda.time.format.DateTimeFormat
 
 /**
  * Data Entity to Data Model
@@ -130,16 +132,63 @@ fun mapperToUser(userEntity: List<UserEntity>): List<User> =
         )
     }
 
-fun mapperToWeather(weatherDTO: WeatherDTO): List<Weather> =
-    weatherDTO.response.body.items.item.toList().map {
-        Weather(
-            baseData = it.baseData,
-            baseTime = it.baseTime,
-            category = it.category,
-            fcstDate = it.fcstDate,
-            fcstTime = it.fcstTime,
-            fcstValue = it.fcstValue,
-            nx = it.nx,
-            ny = it.ny
-        )
+fun mapperToWeather(weatherDTO: WeatherDTO): Weather {
+//    val header = weatherDTO.response.header
+//    if (header.resultCode != ApiSuccessCode.Weather.code) {
+//        throw Exception("${header.resultCode}: ${header.resultMsg}")
+//    }
+//
+//    return weatherDTO.response.body?.items?.let { items ->
+//        items.item.toList().map {
+//            Weather(
+//                baseData = it.baseData,
+//                baseTime = it.baseTime,
+//                category = it.category,
+//                fcstDate = it.fcstDate,
+//                fcstTime = it.fcstTime,
+//                fcstValue = it.fcstValue,
+//                nx = it.nx,
+//                ny = it.ny
+//            )
+//        }
+//    } ?: run { emptyList() }
+    val errorCode = weatherDTO.errorCode
+    val errorMessage = weatherDTO.errorMessage
+    if (errorCode != null && errorMessage != null) {
+        throw Exception("$errorCode: $errorMessage")
     }
+
+    val formatter = DateTimeFormat.forPattern("MM-dd")
+    val today = DateTime.now()
+
+    return Weather(
+        lat = weatherDTO.lat,
+        lng = weatherDTO.lng,
+        clouds = weatherDTO.current.clouds,
+        dewPoint = weatherDTO.current.dewPoint,
+        currentTime = weatherDTO.current.currentTime,
+        feelsLike = weatherDTO.current.feelsLike,
+        humidity = weatherDTO.current.humidity,
+        pressure = weatherDTO.current.pressure,
+        sunrise = StringBuilder().append(weatherDTO.sunrise.trim()).insert(2, ":").toString(),
+        sunset = StringBuilder().append(weatherDTO.sunset.trim()).insert(2, ":").toString(),
+        temp = weatherDTO.current.temp,
+        uvi = weatherDTO.current.uvi,
+        todayWeatherId = weatherDTO.current.weather.first().id,
+        todayWeatherName = weatherDTO.current.weather.first().main,
+        precipitation = weatherDTO.current.rain?.precipitation ?: 0.0,
+        dailyList = weatherDTO.daily.toList().mapIndexed { index, daily ->
+            Weather.DailyWeather(
+                dailyWeatherId = daily.weather.first().id,
+                dailyWeatherName = daily.weather.first().main,
+                rainPercent = daily.pop,
+                maxTemp = daily.temp.max,
+                minTemp = daily.temp.min,
+                month = today.plusDays(index + 1).toString(formatter)
+            )
+        },
+        fineDust = weatherDTO.fineDust,
+        ultraFineDust = weatherDTO.ultraFineDust,
+        windSpeed = weatherDTO.current.windSpeed
+    )
+}
