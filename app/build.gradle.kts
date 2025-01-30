@@ -35,6 +35,8 @@ android {
         buildConfigField("String", "SEOUL_OPEN_API_KEY", getApiKey("SEOUL_OPEN_API_KEY"))
         // Open Weather Map
         buildConfigField("String","OPEN_WEATHER_MAP_KEY", getApiKey("OPEN_WEATHER_MAP_KEY"))
+        // GOOGLE_CLIENT_ID
+        buildConfigField("String", "GOOGLE_CLIENT_ID", getApiKey("GOOGLE_CLIENT_ID"))
 
         vectorDrawables {
             useSupportLibrary = true

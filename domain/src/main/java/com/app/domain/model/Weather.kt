@@ -1,7 +1,9 @@
 package com.app.domain.model
 
 import com.app.domain.model.common.BaseModel
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class Weather(
     val lat: Double = 0.0,
     val lng: Double = 0.0,
@@ -23,6 +25,7 @@ data class Weather(
     val ultraFineDust: Int = -1,
     val windSpeed: Double = 0.0
 ) : BaseModel() {
+    @Serializable
     data class DailyWeather(
         val dailyWeatherId: Int,
         val dailyWeatherName: String,

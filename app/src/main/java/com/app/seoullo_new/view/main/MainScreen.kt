@@ -1,8 +1,5 @@
 package com.app.seoullo_new.view.main
 
-import android.app.Activity
-import android.widget.Toast
-import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -34,7 +31,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
@@ -53,6 +49,7 @@ import com.app.seoullo_new.view.main.setting.SettingScreen
 import com.app.seoullo_new.view.main.travel.TravelScreen
 import com.app.seoullo_new.view.ui.theme.Color_92c8e0
 import com.app.seoullo_new.view.ui.theme.Color_Gray500
+import com.app.seoullo_new.view.util.BackOnPressed
 import com.app.seoullo_new.view.util.TravelJsonItemData
 import com.app.seoullo_new.view.util.theme.LocalLanguage
 import com.skydoves.landscapist.glide.GlideImage
@@ -111,7 +108,6 @@ fun MainScreen(
                 TabRow(
                     selectedTabIndex = pagerState.currentPage,
                     modifier = Modifier.fillMaxWidth()
-//                    containerColor = MaterialTheme.colorScheme.background
                 ) {
                     tabs.forEachIndexed { index, item ->
                         val isSelected = pagerState.currentPage == index
@@ -178,19 +174,4 @@ fun getIcon(screen: String): ImageVector = when (screen) {
     "Travel", "여행" -> Icons.Default.TravelExplore
     "Setting", "설정" -> Icons.Default.Settings
     else -> Icons.Default.Clear
-}
-
-@Composable
-fun BackOnPressed() {
-    val context = LocalContext.current
-    var backPressedTime = 0L
-
-    BackHandler(enabled = true) {
-        if(System.currentTimeMillis() - backPressedTime <= 400L) {
-            (context as Activity).finish() // 앱 종료
-        } else {
-            Toast.makeText(context, context.getString(R.string.exit), Toast.LENGTH_SHORT).show()
-        }
-        backPressedTime = System.currentTimeMillis()
-    }
 }

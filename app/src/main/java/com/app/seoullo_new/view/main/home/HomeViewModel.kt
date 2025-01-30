@@ -2,33 +2,30 @@ package com.app.seoullo_new.view.main.home
 
 import android.Manifest
 import androidx.compose.ui.graphics.Color
+import androidx.lifecycle.SavedStateHandle
 import com.app.domain.model.Weather
-import com.app.domain.model.common.ApiState
-import com.app.domain.usecase.weather.WeatherUseCase
-import com.app.seoullo_new.BuildConfig
 import com.app.seoullo_new.di.DispatcherProvider
 import com.app.seoullo_new.utils.CheckingManager
-import com.app.seoullo_new.utils.Logging
 import com.app.seoullo_new.view.base.BaseViewModel2
 import com.app.seoullo_new.view.ui.theme.Color_Weather_Sunny_Afternoon1
 import com.app.seoullo_new.view.ui.theme.Color_Weather_Sunny_Afternoon2
 import com.app.seoullo_new.view.util.WeatherUIRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.flowOn
+import kotlinx.serialization.json.Json
 import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
+    savedStateHandle: SavedStateHandle,
     dispatcherProvider: DispatcherProvider,
     private val weatherUIRepository: WeatherUIRepository,
-    private val checkingManager: CheckingManager,
-    private val weatherUseCase: WeatherUseCase
+    private val checkingManager: CheckingManager
 ) : BaseViewModel2(dispatcherProvider) {
-    private val _weatherResult = MutableStateFlow(Weather())
+    private val json: String = checkNotNull(savedStateHandle["weather"])
+    private val weather: Weather by lazy { Json.decodeFromString<Weather>(json) }
+    private val _weatherResult = MutableStateFlow(weather)
     val weatherResult = _weatherResult.asStateFlow()
 
     private val _homeBackgroundColor = MutableStateFlow(listOf(Color_Weather_Sunny_Afternoon1, Color_Weather_Sunny_Afternoon2))
@@ -42,7 +39,8 @@ class HomeViewModel @Inject constructor(
 
     init {
         checkPermission()
-        getWeatherList()
+        _homeBackgroundColor.value = setHomeBackgroundColor(weather)
+        _weatherIcon.value = setWeatherIcon(weather)
     }
 
     private fun checkPermission() {
@@ -51,36 +49,6 @@ class HomeViewModel @Inject constructor(
                 Manifest.permission.ACCESS_COARSE_LOCATION,
                 Manifest.permission.ACCESS_FINE_LOCATION
             )
-        }
-    }
-
-    // TODO: 스플래시에서 날씨 정보 가지고 오도록?
-    private fun getWeatherList() {
-        onIO {
-            weatherUseCase(
-                weatherApiKey = BuildConfig.OPEN_WEATHER_MAP_KEY,
-                dustApiKey = BuildConfig.SEOUL_OPEN_API_KEY,
-                sunriseApiKey = BuildConfig.TOUR_API_KEY
-            ).flowOn(Dispatchers.IO)
-                .catch { Logging.e(it.message ?: "") }
-                .collect { state ->
-                    when (state) {
-                        is ApiState.Success -> {
-                            val weather = state.data ?: Weather()
-                            _weatherResult.value = weather
-                            _homeBackgroundColor.value = setHomeBackgroundColor(weather)
-                            _weatherIcon.value = setWeatherIcon(weather)
-                            Logging.e(weather)
-                        }
-                        is ApiState.Error -> {
-                            val errorMessage = state.message
-                            if (_errorMessages.value != errorMessage) {
-                                _errorMessages.value = errorMessage
-                            }
-                        }
-                        else -> {}
-                    }
-                }
         }
     }
 
