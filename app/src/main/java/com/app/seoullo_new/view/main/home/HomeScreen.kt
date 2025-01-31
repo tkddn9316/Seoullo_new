@@ -27,6 +27,9 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -60,6 +63,8 @@ fun HomeScreen(
     val weatherResult by viewModel.weatherResult.collectAsStateWithLifecycle()
     val backgroundColor by viewModel.homeBackgroundColor.collectAsStateWithLifecycle()
     val errorMessage by viewModel.errorMessages.collectAsStateWithLifecycle()
+
+    val currentTime by remember { mutableStateOf(DateTime.now().toString("yyyy-MM-dd HH:mm:ss")) }
 
     Scaffold { innerPadding ->
         LazyColumn(
@@ -108,7 +113,7 @@ fun HomeScreen(
                             tint = Color.White
                         )
                         Text(
-                            text = stringResource(R.string.current_seoul, DateTime.now().toString("yyyy-MM-dd HH:mm:ss")),
+                            text = stringResource(R.string.current_seoul, currentTime),
                             color = Color.White,
                             fontSize = 16.sp
                         )

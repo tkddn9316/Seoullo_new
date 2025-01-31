@@ -38,7 +38,7 @@ fun DailyWeatherList(
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
-            modifier = Modifier.weight(2f),
+            modifier = Modifier.weight(1f),
             text = item.month,
             fontFamily = notosansFont,
             color = Color.White,
@@ -47,42 +47,56 @@ fun DailyWeatherList(
             maxLines = 1
         )
 
-        Icon(
-            modifier = modifier.padding(start = 10.dp, end = 3.dp),
-            imageVector = ImageVector.vectorResource(R.drawable.ic_weather_rain),
-            contentDescription = null,
-            tint = Color.White
-        )
-
-        Text(
-            text = stringResource(R.string.percent_d, item.rainPercent.toInt()),
-            fontFamily = notosansFont,
-            color = Color.White,
-            style = MaterialTheme.typography.bodyMedium
-        )
-
-        WeatherListAnim(
-            weatherId = item.dailyWeatherId
-        )
-
-        Row (
-            modifier = modifier.weight(1.5f),
+        Row(
+            modifier = modifier.weight(1.1f),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.End
         ) {
+            Icon(
+                modifier = modifier.padding(end = 2.dp),
+                imageVector = ImageVector.vectorResource(R.drawable.ic_weather_rain),
+                contentDescription = null,
+                tint = Color.White
+            )
+
             Text(
-                modifier = modifier.padding(3.dp, 0.dp),
-                text = stringResource(id = R.string.temp_symbol, item.maxTemp),
+                text = stringResource(R.string.percent_d, item.rainPercent.toInt()),
                 fontFamily = notosansFont,
                 color = Color.White,
                 style = MaterialTheme.typography.bodyMedium
+            )
+        }
+
+        Row(
+            modifier = modifier.weight(1f),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center
+        ) {
+            WeatherListAnim(
+                weatherId = item.dailyWeatherId
+            )
+        }
+
+        Row (
+            modifier = modifier.weight(1.7f),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceAround
+        ) {
+            Text(
+                modifier = modifier.padding(end = 3.dp),
+                text = stringResource(id = R.string.temp_symbol, item.maxTemp),
+                fontFamily = notosansFont,
+                color = Color.White,
+                style = MaterialTheme.typography.bodyMedium,
+                maxLines = 1
             )
 
             Text(
                 text = stringResource(id = R.string.temp_symbol, item.minTemp),
                 fontFamily = notosansFont,
                 color = Color.White,
-                style = MaterialTheme.typography.bodyMedium
+                style = MaterialTheme.typography.bodyMedium,
+                maxLines = 1
             )
         }
     }
