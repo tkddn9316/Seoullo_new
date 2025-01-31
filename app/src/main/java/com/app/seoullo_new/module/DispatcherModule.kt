@@ -11,8 +11,8 @@ import dagger.hilt.android.components.ViewModelComponent
  * Test 가능한 Dispatchers.
  * 새로운 코루틴을 만들 때 Dispatcher를 주입.
  */
-@InstallIn(ViewModelComponent::class)
 @Module
+@InstallIn(ViewModelComponent::class)
 interface DispatcherModule {
     @Binds
     fun bindDispatcherProvider(provider: DispatcherProviderImpl): DispatcherProvider

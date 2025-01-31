@@ -11,9 +11,9 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
-@InstallIn(SingletonComponent::class)
 @Module
-class PresentationModule {
+@InstallIn(SingletonComponent::class)
+object PresentationModule {
     @Provides
     @Singleton
     fun provideCheckingManager(@ApplicationContext context: Context): CheckingManager {
