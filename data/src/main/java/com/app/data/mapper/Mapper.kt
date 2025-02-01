@@ -1,6 +1,8 @@
 package com.app.data.mapper
 
 import android.text.Html
+import com.app.data.model.AutoCompleteRequestDTO
+import com.app.data.model.AutoCompleteResponseDTO
 import com.app.data.model.PlacesDetailGoogleResponseDTO
 import com.app.data.model.PlacesDetailResponseDTO
 import com.app.data.model.PlacesNearbyRequestDTO
@@ -11,6 +13,8 @@ import com.app.data.model.UserEntity
 import com.app.data.model.WeatherDTO
 import com.app.data.utils.Util.addHttps
 import com.app.domain.model.Places
+import com.app.domain.model.PlacesAutoComplete
+import com.app.domain.model.PlacesAutoCompleteRequest
 import com.app.domain.model.PlacesDetail
 import com.app.domain.model.PlacesDetailGoogle
 import com.app.domain.model.PlacesNearbyRequest
@@ -192,3 +196,20 @@ fun mapperToWeather(weatherDTO: WeatherDTO): Weather {
         windSpeed = weatherDTO.current.windSpeed
     )
 }
+
+fun mapperToAutoCompleteRequest(autoCompleteRequest: PlacesAutoCompleteRequest): AutoCompleteRequestDTO =
+    AutoCompleteRequestDTO(
+        input = autoCompleteRequest.input,
+        languageCode = autoCompleteRequest.languageCode
+    )
+
+fun mapperToAutoComplete(autoCompleteResponseDTO: AutoCompleteResponseDTO): PlacesAutoComplete =
+    PlacesAutoComplete(
+        items = autoCompleteResponseDTO.suggestions.toList().map {
+            PlacesAutoComplete.Item(
+                placeId = it.placePrediction.placeId,
+                displayName = it.placePrediction.structuredFormat.mainText.text,
+                address = it.placePrediction.structuredFormat.secondaryText.text
+            )
+        }
+    )
