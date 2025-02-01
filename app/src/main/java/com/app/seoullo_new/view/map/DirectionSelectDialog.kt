@@ -14,7 +14,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Directions
 import androidx.compose.material.icons.filled.NearMe
 import androidx.compose.material.icons.filled.SwapVert
@@ -23,7 +22,6 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.VerticalDivider
@@ -34,13 +32,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewModelScope
 import com.app.domain.model.DirectionRequest
 import com.app.domain.model.ReverseGeocoding
@@ -63,26 +59,28 @@ fun DirectionSelectDialog(
     val language = LocalLanguage.current
 
     var startingRequest by remember { mutableStateOf(DirectionRequest()) }
-    var destinationRequest by remember { mutableStateOf(
-        DirectionRequest(
-            lat = viewModel.latLng.lat,
-            lng = viewModel.latLng.lng,
-            address = viewModel.latLng.address.ifEmpty { "" },
-            placeId = viewModel.latLng.placeId.ifEmpty { "" }
+    var destinationRequest by remember {
+        mutableStateOf(
+            DirectionRequest(
+                lat = viewModel.latLng.lat,
+                lng = viewModel.latLng.lng,
+                address = viewModel.latLng.address.ifEmpty { "" },
+                placeId = viewModel.latLng.placeId.ifEmpty { "" }
+            )
         )
-    ) }
+    }
 
     Logging.e(startingRequest)
     Logging.e(destinationRequest)
 
-    // FocusRequester 및 FocusManager 설정
-    val textField1FocusRequester = FocusRequester()
-    val textField2FocusRequester = FocusRequester()
     // 현재 Focus 상태 관리
     var focusedField by remember { mutableStateOf<FocusedField?>(null) }
 
     val currentLocationErrorMessage = stringResource(R.string.current_location_error)
     val enterErrorMessage = stringResource(R.string.enter_error)
+
+    // 자동완성 관련
+    val autocompleteResults by viewModel.autocompleteResults.collectAsStateWithLifecycle()
 
     AlertDialog(
         title = { Text(text = stringResource(R.string.select_places_title)) },
@@ -106,12 +104,9 @@ fun DirectionSelectDialog(
                     }
                     Column {
                         // starting
-                        OutlinedTextField(
-                            modifier = Modifier
-                                .focusRequester(textField1FocusRequester)
-                                .onFocusChanged { focusState ->
-                                    if (focusState.isFocused) focusedField = FocusedField.STARTING
-                                },
+                        AutoCompleteTextField(
+                            label = stringResource(R.string.starting),
+                            supportingText = stringResource(R.string.starting_supporting),
                             value = startingRequest.address,
                             onValueChange = { newAddress ->
                                 startingRequest = startingRequest.copy(
@@ -120,36 +115,38 @@ fun DirectionSelectDialog(
                                     address = newAddress,
                                     placeId = ""
                                 )
-                            },
-                            label = { Text(text = stringResource(R.string.starting)) },
-                            supportingText = { Text(text = stringResource(R.string.starting_supporting)) },
-                            singleLine = true,
-                            trailingIcon = {
-                                if (startingRequest.address.isNotEmpty()) {
-                                    IconButton(
-                                        onClick = { startingRequest = startingRequest.copy(
-                                            lat = 0.0,
-                                            lng = 0.0,
-                                            address = "",
-                                            placeId = ""
-                                        ) }
-                                    ) {
-                                        Icon(
-                                            imageVector = Icons.Filled.Clear,
-                                            contentDescription = null
-                                        )
-                                    }
+                                if (newAddress.isNotEmpty()) {
+                                    viewModel.onAutoCompletePlaces(
+                                        input = newAddress,
+                                        languageCode = if (language == Language.ENGLISH) "en" else "ko"
+                                    )
+                                } else {
+                                    viewModel.clearAutoCompleteResults()
                                 }
-                            }
+                            },
+                            onClearClick = {
+                                startingRequest = DirectionRequest()
+                                viewModel.clearAutoCompleteResults()
+                            },
+                            onItemSelected = { place ->
+                                startingRequest = startingRequest.copy(
+                                    lat = 0.0,
+                                    lng = 0.0,
+                                    address = "${place.displayName} - ${place.address}",
+                                    placeId = place.placeId
+                                )
+                                viewModel.clearAutoCompleteResults()
+                            },
+                            autocompleteResults = autocompleteResults,
+                            focusedField = focusedField,
+                            fieldType = FocusedField.STARTING,
+                            setFocusedField = { focusedField = it }
                         )
 
                         // destination
-                        OutlinedTextField(
-                            modifier = Modifier
-                                .focusRequester(textField2FocusRequester)
-                                .onFocusChanged { focusState ->
-                                    if (focusState.isFocused) focusedField = FocusedField.DESTINATION
-                                },
+                        AutoCompleteTextField(
+                            label = stringResource(R.string.destination),
+                            supportingText = stringResource(R.string.destination_supporting),
                             value = destinationRequest.address,
                             onValueChange = { newAddress ->
                                 destinationRequest = destinationRequest.copy(
@@ -158,27 +155,32 @@ fun DirectionSelectDialog(
                                     address = newAddress,
                                     placeId = ""
                                 )
-                            },
-                            label = { Text(text = stringResource(R.string.destination)) },
-                            supportingText = { Text(text = stringResource(R.string.destination_supporting)) },
-                            singleLine = true,
-                            trailingIcon = {
-                                if (destinationRequest.address.isNotEmpty()) {
-                                    IconButton(
-                                        onClick = { destinationRequest = destinationRequest.copy(
-                                            lat = 0.0,
-                                            lng = 0.0,
-                                            address = "",
-                                            placeId = ""
-                                        ) }
-                                    ) {
-                                        Icon(
-                                            imageVector = Icons.Filled.Clear,
-                                            contentDescription = null
-                                        )
-                                    }
+                                if (newAddress.isNotEmpty()) {
+                                    viewModel.onAutoCompletePlaces(
+                                        input = newAddress,
+                                        languageCode = if (language == Language.ENGLISH) "en" else "ko"
+                                    )
+                                } else {
+                                    viewModel.clearAutoCompleteResults()
                                 }
-                            }
+                            },
+                            onClearClick = {
+                                destinationRequest = DirectionRequest()
+                                viewModel.clearAutoCompleteResults()
+                            },
+                            onItemSelected = { place ->
+                                destinationRequest = destinationRequest.copy(
+                                    lat = 0.0,
+                                    lng = 0.0,
+                                    address = "${place.displayName} - ${place.address}",
+                                    placeId = place.placeId
+                                )
+                                viewModel.clearAutoCompleteResults()
+                            },
+                            autocompleteResults = autocompleteResults,
+                            focusedField = focusedField,
+                            fieldType = FocusedField.DESTINATION,
+                            setFocusedField = { focusedField = it }
                         )
                     }
                 }
@@ -272,7 +274,10 @@ fun DirectionSelectDialog(
                 }
             }
         },
-        onDismissRequest = viewModel::closeDirectionSelectDialog,
+        onDismissRequest = {
+            viewModel.clearAutoCompleteResults()
+            viewModel.closeDirectionSelectDialog()
+        },
         confirmButton = {
             TextButton(
                 onClick = viewModel::closeDirectionSelectDialog,
@@ -299,11 +304,13 @@ fun MapViewModel.getAddressText(
                     val address = state.data ?: ReverseGeocoding()
                     responseText(address)
                 }
+
                 is ApiState.Error -> {
                     // 오류 처리
                     val error = state.message
                     Toast.makeText(context, error, Toast.LENGTH_SHORT).show()
                 }
+
                 else -> {}
             }
         }

@@ -5,11 +5,14 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.app.domain.model.Direction
 import com.app.domain.model.DirectionRequest
+import com.app.domain.model.PlacesAutoComplete
+import com.app.domain.model.PlacesAutoCompleteRequest
 import com.app.domain.model.ReverseGeocoding
 import com.app.domain.model.common.ApiState
 import com.app.domain.repository.MapRepository
 import com.app.domain.usecase.direction.GetDirectionUseCase
 import com.app.domain.usecase.direction.GetReverseGeocodingUseCase
+import com.app.domain.usecase.places.GetPlacesAutoCompleteUseCase
 import com.app.seoullo_new.BuildConfig
 import com.app.seoullo_new.di.DispatcherProvider
 import com.app.seoullo_new.utils.LocationService
@@ -22,22 +25,30 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.LatLngBounds
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.serialization.json.Json
 import javax.inject.Inject
 
+@OptIn(FlowPreview::class, ExperimentalCoroutinesApi::class)
 @HiltViewModel
 class MapViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     dispatcherProvider: DispatcherProvider,
     private val reverseGeocodingUseCase: GetReverseGeocodingUseCase,
     private val directionUseCase: GetDirectionUseCase,
+    private val autoCompleteUseCase: GetPlacesAutoCompleteUseCase,
     private val locationService: LocationService,
     private val mapRepository: MapRepository
 ) : BaseViewModel2(dispatcherProvider) {
@@ -58,8 +69,6 @@ class MapViewModel @Inject constructor(
     val currentLocationBounds = _currentLocationBounds.asStateFlow()
 
     // 폴리라인
-//    private val _polyline = MutableStateFlow<List<LatLng>>(emptyList())
-//    val polyline = _polyline.asStateFlow()
     private val _polyline = MutableStateFlow(PolyLine())
     val polyline = _polyline.asStateFlow()
 
@@ -71,13 +80,53 @@ class MapViewModel @Inject constructor(
     private val _direction = MutableStateFlow<ApiState<Direction>>(ApiState.Initial())
     val direction = _direction.asStateFlow()
 
+    private val searchQuery = MutableStateFlow(Pair("", ""))
+
+    // 자동완성 결과
+    private val _autocompleteResults = MutableStateFlow<ApiState<PlacesAutoComplete>>(ApiState.Initial())
+    val autocompleteResults = _autocompleteResults.asStateFlow()
+
     init {
         Logging.e("이전 화면: $latLng")
         getCurrentLocation()
+
+        onIO {
+            searchQuery
+                .debounce(700)
+                .distinctUntilChanged()
+                .filter {
+                    it.first.isNotEmpty()
+                }
+                .flatMapLatest {
+                    autoCompleteUseCase(
+                        apiKey = BuildConfig.SEOULLO_GOOGLE_MAPS_API_KEY,
+                        autoCompleteRequest = PlacesAutoCompleteRequest(
+                            input = it.first,
+                            languageCode = it.second
+                        )
+                    )
+                }
+                .collect {
+                    _autocompleteResults.value = it
+//                    when (it) {
+//                        is ApiState.Success -> {
+//                            val data = it.data ?: PlacesAutoComplete()
+//                            _autocompleteResults.value = data.items
+//                        }
+//                        is ApiState.Error -> {
+//                            Logging.e(it.message ?: "")
+//                        }
+//                        else -> {}
+//                    }
+                }
+        }
     }
 
-    fun openDirectionSelectDialog() = _dialogState.update { it.copy(isDirectionSelectDialogOpen = true) }
-    fun closeDirectionSelectDialog() = _dialogState.update { it.copy(isDirectionSelectDialogOpen = false) }
+    fun openDirectionSelectDialog() =
+        _dialogState.update { it.copy(isDirectionSelectDialogOpen = true) }
+
+    fun closeDirectionSelectDialog() =
+        _dialogState.update { it.copy(isDirectionSelectDialogOpen = false) }
 
     fun getCurrentLocation() {
         viewModelScope.launch {
@@ -138,6 +187,19 @@ class MapViewModel @Inject constructor(
         }
     }
 
+    fun onAutoCompletePlaces(
+        input: String,
+        languageCode: String
+    ) {
+        searchQuery.value = Pair(input, languageCode)
+    }
+
+    fun clearAutoCompleteResults() {
+//        _autocompleteResults.value.data = null
+        searchQuery.value = Pair("", "")
+        _autocompleteResults.value = ApiState.Initial()
+    }
+
     fun getDirection(
         destination: DirectionRequest,
         starting: DirectionRequest,
@@ -163,7 +225,8 @@ class MapViewModel @Inject constructor(
 
             delay(1000)
 
-            val jsonString = context.assets.open("example_google_direction2.json").bufferedReader().use { it.readText() }
+            val jsonString = context.assets.open("example_google_direction2.json").bufferedReader()
+                .use { it.readText() }
             val fakeDirection = Json.decodeFromString<Direction>(jsonString)
             _direction.value = ApiState.Success(fakeDirection)
         }

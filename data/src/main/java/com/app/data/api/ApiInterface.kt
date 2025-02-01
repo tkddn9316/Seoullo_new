@@ -1,5 +1,7 @@
 package com.app.data.api
 
+import com.app.data.model.AutoCompleteRequestDTO
+import com.app.data.model.AutoCompleteResponseDTO
 import com.app.data.model.DirectionResponseDTO
 import com.app.data.model.PlacesDetailGoogleResponseDTO
 import com.app.data.model.PlacesNearbyRequestDTO
@@ -69,4 +71,14 @@ interface ApiInterface {
         @Query("transit_routing_preference") preference: String = "fewer_transfers",
         @Query("key") apiKey: String
     ): DirectionResponseDTO
+
+    // AuthComplete
+    @POST("v1/places:autocomplete")
+    @Headers("Content-Type: application/json")
+    suspend fun getAuthComplete(
+        @Header("X-Goog-Api-Key") apiKey: String,
+        @Header("X-Goog-FieldMask") fieldMask: String =
+            "suggestions.placePrediction.placeId,suggestions.placePrediction.structuredFormat.mainText.text,suggestions.placePrediction.structuredFormat.secondaryText.text",
+        @Body autoCompleteRequestDTO: AutoCompleteRequestDTO
+    ): AutoCompleteResponseDTO
 }

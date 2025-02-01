@@ -4,6 +4,8 @@ import com.app.data.api.ApiAnnotation
 import com.app.data.api.ApiInterface
 import com.app.data.api.ApiInterface2
 import com.app.data.api.ApiInterface3
+import com.app.data.source.AuthCompleteDataSource
+import com.app.data.source.AuthCompleteDataSourceImpl
 import com.app.data.source.DirectionDataSource
 import com.app.data.source.DirectionDataSourceImpl
 import com.app.data.source.DustDataSource
@@ -92,5 +94,11 @@ class RemoteDataModule {
     @Singleton
     fun provideSunriseDataSource(@ApiAnnotation.SeoulSunriseApi apiInterface: ApiInterface3): SunriseDataSource {
         return SunriseDataSourceImpl(apiInterface)
+    }
+
+    @Provides
+    @Singleton
+    fun provideAuthCompleteDataSource(@ApiAnnotation.GooglePlacesApi apiInterface: ApiInterface): AuthCompleteDataSource {
+        return AuthCompleteDataSourceImpl(apiInterface)
     }
 }
