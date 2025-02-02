@@ -93,6 +93,11 @@ fun NavGraphBuilder.mainScreenNavigation(navController: NavHostController) {
                     Route.LICENSE -> {
                         navController.navigate(Route.LICENSE)
                     }
+                    Route.SPLASH -> {
+                        navController.navigate(Route.SPLASH) {
+                            popUpTo(Route.MAIN) { inclusive = true }  // Main 및 하위 스택 제거
+                        }
+                    }
                 }
             }
         )
@@ -180,7 +185,6 @@ fun NavGraphBuilder.travelScreenNavigation(navController: NavHostController) {
 }
 
 fun NavGraphBuilder.settingScreenNavigation(navController: NavHostController) {
-    // TODO: 추후 SettingViewModel 연결(로그아웃 등)
     composable(Route.LICENSE) {
         LicenseScreen(onNavigationClick = { navController.navigateUp() })
     }

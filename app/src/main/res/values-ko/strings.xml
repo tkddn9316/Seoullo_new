@@ -5,6 +5,7 @@
     <string name="empty"></string>
     <string name="btn_close">닫기</string>
     <string name="confirm">확인</string>
+    <string name="cancel">취소</string>
     <string name="exit">\'뒤로\' 버튼을 한 번 더 누르면 앱이 종료됩니다.</string>
     <string name="yes">Y</string>
     <string name="no">N</string>
@@ -108,6 +109,10 @@
     <string name="version_title">버전</string>
     <string name="license_title">라이선스</string>
     <string name="license_description">오픈 소스 라이선스</string>
+    <string name="bug_report_title">버그 제보</string>
+    <string name="bug_report_description">앱에 문제가 있을 경우 문의해주세요.</string>
+    <string name="logout_title">로그아웃</string>
+    <string name="logout_dialog_contents">로그아웃 하시겠습니까?</string>
 
     <string name="account_title">계정</string>
 

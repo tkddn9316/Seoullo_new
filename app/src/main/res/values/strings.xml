@@ -5,6 +5,7 @@
     <string name="line" translatable="false">-</string>
     <string name="btn_close">Close</string>
     <string name="confirm">OK</string>
+    <string name="cancel">Cancel</string>
     <string name="exit">Press \'back\' again to exit.</string>
     <string name="yes">Y</string>
     <string name="no">N</string>
@@ -121,7 +122,14 @@
     <string name="license_title">License</string>
     <string name="license_description">Open Source License</string>
     <string name="github_title" translatable="false">Github</string>
+    <string name="bug_report_title">Bug Report</string>
+    <string name="bug_report_description">Something isn\'t working correctly?</string>
+    <string name="play_store_title" translatable="false">Play Store</string>
+    <string name="logout_title">Logout</string>
+    <string name="logout_dialog_contents">Do you want to logout?</string>
     <string name="github_link" translatable="false">https://github.com/tkddn9316/Seoullo_new</string>
+    <string name="bug_report_link" translatable="false">https://github.com/tkddn9316/Seoullo_new/issues/new/choose</string>
+    <string name="play_store_link" translatable="false">https://play.google.com/store/apps/details?id=com.app.seoullo_new</string>
 
     <string name="account_title">Account</string>
 

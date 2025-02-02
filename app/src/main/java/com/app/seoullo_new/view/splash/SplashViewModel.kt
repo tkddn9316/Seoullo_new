@@ -101,11 +101,10 @@ class SplashViewModel @Inject constructor(
     private fun onLoginSuccess(account: GoogleSignInAccount) {
         onIO {
             val user = User(
-                0,
-                "Y",    // 자동 로그인 설정
-                account.displayName!!,
-                account.email!!,
-                account.photoUrl.toString()
+                auto = "Y",    // 자동 로그인 설정
+                name = account.displayName!!,
+                email = account.email!!,
+                photoUrl = account.photoUrl.toString()
             )
             insertUserUseCase(user)
 

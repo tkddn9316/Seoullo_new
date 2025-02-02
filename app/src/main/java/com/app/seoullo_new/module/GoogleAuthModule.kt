@@ -19,8 +19,8 @@ object GoogleAuthModule {
     @Singleton
     fun provideGoogleSignInOptions(): GoogleSignInOptions {
         return GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            .requestServerAuthCode(BuildConfig.GOOGLE_CLIENT_ID)
             .requestEmail()
+            .requestIdToken(BuildConfig.GOOGLE_CLIENT_ID)
             .build()
     }
 

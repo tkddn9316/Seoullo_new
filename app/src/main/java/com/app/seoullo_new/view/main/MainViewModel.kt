@@ -7,6 +7,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
@@ -28,6 +29,7 @@ class MainViewModel @Inject constructor(
         viewModelScope.launch {
             selectUserUseCase()
                 .flowOn(Dispatchers.IO)
+                .filter { it.isNotEmpty() }
                 .map { it[0] }
                 .collect { user -> _profileImageUrl.value = user.photoUrl }
         }

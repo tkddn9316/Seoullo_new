@@ -7,5 +7,6 @@ data class DialogState(
     val isThemeDialogOpen: Boolean = false,
     val isLanguageDialogOpen: Boolean = false,
     val isReviewDetailDialogOpen: Boolean = false,
-    val isDirectionSelectDialogOpen: Boolean = false
+    val isDirectionSelectDialogOpen: Boolean = false,
+    val isLogoutDialogOpen: Boolean = false
 )
