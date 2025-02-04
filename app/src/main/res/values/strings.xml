@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">Seoullo_new</string>
     <string name="seoullo">SEOULLO</string>
+    <string name="seoullo_small_letter" translatable="false">Seoullo</string>"
     <string name="empty" translatable="false"></string>
     <string name="line" translatable="false">-</string>
     <string name="btn_close">Close</string>

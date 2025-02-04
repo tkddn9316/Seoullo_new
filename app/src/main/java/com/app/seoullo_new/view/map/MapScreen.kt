@@ -54,7 +54,6 @@ fun MapScreen(
     viewModel: MapViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
-    val scope = rememberCoroutineScope()
 
     // 구글 맵 관련
     val cameraPositionState: CameraPositionState = rememberCameraPositionState {
@@ -177,14 +176,10 @@ fun MapScreen(
 
             var lastErrorMessage by remember { mutableStateOf<String?>(null) }
             when (directionState) {
-                is ApiState.Initial -> {}
                 is ApiState.Loading -> {
                     viewModel.closeDirectionSelectDialog()
                     // API 로딩 처리
                     LoadingOverlay()
-                }
-                is ApiState.Success -> {
-
                 }
                 is ApiState.Error -> {
                     // TODO: ERROR Message 구글이 주는 걸로 사용 전환
@@ -194,6 +189,7 @@ fun MapScreen(
                         lastErrorMessage = errorMessage
                     }
                 }
+                else -> {}
             }
         }
     }

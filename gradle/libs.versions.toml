@@ -49,6 +49,7 @@ androidLibrary = "8.7.3"
 googleServices = "4.4.2"
 googleMapsScrect = "2.0.1"
 balloon = "1.6.11"
+composeFoundation = "1.8.0-beta01"
 
 [libraries]
 accompanist-pager = { module = "com.google.accompanist:accompanist-pager", version.ref = "accompanistPager" }
@@ -116,6 +117,7 @@ ui-test-junit4 = { module = "androidx.compose.ui:ui-test-junit4" }
 ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
 ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
 balloon = { module = "com.github.skydoves:balloon-compose", version.ref = "balloon" }
+compose-foundation = { module = "androidx.compose.foundation:foundation", version.ref = "composeFoundation" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "app" }

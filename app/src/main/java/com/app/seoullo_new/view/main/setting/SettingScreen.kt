@@ -60,6 +60,24 @@ fun SettingScreen(
                 .padding(innerPadding)
                 .verticalScroll(scrollState)
         ) {
+            // Account
+            Column(
+                modifier = Modifier.padding(start = 24.dp, top = 24.dp),
+                horizontalAlignment = Alignment.Start
+            ) {
+                Text(
+                    text = stringResource(R.string.account_title),
+                    fontWeight = FontWeight.Bold
+                )
+            }
+            Spacer(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(8.dp)
+            )
+            LogoutSetting { viewModel.openLogoutDialog() }
+            HorizontalDivider(thickness = 1.dp, color = MaterialTheme.colorScheme.outlineVariant)
+
             // Theme Setting
             Column(
                 modifier = Modifier.padding(start = 24.dp, top = 24.dp),
@@ -95,7 +113,6 @@ fun SettingScreen(
                     .height(8.dp)
             )
             SettingItem(
-                modifier = Modifier.height(64.dp),
                 title = stringResource(R.string.version_title),
                 description = getAppVersionName(),
                 onItemClick = { },
@@ -109,7 +126,6 @@ fun SettingScreen(
                 }
             )
             SettingItem(
-                modifier = Modifier.height(64.dp),
                 title = stringResource(R.string.license_title),
                 description = stringResource(R.string.license_description),
                 onItemClick = { settingOnClick(Route.LICENSE) },
@@ -123,7 +139,20 @@ fun SettingScreen(
                 }
             )
             SettingItem(
-                modifier = Modifier.height(64.dp),
+                modifier = Modifier.height(70.dp),
+                title = stringResource(R.string.play_store_title),
+                onItemClick = { uriHandler.openUri(playStoreLink) },
+                showTrailingIcon = true,
+                showLeadingIcon = true,
+                leadingIcon = {
+                    Icon(
+                        ImageVector.vectorResource(id = R.drawable.ic_setting_google_playstore),
+                        contentDescription = null
+                    )
+                }
+            )
+            SettingItem(
+                modifier = Modifier.height(70.dp),
                 title = stringResource(R.string.github_title),
                 onItemClick = { uriHandler.openUri(githubLink) },
                 showTrailingIcon = true,
@@ -136,7 +165,6 @@ fun SettingScreen(
                 }
             )
             SettingItem(
-                modifier = Modifier.height(64.dp),
                 title = stringResource(R.string.bug_report_title),
                 description = stringResource(R.string.bug_report_description),
                 onItemClick = { uriHandler.openUri(bugReportLink) },
@@ -149,38 +177,6 @@ fun SettingScreen(
                     )
                 }
             )
-            SettingItem(
-                modifier = Modifier.height(64.dp),
-                title = stringResource(R.string.play_store_title),
-                onItemClick = { uriHandler.openUri(playStoreLink) },
-                showTrailingIcon = true,
-                showLeadingIcon = true,
-                leadingIcon = {
-                    Icon(
-                        ImageVector.vectorResource(id = R.drawable.ic_setting_google_playstore),
-                        contentDescription = null
-                    )
-                }
-            )
-            HorizontalDivider(thickness = 1.dp, color = MaterialTheme.colorScheme.outlineVariant)
-
-            // Account
-            Column(
-                modifier = Modifier.padding(start = 24.dp, top = 24.dp),
-                horizontalAlignment = Alignment.Start
-            ) {
-                Text(
-                    text = stringResource(R.string.account_title),
-                    fontWeight = FontWeight.Bold
-                )
-            }
-            Spacer(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(8.dp)
-            )
-            LogoutSetting { viewModel.openLogoutDialog() }
-
 
             // 팝업 상태 관리
             if (dialogState.isThemeDialogOpen) {
@@ -239,7 +235,7 @@ fun LogoutSetting(
     onItemClick: () -> Unit
 ) {
     SettingItem(
-        modifier = Modifier.height(64.dp),
+        modifier = Modifier.height(70.dp),
         title = stringResource(R.string.logout_title),
         onItemClick = onItemClick,
         showTrailingIcon = false,

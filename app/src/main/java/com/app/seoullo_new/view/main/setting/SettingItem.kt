@@ -3,17 +3,23 @@ package com.app.seoullo_new.view.main.setting
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.text.BasicText
+import androidx.compose.foundation.text.TextAutoSize
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorProducer
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.app.seoullo_new.R
 
 @Composable
@@ -38,13 +44,32 @@ fun SettingItem(
             .padding(horizontal = 8.dp)
     }
     val colors = ListItemDefaults.colors()
+    val descriptionColor = MaterialTheme.colorScheme.onBackground
 
     if (showLeadingIcon) {
         ListItem(
             modifier = clickableModifier,
-            headlineContent = { Text(title, overflow = TextOverflow.Ellipsis) },
+            headlineContent = {
+                Text(
+                    text = title,
+                    overflow = TextOverflow.Ellipsis,
+                    color = descriptionColor
+                )
+            },
             supportingContent = {
-                description?.let { Text(it, overflow = TextOverflow.Ellipsis) }
+                description?.let {
+                    BasicText(
+                        text = it,
+                        maxLines = 1,
+                        overflow = TextOverflow.Visible,
+                        autoSize = TextAutoSize.StepBased(
+                            minFontSize = 8.sp,
+                            maxFontSize = 14.sp,
+                            stepSize = 2.sp
+                        ),
+                        color = { descriptionColor }
+                    )
+                }
             },
             leadingContent = { leadingIcon() },
             trailingContent = {
@@ -65,9 +90,27 @@ fun SettingItem(
     } else {
         ListItem(
             modifier = clickableModifier,
-            headlineContent = { Text(title) },
+            headlineContent = {
+                Text(
+                    text = title,
+                    overflow = TextOverflow.Ellipsis,
+                    color = descriptionColor
+                )
+            },
             supportingContent = {
-                description?.let { Text(it) }
+                description?.let {
+                    BasicText(
+                        text = it,
+                        maxLines = 1,
+                        overflow = TextOverflow.Visible,
+                        autoSize = TextAutoSize.StepBased(
+                            minFontSize = 8.sp,
+                            maxFontSize = 14.sp,
+                            stepSize = 2.sp
+                        ),
+                        color = { descriptionColor }
+                    )
+                }
             },
             trailingContent = {
                 if (showTrailingIcon) {

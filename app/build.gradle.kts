@@ -115,6 +115,7 @@ dependencies {
     implementation(libs.androidx.constraintlayout.compose)
     implementation(libs.androidx.runtime.livedata)
     implementation(libs.androidx.material.icons.extended)
+    implementation(libs.compose.foundation)
     // compose StatusBar Color
     implementation(libs.accompanist.systemuicontroller)
     // compose permission
