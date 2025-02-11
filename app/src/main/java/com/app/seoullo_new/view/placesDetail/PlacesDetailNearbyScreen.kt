@@ -67,6 +67,7 @@ import com.app.domain.model.common.ApiState
 import com.app.domain.model.theme.Language
 import com.app.seoullo_new.BuildConfig
 import com.app.seoullo_new.R
+import com.app.seoullo_new.utils.Util.getLanguageCode
 import com.app.seoullo_new.view.base.ErrorScreen
 import com.app.seoullo_new.view.base.LoadingOverlay
 import com.app.seoullo_new.view.base.SeoulloAppBar
@@ -106,7 +107,10 @@ fun PlaceDetailNearbyScreen(
             viewModel.getFakePlacesDetailGoogle(context)
         } else {
             viewModel.getPlacesDetailGoogle(
-                if (language == Language.ENGLISH) "en" else "ko"
+                languageCode = getLanguageCode(
+                    context = context,
+                    language = language
+                )
             )
         }
     }
@@ -402,7 +406,9 @@ fun PlacesDetailView(
                                     maxLines = 1,
                                     overflow = TextOverflow.Ellipsis
                                 )
-                                RatingBar(item.rating)
+                                RatingBar(
+                                    rating = item.rating
+                                )
                             }
                         }
                         Spacer(
@@ -504,7 +510,9 @@ fun ReviewDetailDialog(
                     text = review.profileName,
                     style = MaterialTheme.typography.titleLarge
                 )
-                RatingBar(review.rating)
+                RatingBar(
+                    rating = review.rating
+                )
                 Text(
                     text = review.relativePublishTimeDescription,
                     style = MaterialTheme.typography.bodyMedium

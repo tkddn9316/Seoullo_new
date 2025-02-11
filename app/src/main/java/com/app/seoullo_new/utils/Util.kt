@@ -10,6 +10,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.app.domain.model.common.BaseModel
+import com.app.domain.model.theme.Language
 import com.app.seoullo_new.R
 import com.app.seoullo_new.utils.Constants.INTENT_DATA
 import com.app.seoullo_new.view.util.TravelItemData
@@ -215,5 +216,9 @@ object Util {
 
     fun String.toColor(): Color {
         return Color(android.graphics.Color.parseColor(this))
+    }
+
+    fun getLanguageCode(context: Context, language: Language): String {
+        return if (language == Language.ENGLISH) context.getString(R.string.en) else context.getString(R.string.ko)
     }
 }
