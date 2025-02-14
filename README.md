@@ -7,9 +7,12 @@
 ## 🛠️ Development
 ### Language
 - Kotlin
+### Architecture
+- Clean Architecture
+- Multi Module Architecture
+- MVVM
 ### Libraries
 - Kotlin Coroutine
-- Clean Architecture
 - Dagger Hilt
 - Jetpack Compose
   - Material3
@@ -19,6 +22,7 @@
   - Paging3
   - LiveData
 - Glide
+- Lottle Animation
 - Ted Permission
 - Retrofit2
 ### API
@@ -26,7 +30,6 @@
 - Google Login
 - Google Maps
 - Google Places(New)
-- Lottle Animation
 - OpenWeatherMap
 - Seoul Open API
 ## 🗺️ Features
