@@ -1,3 +1,5 @@
+<img width="100" height="100" src="https://github.com/user-attachments/assets/a54ef08a-b276-41bd-9779-6df88884e8db">
+
 # 🌇 Seoullo
 
 서울로는 외국인을 위한 서울 관광 안내 앱입니다.
