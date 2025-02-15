@@ -21,6 +21,9 @@ class PlacesPagingSource @Inject constructor(
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, PlacesResponseDTO.Place> {
         return try {
+            // 카테고리 나누기
+            val (category1, category2, category3) = splitCategory(category)
+
             val currentPage = params.key ?: 1
             Logging.d("${javaClass.name}: $currentPage")
             val response = placesDataSource.getPlacesList(
@@ -28,7 +31,9 @@ class PlacesPagingSource @Inject constructor(
                 pageNo = currentPage,
                 serviceKey = serviceKey,
                 contentTypeId = contentTypeId,
-                category = category
+                category1 = category1,
+                category2 = category2,
+                category3 = category3
             )
             val body = response.single().response.body
             val places = body.items?.items ?: emptyList()   // 데이터
@@ -64,6 +69,15 @@ class PlacesPagingSource @Inject constructor(
         return state.anchorPosition?.let { anchorPosition ->
             state.closestPageToPosition(anchorPosition)?.prevKey?.plus(1)
                 ?: state.closestPageToPosition(anchorPosition)?.nextKey?.minus(1)
+        }
+    }
+
+    private fun splitCategory(input: String): Triple<String, String, String> {
+        return when {
+            input.length >= 9 -> Triple(input.substring(0, 3), input.substring(0, 5), input)
+            input.length >= 5 -> Triple(input.substring(0, 3), input.substring(0, 5), "")
+            input.length >= 3 -> Triple(input.substring(0, 3), "", "")
+            else -> Triple("", "", "")
         }
     }
 }

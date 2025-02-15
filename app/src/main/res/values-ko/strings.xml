@@ -47,17 +47,25 @@
     <string name="current_seoul">서울: %s</string>
 
     <!--  travel  -->
-    <string name="travel_title_restaurant">🍽 음식점</string>
+    <string name="travel_title_restaurant">🍚 음식점</string>
     <string name="korean_restaurant">한식</string>
     <string name="japanese_restaurant">일식</string>
     <string name="chinese_restaurant">중식</string>
     <string name="western_restaurant">양식</string>
     <string name="bar_cafe">바, 카페</string>
-    <string name="travel_title_accommodation">숙박시설</string>
+    <string name="travel_title_accommodation">🏨 숙박시설</string>
     <string name="hotel">호텔</string>
     <string name="motel">모텔</string>
     <string name="guest_house">게스트하우스</string>
     <string name="condominium">콘도미니엄</string>
+    <string name="travel_title_attraction">🎎 관광명소</string>
+    <string name="nature">자연 관광지</string>
+    <string name="historical">역사 관광지</string>
+    <string name="culture">문화시설</string>
+    <string name="leisure_sports">레저 스포츠</string>
+    <string name="travel_title_shopping">🛍️ 쇼핑</string>
+    <string name="department_store">백화점</string>
+    <string name="market">시장, 상점</string>
 
     <string name="open">OPEN</string>
     <string name="close">CLOSE</string>
