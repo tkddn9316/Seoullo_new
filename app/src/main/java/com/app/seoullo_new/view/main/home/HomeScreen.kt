@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -28,8 +29,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -60,6 +59,8 @@ fun HomeScreen(
     modifier: Modifier = Modifier
 ) {
     val context = LocalContext.current
+    // 배너 결과
+    val bannerResult by viewModel.bannerResult.collectAsStateWithLifecycle()
     // 날씨 결과
     val weatherResult by viewModel.weatherResult.collectAsStateWithLifecycle()
     val backgroundColor by viewModel.homeBackgroundColor.collectAsStateWithLifecycle()
@@ -72,6 +73,7 @@ fun HomeScreen(
         LazyColumn(
             modifier = modifier
                 .fillMaxSize()
+                .defaultMinSize(minHeight = 100.dp)
                 .background(Brush.linearGradient(colors = backgroundColor))
                 .padding(innerPadding),
             contentPadding = PaddingValues(24.dp),
@@ -82,46 +84,70 @@ fun HomeScreen(
             val temperature = weatherResult.temp
             val feelsTemperature = weatherResult.feelsLike
             item {
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally
+                Row(
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically
+                    Column(
+                        horizontalAlignment = Alignment.Start,
+                        modifier = modifier.weight(1f)
                     ) {
-                        WeatherAnim(
-                            viewModel = viewModel
-                        )
-                        Spacer(modifier = Modifier.width(8.dp))
-                        Text(
-                            text = stringResource(id = R.string.temp_symbol, temperature),
-                            color = Color.White,
-                            fontSize = 30.sp,
-                            fontWeight = FontWeight.Bold
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            WeatherAnim(
+                                viewModel = viewModel
+                            )
+                            Spacer(modifier = Modifier.width(8.dp))
+                            Text(
+                                text = stringResource(id = R.string.temp_symbol, temperature),
+                                color = Color.White,
+                                fontSize = 30.sp,
+                                fontWeight = FontWeight.Bold
+                            )
+                        }
+                        // 체감 온도
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Icon(
+                                imageVector = ImageVector.vectorResource(id = R.drawable.ic_weather_temperature),
+                                contentDescription = null,
+                                modifier = Modifier.padding(end = 4.dp),
+                                tint = Color.White
+                            )
+                            Text(
+                                text = stringResource(id = R.string.feels_like, feelsTemperature),
+                                color = Color.White,
+                                fontSize = 16.sp
+                            )
+                        }
+                        Spacer(modifier = modifier.height(5.dp))
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.LocationOn,
+                                contentDescription = null,
+                                modifier = Modifier.padding(end = 4.dp),
+                                tint = Color.White
+                            )
+                            Text(
+                                text = stringResource(R.string.current_seoul, currentTime),
+                                color = Color.White,
+                                fontSize = 16.sp
+                            )
+                        }
+                        Spacer(modifier = modifier.height(12.dp))
+                    }
+                    if (bannerResult.isNotEmpty()) {
+                        // 상단 배너
+                        InfiniteLoopPager(
+                            modifier = modifier.weight(1f),
+                            item = bannerResult
                         )
                     }
-                    // 체감 온도
-                    Text(
-                        text = stringResource(id = R.string.feels_like, feelsTemperature),
-                        color = Color.White,
-                        fontSize = 16.sp
-                    )
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.LocationOn,
-                            contentDescription = null,
-                            modifier = Modifier.padding(0.dp, 0.dp, 4.dp, 0.dp),
-                            tint = Color.White
-                        )
-                        Text(
-                            text = stringResource(R.string.current_seoul, currentTime),
-                            color = Color.White,
-                            fontSize = 16.sp
-                        )
-                    }
-                    Spacer(modifier = modifier.height(12.dp))
                 }
+                Spacer(modifier = modifier.height(12.dp))
             }
             // 날씨 정보
             item {

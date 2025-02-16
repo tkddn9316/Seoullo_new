@@ -68,10 +68,11 @@ fun NavigationGraph(navController: NavHostController) {
 fun NavGraphBuilder.splashScreenNavigation(navController: NavHostController) {
     composable(Route.SPLASH) {
         SplashScreen(
-            onMoveMain = { weatherItem ->
+            onMoveMain = { weatherItem, bannerItem ->
                 navController.navigate(
                     Route.MAIN
                         .replace(oldValue = "{weather}", newValue = weatherItem)
+                        .replace(oldValue = "{banner}", newValue = bannerItem)
                 )
             }
         )
@@ -81,7 +82,8 @@ fun NavGraphBuilder.splashScreenNavigation(navController: NavHostController) {
 fun NavGraphBuilder.mainScreenNavigation(navController: NavHostController) {
     composable(
         Route.MAIN,
-        arguments = listOf(navArgument("weather") { type = NavType.StringType })
+        arguments = listOf(navArgument("weather") { type = NavType.StringType },
+            navArgument("banner") { type = NavType.StringType })
     ) {
         MainScreen(
             travelOnClick = { travelItem ->
@@ -93,6 +95,7 @@ fun NavGraphBuilder.mainScreenNavigation(navController: NavHostController) {
                     Route.LICENSE -> {
                         navController.navigate(Route.LICENSE)
                     }
+
                     Route.SPLASH -> {
                         navController.navigate(Route.SPLASH) {
                             popUpTo(Route.MAIN) { inclusive = true }  // Main 및 하위 스택 제거

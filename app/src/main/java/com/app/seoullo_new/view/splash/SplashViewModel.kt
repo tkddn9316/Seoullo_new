@@ -1,9 +1,11 @@
 package com.app.seoullo_new.view.splash
 
 import androidx.lifecycle.viewModelScope
+import com.app.domain.model.Places
 import com.app.domain.model.User
 import com.app.domain.model.Weather
 import com.app.domain.model.common.ApiState
+import com.app.domain.usecase.places.GetPlacesListUseCase
 import com.app.domain.usecase.user.InsertUserUseCase
 import com.app.domain.usecase.user.SelectUserUseCase
 import com.app.domain.usecase.weather.WeatherUseCase
@@ -35,6 +37,7 @@ class SplashViewModel @Inject constructor(
     private val selectUserUseCase: SelectUserUseCase,
     private val insertUserUseCase: InsertUserUseCase,
     private val weatherUseCase: WeatherUseCase,
+    private val placesListUseCase: GetPlacesListUseCase,
     val googleSignInClient: GoogleSignInClient
 ) : BaseViewModel2(dispatcherProvider) {
     // 데이터를 캡슐화 하여 외부(뷰)에서 접근할 수 없도록 하고
@@ -47,6 +50,9 @@ class SplashViewModel @Inject constructor(
 
     private val _weatherResult = MutableStateFlow(Weather())
     val weatherResult = _weatherResult.asStateFlow()
+
+    private val _bannerResult = MutableStateFlow<List<Places>>(emptyList())
+    val bannerResult = _bannerResult.asStateFlow()
 
     init {
         getWeatherList()
@@ -63,19 +69,32 @@ class SplashViewModel @Inject constructor(
 
             val loginFlow = selectUserUseCase().flowOn(Dispatchers.IO)
 
-            combine(weatherFlow, loginFlow) { weatherResult, users ->
-                when (weatherResult) {
-                    is ApiState.Success -> {
+            val bannerFlow = placesListUseCase.getBannerData(
+                serviceUrl = "KorService1",
+                serviceKey = BuildConfig.TOUR_API_KEY,
+                contentTypeId = "15",
+                category = "A0208"
+            ).flowOn(Dispatchers.IO)
+
+            combine(weatherFlow, loginFlow, bannerFlow) { weatherResult, users, bannerResult ->
+                when {
+                    // 둘 다 성공해야 함
+                    weatherResult is ApiState.Success && bannerResult is ApiState.Success -> {
                         // 날씨 데이터 저장
                         val weather = weatherResult.data ?: Weather()
                         _weatherResult.value = weather
 
+                        // 배너 데이터 저장
+                        val banner = bannerResult.data ?: emptyList()
+                        _bannerResult.value = banner
+
+                        // 로그인 체크
                         _apiLoadingMessage.value = "Check Login."
                         delay(2000)
                         val isUserLoggedIn = users.any { it.auto == "Y" }
                         _isLogin.value = LoginState.IsUser(isUserLoggedIn)
                     }
-                    is ApiState.Error -> {
+                    weatherResult is ApiState.Error || bannerResult is ApiState.Error -> {
                         _apiLoadingMessage.value = "Error..."
                     }
                     else -> {}
