@@ -5,7 +5,9 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class TravelItemData(
     val restaurant: List<TravelJsonItemData>? = null,
-    val accommodation: List<TravelJsonItemData>? = null
+    val accommodation: List<TravelJsonItemData>? = null,
+    val attraction: List<TravelJsonItemData>? = null,
+    val shopping: List<TravelJsonItemData>? = null
 )
 
 @Serializable

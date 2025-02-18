@@ -47,17 +47,25 @@
     <string name="current_seoul">in Seoul: %s</string>
 
     <!--  travel  -->
-    <string name="travel_title_restaurant">🍽 Restaurant</string>
+    <string name="travel_title_restaurant">🍚 Restaurant</string>
     <string name="korean_restaurant">Korean Restaurant</string>
     <string name="japanese_restaurant">Japanese Restaurant</string>
     <string name="chinese_restaurant">Chinese Restaurant</string>
     <string name="western_restaurant">Western Restaurant</string>
     <string name="bar_cafe">Bar, Cafe</string>
-    <string name="travel_title_accommodation">Accommodation</string>
+    <string name="travel_title_accommodation">🏨 Accommodation</string>
     <string name="hotel">Hotel</string>
     <string name="motel">Motel</string>
     <string name="guest_house">Guest House</string>
     <string name="condominium">Condominium</string>
+    <string name="travel_title_attraction">🎎 Attraction</string>
+    <string name="nature">Nature</string>
+    <string name="historical">Historical</string>
+    <string name="culture">Culture</string>
+    <string name="leisure_sports">Leisure Sports</string>
+    <string name="travel_title_shopping">🛍️ Shopping</string>
+    <string name="department_store">Department Store</string>
+    <string name="market">Market</string>
 
     <string name="open">OPEN</string>
     <string name="close">CLOSE</string>

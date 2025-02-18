@@ -11,4 +11,11 @@ interface PlacesRepository {
         contentTypeId: String,
         category: String
     ): Flow<PagingData<Places>>
+
+    fun getBannerData(
+        serviceUrl: String,
+        serviceKey: String,
+        contentTypeId: String,
+        category: String
+    ): Flow<List<Places>>
 }

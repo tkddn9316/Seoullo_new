@@ -1,5 +1,6 @@
 package com.app.seoullo_new.view.splash
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.pm.ActivityInfo
 import android.net.Uri
@@ -26,7 +27,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -63,23 +63,19 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
+@SuppressLint("SourceLockedOrientationActivity")
 @Composable
 fun SplashScreen(
     viewModel: SplashViewModel = hiltViewModel(),
     modifier: Modifier = Modifier,
-    onMoveMain: (weather: String) -> Unit
+    onMoveMain: (weather: String, banner: String) -> Unit
 ) {
     val context = LocalContext.current
     val activity = remember { context as? Activity }
 
     // 가로 모드 비활성화 (세로 고정)
-    DisposableEffect(Unit) {
+    LaunchedEffect (Unit) {
         activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
-
-        onDispose {
-            // 다른 화면으로 이동 시 원래 설정 복원 (자동 회전 허용)
-            activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
-        }
     }
     BackOnPressed()
 
@@ -117,6 +113,7 @@ fun SplashScreen(
 
     // 정보 받아온거
     val weatherData by viewModel.weatherResult.collectAsStateWithLifecycle()
+    val bannerData by viewModel.bannerResult.collectAsStateWithLifecycle()
 
     Scaffold { paddingValues ->
         Column(
@@ -165,9 +162,12 @@ fun SplashScreen(
                         val isUser = (loginState as LoginState.IsUser).state
                         if (isUser) {
                             // 로그인 완료
-                            val json = Json.encodeToString(weatherData)
-                            val encodedJson = Uri.encode(json)
-                            onMoveMain(encodedJson)
+                            val weatherJson = Json.encodeToString(weatherData)
+                            val encodedWeatherJson = Uri.encode(weatherJson)
+                            val bannerJson = Json.encodeToString(bannerData)
+                            val encodedBannerJson = Uri.encode(bannerJson)
+
+                            onMoveMain(encodedWeatherJson, encodedBannerJson)
                         } else {
                             GoogleSignInButton {
                                 signInLauncher.launch(viewModel.googleSignInClient.signInIntent)

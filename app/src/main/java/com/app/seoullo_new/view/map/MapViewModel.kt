@@ -94,9 +94,7 @@ class MapViewModel @Inject constructor(
             searchQuery
                 .debounce(700)
                 .distinctUntilChanged()
-                .filter {
-                    it.first.isNotEmpty()
-                }
+                .filter { it.first.isNotEmpty() }
                 .flatMapLatest {
                     autoCompleteUseCase(
                         apiKey = BuildConfig.SEOULLO_GOOGLE_MAPS_API_KEY,
@@ -106,18 +104,8 @@ class MapViewModel @Inject constructor(
                         )
                     )
                 }
-                .collect {
-                    _autocompleteResults.value = it
-//                    when (it) {
-//                        is ApiState.Success -> {
-//                            val data = it.data ?: PlacesAutoComplete()
-//                            _autocompleteResults.value = data.items
-//                        }
-//                        is ApiState.Error -> {
-//                            Logging.e(it.message ?: "")
-//                        }
-//                        else -> {}
-//                    }
+                .collect { state ->
+                    _autocompleteResults.value = state
                 }
         }
     }
@@ -195,7 +183,6 @@ class MapViewModel @Inject constructor(
     }
 
     fun clearAutoCompleteResults() {
-//        _autocompleteResults.value.data = null
         searchQuery.value = Pair("", "")
         _autocompleteResults.value = ApiState.Initial()
     }

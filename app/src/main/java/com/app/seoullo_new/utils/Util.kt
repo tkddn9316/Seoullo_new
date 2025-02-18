@@ -10,6 +10,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.app.domain.model.common.BaseModel
+import com.app.domain.model.theme.Language
 import com.app.seoullo_new.R
 import com.app.seoullo_new.utils.Constants.INTENT_DATA
 import com.app.seoullo_new.view.util.TravelItemData
@@ -151,6 +152,16 @@ object Util {
         return travelData.accommodation ?: emptyList()
     }
 
+    // 관광명소 request data
+    fun getAttraction(travelData: TravelItemData): List<TravelJsonItemData> {
+        return travelData.attraction ?: emptyList()
+    }
+
+    // 쇼핑 request data
+    fun getShopping(travelData: TravelItemData): List<TravelJsonItemData> {
+        return travelData.shopping ?: emptyList()
+    }
+
     fun getStringResourceKey(name: String): Int {
         return when (name) {
             "KoreanRestaurant" -> R.string.korean_restaurant
@@ -162,6 +173,12 @@ object Util {
             "Motel" -> R.string.motel
             "Guest House" -> R.string.guest_house
             "Condominium" -> R.string.condominium
+            "Nature" -> R.string.nature
+            "Historical" -> R.string.historical
+            "Culture" -> R.string.culture
+            "Leisure Sports" -> R.string.leisure_sports
+            "Department Store" -> R.string.department_store
+            "Market" -> R.string.market
             else -> R.string.empty
         }
     }
@@ -215,5 +232,9 @@ object Util {
 
     fun String.toColor(): Color {
         return Color(android.graphics.Color.parseColor(this))
+    }
+
+    fun getLanguageCode(context: Context, language: Language): String {
+        return if (language == Language.ENGLISH) context.getString(R.string.en) else context.getString(R.string.ko)
     }
 }

@@ -23,7 +23,9 @@ interface ApiInterface2 {
         @Query("listYN") listYN: String = "Y",
         @Query("arrange") arrange: String = "C",
         @Query("contentTypeId") contentTypeId: String,  // 컨텐츠 유형
-        @Query("cat3") category: String,                // 분류
+        @Query("cat1") category1: String,               // 분류1
+        @Query("cat2") category2: String,               // 분류2
+        @Query("cat3") category3: String,               // 분류3
         @Query("areaCode") areaCode: String = "1"
     ): PlacesResponseDTO
 

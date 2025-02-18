@@ -216,8 +216,6 @@ fun PlacesListScreen(
                         viewModel.getMyLocation(fusedLocationProviderClient) { }
                         when (menuClickedPosition) {
                             SELECTED_TOUR_LIST -> {
-                                // 페이징 처리 공식문서 참고
-                                // https://developer.android.com/develop/ui/compose/lists?hl=ko&_gl=1*1a4v78e*_up*MQ..*_ga*MTEwMzY5NzI1MC4xNzMzMjgwMjk2*_ga_6HH9YJMN9M*MTczMzI5NTEyOS4yLjAuMTczMzI5NTEyOS4wLjAuMTU3MzU2NjEyNA..#large-datasets
                                 viewModel.getPlacesList(
                                     travelItem = travelItem,
                                     languageCode = language
@@ -283,7 +281,9 @@ fun PlacesListScreen(
                                         val places = (placesNearbyState as ApiState.Success<List<Places>>).data
                                         if (places.isNullOrEmpty()) {
                                             // 데이터가 없을 때
-                                            ErrorScreen(stringResource(R.string.error_reason_no_result))
+                                            ErrorScreen(
+                                                reason = stringResource(R.string.error_reason_no_result)
+                                            )
                                         } else {
                                             LazyColumn(
                                                 state = nearbyListState,
@@ -304,7 +304,9 @@ fun PlacesListScreen(
                                     }
                                     is ApiState.Error -> {
                                         val error = (placesNearbyState as ApiState.Error).message
-                                        ErrorScreen(error ?: "")
+                                        ErrorScreen(
+                                            reason = error ?: ""
+                                        )
                                     }
                                 }
                             }
@@ -349,7 +351,7 @@ fun PlacesListItem(
                 .clip(RoundedCornerShape(10.dp)),
             imageModel = places.photoUrl.ifEmpty { "" },
             requestOptions = { requestOptions },
-            contentScale = ContentScale.Crop,
+            contentScale = ContentScale.FillBounds,
             loading = { CircularProgressIndicator(modifier = Modifier.align(Alignment.Center)) },
             failure = {
                 Column(

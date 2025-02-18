@@ -4,6 +4,7 @@ import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.app.data.model.PlacesResponseDTO
 import com.app.data.utils.Logging
+import com.app.data.utils.Util.splitCategory
 import kotlinx.coroutines.flow.single
 import retrofit2.HttpException
 import java.io.IOException
@@ -21,6 +22,9 @@ class PlacesPagingSource @Inject constructor(
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, PlacesResponseDTO.Place> {
         return try {
+            // 카테고리 나누기
+            val (category1, category2, category3) = splitCategory(category)
+
             val currentPage = params.key ?: 1
             Logging.d("${javaClass.name}: $currentPage")
             val response = placesDataSource.getPlacesList(
@@ -28,7 +32,9 @@ class PlacesPagingSource @Inject constructor(
                 pageNo = currentPage,
                 serviceKey = serviceKey,
                 contentTypeId = contentTypeId,
-                category = category
+                category1 = category1,
+                category2 = category2,
+                category3 = category3
             )
             val body = response.single().response.body
             val places = body.items?.items ?: emptyList()   // 데이터

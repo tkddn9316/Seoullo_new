@@ -14,7 +14,9 @@ class PlacesDataSourceImpl @Inject constructor(private val apiInterface: ApiInte
         pageNo: Int,
         serviceKey: String,
         contentTypeId: String,
-        category: String
+        category1: String,
+        category2: String,
+        category3: String
     ): Flow<PlacesResponseDTO> {
         return flow {
             emit(
@@ -23,7 +25,9 @@ class PlacesDataSourceImpl @Inject constructor(private val apiInterface: ApiInte
                     pageNo = pageNo,
                     serviceKey = serviceKey,
                     contentTypeId = contentTypeId,
-                    category = category
+                    category1 = category1,
+                    category2 = category2,
+                    category3 = category3
                 )
             )
         }

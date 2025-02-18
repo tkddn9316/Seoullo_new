@@ -33,7 +33,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.app.seoullo_new.R
 import com.app.seoullo_new.utils.Util.getAccommodations
+import com.app.seoullo_new.utils.Util.getAttraction
 import com.app.seoullo_new.utils.Util.getRestaurants
+import com.app.seoullo_new.utils.Util.getShopping
 import com.app.seoullo_new.utils.Util.loadDrawableResource
 import com.app.seoullo_new.utils.Util.loadJsonFromAssets
 import com.app.seoullo_new.utils.Util.loadTravelData
@@ -98,6 +100,46 @@ fun TravelScreen(
             item {
                 TwoColumnGrid(
                     items = getAccommodations(travelData),
+                    onItemClick = travelOnClick
+                )
+            }
+
+            // 관광명소 리스트 헤더
+            item {
+                Text(
+                    text = stringResource(R.string.travel_title_attraction),
+                    fontWeight = FontWeight.Bold,
+                    fontFamily = notosansFont,
+                    fontSize = 22.sp,
+                    modifier = Modifier.padding(start = 8.dp)
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+            }
+
+            // 관광명소 리스트 항목
+            item {
+                TwoColumnGrid(
+                    items = getAttraction(travelData),
+                    onItemClick = travelOnClick
+                )
+            }
+
+            // 쇼핑 리스트 헤더
+            item {
+                Text(
+                    text = stringResource(R.string.travel_title_shopping),
+                    fontWeight = FontWeight.Bold,
+                    fontFamily = notosansFont,
+                    fontSize = 22.sp,
+                    modifier = Modifier.padding(start = 8.dp)
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+            }
+
+            // 쇼핑 리스트 항목
+            item {
+                TwoColumnGrid(
+                    items = getShopping(travelData),
                     onItemClick = travelOnClick
                 )
             }

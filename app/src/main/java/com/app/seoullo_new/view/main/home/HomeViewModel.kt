@@ -3,6 +3,7 @@ package com.app.seoullo_new.view.main.home
 import android.Manifest
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.SavedStateHandle
+import com.app.domain.model.Places
 import com.app.domain.model.Weather
 import com.app.seoullo_new.di.DispatcherProvider
 import com.app.seoullo_new.utils.CheckingManager
@@ -23,10 +24,15 @@ class HomeViewModel @Inject constructor(
     private val weatherUIRepository: WeatherUIRepository,
     private val checkingManager: CheckingManager
 ) : BaseViewModel2(dispatcherProvider) {
-    private val json: String = checkNotNull(savedStateHandle["weather"])
-    private val weather: Weather by lazy { Json.decodeFromString<Weather>(json) }
+    private val weatherJson: String = checkNotNull(savedStateHandle["weather"])
+    private val weather: Weather by lazy { Json.decodeFromString<Weather>(weatherJson) }
     private val _weatherResult = MutableStateFlow(weather)
     val weatherResult = _weatherResult.asStateFlow()
+
+    private val bannerJson: String = checkNotNull(savedStateHandle["banner"])
+    private val banner: List<Places> by lazy { Json.decodeFromString<List<Places>>(bannerJson) }
+    private val _bannerResult = MutableStateFlow(banner)
+    val bannerResult = _bannerResult.asStateFlow()
 
     private val _homeBackgroundColor = MutableStateFlow(listOf(Color_Weather_Sunny_Afternoon1, Color_Weather_Sunny_Afternoon2))
     val homeBackgroundColor = _homeBackgroundColor.asStateFlow()

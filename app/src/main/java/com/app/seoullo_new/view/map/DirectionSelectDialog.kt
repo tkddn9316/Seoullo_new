@@ -46,6 +46,7 @@ import com.app.seoullo_new.BuildConfig
 import com.app.seoullo_new.R
 import com.app.seoullo_new.utils.Constants.FocusedField
 import com.app.seoullo_new.utils.Logging
+import com.app.seoullo_new.utils.Util.getLanguageCode
 import com.app.seoullo_new.view.util.singleClickable
 import com.app.seoullo_new.view.util.theme.LocalLanguage
 import kotlinx.coroutines.launch
@@ -118,7 +119,10 @@ fun DirectionSelectDialog(
                                 if (newAddress.isNotEmpty()) {
                                     viewModel.onAutoCompletePlaces(
                                         input = newAddress,
-                                        languageCode = if (language == Language.ENGLISH) "en" else "ko"
+                                        languageCode = getLanguageCode(
+                                            context = context,
+                                            language = language
+                                        )
                                     )
                                 } else {
                                     viewModel.clearAutoCompleteResults()
@@ -158,7 +162,10 @@ fun DirectionSelectDialog(
                                 if (newAddress.isNotEmpty()) {
                                     viewModel.onAutoCompletePlaces(
                                         input = newAddress,
-                                        languageCode = if (language == Language.ENGLISH) "en" else "ko"
+                                        languageCode = getLanguageCode(
+                                            context = context,
+                                            language = language
+                                        )
                                     )
                                 } else {
                                     viewModel.clearAutoCompleteResults()
@@ -201,7 +208,10 @@ fun DirectionSelectDialog(
                                 if (focusedField != null) {
                                     viewModel.getAddressText(
                                         context = context,
-                                        language = if (language == Language.ENGLISH) "en" else "ko"
+                                        languageCode = getLanguageCode(
+                                            context = context,
+                                            language = language
+                                        )
                                     ) { address ->
                                         if (focusedField == FocusedField.STARTING) {
                                             startingRequest = startingRequest.copy(
@@ -254,7 +264,10 @@ fun DirectionSelectDialog(
                                         viewModel.getDirection(
                                             destination = destinationRequest,
                                             starting = startingRequest,
-                                            languageCode = if (language == Language.ENGLISH) "en" else "ko"
+                                            languageCode = getLanguageCode(
+                                                context = context,
+                                                language = language
+                                            )
                                         )
                                     }
                                 } else {
@@ -293,11 +306,13 @@ fun DirectionSelectDialog(
 
 fun MapViewModel.getAddressText(
     context: Context,
-    language: String,
+    languageCode: String,
     responseText: (response: ReverseGeocoding) -> Unit
 ) {
     viewModelScope.launch {
-        getCurrentLocationAddress(language)
+        getCurrentLocationAddress(
+            languageCode = languageCode
+        )
         currentAddress.collect { state ->
             when (state) {
                 is ApiState.Success -> {

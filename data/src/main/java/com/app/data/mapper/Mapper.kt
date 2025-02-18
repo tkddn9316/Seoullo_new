@@ -100,6 +100,28 @@ fun mapperToPlace(place: PlacesResponseDTO.Place): Places =
         photoUrl = place.firstimage
     )
 
+fun mapperToBanner(data: List<PlacesResponseDTO.Place>): List<Places> =
+    data.toList().map { place ->
+        Places(
+            name = place.title,
+            id = place.contentid,
+            contentTypeId = place.contenttypeid,
+            displayName = place.title,
+            address = place.addr1,
+            description = "",
+            openNow = false,
+            weekdayDescriptions = emptyList(),
+            rating = 0.0,
+            userRatingCount = 0,
+            photoUrl = place.firstimage
+        )
+    }
+        .filter { it.photoUrl.isNotEmpty() }
+        .shuffled()  // 요소 랜덤 재배열
+        .take(if (data.size > 5) 5 else data.size)  // 5개만 가져옴
+
+
+
 fun mapperToPlaceDetail(placesDetail: PlacesDetailResponseDTO.PlacesDetail): PlacesDetail =
     PlacesDetail(
         contentId = placesDetail.contentid,

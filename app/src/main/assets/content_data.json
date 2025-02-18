@@ -92,5 +92,69 @@
       "type": "condominium_complex",
       "icon": ""
     }
+  ],
+  "attraction": [
+    {
+      "name": "Nature",
+      "title": "Nature",
+      "color": 5,
+      "id": "76",
+      "id_ko": "12",
+      "cat": "A0101",
+      "type": "garden|beach|hiking_area|marina|national_park|park|picnic_ground|planetarium|wildlife_park|wildlife_refuge",
+      "icon": ""
+    },
+    {
+      "name": "Historical",
+      "title": "Historical",
+      "color": 0,
+      "id": "76",
+      "id_ko": "12",
+      "cat": "A0201",
+      "type": "historical_place|monument|sculpture|historical_landmark",
+      "icon": ""
+    },
+    {
+      "name": "Culture",
+      "title": "Culture",
+      "color": 6,
+      "id": "78",
+      "id_ko": "14",
+      "cat": "A0206",
+      "type": "cultural_landmark|art_gallery|art_studio|auditorium|museum|performing_arts_theater|aquarium|amusement_park|cultural_center|convention_center|tourist_attraction",
+      "icon": ""
+    },
+    {
+      "name": "Leisure\nSports",
+      "title": "Leisure Sports",
+      "color": 4,
+      "id": "75",
+      "id_ko": "28",
+      "cat": "A03",
+      "type": "athletic_field|fishing_charter|fishing_pond|fitness_center|golf_course|gym|playground|ski_resort|sports_activity_location|sports_club|sports_complex|stadium|swimming_pool",
+      "icon": ""
+    }
+  ],
+  "shopping": [
+    {
+      "name": "Department\nStore",
+      "title": "Department Store",
+      "color": 2,
+      "id": "79",
+      "id_ko": "38",
+      "cat": "A04010300",
+      "type": "department_store|clothing_store",
+      "icon": ""
+    },
+    {
+      "name": "Market",
+      "title": "Market",
+      "color": 3,
+      "id": "79",
+      "id_ko": "38",
+      "cat": "A04010200",
+      "type": "market|supermarket|wholesaler|convenience_store|discount_store",
+      "icon": ""
+    }
   ]
 }
