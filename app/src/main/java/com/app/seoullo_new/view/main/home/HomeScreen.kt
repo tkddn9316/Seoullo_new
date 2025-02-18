@@ -2,6 +2,7 @@ package com.app.seoullo_new.view.main.home
 
 import android.widget.Toast
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
@@ -17,6 +18,8 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicText
+import androidx.compose.foundation.text.TextAutoSize
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material3.Card
@@ -39,7 +42,10 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -178,6 +184,8 @@ fun HomeScreen(
                             )
                         )
 
+                        Spacer(modifier = modifier.width(4.dp))
+
                         DustInfoColumn(
                             modifier = Modifier.weight(0.5f),
                             iconId = R.drawable.ic_weather_dust,
@@ -309,8 +317,9 @@ fun DustInfoColumn(
     trackColor: Color = Color.Gray
 ) {
     Column(
-        modifier = modifier,
-        horizontalAlignment = Alignment.CenterHorizontally
+        modifier = modifier.background(Color.Yellow),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         // 제목 및 아이콘
         Row(
@@ -321,33 +330,50 @@ fun DustInfoColumn(
                 contentDescription = null,
                 tint = Color.White
             )
-            Text(
+            BasicText(
                 text = title,
-                fontFamily = notosansFont,
-                style = MaterialTheme.typography.bodyMedium,
-                color = Color.White
+                maxLines = 1,
+                overflow = TextOverflow.Visible,
+                autoSize = TextAutoSize.StepBased(
+                    minFontSize = 8.sp,
+                    maxFontSize = 14.sp,
+                    stepSize = 2.sp
+                ),
+                color = { Color.White },
+                style = TextStyle(
+                    fontFamily = notosansFont
+                )
             )
         }
 
-        Text(
+        BasicText(
             text = when (value) {
                 in progressColors[0].first -> stringResource(R.string.fine_dust_good, value)
                 in progressColors[1].first -> stringResource(R.string.fine_dust_normal, value)
                 in progressColors[2].first -> stringResource(R.string.fine_dust_bad, value)
                 else -> stringResource(R.string.fine_dust_very_bad, value)
             },
-            fontFamily = notosansFont,
-            style = MaterialTheme.typography.bodyLarge,
-            color = Color.White,
-            fontWeight = FontWeight.Bold
+            maxLines = 1,
+            overflow = TextOverflow.Visible,
+            autoSize = TextAutoSize.StepBased(
+                minFontSize = 8.sp,
+                maxFontSize = 16.sp,
+                stepSize = 2.sp
+            ),
+            color = { Color.White },
+            style = TextStyle(
+                fontFamily = notosansFont,
+                fontWeight = FontWeight.Bold
+            )
         )
 
         Spacer(modifier = Modifier.height(8.dp))
 
         LinearProgressIndicator(
             modifier = Modifier
+                .fillMaxWidth()
                 .height(10.dp)
-                .padding(6.dp, 0.dp, 6.dp, 0.dp),
+                .padding(start = 6.dp),
             progress = { (value.toFloat() / max).coerceIn(0f, 1f) },
             trackColor = trackColor,
             color = progressColors.firstOrNull { value in it.first }?.second ?: Color.White,
@@ -383,19 +409,28 @@ fun WeatherInfoCard(
                     contentDescription = null,
                     tint = Color.White
                 )
-                Text(
+                BasicText(
                     text = title,
-                    fontFamily = notosansFont,
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = Color.White
+                    maxLines = 1,
+                    overflow = TextOverflow.Visible,
+                    autoSize = TextAutoSize.StepBased(
+                        minFontSize = 8.sp,
+                        maxFontSize = 14.sp,
+                        stepSize = 2.sp
+                    ),
+                    color = { Color.White },
+                    style = TextStyle(
+                        fontFamily = notosansFont
+                    )
                 )
             }
 
             Text(
                 text = data,
                 fontFamily = notosansFont,
-                fontSize = 24.sp,
-                color = Color.White
+                fontSize = 20.sp,
+                color = Color.White,
+                fontWeight = FontWeight.Bold
             )
         }
     }

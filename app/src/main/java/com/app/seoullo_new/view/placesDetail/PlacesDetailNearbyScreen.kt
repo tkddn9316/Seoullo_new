@@ -204,7 +204,7 @@ fun PlacesDetailView(
                 .height(230.dp),
             imageModel = places.photoUrl.ifEmpty { "" },
             requestOptions = { requestOptions },
-            contentScale = ContentScale.Crop,
+            contentScale = ContentScale.FillBounds,
             loading = { CircularProgressIndicator(modifier = Modifier.align(Alignment.Center)) },
             failure = {
                 Column(
