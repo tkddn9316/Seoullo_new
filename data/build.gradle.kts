@@ -66,8 +66,4 @@ dependencies {
 
     // DataStore
     implementation(libs.androidx.datastore.preferences)
-
-    // XML
-    implementation(libs.converter.simplexml)
-    implementation(libs.simple.xml)
 }

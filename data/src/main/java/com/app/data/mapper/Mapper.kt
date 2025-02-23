@@ -124,16 +124,16 @@ fun mapperToBanner(data: List<PlacesResponseDTO.Place>): List<Places> =
 
 fun mapperToPlaceDetail(placesDetail: PlacesDetailResponseDTO.PlacesDetail): PlacesDetail =
     PlacesDetail(
-        contentId = placesDetail.contentid,
-        contentTypeId = placesDetail.contenttypeid,
-        displayName = placesDetail.title,
-        address = placesDetail.addr1,
-        description = Html.fromHtml(placesDetail.overview, Html.FROM_HTML_MODE_LEGACY).toString(),
-        photoUrl = placesDetail.firstimage,
-        latitude = placesDetail.mapy.toDouble(),
-        longitude = placesDetail.mapx.toDouble(),
-        phoneNum = placesDetail.tel,
-        homepage = if (placesDetail.homepage.isNotEmpty()) Html.fromHtml(
+        contentId = placesDetail.contentid ?: "",
+        contentTypeId = placesDetail.contenttypeid ?: "",
+        displayName = placesDetail.title ?: "",
+        address = placesDetail.addr1 ?: "",
+        description = Html.fromHtml(placesDetail.overview ?: "", Html.FROM_HTML_MODE_LEGACY).toString(),
+        photoUrl = placesDetail.firstimage ?: "",
+        latitude = placesDetail.mapy?.toDouble() ?: 0.0,
+        longitude = placesDetail.mapx?.toDouble() ?: 0.0,
+        phoneNum = placesDetail.tel ?: "",
+        homepage = if (!placesDetail.homepage.isNullOrEmpty()) Html.fromHtml(
             placesDetail.homepage,
             Html.FROM_HTML_MODE_LEGACY
         ).toString().addHttps() else ""

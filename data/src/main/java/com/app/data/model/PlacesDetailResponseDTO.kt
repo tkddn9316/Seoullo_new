@@ -28,23 +28,41 @@ data class PlacesDetailResponseDTO(
     )
 
     data class PlacesDetail(
-        val addr1: String,
-        val addr2: String,
-        val contentid: String,
-        val contenttypeid: String,
-        val cpyrhtDivCd: String,
-        val createdtime: String,
-        val firstimage: String,
-        val firstimage2: String,
-        val homepage: String,
-        val mapx: String,
-        val mapy: String,
-        val mlevel: String,
-        val modifiedtime: String,
-        val overview: String,
-        val tel: String,
-        val telname: String,
-        val title: String,
-        val zipcode: String
+        @SerializedName("addr1")
+        val addr1: String?,
+        @SerializedName("addr2")
+        val addr2: String?,
+        @SerializedName("contentid")
+        val contentid: String?,
+        @SerializedName("contenttypeid")
+        val contenttypeid: String?,
+        @SerializedName("cpyrhtDivCd")
+        val cpyrhtDivCd: String?,
+        @SerializedName("createdtime")
+        val createdtime: String?,
+        @SerializedName("firstimage")
+        val firstimage: String?,
+        @SerializedName("firstimage2")
+        val firstimage2: String?,
+        @SerializedName("homepage")
+        val homepage: String?,
+        @SerializedName("mapx")
+        val mapx: String?,
+        @SerializedName("mapy")
+        val mapy: String?,
+        @SerializedName("mlevel")
+        val mlevel: String?,
+        @SerializedName("modifiedtime")
+        val modifiedtime: String?,
+        @SerializedName("overview")
+        val overview: String?,
+        @SerializedName("tel")
+        val tel: String?,
+        @SerializedName("telname")
+        val telname: String?,
+        @SerializedName("title")
+        val title: String?,
+        @SerializedName("zipcode")
+        val zipcode: String?
     )
 }

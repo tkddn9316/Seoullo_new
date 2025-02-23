@@ -1,8 +1,8 @@
 package com.app.data.api
 
 import com.app.data.model.DustDTO
-import com.app.data.model.SunriseDTO
 import com.app.data.model.WeatherDTO
+import okhttp3.ResponseBody
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
@@ -35,5 +35,5 @@ interface ApiInterface3 {
         @Query("locdate") currentDate: String,
         @Query("location") location: String = "서울",
         @Query("ServiceKey") apiKey: String
-    ): SunriseDTO
+    ): ResponseBody
 }

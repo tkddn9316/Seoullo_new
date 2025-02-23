@@ -5,7 +5,6 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.converter.simplexml.SimpleXmlConverterFactory
 import java.util.concurrent.TimeUnit
 
 /**
@@ -69,7 +68,6 @@ object ApiClient {
         return Retrofit.Builder()
             .baseUrl(BASE_URL_SEOUL_SUNRISE_API)
             .client(commonHttpClient)
-            .addConverterFactory(SimpleXmlConverterFactory.create())
             .build()
             .create(ApiInterface3::class.java)
     }

@@ -26,6 +26,7 @@ import com.app.data.source.SunriseDataSource
 import com.app.data.source.SunriseDataSourceImpl
 import com.app.data.source.WeatherDataSource
 import com.app.data.source.WeatherDataSourceImpl
+import com.app.data.utils.SunriseXmlParser
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -92,8 +93,8 @@ class RemoteDataModule {
 
     @Provides
     @Singleton
-    fun provideSunriseDataSource(@ApiAnnotation.SeoulSunriseApi apiInterface: ApiInterface3): SunriseDataSource {
-        return SunriseDataSourceImpl(apiInterface)
+    fun provideSunriseDataSource(@ApiAnnotation.SeoulSunriseApi apiInterface: ApiInterface3, parser: SunriseXmlParser): SunriseDataSource {
+        return SunriseDataSourceImpl(apiInterface, parser)
     }
 
     @Provides
