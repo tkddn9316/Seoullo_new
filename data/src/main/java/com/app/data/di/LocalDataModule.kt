@@ -8,12 +8,13 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.preferencesDataStoreFile
 import androidx.room.Room
-import com.app.data.source.UserDataSource
-import com.app.data.source.UserDataSourceImpl
 import com.app.data.db.SeoulloDatabase
 import com.app.data.db.UserDao
 import com.app.data.source.SettingDataSource
 import com.app.data.source.SettingDataSourceImpl
+import com.app.data.source.UserDataSource
+import com.app.data.source.UserDataSourceImpl
+import com.app.data.utils.SunriseXmlParser
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -57,5 +58,11 @@ class LocalDataModule {
     @Singleton
     fun provideSettingDataSourceImpl(dataStore: DataStore<Preferences>): SettingDataSource {
         return SettingDataSourceImpl(dataStore)
+    }
+
+    @Provides
+    @Singleton
+    fun provideSunriseXmlParser(): SunriseXmlParser {
+        return SunriseXmlParser()
     }
 }

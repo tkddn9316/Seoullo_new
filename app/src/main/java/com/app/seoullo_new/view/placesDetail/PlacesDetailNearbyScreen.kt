@@ -64,7 +64,6 @@ import com.app.domain.model.DirectionRequest
 import com.app.domain.model.Places
 import com.app.domain.model.PlacesDetailGoogle
 import com.app.domain.model.common.ApiState
-import com.app.domain.model.theme.Language
 import com.app.seoullo_new.BuildConfig
 import com.app.seoullo_new.R
 import com.app.seoullo_new.utils.Util.getLanguageCode
