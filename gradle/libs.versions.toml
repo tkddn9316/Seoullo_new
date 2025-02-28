@@ -50,6 +50,7 @@ googleServices = "4.4.2"
 googleMapsScrect = "2.0.1"
 balloon = "1.6.11"
 composeFoundation = "1.8.0-beta01"
+in-app-update = "2.1.0"
 
 [libraries]
 accompanist-pager = { module = "com.google.accompanist:accompanist-pager", version.ref = "accompanistPager" }
@@ -118,6 +119,8 @@ ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
 ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
 balloon = { module = "com.github.skydoves:balloon-compose", version.ref = "balloon" }
 compose-foundation = { module = "androidx.compose.foundation:foundation", version.ref = "composeFoundation" }
+update = { module = "com.google.android.play:app-update", version.ref = "in-app-update" }
+update-ktx = { module = "com.google.android.play:app-update-ktx", version.ref = "in-app-update" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "app" }

@@ -65,20 +65,100 @@ import kotlinx.serialization.json.Json
 
 @SuppressLint("SourceLockedOrientationActivity")
 @Composable
-fun SplashScreen(
+fun SplashRoute(
     viewModel: SplashViewModel = hiltViewModel(),
-    modifier: Modifier = Modifier,
     onMoveMain: (weather: String, banner: String) -> Unit
 ) {
     val context = LocalContext.current
     val activity = remember { context as? Activity }
 
     // 가로 모드 비활성화 (세로 고정)
-    LaunchedEffect (Unit) {
+    LaunchedEffect(Unit) {
         activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
     }
     BackOnPressed()
 
+    /** 인앱 업데이트(강제) 관련
+     * 추후 개발 진행 예정: https://velog.io/@mraz3068/Implementing-In-app-update-with-Compose
+     * */
+    // AppUpdateManager 초기화
+//    val appUpdateManager: AppUpdateManager = remember { AppUpdateManagerFactory.create(context) }
+//    val lifecycle = LocalLifecycleOwner.current.lifecycle
+//    val lifecycleState by lifecycle.currentStateFlow.collectAsStateWithLifecycle()
+//    val appUpdateResultLauncher = rememberLauncherForActivityResult(
+//        contract = ActivityResultContracts.StartIntentSenderForResult()
+//    ) { result ->
+//        // 사용자가 업데이트를 취소하는 경우, 앱 종료
+//        if (result.resultCode == Activity.RESULT_CANCELED) {
+//            activity?.finish()
+//        }
+//    }
+//    val nowVersionCode = BuildConfig.VERSION_CODE
+//
+//    LaunchedEffect(Unit) {
+//        try {
+//            viewModel.settingLoadingMessage("Update Check.")
+//            val appUpdateInfo = appUpdateManager.appUpdateInfo.await()
+//
+//            // 업데이트가 가능한 상황인지 확인
+//            if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE) {
+//                val availableVersionCode = appUpdateInfo.availableVersionCode()
+//                // 강제 업데이트가 필요한 상황인지 확인
+//                if (availableVersionCode > nowVersionCode &&
+//                    appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE)
+//                ) {
+//                    // 업데이트 시작
+//                    appUpdateManager.startUpdateFlowForResult(
+//                        appUpdateInfo,
+//                        appUpdateResultLauncher,
+//                        AppUpdateOptions.newBuilder(AppUpdateType.IMMEDIATE).build()
+//                    )
+//                } else {
+//                    // 강제 업데이트가 필요하지 않은 경우
+//                    viewModel.getWeatherList()
+//                }
+//            } else {
+//                // 강제 업데이트가 필요하지 않은 경우, 기존 로직 진행
+//                viewModel.getWeatherList()
+//            }
+//        } catch (e: Exception) {
+//            Logging.e(e.message ?: "")
+//            viewModel.getWeatherList()
+//        }
+//    }
+//
+//    LaunchedEffect(key1 = lifecycleState) {
+//        if (lifecycleState == Lifecycle.State.RESUMED) {
+//            try {
+//                val appUpdateInfo = appUpdateManager.appUpdateInfo.await()
+//                // 앱 업데이트 도중 항상 업데이트 UI 가 보이도록 설정
+//                if (appUpdateInfo.updateAvailability() == UpdateAvailability.DEVELOPER_TRIGGERED_UPDATE_IN_PROGRESS) {
+//                    appUpdateManager.startUpdateFlowForResult(
+//                        appUpdateInfo,
+//                        appUpdateResultLauncher,
+//                        AppUpdateOptions.newBuilder(AppUpdateType.IMMEDIATE).build()
+//                    )
+//                }
+//            } catch (e: Exception) {
+//                Logging.e(e.message ?: "")
+//            }
+//        }
+//    }
+    viewModel.getWeatherList()
+
+    SplashScreen(
+        viewModel = viewModel
+    ) { weather, banner ->
+        onMoveMain(weather, banner)
+    }
+}
+
+@Composable
+fun SplashScreen(
+    viewModel: SplashViewModel = hiltViewModel(),
+    modifier: Modifier = Modifier,
+    onMoveMain: (weather: String, banner: String) -> Unit
+) {
     // 하단 애니메이션 세팅
     val retrySignal = rememberLottieRetrySignal()
     val composition by rememberLottieComposition(
@@ -123,7 +203,7 @@ fun SplashScreen(
                 .background(Color.White),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Column (
+            Column(
                 modifier = modifier
                     .weight(1f)
                     .padding(start = 40.dp, end = 40.dp),
@@ -158,6 +238,7 @@ fun SplashScreen(
                             color = colorGridItem7
                         )
                     }
+
                     is LoginState.IsUser -> {
                         val isUser = (loginState as LoginState.IsUser).state
                         if (isUser) {
@@ -223,9 +304,3 @@ fun GoogleSignInButton(
         }
     }
 }
-
-//@Preview(showBackground = true, widthDp = 360, heightDp = 640)
-//@Composable
-//fun SplashScreenPreview() {
-//    SplashScreen()
-//}

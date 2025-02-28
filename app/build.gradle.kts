@@ -1,4 +1,7 @@
 import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
+import com.android.tools.r8.internal.`in`
+
+
 
 plugins {
     alias(libs.plugins.android.application)
@@ -22,8 +25,8 @@ android {
         applicationId = "com.app.seoullo_new"
         minSdk = 31
         targetSdk = 35
-        versionCode = 4
-        versionName = "1.0.4"
+        versionCode = 7
+        versionName = "1.0.7"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
@@ -191,4 +194,8 @@ dependencies {
 
     // balloon
     implementation(libs.balloon)
+
+    // in-app-update
+    implementation(libs.update)
+    implementation(libs.update.ktx)
 }

@@ -21,7 +21,7 @@ import com.app.seoullo_new.view.placesDetail.PlaceDetailNearbyScreen
 import com.app.seoullo_new.view.placesDetail.PlaceDetailScreen
 import com.app.seoullo_new.view.placesList.PlacesListScreen
 import com.app.seoullo_new.view.placesList.PlacesListViewModel
-import com.app.seoullo_new.view.splash.SplashScreen
+import com.app.seoullo_new.view.splash.SplashRoute
 import com.app.seoullo_new.view.util.TravelJsonItemData
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
@@ -67,7 +67,7 @@ fun NavigationGraph(navController: NavHostController) {
 
 fun NavGraphBuilder.splashScreenNavigation(navController: NavHostController) {
     composable(Route.SPLASH) {
-        SplashScreen(
+        SplashRoute (
             onMoveMain = { weatherItem, bannerItem ->
                 navController.navigate(
                     Route.MAIN

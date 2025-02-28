@@ -54,12 +54,12 @@ class SplashViewModel @Inject constructor(
     private val _bannerResult = MutableStateFlow<List<Places>>(emptyList())
     val bannerResult = _bannerResult.asStateFlow()
 
-    init {
-        getWeatherList()
-    }
+//    init {
+//        getWeatherList()
+//    }
 
-    private fun getWeatherList() {
-        _apiLoadingMessage.value = "Getting Data."
+    fun getWeatherList() {
+        settingLoadingMessage("Getting Data.")
         onIO {
             val weatherFlow = weatherUseCase(
                 weatherApiKey = BuildConfig.OPEN_WEATHER_MAP_KEY,
@@ -89,7 +89,7 @@ class SplashViewModel @Inject constructor(
                         _bannerResult.value = banner
 
                         // 로그인 체크
-                        _apiLoadingMessage.value = "Check Login."
+                        settingLoadingMessage("Check Login.")
                         delay(2000)
                         val isUserLoggedIn = users.any { it.auto == "Y" }
                         _isLogin.value = LoginState.IsUser(isUserLoggedIn)
@@ -103,6 +103,10 @@ class SplashViewModel @Inject constructor(
                 .catch { Logging.e(it.message ?: "") }
                 .collect()
         }
+    }
+
+    fun settingLoadingMessage(value: String) {
+        _apiLoadingMessage.value = value
     }
 
     fun performGoogleSignIn(result: Task<GoogleSignInAccount>) {
