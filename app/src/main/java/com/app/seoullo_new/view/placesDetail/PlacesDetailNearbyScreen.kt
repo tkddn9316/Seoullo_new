@@ -135,6 +135,12 @@ fun PlaceDetailNearbyScreen(
                     }
 
                     is ApiState.Success -> {
+                        // DB 넣기
+                        viewModel.insertTodayWatchedList(
+                            data = placesState,
+                            isNearby = true
+                        )
+
                         val placesDetail =
                             (detailState as ApiState.Success<PlacesDetailGoogle>).data
                                 ?: PlacesDetailGoogle()

@@ -144,7 +144,7 @@ fun SplashRoute(
 //            }
 //        }
 //    }
-    viewModel.getWeatherList()
+//    viewModel.getWeatherList()
 
     SplashScreen(
         viewModel = viewModel

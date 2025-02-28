@@ -9,6 +9,7 @@ import com.app.data.model.PlacesNearbyRequestDTO
 import com.app.data.model.PlacesNearbyResponseDTO
 import com.app.data.model.PlacesResponseDTO
 import com.app.data.model.ReverseGeocodingDTO
+import com.app.data.model.TodayWatchedListEntity
 import com.app.data.model.UserEntity
 import com.app.data.model.WeatherDTO
 import com.app.data.utils.Util.addHttps
@@ -19,6 +20,7 @@ import com.app.domain.model.PlacesDetail
 import com.app.domain.model.PlacesDetailGoogle
 import com.app.domain.model.PlacesNearbyRequest
 import com.app.domain.model.ReverseGeocoding
+import com.app.domain.model.TodayWatchedList
 import com.app.domain.model.User
 import com.app.domain.model.Weather
 import org.joda.time.DateTime
@@ -235,3 +237,21 @@ fun mapperToAutoComplete(autoCompleteResponseDTO: AutoCompleteResponseDTO): Plac
             )
         }
     )
+
+fun mapperToTodayWatchedList(todayWatchedListEntity: List<TodayWatchedListEntity>): List<TodayWatchedList> =
+    todayWatchedListEntity.toList().map {
+        TodayWatchedList(
+            isNearby = it.isNearby,
+            name = it.name,
+            id = it.id,
+            contentTypeId = it.contentTypeId,
+            displayName = it.displayName,
+            address = it.address,
+            description = it.description,
+            openNow = it.openNow,
+            weekdayDescriptions = it.weekdayDescriptions,
+            rating = it.rating,
+            userRatingCount = it.userRatingCount,
+            photoUrl = it.photoUrl
+        )
+    }.sortedByDescending { it.index }

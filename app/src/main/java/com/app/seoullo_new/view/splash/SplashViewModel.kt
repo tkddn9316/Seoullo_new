@@ -54,11 +54,11 @@ class SplashViewModel @Inject constructor(
     private val _bannerResult = MutableStateFlow<List<Places>>(emptyList())
     val bannerResult = _bannerResult.asStateFlow()
 
-//    init {
-//        getWeatherList()
-//    }
+    init {
+        getWeatherList()
+    }
 
-    fun getWeatherList() {
+    private fun getWeatherList() {
         settingLoadingMessage("Getting Data.")
         onIO {
             val weatherFlow = weatherUseCase(

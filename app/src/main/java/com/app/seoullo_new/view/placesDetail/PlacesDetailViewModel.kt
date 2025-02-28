@@ -9,6 +9,7 @@ import com.app.domain.model.common.ApiState
 import com.app.domain.model.theme.Language
 import com.app.domain.usecase.places.GetPlacesDetailGoogleUseCase
 import com.app.domain.usecase.places.GetPlacesDetailUseCase
+import com.app.domain.usecase.todayWatchedList.GetTodayWatchedListUseCase
 import com.app.seoullo_new.BuildConfig
 import com.app.seoullo_new.di.DispatcherProvider
 import com.app.seoullo_new.view.base.BaseViewModel2
@@ -25,7 +26,8 @@ class PlacesDetailViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     dispatcherProvider: DispatcherProvider,
     private val getPlacesDetailUseCase: GetPlacesDetailUseCase,
-    private val getPlacesDetailGoogleUseCase: GetPlacesDetailGoogleUseCase
+    private val getPlacesDetailGoogleUseCase: GetPlacesDetailGoogleUseCase,
+    private val getTodayWatchedListUseCase: GetTodayWatchedListUseCase
 ) : BaseViewModel2(dispatcherProvider) {
     private val json: String = checkNotNull(savedStateHandle["place"])
     private val places: Places by lazy { Json.decodeFromString<Places>(json) }
@@ -93,6 +95,14 @@ class PlacesDetailViewModel @Inject constructor(
         }
     }
 
+    fun insertTodayWatchedList(data: Places, isNearby: Boolean) {
+        onIO {
+            getTodayWatchedListUseCase.insert(
+                data = data,
+                isNearby = isNearby
+            )
+        }
+    }
 
     /** Debug Fake Data */
     fun getFakePlacesDetailGoogle(context: Context) {
