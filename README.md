@@ -11,7 +11,6 @@
 - Kotlin
 ### Architecture
 - Clean Architecture
-- Multi Module Architecture
 - MVVM
 ### Libraries
 - Kotlin Coroutine
