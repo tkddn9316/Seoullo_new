@@ -4,7 +4,9 @@ import android.Manifest
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.SavedStateHandle
 import com.app.domain.model.Places
+import com.app.domain.model.TodayWatchedList
 import com.app.domain.model.Weather
+import com.app.domain.usecase.todayWatchedList.GetTodayWatchedListUseCase
 import com.app.seoullo_new.di.DispatcherProvider
 import com.app.seoullo_new.utils.CheckingManager
 import com.app.seoullo_new.view.base.BaseViewModel2
@@ -21,6 +23,7 @@ import javax.inject.Inject
 class HomeViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     dispatcherProvider: DispatcherProvider,
+    private val getTodayWatchedListUseCase: GetTodayWatchedListUseCase,
     private val weatherUIRepository: WeatherUIRepository,
     private val checkingManager: CheckingManager
 ) : BaseViewModel2(dispatcherProvider) {
@@ -43,6 +46,9 @@ class HomeViewModel @Inject constructor(
     private val _errorMessages = MutableStateFlow<String?>(null)
     val errorMessages = _errorMessages.asStateFlow()
 
+    private val _todayWatchedList = MutableStateFlow<List<TodayWatchedList>>(emptyList())
+    val todayWatchedList = _todayWatchedList.asStateFlow()
+
     init {
         checkPermission()
         _homeBackgroundColor.value = setHomeBackgroundColor(weather)
@@ -63,4 +69,28 @@ class HomeViewModel @Inject constructor(
 
     private fun setWeatherIcon(item: Weather): Int =
         weatherUIRepository.setWeatherIcon(weather = item)
+
+    fun selectTodayWatchedList() {
+        onIO {
+            getTodayWatchedListUseCase.select()
+                .collect {
+                    _todayWatchedList.value = it
+                }
+        }
+    }
+
+    fun toPlaces(data: TodayWatchedList): Places = Places(
+        name = data.name,
+        id = data.id,
+        contentTypeId = data.contentTypeId,
+        displayName = data.displayName,
+        address = data.address,
+        description = data.description,
+        openNow = data.openNow,
+        weekdayDescriptions = data.weekdayDescriptions,
+        rating = data.rating,
+        userRatingCount = data.userRatingCount,
+        photoUrl = data.photoUrl,
+        languageCode = data.languageCode
+    )
 }

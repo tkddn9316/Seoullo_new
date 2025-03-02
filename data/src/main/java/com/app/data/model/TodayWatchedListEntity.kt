@@ -13,6 +13,7 @@ data class TodayWatchedListEntity(
     @PrimaryKey(autoGenerate = true)
     val index: Int = 0,
     val isNearby: String,
+    val languageCode: String = "",
     val name: String = "",
     @ColumnInfo(name = "id")
     val id: String = "",

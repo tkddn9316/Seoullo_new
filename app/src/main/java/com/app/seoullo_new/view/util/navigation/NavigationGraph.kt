@@ -86,6 +86,18 @@ fun NavGraphBuilder.mainScreenNavigation(navController: NavHostController) {
             navArgument("banner") { type = NavType.StringType })
     ) {
         MainScreen(
+            watchedOnClick = { place, isNearby ->
+                val route = if (isNearby == "Y") {
+                    Route.PLACE_DETAIL_NEARBY.replace("{place}", place)
+                } else {
+                    Route.PLACE_DETAIL.replace("{place}", place)
+                }
+                navController.navigate(route) {
+                    popUpTo(Route.MAIN) { saveState = true }
+                    launchSingleTop = true
+                    restoreState = true
+                }
+            },
             travelOnClick = { travelItem ->
                 val itemJson = Json.encodeToString(travelItem)
                 navController.navigate(Route.placeListParameter(itemJson))

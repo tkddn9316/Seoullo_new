@@ -45,6 +45,7 @@
     <string name="sunrise">일출</string>
     <string name="sunset">일몰</string>
     <string name="current_seoul">서울: %s</string>
+    <string name="today_watched_list">🗺️ 오늘 본 목록</string>
 
     <!--  travel  -->
     <string name="travel_title_restaurant">🍚 음식점</string>

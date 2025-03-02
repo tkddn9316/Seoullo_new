@@ -45,6 +45,7 @@
     <string name="sunrise">Sunrise</string>
     <string name="sunset">Sunset</string>
     <string name="current_seoul">in Seoul: %s</string>
+    <string name="today_watched_list">🗺️ Today Watched List</string>
 
     <!--  travel  -->
     <string name="travel_title_restaurant">🍚 Restaurant</string>

@@ -7,9 +7,14 @@ import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class GetTodayWatchedListUseCase @Inject constructor(private val repository: TodayWatchedListRepository) {
-    suspend fun insert(data: Places, isNearby: Boolean) {
+    suspend fun insert(
+        data: Places,
+        isNearby: Boolean,
+        languageCode: String
+    ) {
         val todayWatchedList = TodayWatchedList(
             isNearby = if (isNearby) "Y" else "N",
+            languageCode = languageCode,
             name = data.name,
             id = data.id,
             contentTypeId = data.contentTypeId,

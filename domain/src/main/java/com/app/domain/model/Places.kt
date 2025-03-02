@@ -19,5 +19,6 @@ data class Places(
     val weekdayDescriptions: List<String> = emptyList(),
     val rating: Double = 0.0,
     val userRatingCount: Int = 0,
-    val photoUrl: String = ""
+    val photoUrl: String = "",
+    val languageCode: String = ""
 ) : BaseModel()

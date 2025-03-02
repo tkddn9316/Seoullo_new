@@ -14,6 +14,7 @@ class TodayWatchedListRepositoryImpl @Inject constructor(private val todayWatche
     override suspend fun insertWatchedItem(item: TodayWatchedList) {
         val data = TodayWatchedListEntity(
             isNearby = item.isNearby,
+            languageCode = item.languageCode,
             name = item.name,
             id = item.id,
             contentTypeId = item.contentTypeId,

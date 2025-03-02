@@ -5,6 +5,7 @@ import com.app.domain.model.common.BaseModel
 data class TodayWatchedList(
     val index: Int = 0,
     val isNearby: String,
+    val languageCode: String = "",
     val name: String = "",
     val id: String = "",
     val contentTypeId: String = "",

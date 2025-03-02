@@ -64,6 +64,7 @@ import com.app.domain.model.DirectionRequest
 import com.app.domain.model.Places
 import com.app.domain.model.PlacesDetailGoogle
 import com.app.domain.model.common.ApiState
+import com.app.domain.model.theme.Language
 import com.app.seoullo_new.BuildConfig
 import com.app.seoullo_new.R
 import com.app.seoullo_new.utils.Util.getLanguageCode
@@ -99,7 +100,13 @@ fun PlaceDetailNearbyScreen(
     val detailState by viewModel.placesDetailGoogleState.collectAsStateWithLifecycle()
 
     val context = LocalContext.current
-    val language = LocalLanguage.current
+    // 오늘 본 목록에서 왔는지, 리스트에서 왔는지
+    val language =
+        when (placesState.languageCode) {
+            "en" -> Language.ENGLISH
+            "ko" -> Language.KOREA
+            else -> LocalLanguage.current   // 리스트에서 왔으면 앱에 등록한 언어로
+        }
 
     LaunchedEffect(Unit) {
         if (BuildConfig.DEBUG) {
@@ -135,11 +142,17 @@ fun PlaceDetailNearbyScreen(
                     }
 
                     is ApiState.Success -> {
-                        // DB 넣기
-                        viewModel.insertTodayWatchedList(
-                            data = placesState,
-                            isNearby = true
-                        )
+                        // DB 넣기(리스트에서 진입했을 경우만)
+                        if (placesState.languageCode.isEmpty()) {
+                            viewModel.insertTodayWatchedList(
+                                data = placesState,
+                                isNearby = true,
+                                languageCode = getLanguageCode(
+                                    context = context,
+                                    language = language
+                                )
+                            )
+                        }
 
                         val placesDetail =
                             (detailState as ApiState.Success<PlacesDetailGoogle>).data

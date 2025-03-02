@@ -64,8 +64,8 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
-import com.app.domain.model.common.ApiState
 import com.app.domain.model.Places
+import com.app.domain.model.common.ApiState
 import com.app.domain.model.theme.Language
 import com.app.seoullo_new.BuildConfig
 import com.app.seoullo_new.R
@@ -431,7 +431,7 @@ fun PlacesListItem(
             Icon(
                 imageVector = Icons.Default.LocationOn,
                 contentDescription = null,
-                modifier = Modifier.padding(0.dp, 0.dp, 4.dp, 0.dp)
+                modifier = Modifier.padding(end = 4.dp)
             )
             Text(
                 style = MaterialTheme.typography.labelSmall.copy(

@@ -95,11 +95,12 @@ class PlacesDetailViewModel @Inject constructor(
         }
     }
 
-    fun insertTodayWatchedList(data: Places, isNearby: Boolean) {
+    fun insertTodayWatchedList(data: Places, isNearby: Boolean, languageCode: String) {
         onIO {
             getTodayWatchedListUseCase.insert(
                 data = data,
-                isNearby = isNearby
+                isNearby = isNearby,
+                languageCode = languageCode
             )
         }
     }

@@ -242,6 +242,7 @@ fun mapperToTodayWatchedList(todayWatchedListEntity: List<TodayWatchedListEntity
     todayWatchedListEntity.toList().map {
         TodayWatchedList(
             isNearby = it.isNearby,
+            languageCode = it.languageCode,
             name = it.name,
             id = it.id,
             contentTypeId = it.contentTypeId,
