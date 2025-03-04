@@ -1,8 +1,10 @@
 package com.app.seoullo_new.view.main.home
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -12,6 +14,7 @@ import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableIntStateOf
@@ -77,8 +80,18 @@ fun InfiniteLoopPager(
                 GlideImage(
                     imageModel = place.photoUrl,
                     contentScale = ContentScale.FillBounds,
-                    placeHolder = painterResource(R.drawable.ic_user_default),
-                    error = painterResource(R.drawable.ic_user_default)
+                    loading = { CircularProgressIndicator(modifier = Modifier.align(Alignment.Center)) },
+                    failure = {
+                        Column(
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Image(
+                                painter = painterResource(id = R.drawable.ic_seoul_symbol),
+                                contentDescription = null,
+                                contentScale = ContentScale.Fit
+                            )
+                        }
+                    }
                 )
             }
         }
