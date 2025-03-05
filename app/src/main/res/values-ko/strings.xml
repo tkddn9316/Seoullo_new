@@ -122,6 +122,8 @@
     <string name="bug_report_description">앱에 문제가 있을 경우 문의해주세요.</string>
     <string name="logout_title">로그아웃</string>
     <string name="logout_dialog_contents">로그아웃 하시겠습니까?</string>
+    <string name="hide_list_title">목록 숨기기</string>
+    <string name="hide_list_description">홈 화면의 "오늘 본 목록"을 숨깁니다.</string>
 
     <string name="account_title">계정</string>
 
