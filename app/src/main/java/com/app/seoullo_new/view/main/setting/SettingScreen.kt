@@ -55,6 +55,8 @@ fun SettingScreen(
     val scrollState = rememberScrollState()
     val dialogState by viewModel.dialogState.collectAsStateWithLifecycle()
 
+    val switchState by viewModel.switchState.collectAsStateWithLifecycle()
+
     // 로그아웃
     val navigateToSplash by viewModel.navigateToSplash.collectAsStateWithLifecycle()
     LaunchedEffect(
@@ -109,9 +111,8 @@ fun SettingScreen(
             HideTodayWatchedListSetting(
                 title = stringResource(R.string.hide_list_title),
                 description = stringResource(R.string.hide_list_description),
-                onItemClick = {
-
-                }
+                checked = switchState,
+                onCheckedChange = { viewModel.updateHideTodayWatchedList(it) }
             )
             HorizontalDivider(thickness = 1.dp, color = MaterialTheme.colorScheme.outlineVariant)
 
@@ -133,6 +134,7 @@ fun SettingScreen(
             SettingItem(
                 title = stringResource(R.string.version_title),
                 description = getAppVersionName(),
+                enabled = false,
                 onItemClick = { },
                 showTrailingIcon = false,
                 showLeadingIcon = true,
@@ -272,11 +274,12 @@ fun HideTodayWatchedListSetting(
     modifier: Modifier = Modifier,
     title: String,
     description: String,
-    onItemClick: () -> Unit
+    checked: Boolean,
+    onCheckedChange: (Boolean) -> Unit
 ) {
     val colors = ListItemDefaults.colors()
     val descriptionColor = MaterialTheme.colorScheme.onBackground
-    var checked by rememberSaveable { mutableStateOf(false) }
+//    var checked by rememberSaveable { mutableStateOf(false) }
 
     ListItem(
         modifier = modifier
@@ -311,9 +314,7 @@ fun HideTodayWatchedListSetting(
         trailingContent = {
             Switch(
                 checked = checked,
-                onCheckedChange = {
-                    checked = it
-                }
+                onCheckedChange = onCheckedChange
             )
         },
         colors = ListItemDefaults.colors(

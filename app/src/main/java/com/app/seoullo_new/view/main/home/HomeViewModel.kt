@@ -3,9 +3,11 @@ package com.app.seoullo_new.view.main.home
 import android.Manifest
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.viewModelScope
 import com.app.domain.model.Places
 import com.app.domain.model.TodayWatchedList
 import com.app.domain.model.Weather
+import com.app.domain.repository.SettingRepository
 import com.app.domain.usecase.todayWatchedList.GetTodayWatchedListUseCase
 import com.app.seoullo_new.di.DispatcherProvider
 import com.app.seoullo_new.utils.CheckingManager
@@ -15,7 +17,10 @@ import com.app.seoullo_new.view.ui.theme.Color_Weather_Sunny_Afternoon2
 import com.app.seoullo_new.view.util.WeatherUIRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.serialization.json.Json
 import javax.inject.Inject
 
@@ -23,6 +28,7 @@ import javax.inject.Inject
 class HomeViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     dispatcherProvider: DispatcherProvider,
+    settingRepository: SettingRepository,
     private val getTodayWatchedListUseCase: GetTodayWatchedListUseCase,
     private val weatherUIRepository: WeatherUIRepository,
     private val checkingManager: CheckingManager
@@ -48,6 +54,9 @@ class HomeViewModel @Inject constructor(
 
     private val _todayWatchedList = MutableStateFlow<List<TodayWatchedList>>(emptyList())
     val todayWatchedList = _todayWatchedList.asStateFlow()
+    // 오늘 본 목록 숨기기 체크 상태 감지
+    val switchState: StateFlow<Boolean> = settingRepository.getHideTodayWatchedList()
+        .stateIn(viewModelScope, SharingStarted.Eagerly, false)
 
     init {
         checkPermission()

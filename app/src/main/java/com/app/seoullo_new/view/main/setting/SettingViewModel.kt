@@ -1,5 +1,6 @@
 package com.app.seoullo_new.view.main.setting
 
+import androidx.lifecycle.viewModelScope
 import com.app.domain.repository.SettingRepository
 import com.app.domain.usecase.user.DeleteUserUseCase
 import com.app.seoullo_new.di.DispatcherProvider
@@ -9,8 +10,10 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
@@ -31,6 +34,10 @@ class SettingViewModel @Inject constructor(
     private val _navigateToSplash = MutableStateFlow(false)
     val navigateToSplash: StateFlow<Boolean> = _navigateToSplash
 
+    // 오늘 본 목록 숨기기 체크 상태 감지
+    val switchState: StateFlow<Boolean> = settingRepository.getHideTodayWatchedList()
+        .stateIn(viewModelScope, SharingStarted.Eagerly, false)
+
     fun openThemeDialog() = _dialogState.update { it.copy(isThemeDialogOpen = true) }
     fun openLanguageDialog() = _dialogState.update { it.copy(isLanguageDialogOpen = true) }
     fun openLogoutDialog() = _dialogState.update { it.copy(isLogoutDialogOpen = true) }
@@ -48,6 +55,12 @@ class SettingViewModel @Inject constructor(
                 closeLogoutDialog()
                 _navigateToSplash.value = true
             }
+        }
+    }
+
+    fun updateHideTodayWatchedList(checked: Boolean) {
+        onIO {
+            settingRepository.updateHideTodayWatchedList(checked)
         }
     }
 }

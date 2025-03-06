@@ -30,6 +30,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberUpdatedState
@@ -79,6 +80,7 @@ fun HomeScreen(
         getList.value() // 화면이 재활성화될 때마다 실행(onResume)
         onDispose { }
     }
+    val switchState by rememberUpdatedState(newValue = viewModel.switchState.collectAsStateWithLifecycle())
 
     // Bundle 객체에 데이터 저장(Page 이동해도 값 변화 없도록)
     val currentTime by rememberSaveable { mutableStateOf(DateTime.now().toString("yyyy-MM-dd HH:mm:ss")) }
@@ -164,14 +166,16 @@ fun HomeScreen(
                 Spacer(modifier = modifier.height(12.dp))
             }
             // 오늘 본 목록
-            if (todayWatchedList.isNotEmpty()) {
-                item {
-                    TodayWatchedList(
-                        viewModel = viewModel,
-                        list = todayWatchedList,
-                        watchedOnClick = watchedOnClick
-                    )
-                    Spacer(modifier = modifier.height(12.dp))
+            if (!switchState.value) {
+                if (todayWatchedList.isNotEmpty()) {
+                    item {
+                        TodayWatchedList(
+                            viewModel = viewModel,
+                            list = todayWatchedList,
+                            watchedOnClick = watchedOnClick
+                        )
+                        Spacer(modifier = modifier.height(12.dp))
+                    }
                 }
             }
 
