@@ -198,4 +198,9 @@ dependencies {
     // in-app-update
     implementation(libs.update)
     implementation(libs.update.ktx)
+
+    // WorkManager
+    implementation(libs.workManager)
+    implementation(libs.workManager.hilt)
+    ksp(libs.workManager.hilt.compiler)
 }

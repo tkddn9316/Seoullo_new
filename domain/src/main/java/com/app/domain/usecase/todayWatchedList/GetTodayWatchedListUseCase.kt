@@ -35,6 +35,7 @@ class GetTodayWatchedListUseCase @Inject constructor(private val repository: Tod
     }
 
     suspend fun delete() {
-        repository.clearWatchedList()
+        // 기존 작동 WorkManager 취소하고 DB DELETE
+        repository.onCancelWatchedList()
     }
 }

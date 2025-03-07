@@ -1,7 +1,9 @@
 package com.app.seoullo_new.view.main.setting
 
 import androidx.lifecycle.viewModelScope
+import androidx.work.WorkManager
 import com.app.domain.repository.SettingRepository
+import com.app.domain.usecase.todayWatchedList.GetTodayWatchedListUseCase
 import com.app.domain.usecase.user.DeleteUserUseCase
 import com.app.seoullo_new.di.DispatcherProvider
 import com.app.seoullo_new.view.base.BaseViewModel2
@@ -24,6 +26,7 @@ class SettingViewModel @Inject constructor(
     dispatcherProvider: DispatcherProvider,
     private val settingRepository: SettingRepository,
     private val deleteUserUseCase: DeleteUserUseCase,
+    private val getTodayWatchedListUseCase: GetTodayWatchedListUseCase,
     private val googleSignInClient: GoogleSignInClient
 ) : BaseViewModel2(dispatcherProvider) {
 
@@ -49,6 +52,7 @@ class SettingViewModel @Inject constructor(
     fun logout() {
         onIO {
             deleteUserUseCase()
+            getTodayWatchedListUseCase.delete()
             googleSignInClient.signOut().await()
 
             withContext(Dispatchers.Main) {

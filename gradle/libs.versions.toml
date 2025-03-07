@@ -51,6 +51,8 @@ googleMapsScrect = "2.0.1"
 balloon = "1.6.11"
 composeFoundation = "1.8.0-beta01"
 in-app-update = "2.1.0"
+workManager = "2.10.0"
+workManagerHilt = "1.2.0"
 
 [libraries]
 accompanist-pager = { module = "com.google.accompanist:accompanist-pager", version.ref = "accompanistPager" }
@@ -87,6 +89,9 @@ fragment-ktx = { module = "androidx.fragment:fragment-ktx", version.ref = "fragm
 hilt = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
 hilt-compiler = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "hilt" }
 hilt-navigation = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "androidxHilt" }
+workManager = { module = "androidx.work:work-runtime-ktx", version.ref = "workManager" }
+workManager-hilt = { module = "androidx.hilt:hilt-work", version.ref = "workManagerHilt" }
+workManager-hilt-compiler = { module = "androidx.hilt:hilt-compiler", version.ref = "workManagerHilt" }
 auto-license-core = { group = "com.mikepenz", name = "aboutlibraries-core", version.ref = "autoLicense" }
 auto-license-ui = { group = "com.mikepenz", name = "aboutlibraries-compose-m3", version.ref = "autoLicense" }
 joda-time = { module = "joda-time:joda-time", version.ref = "jodaTime" }

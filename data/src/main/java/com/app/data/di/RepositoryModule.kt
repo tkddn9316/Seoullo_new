@@ -1,5 +1,6 @@
 package com.app.data.di
 
+import android.content.Context
 import com.app.data.repository.AutoCompleteRepositoryImpl
 import com.app.data.repository.DirectionRepositoryImpl
 import com.app.data.repository.PlacesDetailGoogleRepositoryImpl
@@ -39,6 +40,7 @@ import com.app.domain.repository.WeatherRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
@@ -118,7 +120,10 @@ class RepositoryModule {
 
     @Provides
     @Singleton
-    fun provideTodayWatchedListRepository(todayWatchedListDataSource: TodayWatchedListDataSource): TodayWatchedListRepository {
-        return TodayWatchedListRepositoryImpl(todayWatchedListDataSource)
+    fun provideTodayWatchedListRepository(
+        todayWatchedListDataSource: TodayWatchedListDataSource,
+        @ApplicationContext context: Context
+    ): TodayWatchedListRepository {
+        return TodayWatchedListRepositoryImpl(todayWatchedListDataSource, context)
     }
 }

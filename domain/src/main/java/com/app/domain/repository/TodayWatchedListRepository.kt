@@ -8,4 +8,5 @@ interface TodayWatchedListRepository {
     suspend fun insertAllWatchedItems(items: List<TodayWatchedList>)
     fun getAllWatchedItems(): Flow<List<TodayWatchedList>>
     suspend fun clearWatchedList()
+    suspend fun onCancelWatchedList()
 }

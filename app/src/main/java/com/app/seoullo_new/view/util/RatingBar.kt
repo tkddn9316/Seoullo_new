@@ -93,9 +93,7 @@ fun RatingBarHalf(
         // 평가 수 표시
         Text(
             text = "$rating ($userRatingCount)",
-            style = MaterialTheme.typography.labelSmall.copy(
-                color = MaterialTheme.colorScheme.onBackground
-            ),
+            style = MaterialTheme.typography.labelSmall,
             fontSize = 13.sp
         )
     }
