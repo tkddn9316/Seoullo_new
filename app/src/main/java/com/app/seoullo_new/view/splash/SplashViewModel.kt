@@ -11,6 +11,7 @@ import com.app.domain.usecase.user.SelectUserUseCase
 import com.app.domain.usecase.weather.WeatherUseCase
 import com.app.seoullo_new.BuildConfig
 import com.app.seoullo_new.di.DispatcherProvider
+import com.app.seoullo_new.utils.Constants.VALUE_YES
 import com.app.seoullo_new.utils.Logging
 import com.app.seoullo_new.utils.LoginState
 import com.app.seoullo_new.view.base.BaseViewModel2
@@ -91,7 +92,7 @@ class SplashViewModel @Inject constructor(
                         // 로그인 체크
                         settingLoadingMessage("Check Login.")
                         delay(2000)
-                        val isUserLoggedIn = users.any { it.auto == "Y" }
+                        val isUserLoggedIn = users.any { it.auto == VALUE_YES }
                         _isLogin.value = LoginState.IsUser(isUserLoggedIn)
                     }
                     weatherResult is ApiState.Error || bannerResult is ApiState.Error -> {
@@ -124,7 +125,7 @@ class SplashViewModel @Inject constructor(
     private fun onLoginSuccess(account: GoogleSignInAccount) {
         onIO {
             val user = User(
-                auto = "Y",    // 자동 로그인 설정
+                auto = VALUE_YES,    // 자동 로그인 설정
                 name = account.displayName!!,
                 email = account.email!!,
                 photoUrl = account.photoUrl.toString()

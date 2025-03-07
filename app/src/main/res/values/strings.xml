@@ -52,6 +52,7 @@
     <string name="pm" translatable="false">%s PM</string>
     <string name="current_seoul">in Seoul: %s</string>
     <string name="today_watched_list">🗺️ Today Watched List</string>
+    <string name="today_watched_list_title">Today Watched List</string>
 
     <!--  travel  -->
     <string name="travel_title_restaurant">🍚 Restaurant</string>

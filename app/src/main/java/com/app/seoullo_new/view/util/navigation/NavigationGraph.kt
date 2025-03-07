@@ -14,6 +14,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import androidx.navigation.navArgument
+import com.app.seoullo_new.utils.Constants.VALUE_YES
 import com.app.seoullo_new.view.main.MainScreen
 import com.app.seoullo_new.view.main.setting.LicenseScreen
 import com.app.seoullo_new.view.map.DirectionScreen
@@ -87,7 +88,7 @@ fun NavGraphBuilder.mainScreenNavigation(navController: NavHostController) {
     ) {
         MainScreen(
             watchedOnClick = { place, isNearby ->
-                val route = if (isNearby == "Y") {
+                val route = if (isNearby == VALUE_YES) {
                     Route.PLACE_DETAIL_NEARBY.replace("{place}", place)
                 } else {
                     Route.PLACE_DETAIL.replace("{place}", place)

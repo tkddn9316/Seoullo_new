@@ -6,20 +6,28 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicText
+import androidx.compose.foundation.text.TextAutoSize
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.LocationOn
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonColors
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -30,6 +38,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -38,6 +47,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.app.domain.model.TodayWatchedList
 import com.app.seoullo_new.R
+import com.app.seoullo_new.utils.Constants.TODAY_WATCHED_LIST_VISIBILITY_SIZE
 import com.app.seoullo_new.utils.Logging
 import com.app.seoullo_new.view.ui.theme.Color_ERROR
 import com.app.seoullo_new.view.ui.theme.notosansFont
@@ -49,10 +59,10 @@ import kotlinx.serialization.json.Json
 
 @Composable
 fun TodayWatchedList(
-    viewModel: HomeViewModel = hiltViewModel(),
-    watchedOnClick: (places: String, isNearby: String) -> Unit,
-    list: List<TodayWatchedList>,
     modifier: Modifier = Modifier,
+    viewModel: HomeViewModel = hiltViewModel(),
+    list: List<TodayWatchedList>,
+    watchedOnClick: (places: String, isNearby: String) -> Unit,
 ) {
     Logging.d("TodayWatchedList: $list")
 
@@ -60,12 +70,47 @@ fun TodayWatchedList(
         modifier = modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.Start,
     ) {
-        Text(
-            text = stringResource(R.string.today_watched_list),
-            color = Color.White,
-            fontFamily = notosansFont,
-            fontSize = 20.sp
-        )
+        Row(
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            BasicText(
+                text = stringResource(R.string.today_watched_list),
+                color = { Color.White },
+                style = TextStyle(
+                    fontFamily = notosansFont,
+                    fontWeight = FontWeight.Bold
+                ),
+                maxLines = 1,
+                autoSize = TextAutoSize.StepBased(
+                    minFontSize = 8.sp,
+                    maxFontSize = 20.sp,
+                    stepSize = 2.sp
+                ),
+            )
+            if (list.size > TODAY_WATCHED_LIST_VISIBILITY_SIZE) {
+                Spacer(modifier = modifier.weight(1f))
+                Button(
+                    modifier = modifier.padding(start = 6.dp),
+                    shape = RoundedCornerShape(8.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color.White.copy(alpha = 0.2f)
+                    ),
+                    onClick = viewModel::openTodayWatchedListDialog,
+                ) {
+                    BasicText(
+                        text = stringResource(R.string.see_more),
+                        color = { Color.White },
+                        maxLines = 1,
+                        autoSize = TextAutoSize.StepBased(
+                            minFontSize = 2.sp,
+                            maxFontSize = 14.sp,
+                            stepSize = 2.sp
+                        )
+                    )
+                }
+            }
+        }
+
 
         Spacer(modifier = modifier.height(12.dp))
 
@@ -73,7 +118,7 @@ fun TodayWatchedList(
             horizontalArrangement = Arrangement.spacedBy(10.dp),
         ) {
             items(
-                items = list.take(5)    // 5개만
+                items = list.take(TODAY_WATCHED_LIST_VISIBILITY_SIZE)    // 5개만
             ) { todayWatched ->
                 val jsonData = remember { Json.encodeToString(viewModel.toPlaces(todayWatched)) }
                 val encodedJson = remember { Uri.encode(jsonData) }
@@ -106,8 +151,8 @@ fun TodayWatchedList(
                                     verticalArrangement = Arrangement.Center
                                 ) {
                                     Image(
+                                        modifier = modifier.weight(1f),
                                         painter = painterResource(id = R.drawable.ic_seoul_symbol),
-                                        modifier = modifier.height(150.dp),
                                         contentDescription = null,
                                         contentScale = ContentScale.Fit
                                     )
@@ -124,39 +169,21 @@ fun TodayWatchedList(
                             }
                         )
 
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            modifier = modifier.padding(start = 4.dp, end = 4.dp)
-                        ) {
-                            // 제목
-                            Text(
-                                style = MaterialTheme.typography.labelMedium.copy(
-                                    textAlign = TextAlign.Start,
-                                    color = Color.White
-                                ),
-                                modifier = Modifier
-                                    .weight(1f),
-                                text = todayWatched.displayName,
-                                fontSize = 18.sp,
-                                fontWeight = FontWeight.Bold,
-                                overflow = TextOverflow.Ellipsis,   // 길이가 길 경우 줄임 처리
-                                maxLines = 1
-                            )
-                            // 오픈 여부
-                            if (todayWatched.isNearby == "Y") {
-                                Text(
-                                    style = MaterialTheme.typography.labelSmall.copy(
-                                        color = if (todayWatched.openNow) Color.Red else Color.Blue,
-                                        textAlign = TextAlign.End
-                                    ),
-                                    modifier = Modifier.padding(4.dp, 0.dp, 0.dp, 0.dp),
-                                    text = if (todayWatched.openNow) stringResource(id = R.string.open) else stringResource(
-                                        id = R.string.close
-                                    ),
-                                    fontSize = 14.sp
-                                )
-                            }
-                        }
+                        // 제목
+                        Text(
+                            style = MaterialTheme.typography.labelMedium.copy(
+                                textAlign = TextAlign.Start,
+                                color = Color.White
+                            ),
+                            modifier = Modifier
+                                .weight(1f)
+                                .padding(start = 4.dp, end = 4.dp),
+                            text = todayWatched.displayName,
+                            fontSize = 18.sp,
+                            fontWeight = FontWeight.Bold,
+                            overflow = TextOverflow.Ellipsis,   // 길이가 길 경우 줄임 처리
+                            maxLines = 1
+                        )
 
                         // 주소
                         Row(

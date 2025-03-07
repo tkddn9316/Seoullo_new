@@ -74,6 +74,7 @@ import com.app.seoullo_new.view.base.SeoulloAppBar
 import com.app.seoullo_new.view.ui.theme.Color_ERROR
 import com.app.seoullo_new.view.ui.theme.colorRatingStar
 import com.app.seoullo_new.view.ui.theme.notosansFont
+import com.app.seoullo_new.view.util.RatingBar
 import com.app.seoullo_new.view.util.theme.LocalLanguage
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
@@ -476,37 +477,6 @@ fun CircularProfileImage(imageUrl: String, size: Dp = 40.dp) {
         placeHolder = painterResource(R.drawable.ic_user_default),
         error = painterResource(R.drawable.ic_user_default)
     )
-}
-
-@Composable
-fun RatingBar(
-    rating: Int
-) {
-    val maxStars = 5
-    val filledStars = rating    // 채워진 별의 개수
-    val emptyStars = maxStars - filledStars
-
-    Row(
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        repeat(filledStars) {
-            Icon(
-                imageVector = Icons.Filled.Star,
-                contentDescription = null,
-                tint = colorRatingStar,
-                modifier = Modifier.size(15.dp)
-            )
-        }
-        // 빈 별
-        repeat(emptyStars) {
-            Icon(
-                imageVector = Icons.Outlined.StarOutline,
-                contentDescription = null,
-                tint = colorRatingStar,
-                modifier = Modifier.size(15.dp)
-            )
-        }
-    }
 }
 
 @Composable

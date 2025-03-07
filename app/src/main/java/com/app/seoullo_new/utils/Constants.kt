@@ -13,8 +13,10 @@ import com.app.seoullo_new.R
  */
 object Constants {
     const val INTENT_DATA = "_data"
+    const val VALUE_YES = "Y"
     const val SELECTED_TOUR_LIST = 0
     const val SELECTED_NEARBY_LIST = 1
+    const val TODAY_WATCHED_LIST_VISIBILITY_SIZE = 5
 
     fun getTabTitle(language: Language): List<String> {
         return if (language == Language.KOREA) {

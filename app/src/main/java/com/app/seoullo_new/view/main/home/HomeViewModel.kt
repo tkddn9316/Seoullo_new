@@ -14,6 +14,7 @@ import com.app.seoullo_new.utils.CheckingManager
 import com.app.seoullo_new.view.base.BaseViewModel2
 import com.app.seoullo_new.view.ui.theme.Color_Weather_Sunny_Afternoon1
 import com.app.seoullo_new.view.ui.theme.Color_Weather_Sunny_Afternoon2
+import com.app.seoullo_new.view.util.DialogState
 import com.app.seoullo_new.view.util.WeatherUIRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -21,6 +22,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.update
 import kotlinx.serialization.json.Json
 import javax.inject.Inject
 
@@ -58,11 +60,18 @@ class HomeViewModel @Inject constructor(
     val switchState: StateFlow<Boolean> = settingRepository.getShowTodayWatchedList()
         .stateIn(viewModelScope, SharingStarted.Eagerly, false)
 
+    private val _dialogState = MutableStateFlow(DialogState())
+    val dialogState: StateFlow<DialogState> = _dialogState.asStateFlow()
+
     init {
         checkPermission()
         _homeBackgroundColor.value = setHomeBackgroundColor(weather)
         _weatherIcon.value = setWeatherIcon(weather)
     }
+
+    // 오늘 본 목록 전체 팝업
+    fun openTodayWatchedListDialog() = _dialogState.update { it.copy(isTodayWatchedListDialogOpen = true) }
+    fun closeTodayWatchedListDialog() = _dialogState.update { it.copy(isTodayWatchedListDialogOpen = false) }
 
     private fun checkPermission() {
         onIO {

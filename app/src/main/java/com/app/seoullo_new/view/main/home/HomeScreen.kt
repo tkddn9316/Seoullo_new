@@ -82,6 +82,8 @@ fun HomeScreen(
     }
     val switchState by rememberUpdatedState(newValue = viewModel.switchState.collectAsStateWithLifecycle())
 
+    val dialogState by viewModel.dialogState.collectAsStateWithLifecycle()
+
     // Bundle 객체에 데이터 저장(Page 이동해도 값 변화 없도록)
     val currentTime by rememberSaveable { mutableStateOf(DateTime.now().toString("yyyy-MM-dd HH:mm:ss")) }
 
@@ -322,6 +324,14 @@ fun HomeScreen(
                     item = it
                 )
             }
+        }
+
+        if (dialogState.isTodayWatchedListDialogOpen) {
+            TodayWatchedListDialog(
+                viewModel = viewModel,
+                list = todayWatchedList,
+                watchedOnClick = watchedOnClick
+            )
         }
 
         if (!errorMessage.isNullOrEmpty()) {
