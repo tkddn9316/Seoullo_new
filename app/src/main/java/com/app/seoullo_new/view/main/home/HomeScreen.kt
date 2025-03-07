@@ -166,7 +166,7 @@ fun HomeScreen(
                 Spacer(modifier = modifier.height(12.dp))
             }
             // 오늘 본 목록
-            if (!switchState.value) {
+            if (switchState.value) {
                 if (todayWatchedList.isNotEmpty()) {
                     item {
                         TodayWatchedList(

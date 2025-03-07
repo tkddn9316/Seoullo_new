@@ -35,7 +35,7 @@ class SettingViewModel @Inject constructor(
     val navigateToSplash: StateFlow<Boolean> = _navigateToSplash
 
     // 오늘 본 목록 숨기기 체크 상태 감지
-    val switchState: StateFlow<Boolean> = settingRepository.getHideTodayWatchedList()
+    val switchState: StateFlow<Boolean> = settingRepository.getShowTodayWatchedList()
         .stateIn(viewModelScope, SharingStarted.Eagerly, false)
 
     fun openThemeDialog() = _dialogState.update { it.copy(isThemeDialogOpen = true) }
@@ -58,9 +58,9 @@ class SettingViewModel @Inject constructor(
         }
     }
 
-    fun updateHideTodayWatchedList(checked: Boolean) {
+    fun updateShowTodayWatchedList(checked: Boolean) {
         onIO {
-            settingRepository.updateHideTodayWatchedList(checked)
+            settingRepository.updateShowTodayWatchedList(checked)
         }
     }
 }

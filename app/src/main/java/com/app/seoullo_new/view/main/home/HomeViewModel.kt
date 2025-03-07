@@ -55,7 +55,7 @@ class HomeViewModel @Inject constructor(
     private val _todayWatchedList = MutableStateFlow<List<TodayWatchedList>>(emptyList())
     val todayWatchedList = _todayWatchedList.asStateFlow()
     // 오늘 본 목록 숨기기 체크 상태 감지
-    val switchState: StateFlow<Boolean> = settingRepository.getHideTodayWatchedList()
+    val switchState: StateFlow<Boolean> = settingRepository.getShowTodayWatchedList()
         .stateIn(viewModelScope, SharingStarted.Eagerly, false)
 
     init {

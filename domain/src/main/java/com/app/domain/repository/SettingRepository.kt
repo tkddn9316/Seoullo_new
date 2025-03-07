@@ -8,6 +8,6 @@ interface SettingRepository {
     suspend fun updateThemes(themeSetting: ThemeSetting)
     suspend fun updateLanguage(themeSetting: ThemeSetting)
 
-    fun getHideTodayWatchedList(): Flow<Boolean>
-    suspend fun updateHideTodayWatchedList(hideTodayWatchedList: Boolean)
+    fun getShowTodayWatchedList(): Flow<Boolean>
+    suspend fun updateShowTodayWatchedList(showTodayWatchedList: Boolean)
 }

@@ -137,8 +137,8 @@
     <string name="play_store_title" translatable="false">Play Store</string>
     <string name="logout_title">Logout</string>
     <string name="logout_dialog_contents">Do you want to logout?</string>
-    <string name="hide_list_title">Hide List</string>
-    <string name="hide_list_description">Hide Today Watched List in Home.</string>
+    <string name="show_list_title">Show List</string>
+    <string name="show_list_description">Show Today Watched List in Home.</string>
     <string name="github_link" translatable="false">https://github.com/tkddn9316/Seoullo_new</string>
     <string name="bug_report_link" translatable="false">https://github.com/tkddn9316/Seoullo_new/issues/new/choose</string>
     <string name="play_store_link" translatable="false">https://play.google.com/store/apps/details?id=com.app.seoullo_new</string>

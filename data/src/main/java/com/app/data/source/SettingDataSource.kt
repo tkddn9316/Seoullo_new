@@ -14,6 +14,6 @@ interface SettingDataSource {
     suspend fun getThemeMode(): ThemeMode?
     suspend fun getLanguage(): Language?
 
-    fun getHideTodayWatchedList(): Flow<Boolean>
-    suspend fun updateHideTodayWatchedList(hideTodayWatchedList: Boolean)
+    fun getShowTodayWatchedList(): Flow<Boolean>
+    suspend fun updateShowTodayWatchedList(showTodayWatchedList: Boolean)
 }

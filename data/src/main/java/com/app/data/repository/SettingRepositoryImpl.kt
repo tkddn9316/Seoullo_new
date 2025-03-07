@@ -27,9 +27,9 @@ class SettingRepositoryImpl @Inject constructor(
         settingDataSource.updateLanguage(themeSetting.language)
     }
 
-    override fun getHideTodayWatchedList(): Flow<Boolean> = settingDataSource.getHideTodayWatchedList()
+    override fun getShowTodayWatchedList(): Flow<Boolean> = settingDataSource.getShowTodayWatchedList()
 
-    override suspend fun updateHideTodayWatchedList(hideTodayWatchedList: Boolean) {
-        settingDataSource.updateHideTodayWatchedList(hideTodayWatchedList = hideTodayWatchedList)
+    override suspend fun updateShowTodayWatchedList(showTodayWatchedList: Boolean) {
+        settingDataSource.updateShowTodayWatchedList(showTodayWatchedList = showTodayWatchedList)
     }
 }

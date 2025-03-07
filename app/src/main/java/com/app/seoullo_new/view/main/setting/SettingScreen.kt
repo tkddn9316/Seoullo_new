@@ -108,11 +108,11 @@ fun SettingScreen(
             )
             ThemeSetting { viewModel.openThemeDialog() }
             LanguageSetting { viewModel.openLanguageDialog() }
-            HideTodayWatchedListSetting(
-                title = stringResource(R.string.hide_list_title),
-                description = stringResource(R.string.hide_list_description),
+            ShowTodayWatchedListSetting(
+                title = stringResource(R.string.show_list_title),
+                description = stringResource(R.string.show_list_description),
                 checked = switchState,
-                onCheckedChange = { viewModel.updateHideTodayWatchedList(it) }
+                onCheckedChange = { viewModel.updateShowTodayWatchedList(it) }
             )
             HorizontalDivider(thickness = 1.dp, color = MaterialTheme.colorScheme.outlineVariant)
 
@@ -270,7 +270,7 @@ fun LogoutSetting(
 }
 
 @Composable
-fun HideTodayWatchedListSetting(
+fun ShowTodayWatchedListSetting(
     modifier: Modifier = Modifier,
     title: String,
     description: String,
@@ -307,7 +307,7 @@ fun HideTodayWatchedListSetting(
         },
         leadingContent = {
             Icon(
-                ImageVector.vectorResource(id = R.drawable.ic_setting_hide_list),
+                ImageVector.vectorResource(id = R.drawable.ic_setting_show_list),
                 contentDescription = null
             )
         },

@@ -19,7 +19,7 @@ class SettingDataSourceImpl @Inject constructor(
     private val dynamicThemeKey = intPreferencesKey("dynamic_mode")
     private val themeModeKey = intPreferencesKey("theme_mode")
     private val languageKey = intPreferencesKey("setting_language")
-    private val hideTodayWatchedListKey = booleanPreferencesKey("hide_today_watched_list")
+    private val showTodayWatchedListKey = booleanPreferencesKey("show_today_watched_list")
 
     override suspend fun updateDynamicTheme(theme: DynamicTheme) {
         dataStore.edit { pref ->
@@ -63,13 +63,13 @@ class SettingDataSourceImpl @Inject constructor(
         return mode?.let { Language.getByValue(it) }
     }
 
-    override fun getHideTodayWatchedList(): Flow<Boolean> = dataStore.data.map {
-        pref -> pref[hideTodayWatchedListKey] ?: false
+    override fun getShowTodayWatchedList(): Flow<Boolean> = dataStore.data.map {
+        pref -> pref[showTodayWatchedListKey] ?: true
     }
 
-    override suspend fun updateHideTodayWatchedList(hideTodayWatchedList: Boolean) {
+    override suspend fun updateShowTodayWatchedList(showTodayWatchedList: Boolean) {
         dataStore.edit { pref ->
-            pref[hideTodayWatchedListKey] = hideTodayWatchedList
+            pref[showTodayWatchedListKey] = showTodayWatchedList
         }
     }
 }
