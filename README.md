@@ -22,6 +22,7 @@
   - Room DB
   - Paging3
   - LiveData
+  - WorkManager
 - Glide
 - Lottle Animation
 - Ted Permission
