@@ -21,7 +21,6 @@
 - AAC(Android Architecture Components)
   - Room DB
   - Paging3
-  - LiveData
   - WorkManager
 - Glide
 - Lottle Animation
