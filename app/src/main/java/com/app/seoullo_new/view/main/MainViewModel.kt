@@ -30,7 +30,7 @@ class MainViewModel @Inject constructor(
             selectUserUseCase()
                 .flowOn(Dispatchers.IO)
                 .filter { it.isNotEmpty() }
-                .map { it[0] }
+                .map { it.first() }
                 .collect { user -> _profileImageUrl.value = user.photoUrl }
         }
     }

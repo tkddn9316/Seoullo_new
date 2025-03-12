@@ -158,6 +158,10 @@ dependencies {
     implementation(libs.firebase.auth.ktx)
     implementation(libs.play.services.auth)
 
+    implementation(libs.google.credentials)
+    implementation(libs.google.credentials.auth)
+    implementation(libs.google.credentials.library)
+
     // google maps
     implementation(libs.maps.compose)
     // Optionally, you can include the Compose utils library for Clustering,

@@ -6,7 +6,6 @@ import android.view.View
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.app.seoullo_new.utils.LoginState
 
 object BindingAdapter {
     private fun Boolean?.gone(): Int {
@@ -65,13 +64,5 @@ object BindingAdapter {
             .replace("&nbsp;", " ")
 
         return Html.fromHtml(value, Html.FROM_HTML_MODE_LEGACY)
-    }
-
-    @JvmStatic
-    @BindingAdapter("show")
-    fun View.isShow(visibility: LoginState) {
-        if (visibility is LoginState.IsUser) {
-            this.visibility = if (visibility.state) View.GONE else View.VISIBLE
-        }
     }
 }

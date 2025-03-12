@@ -1,14 +1,13 @@
 package com.app.seoullo_new.view.main.setting
 
 import androidx.lifecycle.viewModelScope
-import androidx.work.WorkManager
 import com.app.domain.repository.SettingRepository
 import com.app.domain.usecase.todayWatchedList.GetTodayWatchedListUseCase
 import com.app.domain.usecase.user.DeleteUserUseCase
 import com.app.seoullo_new.di.DispatcherProvider
+import com.app.seoullo_new.di.GoogleSignInManager
 import com.app.seoullo_new.view.base.BaseViewModel2
 import com.app.seoullo_new.view.util.DialogState
-import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -17,7 +16,6 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
@@ -27,7 +25,7 @@ class SettingViewModel @Inject constructor(
     private val settingRepository: SettingRepository,
     private val deleteUserUseCase: DeleteUserUseCase,
     private val getTodayWatchedListUseCase: GetTodayWatchedListUseCase,
-    private val googleSignInClient: GoogleSignInClient
+    private val googleSignInManager: GoogleSignInManager
 ) : BaseViewModel2(dispatcherProvider) {
 
     private val _dialogState = MutableStateFlow(DialogState())
@@ -53,13 +51,10 @@ class SettingViewModel @Inject constructor(
         onIO {
             deleteUserUseCase()
             getTodayWatchedListUseCase.delete()
-            googleSignInClient.signOut().await()
-
-            withContext(Dispatchers.Main) {
-                closeLogoutDialog()
-                _navigateToSplash.value = true
-            }
+            googleSignInManager.signOut()
         }
+        closeLogoutDialog()
+        _navigateToSplash.value = true
     }
 
     fun updateShowTodayWatchedList(checked: Boolean) {

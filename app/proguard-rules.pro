@@ -74,3 +74,9 @@
 }
 -dontwarn org.joda.convert.FromString
 -dontwarn org.joda.convert.ToString
+
+# Google Credential
+-if class androidx.credentials.CredentialManager
+-keep class androidx.credentials.playservices.** {
+  *;
+}

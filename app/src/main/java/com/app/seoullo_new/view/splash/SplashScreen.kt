@@ -4,8 +4,6 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.pm.ActivityInfo
 import android.net.Uri
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -51,15 +49,15 @@ import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.rememberLottieAnimatable
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.airbnb.lottie.compose.rememberLottieRetrySignal
+import com.app.domain.model.common.ApiState
 import com.app.seoullo_new.R
 import com.app.seoullo_new.utils.Logging
-import com.app.seoullo_new.utils.LoginState
 import com.app.seoullo_new.view.ui.theme.Color_92c8e0
 import com.app.seoullo_new.view.ui.theme.colorGridItem7
 import com.app.seoullo_new.view.ui.theme.notosansFont
 import com.app.seoullo_new.view.ui.theme.secondaryContainerLight
 import com.app.seoullo_new.view.util.BackOnPressed
-import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
@@ -180,16 +178,8 @@ fun SplashScreen(
 
     // API 관련
     val loadingMessage by viewModel.apiLoadingMessage.collectAsStateWithLifecycle()
-    val loginState by viewModel.isLogin.collectAsStateWithLifecycle()
     // 구글 로그인
-    val signInLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.StartActivityForResult()
-    ) { result ->
-        if (result.resultCode == Activity.RESULT_OK) {
-            val task = GoogleSignIn.getSignedInAccountFromIntent(result.data)
-            viewModel.performGoogleSignIn(task)
-        }
-    }
+    val loginState by viewModel.signInState.collectAsStateWithLifecycle()
 
     // 정보 받아온거
     val weatherData by viewModel.weatherResult.collectAsStateWithLifecycle()
@@ -221,7 +211,27 @@ fun SplashScreen(
                 Spacer(modifier = modifier.height(30.dp))
 
                 when (loginState) {
-                    is LoginState.loading -> {
+                    is ApiState.Success -> {
+                        // 로그인 완료
+                        val response = (loginState as ApiState.Success<GoogleIdTokenCredential?>).data
+                        response?.let {
+                            viewModel.insertUserCredential(it)
+                        }
+
+                        val weatherJson = Json.encodeToString(weatherData)
+                        val encodedWeatherJson = Uri.encode(weatherJson)
+                        val bannerJson = Json.encodeToString(bannerData)
+                        val encodedBannerJson = Uri.encode(bannerJson)
+
+                        onMoveMain(encodedWeatherJson, encodedBannerJson)
+                    }
+                    is ApiState.Error -> {
+                        Logging.e((loginState as ApiState.Error).message ?: "")
+                        GoogleSignInButton(
+                            onClick = { viewModel.startGoogleSignIn() }
+                        )
+                    }
+                    else -> {
                         LinearProgressIndicator(
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -237,23 +247,6 @@ fun SplashScreen(
                             style = MaterialTheme.typography.bodyMedium,
                             color = colorGridItem7
                         )
-                    }
-
-                    is LoginState.IsUser -> {
-                        val isUser = (loginState as LoginState.IsUser).state
-                        if (isUser) {
-                            // 로그인 완료
-                            val weatherJson = Json.encodeToString(weatherData)
-                            val encodedWeatherJson = Uri.encode(weatherJson)
-                            val bannerJson = Json.encodeToString(bannerData)
-                            val encodedBannerJson = Uri.encode(bannerJson)
-
-                            onMoveMain(encodedWeatherJson, encodedBannerJson)
-                        } else {
-                            GoogleSignInButton {
-                                signInLauncher.launch(viewModel.googleSignInClient.signInIntent)
-                            }
-                        }
                     }
                 }
             }

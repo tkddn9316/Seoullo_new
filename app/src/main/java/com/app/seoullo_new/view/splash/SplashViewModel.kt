@@ -1,6 +1,5 @@
 package com.app.seoullo_new.view.splash
 
-import androidx.lifecycle.viewModelScope
 import com.app.domain.model.Places
 import com.app.domain.model.User
 import com.app.domain.model.Weather
@@ -11,14 +10,10 @@ import com.app.domain.usecase.user.SelectUserUseCase
 import com.app.domain.usecase.weather.WeatherUseCase
 import com.app.seoullo_new.BuildConfig
 import com.app.seoullo_new.di.DispatcherProvider
-import com.app.seoullo_new.utils.Constants.VALUE_YES
+import com.app.seoullo_new.di.GoogleSignInManager
 import com.app.seoullo_new.utils.Logging
-import com.app.seoullo_new.utils.LoginState
 import com.app.seoullo_new.view.base.BaseViewModel2
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount
-import com.google.android.gms.auth.api.signin.GoogleSignInClient
-import com.google.android.gms.common.api.ApiException
-import com.google.android.gms.tasks.Task
+import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -26,10 +21,11 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 @HiltViewModel
@@ -39,12 +35,12 @@ class SplashViewModel @Inject constructor(
     private val insertUserUseCase: InsertUserUseCase,
     private val weatherUseCase: WeatherUseCase,
     private val placesListUseCase: GetPlacesListUseCase,
-    val googleSignInClient: GoogleSignInClient
+    private val googleSignInManager: GoogleSignInManager
 ) : BaseViewModel2(dispatcherProvider) {
     // 데이터를 캡슐화 하여 외부(뷰)에서 접근할 수 없도록 하고
     // 외부 접근 프로퍼티는 immutable 타입으로 제한해 변경할 수 없도록 한다.
-    private val _isLogin = MutableStateFlow<LoginState>(LoginState.loading)
-    val isLogin = _isLogin.asStateFlow()
+    private val _signInState = MutableStateFlow<ApiState<GoogleIdTokenCredential?>>(ApiState.Initial())
+    val signInState = _signInState.asStateFlow()
 
     private val _apiLoadingMessage = MutableStateFlow("")
     val apiLoadingMessage = _apiLoadingMessage.asStateFlow()
@@ -68,7 +64,10 @@ class SplashViewModel @Inject constructor(
                 sunriseApiKey = BuildConfig.TOUR_API_KEY
             ).flowOn(Dispatchers.IO)
 
-            val loginFlow = selectUserUseCase().flowOn(Dispatchers.IO)
+            val tokenId = selectUserUseCase()
+                .flowOn(Dispatchers.IO)
+                .map { it.firstOrNull()?.tokenId ?: "" }
+                .first()
 
             val bannerFlow = placesListUseCase.getBannerData(
                 serviceUrl = "KorService1",
@@ -77,7 +76,7 @@ class SplashViewModel @Inject constructor(
                 category = "A0208"
             ).flowOn(Dispatchers.IO)
 
-            combine(weatherFlow, loginFlow, bannerFlow) { weatherResult, users, bannerResult ->
+            combine(weatherFlow, bannerFlow) { weatherResult, bannerResult ->
                 when {
                     // 둘 다 성공해야 함
                     weatherResult is ApiState.Success && bannerResult is ApiState.Success -> {
@@ -92,11 +91,15 @@ class SplashViewModel @Inject constructor(
                         // 로그인 체크
                         settingLoadingMessage("Check Login.")
                         delay(2000)
-                        val isUserLoggedIn = users.any { it.auto == VALUE_YES }
-                        _isLogin.value = LoginState.IsUser(isUserLoggedIn)
+
+                        googleSignInManager.checkAutoSignIn(token = tokenId)
+                            .flowOn(Dispatchers.IO)
+                            .collect {
+                                _signInState.value = it
+                            }
                     }
                     weatherResult is ApiState.Error || bannerResult is ApiState.Error -> {
-                        _apiLoadingMessage.value = "Error..."
+                        settingLoadingMessage("Error...")
                     }
                     else -> {}
                 }
@@ -106,35 +109,28 @@ class SplashViewModel @Inject constructor(
         }
     }
 
-    fun settingLoadingMessage(value: String) {
+    private fun settingLoadingMessage(value: String) {
         _apiLoadingMessage.value = value
     }
 
-    fun performGoogleSignIn(result: Task<GoogleSignInAccount>) {
-        viewModelScope.launch {
-            runCatching {
-                result.getResult(ApiException::class.java)
-            }.onSuccess { account ->
-                onLoginSuccess(account)
-            }.onFailure {
-                Logging.e(it.message.toString())
-            }
+    fun startGoogleSignIn() {
+        onIO {
+            googleSignInManager.signIn()
+                .collectLatest {
+                    _signInState.value = it
+                }
         }
     }
 
-    private fun onLoginSuccess(account: GoogleSignInAccount) {
+    fun insertUserCredential(account: GoogleIdTokenCredential) {
         onIO {
             val user = User(
-                auto = VALUE_YES,    // 자동 로그인 설정
-                name = account.displayName!!,
-                email = account.email!!,
-                photoUrl = account.photoUrl.toString()
+                name = account.displayName ?: "",
+                email = account.id,
+                tokenId = account.idToken,
+                photoUrl = account.profilePictureUri.toString()
             )
             insertUserUseCase(user)
-
-            withContext(Dispatchers.Main) {
-                _isLogin.value = LoginState.IsUser(true)
-            }
         }
     }
 }

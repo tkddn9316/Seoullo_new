@@ -8,7 +8,7 @@ import com.app.data.model.UserEntity
 
 @Database(
     entities = [UserEntity::class, TodayWatchedListEntity::class],
-    version = 3,
+    version = 4,
     exportSchema = false
 )
 @TypeConverters(Converters::class)

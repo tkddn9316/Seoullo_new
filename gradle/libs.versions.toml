@@ -53,6 +53,8 @@ composeFoundation = "1.8.0-beta01"
 in-app-update = "2.1.0"
 workManager = "2.10.0"
 workManagerHilt = "1.2.0"
+googleCredential = "1.3.0"
+googleCredentialLibrary = "1.1.0"
 
 [libraries]
 accompanist-pager = { module = "com.google.accompanist:accompanist-pager", version.ref = "accompanistPager" }
@@ -126,6 +128,9 @@ balloon = { module = "com.github.skydoves:balloon-compose", version.ref = "ballo
 compose-foundation = { module = "androidx.compose.foundation:foundation", version.ref = "composeFoundation" }
 update = { module = "com.google.android.play:app-update", version.ref = "in-app-update" }
 update-ktx = { module = "com.google.android.play:app-update-ktx", version.ref = "in-app-update" }
+google-credentials = { module = "androidx.credentials:credentials", version.ref = "googleCredential" }
+google-credentials-auth = { module = "androidx.credentials:credentials-play-services-auth", version.ref = "googleCredential" }
+google-credentials-library = { module = "com.google.android.libraries.identity.googleid:googleid", version.ref = "googleCredentialLibrary" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "app" }

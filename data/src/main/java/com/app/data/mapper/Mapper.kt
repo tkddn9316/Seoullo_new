@@ -153,9 +153,9 @@ fun mapperToUser(userEntity: List<UserEntity>): List<User> =
     userEntity.toList().map {
         User(
             index = it.index,
-            auto = it.auto,
             name = it.name,
             email = it.email,
+            tokenId = it.tokenId,
             photoUrl = it.photoUrl
         )
     }
