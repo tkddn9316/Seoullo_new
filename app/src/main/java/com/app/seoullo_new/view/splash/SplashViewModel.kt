@@ -92,7 +92,10 @@ class SplashViewModel @Inject constructor(
                         settingLoadingMessage("Check Login.")
                         delay(2000)
 
-                        googleSignInManager.checkAutoSignIn(token = tokenId)
+                        googleSignInManager.signIn(
+                            token = tokenId,
+                            isAuto = true
+                        )
                             .flowOn(Dispatchers.IO)
                             .collect {
                                 _signInState.value = it
@@ -115,7 +118,10 @@ class SplashViewModel @Inject constructor(
 
     fun startGoogleSignIn() {
         onIO {
-            googleSignInManager.signIn()
+            googleSignInManager.signIn(
+                token = "",
+                isAuto = false
+            )
                 .collectLatest {
                     _signInState.value = it
                 }

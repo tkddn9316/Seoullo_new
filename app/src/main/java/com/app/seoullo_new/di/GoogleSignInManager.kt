@@ -24,7 +24,7 @@ class GoogleSignInManager @Inject constructor(
     private val credentialManager: CredentialManager,
     private val auth: FirebaseAuth
 ) {
-    fun checkAutoSignIn(token: String): Flow<ApiState<GoogleIdTokenCredential?>> = flow {
+    fun signIn(token: String, isAuto: Boolean): Flow<ApiState<GoogleIdTokenCredential?>> = flow {
         emit(ApiState.Loading())
 
         if (token.isNotEmpty()) {
@@ -33,48 +33,9 @@ class GoogleSignInManager @Inject constructor(
         }
 
         val googleIdOption = GetGoogleIdOption.Builder()
-            .setFilterByAuthorizedAccounts(true) // 기존에 로그인했던 계정만 사용
+            .setFilterByAuthorizedAccounts(isAuto) // true: 기존에 로그인했던 계정만 사용
             .setServerClientId(BuildConfig.GOOGLE_CLIENT_ID)
             .setAutoSelectEnabled(true) // 자동 선택 활성화
-            .build()
-
-        val request = GetCredentialRequest.Builder()
-            .addCredentialOption(googleIdOption)
-            .build()
-
-        try {
-            val result = credentialManager.getCredential(
-                request = request,
-                context = context
-            )
-            when (val credential = result.credential) {
-                is CustomCredential -> {
-                    if (credential.type == GoogleIdTokenCredential.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL) {
-                        val data = GoogleIdTokenCredential.createFrom(credential.data)
-
-                        // Firebase에 로그인
-                        val firebaseCredential = GoogleAuthProvider.getCredential(data.idToken, null)
-                        auth.signInWithCredential(firebaseCredential)
-
-                        emit(ApiState.Success(data))
-                    } else {
-                        emit(ApiState.Error("Invalid credential type"))
-                    }
-                }
-                else -> emit(ApiState.Error("No valid credentials found"))
-            }
-        } catch (e: GetCredentialException) {
-            emit(ApiState.Error(e.message ?: ""))
-        }
-    }
-
-    fun signIn(): Flow<ApiState<GoogleIdTokenCredential?>> = flow {
-        emit(ApiState.Loading())
-
-        val googleIdOption = GetGoogleIdOption.Builder()
-            .setFilterByAuthorizedAccounts(false)
-            .setServerClientId(BuildConfig.GOOGLE_CLIENT_ID)
-            .setAutoSelectEnabled(true)
             .build()
 
         val request = GetCredentialRequest.Builder()
