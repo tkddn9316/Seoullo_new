@@ -63,6 +63,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun MainScreen(
     viewModel: MainViewModel = hiltViewModel(),
+    watchedOnClick: (places: String, isNearby: String) -> Unit,
     travelOnClick: (TravelJsonItemData) -> Unit,
     settingOnClick: (String) -> Unit
 ) {
@@ -96,7 +97,11 @@ fun MainScreen(
                 ) { page ->
                     when (tabs[page]) {
                         // TODO: 추후 다른 방법이 있는 지 고민...
-                        "Home", "홈" -> HomeScreen()
+                        "Home", "홈" -> HomeScreen(
+                            watchedOnClick = { data, isNearby ->
+                                watchedOnClick(data, isNearby)
+                            }
+                        )
                         "Travel", "여행" -> TravelScreen { travelOnClick(it) }
                         "Setting", "설정" -> SettingScreen { settingOnClick(it) }
                     }

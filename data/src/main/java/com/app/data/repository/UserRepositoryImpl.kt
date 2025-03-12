@@ -13,7 +13,7 @@ class UserRepositoryImpl @Inject constructor(private val userDataSource: UserDat
     UserRepository {
     override fun insert(data: User) {
         val userEntity = UserEntity(
-            data.index, data.auto, data.name, data.email, data.photoUrl
+            data.index, data.name, data.email, data.tokenId, data.photoUrl
         )
         userDataSource.insert(userEntity)
     }
@@ -28,7 +28,7 @@ class UserRepositoryImpl @Inject constructor(private val userDataSource: UserDat
 
     override fun update(data: User) {
         val userEntity = UserEntity(
-            data.index, data.auto, data.name, data.email, data.photoUrl
+            data.index, data.name, data.email, data.tokenId, data.photoUrl
         )
         userDataSource.update(userEntity)
     }

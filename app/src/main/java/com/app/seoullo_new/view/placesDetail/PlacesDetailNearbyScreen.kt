@@ -64,6 +64,7 @@ import com.app.domain.model.DirectionRequest
 import com.app.domain.model.Places
 import com.app.domain.model.PlacesDetailGoogle
 import com.app.domain.model.common.ApiState
+import com.app.domain.model.theme.Language
 import com.app.seoullo_new.BuildConfig
 import com.app.seoullo_new.R
 import com.app.seoullo_new.utils.Util.getLanguageCode
@@ -73,6 +74,7 @@ import com.app.seoullo_new.view.base.SeoulloAppBar
 import com.app.seoullo_new.view.ui.theme.Color_ERROR
 import com.app.seoullo_new.view.ui.theme.colorRatingStar
 import com.app.seoullo_new.view.ui.theme.notosansFont
+import com.app.seoullo_new.view.util.RatingBar
 import com.app.seoullo_new.view.util.theme.LocalLanguage
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
@@ -99,7 +101,13 @@ fun PlaceDetailNearbyScreen(
     val detailState by viewModel.placesDetailGoogleState.collectAsStateWithLifecycle()
 
     val context = LocalContext.current
-    val language = LocalLanguage.current
+    // 오늘 본 목록에서 왔는지, 리스트에서 왔는지
+    val language =
+        when (placesState.languageCode) {
+            "en" -> Language.ENGLISH
+            "ko" -> Language.KOREA
+            else -> LocalLanguage.current   // 리스트에서 왔으면 앱에 등록한 언어로
+        }
 
     LaunchedEffect(Unit) {
         if (BuildConfig.DEBUG) {
@@ -135,6 +143,18 @@ fun PlaceDetailNearbyScreen(
                     }
 
                     is ApiState.Success -> {
+                        // DB 넣기(리스트에서 진입했을 경우만)
+                        if (placesState.languageCode.isEmpty()) {
+                            viewModel.insertTodayWatchedList(
+                                data = placesState,
+                                isNearby = true,
+                                languageCode = getLanguageCode(
+                                    context = context,
+                                    language = language
+                                )
+                            )
+                        }
+
                         val placesDetail =
                             (detailState as ApiState.Success<PlacesDetailGoogle>).data
                                 ?: PlacesDetailGoogle()
@@ -457,37 +477,6 @@ fun CircularProfileImage(imageUrl: String, size: Dp = 40.dp) {
         placeHolder = painterResource(R.drawable.ic_user_default),
         error = painterResource(R.drawable.ic_user_default)
     )
-}
-
-@Composable
-fun RatingBar(
-    rating: Int
-) {
-    val maxStars = 5
-    val filledStars = rating    // 채워진 별의 개수
-    val emptyStars = maxStars - filledStars
-
-    Row(
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        repeat(filledStars) {
-            Icon(
-                imageVector = Icons.Filled.Star,
-                contentDescription = null,
-                tint = colorRatingStar,
-                modifier = Modifier.size(15.dp)
-            )
-        }
-        // 빈 별
-        repeat(emptyStars) {
-            Icon(
-                imageVector = Icons.Outlined.StarOutline,
-                contentDescription = null,
-                tint = colorRatingStar,
-                modifier = Modifier.size(15.dp)
-            )
-        }
-    }
 }
 
 @Composable

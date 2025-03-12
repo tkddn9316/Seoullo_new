@@ -1,14 +1,11 @@
 package com.app.domain.model
 
 import com.app.domain.model.common.BaseModel
-import kotlinx.serialization.Serializable
 
-/**
- * 실제로 사용되는 Place Model.
- * Data 계층에서 가져온 TourInfoResponseDTO가 Mapper로 인하여 Place로 변경되었다.
- */
-@Serializable
-data class Places(
+data class TodayWatchedList(
+    val index: Int = 0,
+    val isNearby: String,
+    val languageCode: String = "",
     val name: String = "",
     val id: String = "",
     val contentTypeId: String = "",
@@ -19,6 +16,5 @@ data class Places(
     val weekdayDescriptions: List<String> = emptyList(),
     val rating: Double = 0.0,
     val userRatingCount: Int = 0,
-    val photoUrl: String = "",
-    val languageCode: String = ""
+    val photoUrl: String = ""
 ) : BaseModel()

@@ -1,5 +1,6 @@
 package com.app.data.di
 
+import android.content.Context
 import com.app.data.repository.AutoCompleteRepositoryImpl
 import com.app.data.repository.DirectionRepositoryImpl
 import com.app.data.repository.PlacesDetailGoogleRepositoryImpl
@@ -8,6 +9,7 @@ import com.app.data.repository.PlacesNearbyRepositoryImpl
 import com.app.data.repository.PlacesRepositoryImpl
 import com.app.data.repository.ReverseGeocodingRepositoryImpl
 import com.app.data.repository.SettingRepositoryImpl
+import com.app.data.repository.TodayWatchedListRepositoryImpl
 import com.app.data.repository.UserRepositoryImpl
 import com.app.data.repository.WeatherRepositoryImpl
 import com.app.data.source.AuthCompleteDataSource
@@ -21,6 +23,7 @@ import com.app.data.source.PlacesPhotoNearbyDataSource
 import com.app.data.source.ReverseGeocodingDataSource
 import com.app.data.source.SettingDataSource
 import com.app.data.source.SunriseDataSource
+import com.app.data.source.TodayWatchedListDataSource
 import com.app.data.source.UserDataSource
 import com.app.data.source.WeatherDataSource
 import com.app.domain.repository.AutoCompleteRepository
@@ -31,11 +34,13 @@ import com.app.domain.repository.PlacesNearbyRepository
 import com.app.domain.repository.PlacesRepository
 import com.app.domain.repository.ReverseGeocodingRepository
 import com.app.domain.repository.SettingRepository
+import com.app.domain.repository.TodayWatchedListRepository
 import com.app.domain.repository.UserRepository
 import com.app.domain.repository.WeatherRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
@@ -111,5 +116,14 @@ class RepositoryModule {
     @Singleton
     fun provideAutoCompleteRepository(autoCompleteDataSource: AuthCompleteDataSource): AutoCompleteRepository {
         return AutoCompleteRepositoryImpl(autoCompleteDataSource)
+    }
+
+    @Provides
+    @Singleton
+    fun provideTodayWatchedListRepository(
+        todayWatchedListDataSource: TodayWatchedListDataSource,
+        @ApplicationContext context: Context
+    ): TodayWatchedListRepository {
+        return TodayWatchedListRepositoryImpl(todayWatchedListDataSource, context)
     }
 }

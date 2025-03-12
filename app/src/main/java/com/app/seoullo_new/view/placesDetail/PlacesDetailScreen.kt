@@ -37,6 +37,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -50,8 +51,10 @@ import com.app.domain.model.DirectionRequest
 import com.app.domain.model.Places
 import com.app.domain.model.PlacesDetail
 import com.app.domain.model.common.ApiState
+import com.app.domain.model.theme.Language
 import com.app.seoullo_new.R
 import com.app.seoullo_new.utils.Logging
+import com.app.seoullo_new.utils.Util.getLanguageCode
 import com.app.seoullo_new.view.base.ErrorScreen
 import com.app.seoullo_new.view.base.LoadingOverlay
 import com.app.seoullo_new.view.base.SeoulloAppBar
@@ -78,9 +81,16 @@ fun PlaceDetailScreen(
     onNavigationClick: () -> Unit,
     onDirectionClick: (destination: String) -> Unit
 ) {
-    val language = LocalLanguage.current
+    val context = LocalContext.current
     val placesState by viewModel.placesState.collectAsStateWithLifecycle()
     val detailState by viewModel.placesDetailState.collectAsStateWithLifecycle()
+    // 오늘 본 목록에서 왔는지, 리스트에서 왔는지
+    val language =
+        when (placesState.languageCode) {
+            "en" -> Language.ENGLISH
+            "ko" -> Language.KOREA
+            else -> LocalLanguage.current   // 리스트에서 왔으면 앱에 등록한 언어로
+        }
 
     LaunchedEffect(Unit) {
         viewModel.getPlacesDetail(
@@ -110,6 +120,18 @@ fun PlaceDetailScreen(
                     }
 
                     is ApiState.Success -> {
+                        // DB 넣기(리스트에서 진입했을 경우만)
+                        if (placesState.languageCode.isEmpty()) {
+                            viewModel.insertTodayWatchedList(
+                                data = placesState,
+                                isNearby = false,
+                                languageCode = getLanguageCode(
+                                    context = context,
+                                    language = language
+                                )
+                            )
+                        }
+
                         val placesDetail =
                             (detailState as ApiState.Success<PlacesDetail>).data ?: PlacesDetail()
                         PlacesDetailView(

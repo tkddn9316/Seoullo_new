@@ -6,6 +6,7 @@ import com.app.domain.model.theme.Language
 import com.app.domain.model.theme.ThemeMode
 import com.app.domain.model.theme.ThemeSetting
 import com.app.domain.repository.SettingRepository
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class SettingRepositoryImpl @Inject constructor(
@@ -24,5 +25,11 @@ class SettingRepositoryImpl @Inject constructor(
 
     override suspend fun updateLanguage(themeSetting: ThemeSetting) {
         settingDataSource.updateLanguage(themeSetting.language)
+    }
+
+    override fun getShowTodayWatchedList(): Flow<Boolean> = settingDataSource.getShowTodayWatchedList()
+
+    override suspend fun updateShowTodayWatchedList(showTodayWatchedList: Boolean) {
+        settingDataSource.updateShowTodayWatchedList(showTodayWatchedList = showTodayWatchedList)
     }
 }

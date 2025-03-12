@@ -1,10 +1,16 @@
 package com.app.seoullo_new.module
 
 import android.content.Context
+import androidx.credentials.CredentialManager
+import com.app.domain.usecase.user.SelectUserUseCase
 import com.app.seoullo_new.BuildConfig
+import com.app.seoullo_new.di.GoogleSignInManager
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -17,16 +23,23 @@ import javax.inject.Singleton
 object GoogleAuthModule {
     @Provides
     @Singleton
-    fun provideGoogleSignInOptions(): GoogleSignInOptions {
-        return GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            .requestEmail()
-            .requestIdToken(BuildConfig.GOOGLE_CLIENT_ID)
-            .build()
+    fun provideCredentialManager(@ApplicationContext context: Context): CredentialManager {
+        return CredentialManager.create(context)
     }
 
     @Provides
     @Singleton
-    fun provideGoogleSignInClient(@ApplicationContext context: Context, options: GoogleSignInOptions): GoogleSignInClient {
-        return GoogleSignIn.getClient(context, options)
+    fun provideFirebaseAuth(): FirebaseAuth {
+        return Firebase.auth
+    }
+
+    @Provides
+    @Singleton
+    fun provideGoogleSignInManager(
+        @ApplicationContext context: Context,
+        credentialManager: CredentialManager,
+        auth: FirebaseAuth
+    ): GoogleSignInManager {
+        return GoogleSignInManager(context, credentialManager, auth)
     }
 }

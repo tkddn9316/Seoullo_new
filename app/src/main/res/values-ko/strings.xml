@@ -45,6 +45,8 @@
     <string name="sunrise">일출</string>
     <string name="sunset">일몰</string>
     <string name="current_seoul">서울: %s</string>
+    <string name="today_watched_list">🗺️ 오늘 본 목록</string>
+    <string name="today_watched_list_title">오늘 본 목록</string>
 
     <!--  travel  -->
     <string name="travel_title_restaurant">🍚 음식점</string>
@@ -121,6 +123,8 @@
     <string name="bug_report_description">앱에 문제가 있을 경우 문의해주세요.</string>
     <string name="logout_title">로그아웃</string>
     <string name="logout_dialog_contents">로그아웃 하시겠습니까?</string>
+    <string name="show_list_title">목록 보기</string>
+    <string name="show_list_description">홈 화면의 "오늘 본 목록"을 노출시킵니다.</string>
 
     <string name="account_title">계정</string>
 

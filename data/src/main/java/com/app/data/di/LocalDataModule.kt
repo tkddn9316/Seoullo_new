@@ -8,10 +8,14 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.preferencesDataStoreFile
 import androidx.room.Room
+import com.app.data.db.Converters
 import com.app.data.db.SeoulloDatabase
+import com.app.data.db.TodayWatchedListDao
 import com.app.data.db.UserDao
 import com.app.data.source.SettingDataSource
 import com.app.data.source.SettingDataSourceImpl
+import com.app.data.source.TodayWatchedListDataSource
+import com.app.data.source.TodayWatchedListDataSourceImpl
 import com.app.data.source.UserDataSource
 import com.app.data.source.UserDataSourceImpl
 import com.app.data.utils.SunriseXmlParser
@@ -29,13 +33,17 @@ private const val TOKEN_PREF_FILE = "token"
 class LocalDataModule {
     @Provides
     @Singleton
-    fun provideDatabase(@ApplicationContext context: Context): SeoulloDatabase {
-        return Room.databaseBuilder(
-            context,
-            SeoulloDatabase::class.java,
-            "SeoulloDB.db"
-        ).build()
+    fun provideDatabase(@ApplicationContext context: Context, converters: Converters): SeoulloDatabase {
+        return Room
+            .databaseBuilder(context, SeoulloDatabase::class.java, "SeoulloDB.db")
+            .addTypeConverter(converters)
+            .fallbackToDestructiveMigration()
+            .build()
     }
+
+    @Provides
+    @Singleton
+    fun provideConverters(): Converters = Converters()
 
     @Provides
     @Singleton
@@ -43,7 +51,15 @@ class LocalDataModule {
 
     @Provides
     @Singleton
+    fun provideTodayWatchedListDao(seoulloDatabase: SeoulloDatabase): TodayWatchedListDao = seoulloDatabase.todayWatchedListDao()
+
+    @Provides
+    @Singleton
     fun provideUserDataSource(userDao: UserDao): UserDataSource = UserDataSourceImpl(userDao)
+
+    @Provides
+    @Singleton
+    fun provideTodayWatchedListDataSource(todayWatchedListDao: TodayWatchedListDao): TodayWatchedListDataSource = TodayWatchedListDataSourceImpl(todayWatchedListDao)
 
     @Provides
     @Singleton

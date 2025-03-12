@@ -29,8 +29,11 @@ import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -60,6 +63,7 @@ import org.joda.time.DateTime
 @Composable
 fun HomeScreen(
     viewModel: HomeViewModel = hiltViewModel(),
+    watchedOnClick: (places: String, isNearby: String) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val context = LocalContext.current
@@ -69,6 +73,16 @@ fun HomeScreen(
     val weatherResult by viewModel.weatherResult.collectAsStateWithLifecycle()
     val backgroundColor by viewModel.homeBackgroundColor.collectAsStateWithLifecycle()
     val errorMessage by viewModel.errorMessages.collectAsStateWithLifecycle()
+    // 오늘 본 목록 결과
+    val getList = rememberUpdatedState(viewModel::selectTodayWatchedList)
+    val todayWatchedList by viewModel.todayWatchedList.collectAsStateWithLifecycle()
+    DisposableEffect(Unit) {
+        getList.value() // 화면이 재활성화될 때마다 실행(onResume)
+        onDispose { }
+    }
+    val switchState by rememberUpdatedState(newValue = viewModel.switchState.collectAsStateWithLifecycle())
+
+    val dialogState by viewModel.dialogState.collectAsStateWithLifecycle()
 
     // Bundle 객체에 데이터 저장(Page 이동해도 값 변화 없도록)
     val currentTime by rememberSaveable { mutableStateOf(DateTime.now().toString("yyyy-MM-dd HH:mm:ss")) }
@@ -153,6 +167,20 @@ fun HomeScreen(
                 }
                 Spacer(modifier = modifier.height(12.dp))
             }
+            // 오늘 본 목록
+            if (switchState.value) {
+                if (todayWatchedList.isNotEmpty()) {
+                    item {
+                        TodayWatchedList(
+                            viewModel = viewModel,
+                            list = todayWatchedList,
+                            watchedOnClick = watchedOnClick
+                        )
+                        Spacer(modifier = modifier.height(12.dp))
+                    }
+                }
+            }
+
             // 날씨 정보
             item {
                 Card(
@@ -296,6 +324,14 @@ fun HomeScreen(
                     item = it
                 )
             }
+        }
+
+        if (dialogState.isTodayWatchedListDialogOpen) {
+            TodayWatchedListDialog(
+                viewModel = viewModel,
+                list = todayWatchedList,
+                watchedOnClick = watchedOnClick
+            )
         }
 
         if (!errorMessage.isNullOrEmpty()) {

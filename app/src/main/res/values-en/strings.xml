@@ -45,6 +45,8 @@
     <string name="sunrise">Sunrise</string>
     <string name="sunset">Sunset</string>
     <string name="current_seoul">in Seoul: %s</string>
+    <string name="today_watched_list">🗺️ Today Watched List</string>
+    <string name="today_watched_list_title">Today Watched List</string>
 
     <!--  travel  -->
     <string name="travel_title_restaurant">🍚 Restaurant</string>
@@ -121,6 +123,8 @@
     <string name="bug_report_description">Something isn\'t working correctly?</string>
     <string name="logout_title">Logout</string>
     <string name="logout_dialog_contents">Do you want to logout?</string>
+    <string name="show_list_title">Show List</string>
+    <string name="show_list_description">Show Today Watched List in Home.</string>
 
     <string name="account_title">Account</string>
 

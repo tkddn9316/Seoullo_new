@@ -14,6 +14,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import androidx.navigation.navArgument
+import com.app.seoullo_new.utils.Constants.VALUE_YES
 import com.app.seoullo_new.view.main.MainScreen
 import com.app.seoullo_new.view.main.setting.LicenseScreen
 import com.app.seoullo_new.view.map.DirectionScreen
@@ -21,7 +22,7 @@ import com.app.seoullo_new.view.placesDetail.PlaceDetailNearbyScreen
 import com.app.seoullo_new.view.placesDetail.PlaceDetailScreen
 import com.app.seoullo_new.view.placesList.PlacesListScreen
 import com.app.seoullo_new.view.placesList.PlacesListViewModel
-import com.app.seoullo_new.view.splash.SplashScreen
+import com.app.seoullo_new.view.splash.SplashRoute
 import com.app.seoullo_new.view.util.TravelJsonItemData
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
@@ -67,7 +68,7 @@ fun NavigationGraph(navController: NavHostController) {
 
 fun NavGraphBuilder.splashScreenNavigation(navController: NavHostController) {
     composable(Route.SPLASH) {
-        SplashScreen(
+        SplashRoute (
             onMoveMain = { weatherItem, bannerItem ->
                 navController.navigate(
                     Route.MAIN
@@ -86,6 +87,18 @@ fun NavGraphBuilder.mainScreenNavigation(navController: NavHostController) {
             navArgument("banner") { type = NavType.StringType })
     ) {
         MainScreen(
+            watchedOnClick = { place, isNearby ->
+                val route = if (isNearby == VALUE_YES) {
+                    Route.PLACE_DETAIL_NEARBY.replace("{place}", place)
+                } else {
+                    Route.PLACE_DETAIL.replace("{place}", place)
+                }
+                navController.navigate(route) {
+                    popUpTo(Route.MAIN) { saveState = true }
+                    launchSingleTop = true
+                    restoreState = true
+                }
+            },
             travelOnClick = { travelItem ->
                 val itemJson = Json.encodeToString(travelItem)
                 navController.navigate(Route.placeListParameter(itemJson))

@@ -64,8 +64,8 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
-import com.app.domain.model.common.ApiState
 import com.app.domain.model.Places
+import com.app.domain.model.common.ApiState
 import com.app.domain.model.theme.Language
 import com.app.seoullo_new.BuildConfig
 import com.app.seoullo_new.R
@@ -81,6 +81,7 @@ import com.app.seoullo_new.view.ui.theme.Color_ERROR
 import com.app.seoullo_new.view.ui.theme.colorRatingStar
 import com.app.seoullo_new.view.util.FabItem
 import com.app.seoullo_new.view.util.MultipleFloatingActionButton
+import com.app.seoullo_new.view.util.RatingBarHalf
 import com.app.seoullo_new.view.util.TravelJsonItemData
 import com.app.seoullo_new.view.util.theme.LocalLanguage
 import com.bumptech.glide.load.engine.DiskCacheStrategy
@@ -418,7 +419,7 @@ fun PlacesListItem(
                 overflow = TextOverflow.Ellipsis,
                 maxLines = 1
             )
-            RatingBar(
+            RatingBarHalf(
                 places.rating,
                 places.userRatingCount
             )
@@ -431,7 +432,7 @@ fun PlacesListItem(
             Icon(
                 imageVector = Icons.Default.LocationOn,
                 contentDescription = null,
-                modifier = Modifier.padding(0.dp, 0.dp, 4.dp, 0.dp)
+                modifier = Modifier.padding(end = 4.dp)
             )
             Text(
                 style = MaterialTheme.typography.labelSmall.copy(
@@ -448,58 +449,6 @@ fun PlacesListItem(
     Spacer(modifier = Modifier.height(6.dp))
     HorizontalDivider(thickness = 1.dp, color = MaterialTheme.colorScheme.outlineVariant)
     Spacer(modifier = Modifier.height(6.dp))
-}
-
-@Composable
-fun RatingBar(
-    rating: Double,
-    userRatingCount: Int,
-    modifier: Modifier = Modifier
-) {
-    val maxStars = 5
-    val filledStars = rating.toInt()    // 채워진 별의 개수
-    val halfStar = rating - filledStars >= 0.5  // 반 별 여부
-    val emptyStars = maxStars - filledStars - if (halfStar) 1 else 0 // 빈 별 개수
-
-    Row(
-        verticalAlignment = Alignment.Top,
-        modifier = modifier
-    ) {
-        repeat(filledStars) {
-            Icon(
-                imageVector = Icons.Filled.Star,
-                contentDescription = null,
-                tint = colorRatingStar,
-                modifier = Modifier.size(15.dp)
-            )
-        }
-        if (halfStar) {
-            Icon(
-                imageVector = Icons.AutoMirrored.Filled.StarHalf,
-                contentDescription = null,
-                tint = colorRatingStar,
-                modifier = Modifier.size(15.dp)
-            )
-        }
-        // 빈 별
-        repeat(emptyStars) {
-            Icon(
-                imageVector = Icons.Outlined.StarOutline,
-                contentDescription = null,
-                tint = colorRatingStar,
-                modifier = Modifier.size(15.dp)
-            )
-        }
-        Spacer(modifier = Modifier.width(5.dp))
-        // 평가 수 표시
-        Text(
-            text = "$rating ($userRatingCount)",
-            style = MaterialTheme.typography.labelSmall.copy(
-                color = MaterialTheme.colorScheme.onBackground
-            ),
-            fontSize = 13.sp
-        )
-    }
 }
 
 /** PREVIEW */
