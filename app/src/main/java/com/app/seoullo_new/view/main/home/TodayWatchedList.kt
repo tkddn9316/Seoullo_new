@@ -1,6 +1,7 @@
 package com.app.seoullo_new.view.main.home
 
 import android.net.Uri
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -45,14 +46,22 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.app.domain.model.PlacesDetailReview
 import com.app.domain.model.TodayWatchedList
 import com.app.seoullo_new.R
 import com.app.seoullo_new.utils.Constants.TODAY_WATCHED_LIST_VISIBILITY_SIZE
 import com.app.seoullo_new.utils.Logging
+import com.app.seoullo_new.view.placesDetail.PlacesDetailView
 import com.app.seoullo_new.view.ui.theme.Color_ERROR
 import com.app.seoullo_new.view.ui.theme.notosansFont
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
+import com.google.firebase.FirebaseApp
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.FirebaseFirestoreSettings
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import com.skydoves.landscapist.glide.GlideImage
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
@@ -95,7 +104,33 @@ fun TodayWatchedList(
                     colors = ButtonDefaults.buttonColors(
                         containerColor = Color.White.copy(alpha = 0.2f)
                     ),
-                    onClick = viewModel::openTodayWatchedListDialog,
+//                    onClick = viewModel::openTodayWatchedListDialog
+                    onClick = {
+                        val review = PlacesDetailReview(
+                            text = "aaaaaaaaaaaaaaa",
+                            category = "1",
+                            contentId = "1",
+                            contentTypeId = "1",
+                            profileName = "1",
+                            profilePhotoUrl = "1",
+                            rating = 1,
+                        )
+                        val db = Firebase.firestore("seoullo-places-review-database")
+                        db.collection("reviews")
+                            .get()
+                            .addOnSuccessListener { result ->
+                                for (document in result) {
+                                    Logging.e("${document.id} => ${document.data}")
+                                }
+                            }
+                            .addOnFailureListener {
+                                Logging.e(it.message ?: "")
+                            }
+//                        db.collection("reviews")
+//                            .add(review)
+//                            .addOnSuccessListener { Logging.e("성공") }
+//                            .addOnFailureListener { Logging.e("실패 ${it.message}") }
+                    }
                 ) {
                     BasicText(
                         text = stringResource(R.string.see_more),
