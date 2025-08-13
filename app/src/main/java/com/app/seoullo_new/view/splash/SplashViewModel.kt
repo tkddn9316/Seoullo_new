@@ -70,7 +70,7 @@ class SplashViewModel @Inject constructor(
                 .first()
 
             val bannerFlow = placesListUseCase.getBannerData(
-                serviceUrl = "KorService1",
+                serviceUrl = "KorService2",
                 serviceKey = BuildConfig.TOUR_API_KEY,
                 contentTypeId = "15",
                 category = "A0208"

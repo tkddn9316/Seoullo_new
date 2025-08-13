@@ -64,10 +64,9 @@ class PlacesDetailViewModel @Inject constructor(
 
         onIO {
             getPlacesDetailUseCase(
-                serviceUrl = if (languageCode == Language.ENGLISH) "EngService1" else "KorService1",
+                serviceUrl = if (languageCode == Language.ENGLISH) "EngService2" else "KorService2",
                 serviceKey = BuildConfig.TOUR_API_KEY,
-                contentId = places.id,
-                contentTypeId = places.contentTypeId
+                contentId = places.id
             )
                 .flowOn(Dispatchers.IO)
                 .collect { state ->

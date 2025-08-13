@@ -11,16 +11,15 @@ import retrofit2.http.Query
  */
 interface ApiInterface2 {
     // 지역기반(서울) 관광 정보 조회
-    @GET("{serviceUrl}/areaBasedList1")
+    @GET("{serviceUrl}/areaBasedList2")
     suspend fun getPlacesList(
-        @Path("serviceUrl") serviceUrl: String,         // 영어: EngService1, 한글: KorService1
+        @Path("serviceUrl") serviceUrl: String,         // 영어: EngService2, 한글: KorService2
         @Query("numOfRows") numOfRows: Int = 10,
         @Query("pageNo") pageNo: Int,                   // 페이지 번호
         @Query("MobileOS") mobileOS: String = "AND",
         @Query("MobileApp") mobileApp: String = "Seoullo",
         @Query("serviceKey") serviceKey: String,        // API KEY
         @Query("_type") type: String = "JSON",
-        @Query("listYN") listYN: String = "Y",
         @Query("arrange") arrange: String = "C",
         @Query("contentTypeId") contentTypeId: String,  // 컨텐츠 유형
         @Query("cat1") category1: String,               // 분류1
@@ -30,19 +29,13 @@ interface ApiInterface2 {
     ): PlacesResponseDTO
 
     // 관광 상세 정보 조회
-    @GET("{serviceUrl}/detailCommon1")
+    @GET("{serviceUrl}/detailCommon2")
     suspend fun getPlacesInfoDetail(
         @Path("serviceUrl") serviceUrl: String,
         @Query("MobileOS") mobileOS: String = "AND",
         @Query("MobileApp") mobileApp: String = "Seoullo",
         @Query("serviceKey") serviceKey: String,
         @Query("contentId") contentId: String,
-        @Query("contentTypeId") contentTypeId: String,
-        @Query("_type") type: String = "JSON",
-        @Query("defaultYN") defaultYN: String = "Y",
-        @Query("firstImageYN") firstImageYN: String = "Y",
-        @Query("addrinfoYN") addrinfoYN: String = "Y",
-        @Query("mapinfoYN") mapinfoYN: String = "Y",
-        @Query("overviewYN") overviewYN: String = "Y",
+        @Query("_type") type: String = "JSON"
     ): PlacesDetailResponseDTO
 }

@@ -70,7 +70,7 @@ class PlacesListViewModel @Inject constructor(
 
         onIO {
             getPlacesListUseCase(
-                serviceUrl = if (languageCode == Language.ENGLISH) "EngService1" else "KorService1",
+                serviceUrl = if (languageCode == Language.ENGLISH) "EngService2" else "KorService2",
                 serviceKey = BuildConfig.TOUR_API_KEY,
                 contentTypeId = if (languageCode == Language.ENGLISH) travelItem.id else travelItem.id_ko,
                 category = travelItem.cat

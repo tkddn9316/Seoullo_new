@@ -7,7 +7,6 @@ interface PlacesDetailRepository {
     fun getPlacesDetail(
         serviceUrl: String,
         serviceKey: String,
-        contentId: String,
-        contentTypeId: String
+        contentId: String
     ): Flow<PlacesDetail>
 }

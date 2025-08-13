@@ -13,16 +13,14 @@ class GetPlacesDetailUseCase @Inject constructor(private val repository: PlacesD
     operator fun invoke(
         serviceUrl: String,
         serviceKey: String,
-        contentId: String,
-        contentTypeId: String
+        contentId: String
     ): Flow<ApiState<PlacesDetail>> = flow {
         emit(ApiState.Loading())
         try {
             repository.getPlacesDetail(
                 serviceUrl = serviceUrl,
                 serviceKey = serviceKey,
-                contentId = contentId,
-                contentTypeId = contentTypeId
+                contentId = contentId
             ).collect {
                 emit(ApiState.Success(it))
             }
