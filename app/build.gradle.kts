@@ -152,12 +152,13 @@ dependencies {
     // ViewModelScope
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
 
-    // Google Login
+    // firebase
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.analytics)
     implementation(libs.firebase.auth.ktx)
-    implementation(libs.play.services.auth)
+    implementation(libs.firebase.firestore)
 
+    // Google Login
     implementation(libs.google.credentials)
     implementation(libs.google.credentials.auth)
     implementation(libs.google.credentials.library)
