@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -55,7 +56,9 @@ import com.skydoves.landscapist.glide.GlideImage
 fun TravelScreen(
     travelOnClick: (TravelJsonItemData) -> Unit
 ) {
-    Scaffold { innerPadding ->
+    Scaffold(
+        contentWindowInsets = WindowInsets(0)   //  안드 15 불필요한 위/아래 패딩 제거
+    ) { innerPadding ->
         val context = LocalContext.current
         val jsonString = loadJsonFromAssets(context)
         val travelData = remember { loadTravelData(jsonString) }
