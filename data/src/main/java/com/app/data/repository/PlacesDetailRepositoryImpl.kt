@@ -15,15 +15,13 @@ class PlacesDetailRepositoryImpl @Inject constructor(
     override fun getPlacesDetail(
         serviceUrl: String,
         serviceKey: String,
-        contentId: String,
-        contentTypeId: String
+        contentId: String
     ): Flow<PlacesDetail> {
         return flow {
             placesDetailDataSource.getPlacesDetail(
                 serviceUrl = serviceUrl,
                 serviceKey = serviceKey,
-                contentId = contentId,
-                contentTypeId = contentTypeId
+                contentId = contentId
             ).collect {
                 emit(mapperToPlaceDetail((it.response.body.items?.items?: emptyList())[0]))
             }
