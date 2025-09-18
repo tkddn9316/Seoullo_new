@@ -105,6 +105,7 @@ fun TodayWatchedList(
                         containerColor = Color.White.copy(alpha = 0.2f)
                     ),
 //                    onClick = viewModel::openTodayWatchedListDialog
+                    
                     onClick = {
                         val review = PlacesDetailReview(
                             text = "aaaaaaaaaaaaaaa",
@@ -117,19 +118,21 @@ fun TodayWatchedList(
                         )
                         val db = Firebase.firestore("seoullo-places-review-database")
                         db.collection("reviews")
-                            .get()
-                            .addOnSuccessListener { result ->
-                                for (document in result) {
-                                    Logging.e("${document.id} => ${document.data}")
-                                }
+                            .add(review)
+                            .addOnSuccessListener {
+                                Logging.e("성공")
+                                db.collection("reviews")
+                                    .get()
+                                    .addOnSuccessListener { result ->
+                                        for (document in result) {
+                                            Logging.e("${document.id} => ${document.data}")
+                                        }
+                                    }
+                                    .addOnFailureListener {
+                                        Logging.e(it.message ?: "")
+                                    }
                             }
-                            .addOnFailureListener {
-                                Logging.e(it.message ?: "")
-                            }
-//                        db.collection("reviews")
-//                            .add(review)
-//                            .addOnSuccessListener { Logging.e("성공") }
-//                            .addOnFailureListener { Logging.e("실패 ${it.message}") }
+                            .addOnFailureListener { Logging.e("실패 ${it.message}") }
                     }
                 ) {
                     BasicText(
