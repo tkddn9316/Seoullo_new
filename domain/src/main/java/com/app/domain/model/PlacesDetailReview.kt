@@ -1,6 +1,5 @@
 package com.app.domain.model
 
-import com.app.domain.model.common.BaseModel
 import kotlinx.serialization.Serializable
 
 @Serializable

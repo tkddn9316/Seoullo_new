@@ -105,7 +105,7 @@ fun TodayWatchedList(
                         containerColor = Color.White.copy(alpha = 0.2f)
                     ),
 //                    onClick = viewModel::openTodayWatchedListDialog
-                    
+
                     onClick = {
                         val review = PlacesDetailReview(
                             text = "aaaaaaaaaaaaaaa",
@@ -118,10 +118,14 @@ fun TodayWatchedList(
                         )
                         val db = Firebase.firestore("seoullo-places-review-database")
                         db.collection("reviews")
+                            .document("흠")      // TODO: 게시글 이름
+                            .collection("review")
                             .add(review)
                             .addOnSuccessListener {
                                 Logging.e("성공")
                                 db.collection("reviews")
+                                    .document("흠")
+                                    .collection("review")
                                     .get()
                                     .addOnSuccessListener { result ->
                                         for (document in result) {
