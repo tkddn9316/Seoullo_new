@@ -5,6 +5,7 @@ import com.app.data.model.AutoCompleteRequestDTO
 import com.app.data.model.AutoCompleteResponseDTO
 import com.app.data.model.PlacesDetailGoogleResponseDTO
 import com.app.data.model.PlacesDetailResponseDTO
+import com.app.data.model.PlacesDetailReviewDTO
 import com.app.data.model.PlacesNearbyRequestDTO
 import com.app.data.model.PlacesNearbyResponseDTO
 import com.app.data.model.PlacesResponseDTO
@@ -18,11 +19,13 @@ import com.app.domain.model.PlacesAutoComplete
 import com.app.domain.model.PlacesAutoCompleteRequest
 import com.app.domain.model.PlacesDetail
 import com.app.domain.model.PlacesDetailGoogle
+import com.app.domain.model.PlacesDetailReview
 import com.app.domain.model.PlacesNearbyRequest
 import com.app.domain.model.ReverseGeocoding
 import com.app.domain.model.TodayWatchedList
 import com.app.domain.model.User
 import com.app.domain.model.Weather
+import com.google.firebase.firestore.DocumentSnapshot
 import org.joda.time.DateTime
 import org.joda.time.format.DateTimeFormat
 
@@ -161,25 +164,6 @@ fun mapperToUser(userEntity: List<UserEntity>): List<User> =
     }
 
 fun mapperToWeather(weatherDTO: WeatherDTO): Weather {
-//    val header = weatherDTO.response.header
-//    if (header.resultCode != ApiSuccessCode.Weather.code) {
-//        throw Exception("${header.resultCode}: ${header.resultMsg}")
-//    }
-//
-//    return weatherDTO.response.body?.items?.let { items ->
-//        items.item.toList().map {
-//            Weather(
-//                baseData = it.baseData,
-//                baseTime = it.baseTime,
-//                category = it.category,
-//                fcstDate = it.fcstDate,
-//                fcstTime = it.fcstTime,
-//                fcstValue = it.fcstValue,
-//                nx = it.nx,
-//                ny = it.ny
-//            )
-//        }
-//    } ?: run { emptyList() }
     val errorCode = weatherDTO.errorCode
     val errorMessage = weatherDTO.errorMessage
     if (errorCode != null && errorMessage != null) {
@@ -256,3 +240,18 @@ fun mapperToTodayWatchedList(todayWatchedListEntity: List<TodayWatchedListEntity
             photoUrl = it.photoUrl
         )
     }.sortedByDescending { it.index }
+
+
+fun DocumentSnapshot.mapperToPlacesDetailReview(): PlacesDetailReview? {
+    val dto = this.toObject(PlacesDetailReviewDTO::class.java) ?: return null
+    return PlacesDetailReview(
+        text = dto.text,
+        category = dto.category,
+        contentId = dto.contentId,
+        contentTypeId = dto.contentTypeId,
+        profileName = dto.profileName,
+        profilePhotoUrl = dto.profilePhotoUrl,
+        rating = dto.rating,
+        timestamp = dto.timestamp
+    )
+}

@@ -2,22 +2,29 @@ package com.app.seoullo_new.view.placesDetail
 
 import android.content.Context
 import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.viewModelScope
 import com.app.domain.model.Places
 import com.app.domain.model.PlacesDetail
 import com.app.domain.model.PlacesDetailGoogle
+import com.app.domain.model.PlacesDetailReview
 import com.app.domain.model.common.ApiState
 import com.app.domain.model.theme.Language
 import com.app.domain.usecase.places.GetPlacesDetailGoogleUseCase
 import com.app.domain.usecase.places.GetPlacesDetailUseCase
+import com.app.domain.usecase.review.PlacesReviewUseCase
 import com.app.domain.usecase.todayWatchedList.GetTodayWatchedListUseCase
 import com.app.seoullo_new.BuildConfig
 import com.app.seoullo_new.di.DispatcherProvider
+import com.app.seoullo_new.utils.Logging
 import com.app.seoullo_new.view.base.BaseViewModel2
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.serialization.json.Json
 import javax.inject.Inject
 
@@ -27,7 +34,8 @@ class PlacesDetailViewModel @Inject constructor(
     dispatcherProvider: DispatcherProvider,
     private val getPlacesDetailUseCase: GetPlacesDetailUseCase,
     private val getPlacesDetailGoogleUseCase: GetPlacesDetailGoogleUseCase,
-    private val getTodayWatchedListUseCase: GetTodayWatchedListUseCase
+    private val getTodayWatchedListUseCase: GetTodayWatchedListUseCase,
+    getPlacesReviewUseCase: PlacesReviewUseCase
 ) : BaseViewModel2(dispatcherProvider) {
     private val json: String = checkNotNull(savedStateHandle["place"])
     private val places: Places by lazy { Json.decodeFromString<Places>(json) }
@@ -41,20 +49,43 @@ class PlacesDetailViewModel @Inject constructor(
     private val _placesDetailGoogleState = MutableStateFlow<ApiState<PlacesDetailGoogle>>(ApiState.Initial())
     val placesDetailGoogleState = _placesDetailGoogleState.asStateFlow()
 
-    private val _selectedReview = MutableStateFlow<PlacesDetailGoogle.Review?>(null)
+    // Nearby 리뷰
+    private val _selectedNearbyReview = MutableStateFlow<PlacesDetailGoogle.Review?>(null)
+    val selectedNearbyReview = _selectedNearbyReview.asStateFlow()
+
+    // 일반 리뷰
+    private val _selectedReview = MutableStateFlow<PlacesDetailReview?>(null)
     val selectedReview = _selectedReview.asStateFlow()
-    fun openReviewDetailDialog(review: PlacesDetailGoogle.Review) {
-        _selectedReview.value = review
-    }
-    fun closeReviewDetailDialog() {
-        _selectedReview.value = null
-    }
+
+    fun getTitle(): String = places.displayName
+
+    val reviewState: StateFlow<ApiState<List<PlacesDetailReview>>> =
+        getPlacesReviewUseCase.getReviews(getTitle())
+            .stateIn(
+                scope = viewModelScope,
+                started = SharingStarted.WhileSubscribed(5000),
+                initialValue = ApiState.Loading()
+            )
 
     init {
         _placesState.value = places
     }
 
-    fun getTitle(): String = places.displayName
+    fun openNearbyReviewDetailDialog(review: PlacesDetailGoogle.Review) {
+        _selectedNearbyReview.value = review
+    }
+
+    fun closeNearbyReviewDetailDialog() {
+        _selectedNearbyReview.value = null
+    }
+
+    fun openReviewDetailDialog(review: PlacesDetailReview) {
+        _selectedReview.value = review
+    }
+
+    fun closeReviewDetailDialog() {
+        _selectedReview.value = null
+    }
 
     fun getPlacesDetail(
         languageCode: Language

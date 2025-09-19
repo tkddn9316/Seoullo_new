@@ -36,7 +36,6 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 @Module
 class RemoteDataModule {
-
     @Provides
     @Singleton
     fun providePlacesNearbyDataSource(@ApiAnnotation.GooglePlacesApi apiInterface: ApiInterface): PlacesNearbyDataSource {
