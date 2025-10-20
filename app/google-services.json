@@ -2,7 +2,7 @@
   "project_info": {
     "project_number": "1059945270546",
     "project_id": "seoullo-new",
-    "storage_bucket": "seoullo-new.appspot.com"
+    "storage_bucket": "seoullo-new.firebasestorage.app"
   },
   "client": [
     {
@@ -19,6 +19,38 @@
           "android_info": {
             "package_name": "com.app.seoullo_new",
             "certificate_hash": "f0014abc4467ca57b06c018eb24ab61cee386945"
+          }
+        },
+        {
+          "client_id": "1059945270546-4chhlfkat98fbokcv5gtbt5hol70ps9k.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.app.seoullo_new",
+            "certificate_hash": "8bcfd51592feda945e24f067bce7824928291f71"
+          }
+        },
+        {
+          "client_id": "1059945270546-flbgiket3njvjmard7qppqaqtuegq830.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.app.seoullo_new",
+            "certificate_hash": "a8a8b7d7e6ae3e1f8545f96c8a617bf4e4ac7bd4"
+          }
+        },
+        {
+          "client_id": "1059945270546-ohma528urbpvd8flq5942jkd9cok33pb.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.app.seoullo_new",
+            "certificate_hash": "2d16c979b35e4d13374a7d9e63b7ec683918ce4f"
+          }
+        },
+        {
+          "client_id": "1059945270546-u5743pctpord4m3agiu8v5r1dj1i9r9r.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.app.seoullo_new",
+            "certificate_hash": "93b5c962b209060466e2d566a3c6830bc804415b"
           }
         },
         {

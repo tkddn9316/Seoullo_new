@@ -17,6 +17,10 @@ import com.app.seoullo_new.view.util.TravelItemData
 import com.app.seoullo_new.view.util.TravelJsonItemData
 import com.google.android.gms.maps.model.LatLng
 import kotlinx.serialization.json.Json
+import java.time.Instant
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
+import java.util.Locale
 
 /**
  * 각종 유틸 클래스
@@ -236,5 +240,12 @@ object Util {
 
     fun getLanguageCode(context: Context, language: Language): String {
         return if (language == Language.ENGLISH) context.getString(R.string.en) else context.getString(R.string.ko)
+    }
+
+    fun getCurrentDate(timestamp: Long): String {
+        val date = Instant.ofEpochMilli(timestamp)
+            .atZone(ZoneId.systemDefault())
+            .toLocalDate()
+        return date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.getDefault()))
     }
 }

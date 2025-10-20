@@ -71,4 +71,10 @@ dependencies {
     implementation(libs.workManager)
     implementation(libs.workManager.hilt)
     ksp(libs.workManager.hilt.compiler)
+
+    // firebase
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.analytics)
+    implementation(libs.firebase.auth.ktx)
+    implementation(libs.firebase.firestore)
 }

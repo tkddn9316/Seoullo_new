@@ -6,12 +6,10 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -20,14 +18,12 @@ import androidx.compose.foundation.text.TextAutoSize
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -95,7 +91,40 @@ fun TodayWatchedList(
                     colors = ButtonDefaults.buttonColors(
                         containerColor = Color.White.copy(alpha = 0.2f)
                     ),
-                    onClick = viewModel::openTodayWatchedListDialog,
+                    onClick = viewModel::openTodayWatchedListDialog
+
+//                    onClick = {
+//                        val review = PlacesDetailReview(
+//                            text = "aaaaaaaaaaaaaaa",
+//                            category = "1",
+//                            contentId = "1",
+//                            contentTypeId = "1",
+//                            profileName = "1",
+//                            profilePhotoUrl = "1",
+//                            rating = 1,
+//                        )
+//                        val db = Firebase.firestore("seoullo-places-review-database")
+//                        db.collection("reviews")
+//                            .document("흠")      // TODO: 게시글 이름
+//                            .collection("review")
+//                            .add(review)
+//                            .addOnSuccessListener {
+//                                Logging.e("성공")
+//                                db.collection("reviews")
+//                                    .document("흠")
+//                                    .collection("review")
+//                                    .get()
+//                                    .addOnSuccessListener { result ->
+//                                        for (document in result) {
+//                                            Logging.e("${document.id} => ${document.data}")
+//                                        }
+//                                    }
+//                                    .addOnFailureListener {
+//                                        Logging.e(it.message ?: "")
+//                                    }
+//                            }
+//                            .addOnFailureListener { Logging.e("실패 ${it.message}") }
+//                    }
                 ) {
                     BasicText(
                         text = stringResource(R.string.see_more),

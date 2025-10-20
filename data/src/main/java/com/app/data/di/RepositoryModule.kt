@@ -7,6 +7,7 @@ import com.app.data.repository.PlacesDetailGoogleRepositoryImpl
 import com.app.data.repository.PlacesDetailRepositoryImpl
 import com.app.data.repository.PlacesNearbyRepositoryImpl
 import com.app.data.repository.PlacesRepositoryImpl
+import com.app.data.repository.PlacesReviewRepositoryImpl
 import com.app.data.repository.ReverseGeocodingRepositoryImpl
 import com.app.data.repository.SettingRepositoryImpl
 import com.app.data.repository.TodayWatchedListRepositoryImpl
@@ -32,16 +33,19 @@ import com.app.domain.repository.PlacesDetailGoogleRepository
 import com.app.domain.repository.PlacesDetailRepository
 import com.app.domain.repository.PlacesNearbyRepository
 import com.app.domain.repository.PlacesRepository
+import com.app.domain.repository.PlacesReviewRepository
 import com.app.domain.repository.ReverseGeocodingRepository
 import com.app.domain.repository.SettingRepository
 import com.app.domain.repository.TodayWatchedListRepository
 import com.app.domain.repository.UserRepository
 import com.app.domain.repository.WeatherRepository
+import com.google.firebase.firestore.CollectionReference
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import javax.inject.Named
 import javax.inject.Singleton
 
 /**
@@ -125,5 +129,13 @@ class RepositoryModule {
         @ApplicationContext context: Context
     ): TodayWatchedListRepository {
         return TodayWatchedListRepositoryImpl(todayWatchedListDataSource, context)
+    }
+
+    @Provides
+    @Singleton
+    fun providePlacesReviewRepository(
+        @Named("reviewsRef") reviewsRef: CollectionReference
+    ): PlacesReviewRepository {
+        return PlacesReviewRepositoryImpl(reviewsRef)
     }
 }
