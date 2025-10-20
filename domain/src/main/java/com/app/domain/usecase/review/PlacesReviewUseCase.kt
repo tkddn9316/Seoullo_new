@@ -1,6 +1,7 @@
 package com.app.domain.usecase.review
 
 import com.app.domain.model.PlacesDetailReview
+import com.app.domain.model.User
 import com.app.domain.model.common.ApiState
 import com.app.domain.repository.PlacesReviewRepository
 import com.google.gson.JsonSyntaxException
@@ -29,4 +30,31 @@ class PlacesReviewUseCase @Inject constructor(
             emit(ApiState.Error(errorMessage))
         }
     }
+
+    // TODO: addReview 함수 추후 작업 필요(일단 게시판 작업부터...)
+//    fun addReview(
+//        userInfo: User,
+//        contentName: String,
+//        reviewText: String
+//    ): Flow<ApiState<Unit>> = flow {
+//        emit(ApiState.Loading())
+//        try {
+//            val review = PlacesDetailReview(
+//
+//            )
+//            repository.addReview(
+//                contentName = contentName,
+//                review = review
+//            ).collect {
+//                emit(ApiState.Success())
+//            }
+//        } catch (e: Exception) {
+//            val errorMessage = when (e) {
+//                is IOException -> "Network Error: ${e.message}"
+//                is JsonSyntaxException -> "Parsing error: Received non-JSON response (possibly HTML)."
+//                else -> "Exception: ${e.message}"
+//            }
+//            emit(ApiState.Error(errorMessage))
+//        }
+//    }
 }

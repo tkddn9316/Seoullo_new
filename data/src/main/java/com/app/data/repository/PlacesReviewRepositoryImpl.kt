@@ -8,6 +8,7 @@ import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.Query
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 import javax.inject.Named
 
@@ -22,6 +23,13 @@ class PlacesReviewRepositoryImpl @Inject constructor(
             .collection("review")
             .orderBy("timestamp", Query.Direction.DESCENDING)
             .asSnapshotFlowList { it.mapperToPlacesDetailReview() }
+
+    override suspend fun addReview(contentName: String, review: PlacesDetailReview) {
+        getDocumentRef(contentName)
+            .collection("review")
+            .add(review)
+            .await()
+    }
 
     private fun getDocumentRef(contentName: String): DocumentReference =
         reviewsRef.document(contentName)

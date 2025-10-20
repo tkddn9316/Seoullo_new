@@ -13,9 +13,9 @@ import com.app.domain.usecase.places.GetPlacesDetailGoogleUseCase
 import com.app.domain.usecase.places.GetPlacesDetailUseCase
 import com.app.domain.usecase.review.PlacesReviewUseCase
 import com.app.domain.usecase.todayWatchedList.GetTodayWatchedListUseCase
+import com.app.domain.usecase.user.SelectUserUseCase
 import com.app.seoullo_new.BuildConfig
 import com.app.seoullo_new.di.DispatcherProvider
-import com.app.seoullo_new.utils.Logging
 import com.app.seoullo_new.view.base.BaseViewModel2
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -35,7 +35,8 @@ class PlacesDetailViewModel @Inject constructor(
     private val getPlacesDetailUseCase: GetPlacesDetailUseCase,
     private val getPlacesDetailGoogleUseCase: GetPlacesDetailGoogleUseCase,
     private val getTodayWatchedListUseCase: GetTodayWatchedListUseCase,
-    getPlacesReviewUseCase: PlacesReviewUseCase
+    private val getPlacesReviewUseCase: PlacesReviewUseCase,
+    selectUserUseCase: SelectUserUseCase
 ) : BaseViewModel2(dispatcherProvider) {
     private val json: String = checkNotNull(savedStateHandle["place"])
     private val places: Places by lazy { Json.decodeFromString<Places>(json) }
@@ -66,6 +67,15 @@ class PlacesDetailViewModel @Inject constructor(
                 started = SharingStarted.WhileSubscribed(5000),
                 initialValue = ApiState.Loading()
             )
+
+//    private val userInfo: User? = selectUserUseCase()
+//        .map { users -> users.firstOrNull() }
+//        .stateIn(
+//            scope = viewModelScope,
+//            started = SharingStarted.WhileSubscribed(5_000),
+//            initialValue = null
+//        )
+//        .value
 
     init {
         _placesState.value = places
@@ -134,6 +144,12 @@ class PlacesDetailViewModel @Inject constructor(
             )
         }
     }
+
+//    fun summitReview() {
+//        onIO {
+//            getPlacesReviewUseCase.getReviews(userUseCase)
+//        }
+//    }
 
     /** Debug Fake Data */
     fun getFakePlacesDetailGoogle(context: Context) {
