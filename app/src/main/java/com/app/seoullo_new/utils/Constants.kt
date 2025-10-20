@@ -20,9 +20,9 @@ object Constants {
 
     fun getTabTitle(language: Language): List<String> {
         return if (language == Language.KOREA) {
-            listOf("홈", "여행", "설정")
+            listOf("홈", "여행", "게시판", "설정")
         } else {
-            listOf("Home", "Travel", "Setting")
+            listOf("Home", "Travel", "Community", "Setting")
         }
     }
 

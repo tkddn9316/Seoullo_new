@@ -103,6 +103,9 @@ fun NavGraphBuilder.mainScreenNavigation(navController: NavHostController) {
                 val itemJson = Json.encodeToString(travelItem)
                 navController.navigate(Route.placeListParameter(itemJson))
             },
+            communityOnClick = {
+                // TODO: 게시글 세부 화면 이동 필요(추후)
+            },
             settingOnClick = { route ->
                 when (route) {
                     Route.LICENSE -> {

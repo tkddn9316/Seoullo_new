@@ -8,9 +8,12 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.text.BasicText
+import androidx.compose.foundation.text.TextAutoSize
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.PeopleAlt
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.TravelExplore
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -37,6 +40,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -44,6 +48,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.app.seoullo_new.R
 import com.app.seoullo_new.utils.Constants.getTabTitle
 import com.app.seoullo_new.utils.Logging
+import com.app.seoullo_new.view.main.community.CommunityScreen
 import com.app.seoullo_new.view.main.home.HomeScreen
 import com.app.seoullo_new.view.main.setting.SettingScreen
 import com.app.seoullo_new.view.main.travel.TravelScreen
@@ -55,16 +60,19 @@ import com.app.seoullo_new.view.util.theme.LocalLanguage
 import com.skydoves.landscapist.glide.GlideImage
 import kotlinx.coroutines.launch
 
-// 탭 3~4개
-// 탭1: 메인 배너, popular location
-// 탭2: travel info
-// 탭3: 설정 창(다크 모드, 언어 설정, 로그아웃 등)
-
+/**
+ * 메인 화면
+ * 탭1: 메인 배너, popular location
+ * 탭2: travel info
+ * 탭3: 게시판
+ * 탭4: 설정 창(다크 모드, 언어 설정, 로그아웃 등)
+ */
 @Composable
 fun MainScreen(
     viewModel: MainViewModel = hiltViewModel(),
     watchedOnClick: (places: String, isNearby: String) -> Unit,
     travelOnClick: (TravelJsonItemData) -> Unit,
+    communityOnClick: () -> Unit,
     settingOnClick: (String) -> Unit
 ) {
     BackOnPressed()
@@ -103,6 +111,7 @@ fun MainScreen(
                             }
                         )
                         "Travel", "여행" -> TravelScreen { travelOnClick(it) }
+                        "Community", "게시판" -> CommunityScreen { communityOnClick() }
                         "Setting", "설정" -> SettingScreen { settingOnClick(it) }
                     }
                 }
@@ -118,7 +127,19 @@ fun MainScreen(
                         val isSelected = pagerState.currentPage == index
                         val tabColor = if (isSelected) MaterialTheme.colorScheme.primary else Color_Gray500
                         Tab(
-                            text = { Text(text = item, color = tabColor) },
+                            text = {
+                                BasicText(
+                                    text = item,
+                                    maxLines = 1,
+                                    overflow = TextOverflow.Visible,
+                                    autoSize = TextAutoSize.StepBased(
+                                        minFontSize = 8.sp,
+                                        maxFontSize = 14.sp,
+                                        stepSize = 2.sp
+                                    ),
+                                    color = { tabColor }
+                                )
+                            },
                             icon = { Icon(imageVector = getIcon(item), contentDescription = null, tint = tabColor) },
                             selected = isSelected,
                             onClick = {
@@ -177,6 +198,7 @@ fun CircularProfileImage(imageUrl: String, size: Dp = 40.dp) {
 fun getIcon(screen: String): ImageVector = when (screen) {
     "Home", "홈" -> Icons.Default.Home
     "Travel", "여행" -> Icons.Default.TravelExplore
+    "Community", "게시판" -> Icons.Default.PeopleAlt
     "Setting", "설정" -> Icons.Default.Settings
     else -> Icons.Default.Clear
 }
