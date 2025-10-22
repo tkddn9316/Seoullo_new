@@ -21,6 +21,7 @@ fun CommunityScreen(
             modifier = Modifier
                 .padding(innerPadding)
         ) {
+            viewModel.setTestData()
         }
     }
 }

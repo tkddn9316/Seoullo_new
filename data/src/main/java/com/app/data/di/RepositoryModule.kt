@@ -2,6 +2,7 @@ package com.app.data.di
 
 import android.content.Context
 import com.app.data.repository.AutoCompleteRepositoryImpl
+import com.app.data.repository.BoardRepositoryImpl
 import com.app.data.repository.DirectionRepositoryImpl
 import com.app.data.repository.PlacesDetailGoogleRepositoryImpl
 import com.app.data.repository.PlacesDetailRepositoryImpl
@@ -28,6 +29,7 @@ import com.app.data.source.TodayWatchedListDataSource
 import com.app.data.source.UserDataSource
 import com.app.data.source.WeatherDataSource
 import com.app.domain.repository.AutoCompleteRepository
+import com.app.domain.repository.BoardRepository
 import com.app.domain.repository.DirectionRepository
 import com.app.domain.repository.PlacesDetailGoogleRepository
 import com.app.domain.repository.PlacesDetailRepository
@@ -39,7 +41,11 @@ import com.app.domain.repository.SettingRepository
 import com.app.domain.repository.TodayWatchedListRepository
 import com.app.domain.repository.UserRepository
 import com.app.domain.repository.WeatherRepository
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.CollectionReference
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.storage.FirebaseStorage
+import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -137,5 +143,16 @@ class RepositoryModule {
         @Named("reviewsRef") reviewsRef: CollectionReference
     ): PlacesReviewRepository {
         return PlacesReviewRepositoryImpl(reviewsRef)
+    }
+
+    @Provides
+    @Singleton
+    fun bindBoardRepository(
+        @Named("boardRef") boardRef: CollectionReference,
+        auth: FirebaseAuth,
+        db: FirebaseFirestore,
+        storage: FirebaseStorage
+    ): BoardRepository {
+        return BoardRepositoryImpl(boardRef, auth, db, storage)
     }
 }

@@ -9,5 +9,5 @@ interface PlacesReviewRepository {
 
     fun getReviews(contentName: String): Flow<List<PlacesDetailReview>>
 
-    suspend fun addReview(contentName: String, review: PlacesDetailReview): Flow<ApiState<Unit>>
+    suspend fun addReview(contentName: String, review: PlacesDetailReview)
 }

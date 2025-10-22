@@ -110,9 +110,9 @@ fun MainScreen(
                                 watchedOnClick(data, isNearby)
                             }
                         )
-                        "Travel", "여행" -> TravelScreen { travelOnClick(it) }
+                        "Travel", "여행" -> TravelScreen { data -> travelOnClick(data) }
                         "Community", "게시판" -> CommunityScreen { communityOnClick() }
-                        "Setting", "설정" -> SettingScreen { settingOnClick(it) }
+                        "Setting", "설정" -> SettingScreen { route -> settingOnClick(route) }
                     }
                 }
 
@@ -143,7 +143,7 @@ fun MainScreen(
                             icon = { Icon(imageVector = getIcon(item), contentDescription = null, tint = tabColor) },
                             selected = isSelected,
                             onClick = {
-                                coroutineScope.launch { pagerState.animateScrollToPage(index) }
+                                coroutineScope.launch { pagerState.scrollToPage(index) }
                             }
                         )
                     }
