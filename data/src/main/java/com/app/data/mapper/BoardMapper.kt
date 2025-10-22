@@ -17,6 +17,7 @@ fun DocumentSnapshot.toPost(): Post? =
             authorPhotoUrl = dto.authorPhotoUrl,
             createdAt = dto.createdAt,
             likeCount = dto.likeCount,
+            commentCount = dto.commentCount,
             imageUrls = dto.imageUrls
         )
     }

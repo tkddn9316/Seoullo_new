@@ -9,6 +9,7 @@ import com.app.domain.model.community.Post
 import com.app.domain.repository.BoardRepository
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.CollectionReference
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.QuerySnapshot
@@ -62,8 +63,8 @@ class BoardRepositoryImpl @Inject constructor(
             .map { qs -> qs.documents.mapNotNull { it.toPost() } }
 
     override suspend fun addComment(postId: String, user: User, text: String): String {
-        val commentRef = boardRef.document(postId)
-            .collection("comments").document()
+        val postRef = boardRef.document(postId)
+        val commentRef = postRef.collection("comments").document()
         val comment = Comment(
             id = commentRef.id,
             text = text,
@@ -72,8 +73,23 @@ class BoardRepositoryImpl @Inject constructor(
             authorPhotoUrl = user.photoUrl,
             createdAt = System.currentTimeMillis()
         )
-        commentRef.set(comment.toDto()).await()
+
+//        commentRef.set(comment.toDto()).await()
+        db.runBatch { batch ->
+            batch.set(commentRef, comment.toDto())
+            batch.update(postRef, "commentCount", FieldValue.increment(1))
+        }.await()
         return commentRef.id
+    }
+
+    suspend fun deleteComment(postId: String, commentId: String) {
+        val postRef = boardRef.document(postId)
+        val commentRef = postRef.collection("comments").document()
+
+        db.runBatch { batch ->
+            batch.delete(commentRef)
+            batch.update(postRef, "commentCount", FieldValue.increment(-1))
+        }.await()
     }
 
     override fun observeComments(postId: String): Flow<List<Comment>> =

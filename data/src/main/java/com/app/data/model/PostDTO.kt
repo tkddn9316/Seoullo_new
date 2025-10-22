@@ -8,5 +8,6 @@ data class PostDTO(
     val authorPhotoUrl: String = "",
     val createdAt: Long = 0L,
     val likeCount: Int = 0,
+    val commentCount: Int = 0,
     val imageUrls: List<String> = emptyList()
 )

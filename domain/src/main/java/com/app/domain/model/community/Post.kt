@@ -9,5 +9,6 @@ data class Post(
     val authorPhotoUrl: String = "",
     val createdAt: Long = System.currentTimeMillis(),
     val likeCount: Int = 0,
+    val commentCount: Int = 0,
     val imageUrls: List<String> = emptyList()
 )

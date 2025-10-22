@@ -248,4 +248,11 @@ object Util {
             .toLocalDate()
         return date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.getDefault()))
     }
+
+    fun getCurrentDateAndTime(timestamp: Long): String {
+        val date = Instant.ofEpochMilli(timestamp)
+            .atZone(ZoneId.systemDefault())
+            .toLocalDateTime()
+        return date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss", Locale.getDefault()))
+    }
 }
