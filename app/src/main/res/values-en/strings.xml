@@ -99,6 +99,12 @@
     <string name="start2">Start</string>
     <string name="arrival">Arrival</string>
 
+    <!--  community  -->
+    <string name="add_post_title">Add Post</string>
+    <string name="add_post_hint">Please enter a title.</string>
+    <string name="add_post_content_hint">Please enter a content.</string>
+    <string name="add_post_summit">Summit</string>
+
     <!--  setting  -->
     <string name="theme_title">Theme Setting</string>
     <string name="theme_settings_title">Theme</string>

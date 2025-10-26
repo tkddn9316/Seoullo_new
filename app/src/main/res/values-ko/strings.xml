@@ -99,6 +99,12 @@
     <string name="start2">출발</string>
     <string name="arrival">도착</string>
 
+    <!--  community  -->
+    <string name="add_post_title">게시글 쓰기</string>
+    <string name="add_post_hint">제목을 입력해주세요.</string>
+    <string name="add_post_content_hint">내용을 입력해주세요.</string>
+    <string name="add_post_summit">올리기</string>
+
     <!--  setting  -->
     <string name="theme_title">테마 설정</string>
     <string name="theme_settings_title">테마</string>

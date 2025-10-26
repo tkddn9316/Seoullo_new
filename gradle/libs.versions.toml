@@ -5,7 +5,7 @@ accompanistPermission = "0.36.0"
 activityKtx = "1.9.3"
 app = "8.7.3"
 appcompat = "1.7.0"
-composeBom = "2025.03.00"
+composeBom = "2025.07.00"   # 최신 버전으로 올리면 로그가 너무 많이 떠서 보류
 constraintlayout = "2.2.0"
 constraintlayoutCompose = "1.1.1"
 converterGson = "2.9.0"
@@ -49,7 +49,7 @@ androidLibrary = "8.7.3"
 googleServices = "4.4.2"
 googleMapsScrect = "2.0.1"
 balloon = "1.6.11"
-composeFoundation = "1.8.0-beta01"
+#composeFoundation = "1.8.0-beta01"
 in-app-update = "2.1.0"
 workManager = "2.10.0"
 workManagerHilt = "1.2.0"
@@ -77,7 +77,6 @@ androidx-runtime-livedata = { module = "androidx.compose.runtime:runtime-livedat
 androidx-ui-test-manifest = { module = "androidx.compose.ui:ui-test-manifest" }
 androidx-ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
 appcompat = { module = "androidx.appcompat:appcompat", version.ref = "appcompat" }
-compose-bom = { module = "androidx.compose:compose-bom", version.ref = "composeBom" }
 constraintlayout = { module = "androidx.constraintlayout:constraintlayout", version.ref = "constraintlayout" }
 converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "converterGson" }
 #converter-simplexml = { module = "com.squareup.retrofit2:converter-simplexml", version.ref = "converterSimplexml" }
@@ -117,15 +116,18 @@ room-ktx = { module = "androidx.room:room-ktx", version.ref = "roomRuntime" }
 room-runtime = { module = "androidx.room:room-runtime", version.ref = "roomRuntime" }
 simple-xml = { module = "org.simpleframework:simple-xml", version.ref = "simpleXml" }
 tedpermission-coroutine = { module = "io.github.ParkSangGwon:tedpermission-coroutine", version.ref = "tedpermissionCoroutine" }
+update = { module = "com.google.android.play:app-update", version.ref = "in-app-update" }
+update-ktx = { module = "com.google.android.play:app-update-ktx", version.ref = "in-app-update" }
+balloon = { module = "com.github.skydoves:balloon-compose", version.ref = "balloon" }
+
+# compose
+compose-bom = { module = "androidx.compose:compose-bom", version.ref = "composeBom" }
 ui = { module = "androidx.compose.ui:ui" }
 ui-graphics = { module = "androidx.compose.ui:ui-graphics" }
 ui-test-junit4 = { module = "androidx.compose.ui:ui-test-junit4" }
 ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
 ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
-balloon = { module = "com.github.skydoves:balloon-compose", version.ref = "balloon" }
-compose-foundation = { module = "androidx.compose.foundation:foundation", version.ref = "composeFoundation" }
-update = { module = "com.google.android.play:app-update", version.ref = "in-app-update" }
-update-ktx = { module = "com.google.android.play:app-update-ktx", version.ref = "in-app-update" }
+compose-foundation = { module = "androidx.compose.foundation:foundation" }
 
 # Google Credentials
 google-credentials = { module = "androidx.credentials:credentials", version.ref = "googleCredential" }

@@ -16,6 +16,9 @@ object Route {
     const val PLACE_DETAIL_NEARBY = "place_detail_nearby/{place}"
     const val DIRECTION = "direction/{latlng}"
 
+    const val ADD_POST = "add"
+    const val DETAIL_POST = "detail_post/{postId}"
+
     const val LICENSE = "license"
 
     fun placeListParameter(item: String): String {

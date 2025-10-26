@@ -6,7 +6,7 @@ import com.app.domain.model.community.Post
 import kotlinx.coroutines.flow.Flow
 
 interface BoardRepository {
-    suspend fun addPost(user: User, title: String, content: String, images: List<ByteArray>): String
+    fun addPost(user: User, title: String, content: String, images: List<ByteArray>): Flow<String>
     fun observePosts(): Flow<List<Post>>
 
     suspend fun addComment(postId: String, user: User, text: String): String

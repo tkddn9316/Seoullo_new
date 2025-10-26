@@ -20,6 +20,7 @@ import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
@@ -31,12 +32,12 @@ class BoardRepositoryImpl @Inject constructor(
     private val db: FirebaseFirestore,
     private val storage: FirebaseStorage
 ) : BoardRepository {
-    override suspend fun addPost(
+    override fun addPost(
         user: User,
         title: String,
         content: String,
         images: List<ByteArray>
-    ): String {
+    ): Flow<String> = flow {
         val postRef = boardRef.document()
         val postId = postRef.id
         val urls = uploadPostImages(postId, images)
@@ -50,10 +51,12 @@ class BoardRepositoryImpl @Inject constructor(
             authorPhotoUrl = user.photoUrl,
             createdAt = System.currentTimeMillis(),
             likeCount = 0,
+            commentCount = 0,
             imageUrls = urls
         )
         postRef.set(post.toDto()).await()
-        return postId
+
+        emit(postId)
     }
 
     override fun observePosts(): Flow<List<Post>> =

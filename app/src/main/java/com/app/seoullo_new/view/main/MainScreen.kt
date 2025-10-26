@@ -12,8 +12,8 @@ import androidx.compose.foundation.text.BasicText
 import androidx.compose.foundation.text.TextAutoSize
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
+import androidx.compose.material.icons.filled.Diversity3
 import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.PeopleAlt
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.TravelExplore
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -72,7 +72,7 @@ fun MainScreen(
     viewModel: MainViewModel = hiltViewModel(),
     watchedOnClick: (places: String, isNearby: String) -> Unit,
     travelOnClick: (TravelJsonItemData) -> Unit,
-    communityOnClick: () -> Unit,
+    communityOnClick: (destination: String, postId: String) -> Unit,
     settingOnClick: (String) -> Unit
 ) {
     BackOnPressed()
@@ -111,7 +111,7 @@ fun MainScreen(
                             }
                         )
                         "Travel", "여행" -> TravelScreen { data -> travelOnClick(data) }
-                        "Community", "게시판" -> CommunityScreen { communityOnClick() }
+                        "Community", "게시판" -> CommunityScreen { route, postId -> communityOnClick(route, postId) }
                         "Setting", "설정" -> SettingScreen { route -> settingOnClick(route) }
                     }
                 }
@@ -198,7 +198,7 @@ fun CircularProfileImage(imageUrl: String, size: Dp = 40.dp) {
 fun getIcon(screen: String): ImageVector = when (screen) {
     "Home", "홈" -> Icons.Default.Home
     "Travel", "여행" -> Icons.Default.TravelExplore
-    "Community", "게시판" -> Icons.Default.PeopleAlt
+    "Community", "게시판" -> Icons.Default.Diversity3
     "Setting", "설정" -> Icons.Default.Settings
     else -> Icons.Default.Clear
 }

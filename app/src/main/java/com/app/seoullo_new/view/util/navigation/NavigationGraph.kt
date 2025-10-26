@@ -16,6 +16,8 @@ import androidx.navigation.compose.navigation
 import androidx.navigation.navArgument
 import com.app.seoullo_new.utils.Constants.VALUE_YES
 import com.app.seoullo_new.view.main.MainScreen
+import com.app.seoullo_new.view.main.community.CommunityAddScreen
+import com.app.seoullo_new.view.main.community.CommunityDetailScreen
 import com.app.seoullo_new.view.main.setting.LicenseScreen
 import com.app.seoullo_new.view.map.DirectionScreen
 import com.app.seoullo_new.view.placesDetail.PlaceDetailNearbyScreen
@@ -62,13 +64,14 @@ fun NavigationGraph(navController: NavHostController) {
         splashScreenNavigation(navController)
         mainScreenNavigation(navController)
         travelScreenNavigation(navController)
+        communityNavigation(navController)
         settingScreenNavigation(navController)
     }
 }
 
 fun NavGraphBuilder.splashScreenNavigation(navController: NavHostController) {
     composable(Route.SPLASH) {
-        SplashRoute (
+        SplashRoute(
             onMoveMain = { weatherItem, bannerItem ->
                 navController.navigate(
                     Route.MAIN
@@ -103,8 +106,14 @@ fun NavGraphBuilder.mainScreenNavigation(navController: NavHostController) {
                 val itemJson = Json.encodeToString(travelItem)
                 navController.navigate(Route.placeListParameter(itemJson))
             },
-            communityOnClick = {
-                // TODO: 게시글 세부 화면 이동 필요(추후)
+            communityOnClick = { route, postId ->
+                // TODO: 게시글 세부 화면/글쓰기 화면 이동 필요(추후)
+                val newRoute = if (postId.isNotEmpty()) {
+                    Route.DETAIL_POST.replace("{postId}", postId)
+                } else {
+                    route
+                }
+                navController.navigate(newRoute)
             },
             settingOnClick = { route ->
                 when (route) {
@@ -200,6 +209,23 @@ fun NavGraphBuilder.travelScreenNavigation(navController: NavHostController) {
                 onNavigationClick = { navController.navigateUp() }
             )
         }
+    }
+}
+
+fun NavGraphBuilder.communityNavigation(navController: NavHostController) {
+    composable(Route.ADD_POST) {
+        CommunityAddScreen(
+            onNavigationClick = { navController.navigateUp() },
+            addPostOnClick = { navController.navigateUp() }
+        )
+    }
+    composable(
+        Route.DETAIL_POST,
+        arguments = listOf(navArgument(("postId")) { type = NavType.StringType })
+    ) {
+        CommunityDetailScreen(
+            onNavigationClick = { navController.navigateUp() }
+        )
     }
 }
 
