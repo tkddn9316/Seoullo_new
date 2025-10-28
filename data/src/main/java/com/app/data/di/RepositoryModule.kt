@@ -4,6 +4,7 @@ import android.content.Context
 import com.app.data.repository.AutoCompleteRepositoryImpl
 import com.app.data.repository.BoardRepositoryImpl
 import com.app.data.repository.DirectionRepositoryImpl
+import com.app.data.repository.ImageOptimizationRepository
 import com.app.data.repository.PlacesDetailGoogleRepositoryImpl
 import com.app.data.repository.PlacesDetailRepositoryImpl
 import com.app.data.repository.PlacesNearbyRepositoryImpl
@@ -45,7 +46,6 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
-import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -148,12 +148,12 @@ class RepositoryModule {
     @Provides
     @Singleton
     fun bindBoardRepository(
-        @ApplicationContext context: Context,
         @Named("boardRef") boardRef: CollectionReference,
+        imageOptRepo: ImageOptimizationRepository,
         auth: FirebaseAuth,
         db: FirebaseFirestore,
         storage: FirebaseStorage
     ): BoardRepository {
-        return BoardRepositoryImpl(context, boardRef, auth, db, storage)
+        return BoardRepositoryImpl(boardRef, imageOptRepo, auth, db, storage)
     }
 }

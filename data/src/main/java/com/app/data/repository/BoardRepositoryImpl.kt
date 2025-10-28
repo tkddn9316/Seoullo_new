@@ -1,6 +1,5 @@
 package com.app.data.repository
 
-import android.content.Context
 import android.net.Uri
 import com.app.data.mapper.toComment
 import com.app.data.mapper.toDto
@@ -17,7 +16,6 @@ import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.storageMetadata
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
@@ -28,18 +26,19 @@ import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.tasks.await
-import java.io.IOException
 import java.util.UUID
 import javax.inject.Inject
 import javax.inject.Named
 
 class BoardRepositoryImpl @Inject constructor(
-    @ApplicationContext private val context: Context,
     @Named("boardRef") private val boardRef: CollectionReference,
+    private val imageOptRepo: ImageOptimizationRepository,
     private val auth: FirebaseAuth,
     private val db: FirebaseFirestore,
     private val storage: FirebaseStorage
 ) : BoardRepository {
+
+    // 게시글 올리기
     override fun addPost(
         user: User,
         title: String,
@@ -67,12 +66,14 @@ class BoardRepositoryImpl @Inject constructor(
         emit(postId)
     }
 
+    // 게시글 목록
     override fun observePosts(): Flow<List<Post>> =
         boardRef
             .orderBy("createdAt", Query.Direction.DESCENDING)
             .snapshotsFlow()
             .map { qs -> qs.documents.mapNotNull { it.toPost() } }
 
+    // 댓글 올리기
     override suspend fun addComment(postId: String, user: User, text: String): String {
         val postRef = boardRef.document(postId)
         val commentRef = postRef.collection("comments").document()
@@ -93,6 +94,7 @@ class BoardRepositoryImpl @Inject constructor(
         return commentRef.id
     }
 
+    // 댓글 삭제
     suspend fun deleteComment(postId: String, commentId: String) {
         val postRef = boardRef.document(postId)
         val commentRef = postRef.collection("comments").document()
@@ -103,6 +105,7 @@ class BoardRepositoryImpl @Inject constructor(
         }.await()
     }
 
+    // 댓글 목록
     override fun observeComments(postId: String): Flow<List<Comment>> =
         boardRef.document(postId)
             .collection("comments")
@@ -110,6 +113,7 @@ class BoardRepositoryImpl @Inject constructor(
             .snapshotsFlow()
             .map { qs -> qs.documents.mapNotNull { it.toComment() } }
 
+    // 좋아요 올리기
     override suspend fun incrementLike(postId: String, delta: Int) {
         val ref = boardRef.document(postId)
         db.runTransaction { tx ->
@@ -118,27 +122,31 @@ class BoardRepositoryImpl @Inject constructor(
         }.await()
     }
 
-//    private fun postsCol() = db.collection("posts")
-
+    // 이미지 업로드
     private suspend fun uploadPostImages(postId: String, uris: List<Uri>): List<String> =
         coroutineScope {
             val baseRef = storage.reference.child("posts/$postId")
             uris.map { uri ->
                 async(Dispatchers.IO) {
-                    val mime = context.contentResolver.getType(uri) ?: "image/jpeg"
-                    val meta = storageMetadata { contentType = mime }
+                    // 1. URI → 최적화된 EncodedImage (리사이즈 + 압축)
+                    val encoded = imageOptRepo.optimizeUri(uri)
 
-                    val fileName = "${System.currentTimeMillis()}_${UUID.randomUUID()}.jpg"
+                    // 2. Firebase 업로드 경로 및 메타데이터
+                    val fileName =
+                        "${System.currentTimeMillis()}_${UUID.randomUUID()}.${encoded.extension}"
                     val fileRef = baseRef.child(fileName)
+                    val meta = storageMetadata { contentType = encoded.contentType }
 
-                    context.contentResolver.openInputStream(uri)?.use { inputStream ->
-                        fileRef.putStream(inputStream, meta).await()
-                        fileRef.downloadUrl.await().toString()
-                    } ?: throw IOException("Failed to open InputStream for uri: $uri")
+                    // 3. 업로드
+                    fileRef.putBytes(encoded.bytes, meta).await()
+
+                    // 4. 다운로드 URL
+                    fileRef.downloadUrl.await().toString()
                 }
             }.awaitAll()
         }
 
+    // 실시간 쿼리 스냅샷
     private fun Query.snapshotsFlow(): Flow<QuerySnapshot> = callbackFlow {
         val reg = addSnapshotListener { qs, e ->
             if (e != null) {
@@ -148,15 +156,4 @@ class BoardRepositoryImpl @Inject constructor(
         }
         awaitClose { reg.remove() }
     }
-//    private suspend fun uploadPostImages(postId: String, images: List<ByteArray>): List<String> =
-//        coroutineScope {
-//            val base = storage.reference.child("posts/$postId")
-//            images.mapIndexed { i, bytes ->
-//                async {
-//                    val obj = base.child("img_$i.jpg")
-//                    obj.putBytes(bytes).await()
-//                    obj.downloadUrl.await().toString()
-//                }
-//            }.awaitAll()
-//        }
 }

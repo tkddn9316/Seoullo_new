@@ -8,9 +8,9 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
@@ -28,6 +28,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -41,11 +42,6 @@ import com.app.seoullo_new.utils.Logging
 import com.app.seoullo_new.view.base.LoadingOverlay
 import com.app.seoullo_new.view.base.SeoulloAppBar
 import com.app.seoullo_new.view.util.advancedImePadding
-
-/* TODO
-*   1. 이미지 리사이징
-*   2. 프로그래스 바
-*   3. 확인 버튼 누르면 키보드 내리기 */
 
 @Composable
 fun CommunityAddScreen(
@@ -66,32 +62,33 @@ fun CommunityAddScreen(
         }
     ) { innerPadding ->
         Column(
-            modifier = Modifier
-                .padding(innerPadding)
-//                .imePadding()
+            modifier = Modifier.padding(innerPadding)
         ) {
-            when (val s = addPostState) {
-                is ApiState.Loading -> {
-                    // API 로딩 처리
-                    LoadingOverlay()
-                }
+            Box(
+                modifier = Modifier.fillMaxSize()
+            ) {
+                CommunityAddView(
+                    viewModel = viewModel
+                )
 
-                is ApiState.Success -> {
-                    addPostOnClick()
-                }
+                when (val s = addPostState) {
+                    is ApiState.Loading -> {
+                        // API 로딩 처리
+                        LoadingOverlay()
+                    }
 
-                is ApiState.Error -> {
-                    val error = s.message.orEmpty()
-                    Toast.makeText(context, error, Toast.LENGTH_SHORT).show()
-                }
+                    is ApiState.Success -> {
+                        addPostOnClick()
+                    }
 
-                else -> {}
+                    is ApiState.Error -> {
+                        val error = s.message.orEmpty()
+                        Toast.makeText(context, error, Toast.LENGTH_SHORT).show()
+                    }
+
+                    else -> {}
+                }
             }
-//            LoadingOverlay()
-
-            CommunityAddView(
-                viewModel = viewModel
-            )
         }
     }
 }
@@ -122,7 +119,7 @@ fun CommunityAddView(
     val images by viewModel.addImageList.collectAsStateWithLifecycle()
 
     // TextField
-//    var titleText by rememberSaveable { mutableStateOf("") }
+    val focusManager = LocalFocusManager.current
     val titleText = rememberTextFieldState()
     val contentText = rememberTextFieldState()
 
@@ -232,6 +229,7 @@ fun CommunityAddView(
             modifier = modifier.fillMaxWidth(),
             shape = RoundedCornerShape(10.dp),
             onClick = {
+                focusManager.clearFocus()
                 viewModel.addPost(
                     title = titleText.text.toString(),
                     content = contentText.text.toString()

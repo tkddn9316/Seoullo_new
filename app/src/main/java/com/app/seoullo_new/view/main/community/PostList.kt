@@ -1,6 +1,7 @@
 package com.app.seoullo_new.view.main.community
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -10,11 +11,13 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.WatchLater
 import androidx.compose.material.icons.outlined.ModeComment
 import androidx.compose.material.icons.outlined.ThumbUp
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -22,6 +25,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.PlatformTextStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -32,6 +37,7 @@ import androidx.compose.ui.unit.sp
 import com.app.domain.model.community.Post
 import com.app.seoullo_new.utils.Util
 import com.app.seoullo_new.view.util.CircularProfileImage
+import com.skydoves.landscapist.glide.GlideImage
 
 @Composable
 fun PostList(
@@ -162,9 +168,22 @@ fun PostList(
                 )
             }
 
-            // TODO: 하단에 이미지 썸네일 추가 예정
             if (item.imageUrls.isNotEmpty()) {
+                Spacer(modifier = modifier.height(12.dp))
 
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(240.dp)
+                        .clip(RoundedCornerShape(12.dp)),
+                    contentAlignment = Alignment.Center
+                ) {
+                    GlideImage(
+                        imageModel = item.imageUrls[0],
+                        contentScale = ContentScale.Crop,
+                        loading = { CircularProgressIndicator(modifier = Modifier.align(Alignment.Center)) }
+                    )
+                }
             }
         }
     }
