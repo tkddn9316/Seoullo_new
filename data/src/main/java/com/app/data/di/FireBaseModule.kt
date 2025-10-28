@@ -24,7 +24,7 @@ class FireBaseModule {
     //    fun provideStorage(): FirebaseStorage = FirebaseStorage.getInstance()
     @Provides
     @Singleton
-    fun provideStorage(): FirebaseStorage = Firebase.storage
+    fun provideStorage(): FirebaseStorage = Firebase.storage("gs://seoullo-new.firebasestorage.app")
 
     @Provides
     @Singleton

@@ -148,11 +148,12 @@ class RepositoryModule {
     @Provides
     @Singleton
     fun bindBoardRepository(
+        @ApplicationContext context: Context,
         @Named("boardRef") boardRef: CollectionReference,
         auth: FirebaseAuth,
         db: FirebaseFirestore,
         storage: FirebaseStorage
     ): BoardRepository {
-        return BoardRepositoryImpl(boardRef, auth, db, storage)
+        return BoardRepositoryImpl(context, boardRef, auth, db, storage)
     }
 }

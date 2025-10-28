@@ -1,5 +1,7 @@
 package com.app.data.repository
 
+import android.content.Context
+import android.net.Uri
 import com.app.data.mapper.toComment
 import com.app.data.mapper.toDto
 import com.app.data.mapper.toPost
@@ -14,6 +16,9 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.storageMetadata
+import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.channels.awaitClose
@@ -23,10 +28,13 @@ import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.tasks.await
+import java.io.IOException
+import java.util.UUID
 import javax.inject.Inject
 import javax.inject.Named
 
 class BoardRepositoryImpl @Inject constructor(
+    @ApplicationContext private val context: Context,
     @Named("boardRef") private val boardRef: CollectionReference,
     private val auth: FirebaseAuth,
     private val db: FirebaseFirestore,
@@ -36,7 +44,7 @@ class BoardRepositoryImpl @Inject constructor(
         user: User,
         title: String,
         content: String,
-        images: List<ByteArray>
+        images: List<Uri>
     ): Flow<String> = flow {
         val postRef = boardRef.document()
         val postId = postRef.id
@@ -112,14 +120,21 @@ class BoardRepositoryImpl @Inject constructor(
 
 //    private fun postsCol() = db.collection("posts")
 
-    private suspend fun uploadPostImages(postId: String, images: List<ByteArray>): List<String> =
+    private suspend fun uploadPostImages(postId: String, uris: List<Uri>): List<String> =
         coroutineScope {
-            val base = storage.reference.child("posts/$postId")
-            images.mapIndexed { i, bytes ->
-                async {
-                    val obj = base.child("img_$i.jpg")
-                    obj.putBytes(bytes).await()
-                    obj.downloadUrl.await().toString()
+            val baseRef = storage.reference.child("posts/$postId")
+            uris.map { uri ->
+                async(Dispatchers.IO) {
+                    val mime = context.contentResolver.getType(uri) ?: "image/jpeg"
+                    val meta = storageMetadata { contentType = mime }
+
+                    val fileName = "${System.currentTimeMillis()}_${UUID.randomUUID()}.jpg"
+                    val fileRef = baseRef.child(fileName)
+
+                    context.contentResolver.openInputStream(uri)?.use { inputStream ->
+                        fileRef.putStream(inputStream, meta).await()
+                        fileRef.downloadUrl.await().toString()
+                    } ?: throw IOException("Failed to open InputStream for uri: $uri")
                 }
             }.awaitAll()
         }
@@ -133,4 +148,15 @@ class BoardRepositoryImpl @Inject constructor(
         }
         awaitClose { reg.remove() }
     }
+//    private suspend fun uploadPostImages(postId: String, images: List<ByteArray>): List<String> =
+//        coroutineScope {
+//            val base = storage.reference.child("posts/$postId")
+//            images.mapIndexed { i, bytes ->
+//                async {
+//                    val obj = base.child("img_$i.jpg")
+//                    obj.putBytes(bytes).await()
+//                    obj.downloadUrl.await().toString()
+//                }
+//            }.awaitAll()
+//        }
 }

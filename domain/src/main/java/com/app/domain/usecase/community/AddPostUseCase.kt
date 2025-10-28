@@ -1,5 +1,6 @@
 package com.app.domain.usecase.community
 
+import android.net.Uri
 import com.app.domain.model.User
 import com.app.domain.model.common.ApiState
 import com.app.domain.repository.BoardRepository
@@ -14,7 +15,7 @@ class AddPostUseCase @Inject constructor(private val repository: BoardRepository
         user: User,
         title: String,
         content: String,
-        images: List<ByteArray>
+        images: List<Uri>
     ): Flow<ApiState<String>> = flow {
         emit(ApiState.Loading())
 

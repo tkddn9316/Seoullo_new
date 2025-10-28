@@ -1,6 +1,10 @@
 package com.app.seoullo_new.view.main.community
 
+import android.os.Build
 import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -33,8 +37,15 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.app.domain.model.common.ApiState
 import com.app.seoullo_new.R
+import com.app.seoullo_new.utils.Logging
 import com.app.seoullo_new.view.base.LoadingOverlay
 import com.app.seoullo_new.view.base.SeoulloAppBar
+import com.app.seoullo_new.view.util.advancedImePadding
+
+/* TODO
+*   1. 이미지 리사이징
+*   2. 프로그래스 바
+*   3. 확인 버튼 누르면 키보드 내리기 */
 
 @Composable
 fun CommunityAddScreen(
@@ -57,12 +68,8 @@ fun CommunityAddScreen(
         Column(
             modifier = Modifier
                 .padding(innerPadding)
-                .imePadding()
+//                .imePadding()
         ) {
-            CommunityAddView(
-                viewModel = viewModel
-            )
-
             when (val s = addPostState) {
                 is ApiState.Loading -> {
                     // API 로딩 처리
@@ -80,6 +87,11 @@ fun CommunityAddScreen(
 
                 else -> {}
             }
+//            LoadingOverlay()
+
+            CommunityAddView(
+                viewModel = viewModel
+            )
         }
     }
 }
@@ -89,6 +101,26 @@ fun CommunityAddView(
     viewModel: CommunityAddViewModel = hiltViewModel(),
     modifier: Modifier = Modifier
 ) {
+    // picker
+    val picker =
+        rememberLauncherForActivityResult(ActivityResultContracts.PickMultipleVisualMedia(5)) { uris ->
+            if (uris.isNotEmpty()) {
+                viewModel.addImages(uris = uris)
+            } else {
+                Logging.e("No media selected")
+            }
+        }
+    val legacyPicker = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetMultipleContents()
+    ) { uris ->
+        if (uris.isNotEmpty()) {
+            viewModel.addImages(uris = uris)
+        } else {
+            Logging.e("No media selected")
+        }
+    }
+    val images by viewModel.addImageList.collectAsStateWithLifecycle()
+
     // TextField
 //    var titleText by rememberSaveable { mutableStateOf("") }
     val titleText = rememberTextFieldState()
@@ -97,6 +129,7 @@ fun CommunityAddView(
     Column(
         modifier = Modifier
             .padding(top = 10.dp, start = 16.dp, end = 16.dp, bottom = 16.dp)
+            .advancedImePadding()
     ) {
         BasicTextField(
             modifier = modifier.fillMaxWidth(),
@@ -166,14 +199,42 @@ fun CommunityAddView(
             }
         )
 
+        // 내가 올릴 사진 리스트
+        if (images.isNotEmpty()) {
+            ImagePickerRow(
+                images = images,
+                onRemoveClick = { viewModel.removeImage(it.id) }
+            )
+        }
+
+        HorizontalDivider(
+            modifier = modifier.padding(top = 6.dp, bottom = 6.dp),
+            thickness = 0.5.dp,
+            color = MaterialTheme.colorScheme.outlineVariant
+        )
+
+        // 글쓰기 옵션(사진 등)
+        PostOptionRow(
+            modifier = modifier
+        ) { option ->
+            when (option.id) {
+                "photo" -> {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                        picker.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+                    } else {
+                        legacyPicker.launch("image/*")
+                    }
+                }
+            }
+        }
+
         Button(
             modifier = modifier.fillMaxWidth(),
             shape = RoundedCornerShape(10.dp),
             onClick = {
                 viewModel.addPost(
                     title = titleText.text.toString(),
-                    content = contentText.text.toString(),
-                    images = emptyList()
+                    content = contentText.text.toString()
                 )
             }
         ) {
