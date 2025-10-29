@@ -43,22 +43,35 @@ class WeatherRepositoryImpl @Inject constructor(
                 it is IOException
             }
             .catch { throw it }
-        val sunriseFlow = sunriseDataSource.getSunriseTime(
-            currentDate = DateTime.now().toString("yyyyMMdd"),
-            apiKey = sunriseApiKey
-        )
-            .retry(3) {
-                delay(500)
-                it is IOException
-            }
-            .catch { throw it }
 
-        return combine(weatherFlow, dustFlow, sunriseFlow) { weatherData, dustData, sunriseData ->
+
+        // TODO: 공공데이터 복구까지 미적용
+//        val sunriseFlow = sunriseDataSource.getSunriseTime(
+//            currentDate = DateTime.now().toString("yyyyMMdd"),
+//            apiKey = sunriseApiKey
+//        )
+//            .retry(3) {
+//                delay(500)
+//                it is IOException
+//            }
+//            .catch { throw it }
+
+//        return combine(weatherFlow, dustFlow, sunriseFlow) { weatherData, dustData, sunriseData ->
+//            val updatedData = weatherData.copy(
+//                fineDust = dustData.result.items.firstOrNull()?.fineDust ?: -1,
+//                ultraFineDust = dustData.result.items.firstOrNull()?.ultraFineDust ?: -1,
+//                sunrise = sunriseData.body?.items?.itemList?.firstOrNull()?.sunrise ?: "0600",
+//                sunset = sunriseData.body?.items?.itemList?.firstOrNull()?.sunset ?: "1800"
+//            )
+//            mapperToWeather(updatedData)
+//        }
+
+        return combine(weatherFlow, dustFlow) { weatherData, dustData ->
             val updatedData = weatherData.copy(
                 fineDust = dustData.result.items.firstOrNull()?.fineDust ?: -1,
                 ultraFineDust = dustData.result.items.firstOrNull()?.ultraFineDust ?: -1,
-                sunrise = sunriseData.body?.items?.itemList?.firstOrNull()?.sunrise ?: "",
-                sunset = sunriseData.body?.items?.itemList?.firstOrNull()?.sunset ?: ""
+                sunrise = "0600",
+                sunset = "1800"
             )
             mapperToWeather(updatedData)
         }
