@@ -2,41 +2,21 @@ package com.app.seoullo_new.view.main.community
 
 import androidx.lifecycle.viewModelScope
 import com.app.domain.model.common.ApiState
-import com.app.domain.model.community.Comment
 import com.app.domain.model.community.Post
-import com.app.domain.usecase.community.AddCommentUseCase
-import com.app.domain.usecase.community.AddPostUseCase
-import com.app.domain.usecase.community.LikePostUseCase
-import com.app.domain.usecase.community.ObserveCommentsUseCase
 import com.app.domain.usecase.community.ObservePostsUseCase
-import com.app.domain.usecase.user.SelectUserUseCase
 import com.app.seoullo_new.di.DispatcherProvider
 import com.app.seoullo_new.view.base.BaseViewModel2
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.filter
-import kotlinx.coroutines.flow.firstOrNull
-import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
 
 @HiltViewModel
 class CommunityViewModel @Inject constructor(
     dispatcherProvider: DispatcherProvider,
-    private val selectUserUseCase: SelectUserUseCase,
-    private val addPostUseCase: AddPostUseCase,
-    private val addCommentUseCase: AddCommentUseCase,
-    private val observePostsUseCase: ObservePostsUseCase,
-    private val observeCommentsUseCase: ObserveCommentsUseCase,
-    private val likePostUseCase: LikePostUseCase
+    observePostsUseCase: ObservePostsUseCase
 ) : BaseViewModel2(dispatcherProvider) {
 
     val posts: StateFlow<ApiState<List<Post>>> =

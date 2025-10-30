@@ -7,13 +7,14 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.app.seoullo_new.utils.Logging
 import com.google.android.gms.location.FusedLocationProviderClient
+import kotlinx.coroutines.flow.MutableStateFlow
 
 /**
  * 기본 형태 BaseViewModel
  */
 open class BaseViewModel : ViewModel() {
     /** AppBar Title */
-    val title = MutableLiveData("")
+    val title = MutableStateFlow("")
 
     /** AppBar BackButton */
     val back = MutableLiveData(true)

@@ -10,6 +10,8 @@ import com.app.domain.model.community.Post
 import com.app.domain.repository.BoardRepository
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.CollectionReference
+import com.google.firebase.firestore.DocumentReference
+import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
@@ -73,6 +75,13 @@ class BoardRepositoryImpl @Inject constructor(
             .snapshotsFlow()
             .map { qs -> qs.documents.mapNotNull { it.toPost() } }
 
+    // 게시글 가져오기(단일)
+    override fun getPost(postId: String): Flow<Post?> =
+        boardRef
+            .document(postId)
+            .snapshotsFlow()
+            .map { it?.toPost() }
+
     // 댓글 올리기
     override suspend fun addComment(postId: String, user: User, text: String): String {
         val postRef = boardRef.document(postId)
@@ -113,12 +122,55 @@ class BoardRepositoryImpl @Inject constructor(
             .snapshotsFlow()
             .map { qs -> qs.documents.mapNotNull { it.toComment() } }
 
-    // 좋아요 올리기
-    override suspend fun incrementLike(postId: String, delta: Int) {
+    // 좋아요 여부
+    override suspend fun hasLiked(postId: String, user: User): Boolean {
+        val authId = auth.currentUser?.uid ?: user.tokenId
         val ref = boardRef.document(postId)
+            .collection("like")
+            .document(authId)
+
+        return ref.get().await().exists()
+    }
+
+    // 좋아요 올리기
+    override suspend fun like(postId: String, user: User) {
+        val authId = auth.currentUser?.uid ?: user.tokenId
+        val data = mapOf(
+            "authorId" to authId,
+            "likedAt" to System.currentTimeMillis()
+        )
+
+        val postRef = boardRef.document(postId)
         db.runTransaction { tx ->
-            val cur = (tx.get(ref).getLong("likeCount") ?: 0L).toInt()
-            tx.update(ref, "likeCount", (cur + delta).coerceAtLeast(0))
+            val postSnapshot = tx.get(postRef)
+            val likeRef = postRef.collection("like").document(authId)
+            val likeSnapshot = tx.get(likeRef)
+
+            // 이미 좋아요 눌렀으면 아무 작업도 하지 않음
+            if (likeSnapshot.exists()) return@runTransaction
+
+            val cur = postSnapshot.getLong("likeCount") ?: 0L
+            tx.update(postRef, "likeCount", cur + 1)
+            tx.set(likeRef, data)
+        }.await()
+    }
+
+    // 좋아요 삭제
+    override suspend fun unlike(postId: String, user: User) {
+        val authId = auth.currentUser?.uid ?: user.tokenId
+        val postRef = boardRef.document(postId)
+
+        db.runTransaction { tx ->
+            val postSnapshot = tx.get(postRef)
+            val likeRef = postRef.collection("like").document(authId)
+            val likeSnapshot = tx.get(likeRef)
+
+            // 좋아요가 없는데 취소하려 하면 아무 작업도 하지 않음
+            if (!likeSnapshot.exists()) return@runTransaction
+
+            val cur = postSnapshot.getLong("likeCount") ?: 0L
+            tx.update(postRef, "likeCount", (cur - 1).coerceAtLeast(0))
+            tx.delete(likeRef)
         }.await()
     }
 
@@ -155,5 +207,16 @@ class BoardRepositoryImpl @Inject constructor(
             if (qs != null) trySend(qs)
         }
         awaitClose { reg.remove() }
+    }
+
+    private fun DocumentReference.snapshotsFlow(): Flow<DocumentSnapshot?> = callbackFlow {
+        val listener = addSnapshotListener { snapshot, error ->
+            if (error != null) {
+                close(error)
+            } else {
+                trySend(snapshot)
+            }
+        }
+        awaitClose { listener.remove() }
     }
 }

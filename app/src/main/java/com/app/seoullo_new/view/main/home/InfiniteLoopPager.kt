@@ -1,18 +1,13 @@
 package com.app.seoullo_new.view.main.home
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
@@ -26,10 +21,10 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.app.domain.model.Places
 import com.app.seoullo_new.R
+import com.app.seoullo_new.view.util.PagerIndicator
 import com.skydoves.landscapist.glide.GlideImage
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -108,41 +103,5 @@ fun InfiniteLoopPager(
             selectedColor = Color.White,
             unSelectedColor = Color.LightGray
         )
-    }
-}
-
-@Composable
-fun PagerIndicator(
-    modifier: Modifier = Modifier,
-    count: Int,
-    dotSize: Dp,
-    spacedBy: Dp,
-    currentPage: Int,
-    selectedColor: Color,
-    unSelectedColor: Color
-) {
-    Box(
-        modifier = modifier.fillMaxWidth(),
-        contentAlignment = Alignment.BottomEnd
-    ) {
-        Row(
-            horizontalArrangement = Arrangement.spacedBy(spacedBy),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            (0 until count).forEach { index ->
-                Box(
-                    modifier = Modifier
-                        .size(dotSize)
-                        .background(
-                            color = if (index == currentPage) {
-                                selectedColor
-                            } else {
-                                unSelectedColor
-                            },
-                            shape = CircleShape
-                        )
-                )
-            }
-        }
     }
 }
