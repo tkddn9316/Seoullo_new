@@ -20,7 +20,7 @@ class CommunityViewModel @Inject constructor(
 ) : BaseViewModel2(dispatcherProvider) {
 
     val posts: StateFlow<ApiState<List<Post>>> =
-        observePostsUseCase()
+        observePostsUseCase.getPostList()
             .distinctUntilChanged()
             .stateIn(
                 scope = viewModelScope,

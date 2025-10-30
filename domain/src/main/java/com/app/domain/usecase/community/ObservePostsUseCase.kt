@@ -7,45 +7,25 @@ import com.google.gson.JsonSyntaxException
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onStart
 import java.io.IOException
 import javax.inject.Inject
 
 class ObservePostsUseCase @Inject constructor(private val repository: BoardRepository) {
-//    operator fun invoke() = boardRepository.observePosts()
+    fun getPostList(): Flow<ApiState<List<Post>>> =
+        repository.observePosts()
+            .map<List<Post>, ApiState<List<Post>>> { posts ->
+                ApiState.Success(posts)
+            }
+            .onStart { emit(ApiState.Loading()) }
+            .catch { e -> emit(ApiState.Error(e.message ?: "Unknown error")) }
 
-    operator fun invoke(): Flow<ApiState<List<Post>>> = flow {
-        emit(ApiState.Loading())
-        try {
-            repository.observePosts().collect {
-                emit(ApiState.Success(it))
+    fun getPost(postId: String): Flow<ApiState<Post>> =
+        repository.getPost(postId)
+            .map { post ->
+                post?.let { ApiState.Success(it) } ?: ApiState.Error("Post not found")
             }
-        } catch (e: Exception) {
-            val errorMessage = when (e) {
-                is IOException -> "Network Error: ${e.message}"
-                is JsonSyntaxException -> "Parsing error: Received non-JSON response (possibly HTML)."
-                else -> "Exception: ${e.message}"
-            }
-            emit(ApiState.Error(errorMessage))
-        }
-    }
-
-    fun getPost(postId: String): Flow<ApiState<Post>> = flow {
-        emit(ApiState.Loading())
-        try {
-            repository.getPost(postId = postId).collect { post ->
-                post?.let {
-                    emit(ApiState.Success(it))
-                } ?: run {
-                    emit(ApiState.Error("Post not found"))
-                }
-            }
-        } catch (e: Exception) {
-            val errorMessage = when (e) {
-                is IOException -> "Network Error: ${e.message}"
-                is JsonSyntaxException -> "Parsing error: Received non-JSON response (possibly HTML)."
-                else -> "Exception: ${e.message}"
-            }
-            emit(ApiState.Error(errorMessage))
-        }
-    }
+            .onStart { emit(ApiState.Loading()) }
+            .catch { e -> emit(ApiState.Error(e.message ?: "Unknown error")) }
 }

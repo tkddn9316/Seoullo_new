@@ -124,7 +124,11 @@ class BoardRepositoryImpl @Inject constructor(
 
     // 좋아요 여부
     override suspend fun hasLiked(postId: String, user: User): Boolean {
-        val authId = auth.currentUser?.uid ?: user.tokenId
+        val rawUid = auth.currentUser?.uid
+        val authId = if (!rawUid.isNullOrBlank()) rawUid else user.tokenId
+
+        if (authId.isBlank()) return false
+
         val ref = boardRef.document(postId)
             .collection("like")
             .document(authId)
