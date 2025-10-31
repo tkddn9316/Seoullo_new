@@ -13,7 +13,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.pager.HorizontalPager
@@ -27,6 +29,8 @@ import androidx.compose.material.icons.outlined.ModeComment
 import androidx.compose.material.icons.outlined.MoreVert
 import androidx.compose.material.icons.outlined.ThumbUp
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -34,9 +38,12 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -45,6 +52,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.PlatformTextStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -71,6 +79,8 @@ fun CommunityDetailScreen(
     viewModel: CommunityDetailViewModel = hiltViewModel(),
     onNavigationClick: () -> Unit
 ) {
+    val listState = rememberLazyListState()
+
     val postState by viewModel.post.collectAsStateWithLifecycle()
     val commentListState by viewModel.comments.collectAsStateWithLifecycle()
     val title by viewModel.title.collectAsStateWithLifecycle()
@@ -81,6 +91,9 @@ fun CommunityDetailScreen(
 
     val commentBoxHeightPx = remember { mutableIntStateOf(0) }
     val density = LocalDensity.current
+
+    // dialog
+    val dialogState by viewModel.dialogState.collectAsStateWithLifecycle()
 
     Scaffold(
         topBar = {
@@ -108,16 +121,23 @@ fun CommunityDetailScreen(
                         post?.let {
                             viewModel.setTitle(it.title)
                             CommunityDetailView(
+                                state = listState,
                                 post = it,
                                 commentList = commentListState,
                                 isWriter = writerState,
                                 hasLiked = hasLikedState,
                                 bottomPadding = with(density) { commentBoxHeightPx.intValue.toDp() },
-                                onLikeClick = { postId ->
-                                    viewModel.setLike(postId = postId)
+                                onPostModifyClick = { postId ->
+
+                                },
+                                onPostDeleteClick = { postId ->
+
                                 },
                                 onDeleteCommentClick = { commentId ->
-                                    viewModel.deleteComment(commentId = commentId)
+                                    viewModel.openCommentDeleteDialog(commentId = commentId)
+                                },
+                                onLikeClick = { postId ->
+                                    viewModel.setLike(postId = postId)
                                 }
                             )
                         }
@@ -148,23 +168,42 @@ fun CommunityDetailScreen(
                 }
             }
         }
+
+        if (dialogState.isDeleteCommentDialogOpen) {
+            DeleteCommentDialog(
+                onDone = { viewModel.deleteSelectedComment() },
+                onClose = { viewModel.closeCommentDeleteDialog() }
+            )
+        }
     }
 }
 
 @Composable
 fun CommunityDetailView(
+    state: LazyListState,
     post: Post,
     commentList: List<Comment>,
     isWriter: Boolean,
     hasLiked: Boolean,
     bottomPadding: Dp = 0.dp,
     modifier: Modifier = Modifier,
+    onPostModifyClick: (postId: String) -> Unit,
+    onPostDeleteClick: (postId: String) -> Unit,
+    onDeleteCommentClick: (commentId: String) -> Unit,
     onLikeClick: (postId: String) -> Unit,
-    onDeleteCommentClick: (commentId: String) -> Unit
 ) {
+    var previousSize by remember { mutableIntStateOf(commentList.size) }
+    LaunchedEffect(commentList.size) {
+        if (commentList.size > previousSize) {
+            // 새로운 댓글이 추가되었을 때만
+            state.scrollToItem(commentList.size)
+        }
+        previousSize = commentList.size
+    }
+
     LazyColumn(
         modifier = modifier.fillMaxSize(),
-        state = rememberLazyListState(),
+        state = state,
         contentPadding = PaddingValues(
             start = 16.dp,
             end = 16.dp,
@@ -191,7 +230,7 @@ fun CommunityDetailView(
                         fontSize = 12.sp,
                         style = TextStyle(
                             lineHeight = 12.sp,
-                            platformStyle = PlatformTextStyle(includeFontPadding = false)   // 내부 공백 제거
+                            platformStyle = PlatformTextStyle(includeFontPadding = false)
                         )
                     )
 
@@ -210,7 +249,7 @@ fun CommunityDetailView(
                             fontSize = 12.sp,
                             style = TextStyle(
                                 lineHeight = 12.sp,
-                                platformStyle = PlatformTextStyle(includeFontPadding = false),   // 내부 공백 제거
+                                platformStyle = PlatformTextStyle(includeFontPadding = false),
                                 color = MaterialTheme.colorScheme.outline
                             )
                         )
@@ -219,15 +258,45 @@ fun CommunityDetailView(
 
                 // 옵션(삭제, 수정 등)
                 if (isWriter) {
+                    var isDropDownMenuExpanded by remember { mutableStateOf(false) }
+
                     Spacer(modifier = modifier.weight(1f))
-                    IconButton(
-                        onClick = { /*TODO*/ }
-                    ) {
-                        Icon(
-                            imageVector = Icons.Outlined.MoreVert,
-                            tint = MaterialTheme.colorScheme.outline,
-                            contentDescription = null
-                        )
+
+                    Box {
+                        IconButton(
+                            onClick = { isDropDownMenuExpanded = true }
+                        ) {
+                            Icon(
+                                imageVector = Icons.Outlined.MoreVert,
+                                tint = MaterialTheme.colorScheme.outline,
+                                contentDescription = null
+                            )
+                        }
+
+                        DropdownMenu(
+                            modifier = modifier.wrapContentSize(),
+                            expanded = isDropDownMenuExpanded,
+                            onDismissRequest = { isDropDownMenuExpanded = false }
+                        ) {
+                            DropdownMenuItem(
+                                text = {
+                                    Text(text = stringResource(R.string.post_modify))
+                                },
+                                onClick = {
+                                    isDropDownMenuExpanded = false
+                                    onPostModifyClick(post.id)
+                                }
+                            )
+                            DropdownMenuItem(
+                                text = {
+                                    Text(text = stringResource(R.string.post_delete))
+                                },
+                                onClick = {
+                                    isDropDownMenuExpanded = false
+                                    onPostDeleteClick(post.id)
+                                }
+                            )
+                        }
                     }
                 }
             }

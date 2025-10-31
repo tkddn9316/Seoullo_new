@@ -14,6 +14,7 @@ import com.app.domain.usecase.user.SelectUserUseCase
 import com.app.seoullo_new.di.DispatcherProvider
 import com.app.seoullo_new.utils.Logging
 import com.app.seoullo_new.view.base.BaseViewModel2
+import com.app.seoullo_new.view.util.DialogState
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -28,6 +29,7 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.update
 import javax.inject.Inject
 
 @HiltViewModel
@@ -42,6 +44,30 @@ class CommunityDetailViewModel @Inject constructor(
     private val likePostUseCase: LikePostUseCase
 ) : BaseViewModel2(dispatcherProvider) {
     private val postId: String = checkNotNull(savedStateHandle["postId"])
+
+    private val _dialogState = MutableStateFlow(DialogState())
+    val dialogState: StateFlow<DialogState> = _dialogState.asStateFlow()
+
+    private val _selectedCommentId = MutableStateFlow<String?>(null)
+
+    fun openCommentDeleteDialog(commentId: String) {
+        _selectedCommentId.value = commentId
+        _dialogState.value = _dialogState.value.copy(isDeleteCommentDialogOpen = true)
+    }
+
+    fun closeCommentDeleteDialog() {
+        _dialogState.value = _dialogState.value.copy(isDeleteCommentDialogOpen = false)
+        _selectedCommentId.value = null
+    }
+
+    fun deleteSelectedComment() {
+        _selectedCommentId.value?.let { id ->
+            onIO {
+                deleteComment(id)
+                closeCommentDeleteDialog()
+            }
+        }
+    }
 
     private val _isWriter = MutableStateFlow(false)
     val isWriter = _isWriter.asStateFlow()
