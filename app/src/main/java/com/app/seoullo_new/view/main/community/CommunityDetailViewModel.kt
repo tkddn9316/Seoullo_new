@@ -6,12 +6,13 @@ import com.app.domain.model.User
 import com.app.domain.model.common.ApiState
 import com.app.domain.model.community.Comment
 import com.app.domain.model.community.Post
-import com.app.domain.usecase.community.AddCommentUseCase
+import com.app.domain.usecase.community.CommentUseCase
 import com.app.domain.usecase.community.LikePostUseCase
 import com.app.domain.usecase.community.ObserveCommentsUseCase
 import com.app.domain.usecase.community.ObservePostsUseCase
 import com.app.domain.usecase.user.SelectUserUseCase
 import com.app.seoullo_new.di.DispatcherProvider
+import com.app.seoullo_new.utils.Logging
 import com.app.seoullo_new.view.base.BaseViewModel2
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -20,9 +21,9 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filter
-import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
@@ -35,9 +36,9 @@ class CommunityDetailViewModel @Inject constructor(
     dispatcherProvider: DispatcherProvider,
     observePostsUseCase: ObservePostsUseCase,
     observeCommentsUseCase: ObserveCommentsUseCase,
+    selectUserUseCase: SelectUserUseCase,
     private val auth: FirebaseAuth,
-    private val selectUserUseCase: SelectUserUseCase,
-    private val addCommentUseCase: AddCommentUseCase,
+    private val commentUseCase: CommentUseCase,
     private val likePostUseCase: LikePostUseCase
 ) : BaseViewModel2(dispatcherProvider) {
     private val postId: String = checkNotNull(savedStateHandle["postId"])
@@ -76,6 +77,11 @@ class CommunityDetailViewModel @Inject constructor(
 
     val comments: StateFlow<List<Comment>> =
         observeCommentsUseCase(postId = postId)
+            .map { commentList ->
+                commentList.map { comment ->
+                    comment.copy(isMine = comment.authorId == (auth.currentUser?.uid ?: ""))
+                }
+            }
             .distinctUntilChanged()
             .stateIn(
                 scope = viewModelScope,
@@ -94,7 +100,9 @@ class CommunityDetailViewModel @Inject constructor(
 
     // 좋아요 여부
     private suspend fun checkIsLike(postId: String) {
-        _hasLiked.value = likePostUseCase.hasLiked(postId = postId, user = user.value)
+        likePostUseCase.hasLiked(postId = postId, user = user.value).onSuccess {
+            _hasLiked.value = it
+        }
     }
 
     // 좋아요 클릭
@@ -103,12 +111,34 @@ class CommunityDetailViewModel @Inject constructor(
             onIO {
                 if (_hasLiked.value) {
                     likePostUseCase.unlike(postId = postId, user = user.value)
+                        .onFailure { e -> Logging.e("좋아요 실패: ${e.message}") }
                 } else {
                     likePostUseCase.like(postId = postId, user = user.value)
+                        .onFailure { e -> Logging.e("좋아요 실패: ${e.message}") }
                 }
                 checkIsLike(postId = postId)
             }
         }
+    }
 
+    // 댓글 달기
+    fun addComment(comment: String) {
+        onIO {
+            commentUseCase.addComment(
+                postId = postId,
+                user = user.value,
+                text = comment
+            ).collect()
+        }
+    }
+
+    // 댓글 삭제
+    fun deleteComment(commentId: String) {
+        onIO {
+            commentUseCase.deleteComment(
+                postId = postId,
+                commentId = commentId
+            ).collect()
+        }
     }
 }

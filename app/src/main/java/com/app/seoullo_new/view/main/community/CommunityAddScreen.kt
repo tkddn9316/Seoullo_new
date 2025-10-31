@@ -41,6 +41,7 @@ import com.app.seoullo_new.R
 import com.app.seoullo_new.utils.Logging
 import com.app.seoullo_new.view.base.LoadingOverlay
 import com.app.seoullo_new.view.base.SeoulloAppBar
+import com.app.seoullo_new.view.ui.theme.seoulloLightGray
 import com.app.seoullo_new.view.util.advancedImePadding
 
 @Composable
@@ -152,7 +153,7 @@ fun CommunityAddView(
                                 Text(
                                     text = stringResource(R.string.add_post_hint),
                                     fontSize = 18.sp,
-                                    color = Color(0xFF848484),
+                                    color = seoulloLightGray,
                                 )
                             }
                             innerTextField()
@@ -187,7 +188,7 @@ fun CommunityAddView(
                             Text(
                                 text = stringResource(R.string.add_post_content_hint),
                                 fontSize = 16.sp,
-                                color = Color(0xFF848484),
+                                color = seoulloLightGray,
                             )
                         }
                         innerTextField()

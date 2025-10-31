@@ -83,7 +83,7 @@ class BoardRepositoryImpl @Inject constructor(
             .map { it?.toPost() }
 
     // 댓글 올리기
-    override suspend fun addComment(postId: String, user: User, text: String): String {
+    override suspend fun addComment(postId: String, user: User, text: String): Flow<String> = flow {
         val postRef = boardRef.document(postId)
         val commentRef = postRef.collection("comments").document()
         val comment = Comment(
@@ -100,18 +100,21 @@ class BoardRepositoryImpl @Inject constructor(
             batch.set(commentRef, comment.toDto())
             batch.update(postRef, "commentCount", FieldValue.increment(1))
         }.await()
-        return commentRef.id
+
+        emit(commentRef.id)
     }
 
     // 댓글 삭제
-    suspend fun deleteComment(postId: String, commentId: String) {
+    override suspend fun deleteComment(postId: String, commentId: String): Flow<Unit> = flow {
         val postRef = boardRef.document(postId)
-        val commentRef = postRef.collection("comments").document()
+        val commentRef = postRef.collection("comments").document(commentId)
 
         db.runBatch { batch ->
             batch.delete(commentRef)
             batch.update(postRef, "commentCount", FieldValue.increment(-1))
         }.await()
+
+        emit(Unit)
     }
 
     // 댓글 목록

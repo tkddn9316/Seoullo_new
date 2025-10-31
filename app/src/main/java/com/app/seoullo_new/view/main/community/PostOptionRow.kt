@@ -16,6 +16,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import com.app.seoullo_new.utils.PostOption
+import com.app.seoullo_new.view.ui.theme.seoulloLightGray
 
 /**
  * 글쓰기 옵션(사진 등)
@@ -46,7 +47,7 @@ fun PostOptionRow(
                 Icon(
                     imageVector = idToIcon(option.id),
                     contentDescription = null,
-                    tint = Color(0xFF848484)
+                    tint = seoulloLightGray
                 )
             }
         }

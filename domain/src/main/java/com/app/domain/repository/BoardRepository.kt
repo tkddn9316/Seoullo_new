@@ -11,7 +11,8 @@ interface BoardRepository {
     fun observePosts(): Flow<List<Post>>
     fun getPost(postId: String): Flow<Post?>
 
-    suspend fun addComment(postId: String, user: User, text: String): String
+    suspend fun addComment(postId: String, user: User, text: String): Flow<String>
+    suspend fun deleteComment(postId: String, commentId: String): Flow<Unit>
     fun observeComments(postId: String): Flow<List<Comment>>
 
 //    suspend fun incrementLike(postId: String, delta: Int)

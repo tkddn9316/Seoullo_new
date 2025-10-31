@@ -6,5 +6,6 @@ data class Comment(
     val authorId: String = "",
     val authorName: String = "",
     val authorPhotoUrl: String = "",
-    val createdAt: Long = System.currentTimeMillis()
+    val createdAt: Long = System.currentTimeMillis(),
+    val isMine: Boolean = false
 )
