@@ -13,7 +13,9 @@ interface BoardRepository {
 
     suspend fun addComment(postId: String, user: User, text: String): Flow<String>
     suspend fun deleteComment(postId: String, commentId: String): Flow<Unit>
-    fun observeComments(postId: String): Flow<List<Comment>>
+    suspend fun addReply(postId: String, commentId: String, user: User, text: String): Flow<String>
+    suspend fun deleteReply(postId: String, commentId: String, replyId: String): Flow<Unit>
+    fun observeCommentsWithReplies(postId: String): Flow<List<Comment>>
 
 //    suspend fun incrementLike(postId: String, delta: Int)
     suspend fun hasLiked(postId: String, user: User): Boolean

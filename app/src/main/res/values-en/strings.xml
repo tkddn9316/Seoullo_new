@@ -106,7 +106,11 @@
     <string name="add_post_summit">Summit</string>
     <string name="post_modify">Modify</string>
     <string name="post_delete">Delete</string>
-    <string name="delete_comment_dialog_contents">Are you sure you want to delete this comment?</string>
+    <string name="delete_comment_dialog_contents">Are you sure you want to delete this comment?\nAfter deletion, restoration is not possible.</string>
+    <string name="delete_reply_dialog_contents">Are you sure you want to delete this reply?\nAfter deletion, restoration is not possible.</string>
+    <string name="reply">Reply</string>
+    <string name="reply_notice">Reply to %s</string>
+    <string name="has_been_deleted_comment">This comment has been deleted.</string>
 
     <!--  setting  -->
     <string name="theme_title">Theme Setting</string>

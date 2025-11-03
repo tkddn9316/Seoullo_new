@@ -94,6 +94,10 @@ fun CommunityDetailScreen(
 
     // dialog
     val dialogState by viewModel.dialogState.collectAsStateWithLifecycle()
+    val dialogState2 by viewModel.dialogState2.collectAsStateWithLifecycle()
+
+    val replyNoticeState by viewModel.replyNoticeState.collectAsStateWithLifecycle()
+    val targetComment by viewModel.selectedTargetComment.collectAsStateWithLifecycle()
 
     Scaffold(
         topBar = {
@@ -128,16 +132,26 @@ fun CommunityDetailScreen(
                                 hasLiked = hasLikedState,
                                 bottomPadding = with(density) { commentBoxHeightPx.intValue.toDp() },
                                 onPostModifyClick = { postId ->
-
+                                    // 게시글 수정
                                 },
                                 onPostDeleteClick = { postId ->
-
+                                    // 게시글 삭제
                                 },
                                 onDeleteCommentClick = { commentId ->
+                                    // 댓글 삭제
                                     viewModel.openCommentDeleteDialog(commentId = commentId)
                                 },
                                 onLikeClick = { postId ->
+                                    // 좋아요 클릭
                                     viewModel.setLike(postId = postId)
+                                },
+                                onReplyCallback = { targetComment ->
+                                    // 답글 달기
+                                    viewModel.openReplyNotice(comment = targetComment)
+                                },
+                                onDeleteReplyClick = { commentId: String, replyId: String ->
+                                    // 답글 삭제
+                                    viewModel.openReplyDeleteDialog(commentId = commentId, replyId = replyId)
                                 }
                             )
                         }
@@ -161,8 +175,16 @@ fun CommunityDetailScreen(
                     CommentTextField(
                         userInfo = userInfo,
                         commentTextState = commentTextState,
+                        isReply = replyNoticeState,
+                        targetComment = targetComment,
                         onAddCommentClick = { comment ->
-                            viewModel.addComment(comment = comment)
+                            viewModel.addComment(
+                                comment = comment,
+                                isReply = replyNoticeState
+                            )
+                        },
+                        onCloseReplyNoticeClick = {
+                            viewModel.closeReplyNotice()
                         }
                     )
                 }
@@ -173,6 +195,13 @@ fun CommunityDetailScreen(
             DeleteCommentDialog(
                 onDone = { viewModel.deleteSelectedComment() },
                 onClose = { viewModel.closeCommentDeleteDialog() }
+            )
+        }
+
+        if (dialogState2.isDeleteReplyDialogOpen) {
+            DeleteReplyDialog (
+                onDone = { viewModel.deleteSelectedReply() },
+                onClose = { viewModel.closeReplyDeleteDialog() }
             )
         }
     }
@@ -190,7 +219,9 @@ fun CommunityDetailView(
     onPostModifyClick: (postId: String) -> Unit,
     onPostDeleteClick: (postId: String) -> Unit,
     onDeleteCommentClick: (commentId: String) -> Unit,
+    onDeleteReplyClick: (commentId: String, replyId: String) -> Unit,
     onLikeClick: (postId: String) -> Unit,
+    onReplyCallback: (targetComment: Comment) -> Unit,
 ) {
     var previousSize by remember { mutableIntStateOf(commentList.size) }
     LaunchedEffect(commentList.size) {
@@ -418,7 +449,7 @@ fun CommunityDetailView(
                     contentDescription = null
                 )
                 Text(
-                    text = commentList.size.toString(),
+                    text = post.commentCount.toString(),    // 댓글+답글 총 합
                     style = TextStyle(
                         color = MaterialTheme.colorScheme.outline
                     )
@@ -444,10 +475,11 @@ fun CommunityDetailView(
                     .fillMaxWidth()
             ) {
                 CommentList(
-                    item = comment
-                ) { commentId ->
-                    onDeleteCommentClick(commentId)
-                }
+                    item = comment,
+                    onReplyCallback = { targetComment -> onReplyCallback(targetComment) },
+                    onDeleteCommentClick = { commentId -> onDeleteCommentClick(commentId) },
+                    onDeleteReplyClick = { commentId, replyId -> onDeleteReplyClick(commentId, replyId) }
+                )
             }
         }
     }

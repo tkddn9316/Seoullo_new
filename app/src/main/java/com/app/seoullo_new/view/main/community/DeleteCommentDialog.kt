@@ -45,3 +45,40 @@ fun DeleteCommentDialog(
         }
     )
 }
+
+@Composable
+fun DeleteReplyDialog(
+    onDone: () -> Unit,
+    onClose: () -> Unit
+) {
+    AlertDialog(
+        title = { Text(text = stringResource(R.string.post_delete)) },
+        text = {
+            Text(
+                text = stringResource(R.string.delete_reply_dialog_contents),
+                style = MaterialTheme.typography.titleMedium
+            )
+        },
+        onDismissRequest = onClose,
+        dismissButton = {
+            TextButton(
+                onClick = onClose,
+                colors = ButtonDefaults.textButtonColors(
+                    contentColor = MaterialTheme.colorScheme.onBackground
+                )
+            ) {
+                Text(stringResource(R.string.cancel))
+            }
+        },
+        confirmButton = {
+            TextButton(
+                onClick = onDone,
+                colors = ButtonDefaults.textButtonColors(
+                    contentColor = MaterialTheme.colorScheme.onBackground
+                )
+            ) {
+                Text(stringResource(R.string.confirm))
+            }
+        }
+    )
+}

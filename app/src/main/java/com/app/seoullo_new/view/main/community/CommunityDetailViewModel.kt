@@ -29,7 +29,6 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.flow.update
 import javax.inject.Inject
 
 @HiltViewModel
@@ -45,6 +44,7 @@ class CommunityDetailViewModel @Inject constructor(
 ) : BaseViewModel2(dispatcherProvider) {
     private val postId: String = checkNotNull(savedStateHandle["postId"])
 
+    // 댓삭 팝업
     private val _dialogState = MutableStateFlow(DialogState())
     val dialogState: StateFlow<DialogState> = _dialogState.asStateFlow()
 
@@ -65,6 +65,46 @@ class CommunityDetailViewModel @Inject constructor(
             onIO {
                 deleteComment(id)
                 closeCommentDeleteDialog()
+            }
+        }
+    }
+
+    // 리플 관련
+    private val _replyNoticeState = MutableStateFlow(false)
+    val replyNoticeState = _replyNoticeState.asStateFlow()
+    private val _selectedTargetComment = MutableStateFlow<Comment?>(null)
+    val selectedTargetComment = _selectedTargetComment.asStateFlow()
+
+    fun openReplyNotice(comment: Comment) {
+        _selectedTargetComment.value = comment
+        _replyNoticeState.value = true
+    }
+
+    fun closeReplyNotice() {
+        _selectedTargetComment.value = null
+        _replyNoticeState.value = false
+    }
+
+    private val _dialogState2 = MutableStateFlow(DialogState())
+    val dialogState2: StateFlow<DialogState> = _dialogState2.asStateFlow()
+
+    private val _selectedReplyId = MutableStateFlow<Pair<String, String>?>(null)
+
+    fun openReplyDeleteDialog(commentId: String, replyId: String) {
+        _selectedReplyId.value = Pair(commentId, replyId)
+        _dialogState2.value = _dialogState2.value.copy(isDeleteReplyDialogOpen = true)
+    }
+
+    fun closeReplyDeleteDialog() {
+        _selectedReplyId.value = null
+        _dialogState2.value = _dialogState2.value.copy(isDeleteReplyDialogOpen = false)
+    }
+
+    fun deleteSelectedReply() {
+        _selectedReplyId.value?.let { ids ->
+            onIO {
+                deleteReply(ids.first, ids.second)
+                closeReplyDeleteDialog()
             }
         }
     }
@@ -105,7 +145,12 @@ class CommunityDetailViewModel @Inject constructor(
         observeCommentsUseCase(postId = postId)
             .map { commentList ->
                 commentList.map { comment ->
-                    comment.copy(isMine = comment.authorId == (auth.currentUser?.uid ?: ""))
+                    comment.copy(
+                        isMine = comment.authorId == auth.currentUser?.uid,
+                        replyList = comment.replyList.map { reply ->
+                            reply.copy(isMine = reply.authorId == auth.currentUser?.uid)
+                        }
+                    )
                 }
             }
             .distinctUntilChanged()
@@ -148,22 +193,49 @@ class CommunityDetailViewModel @Inject constructor(
     }
 
     // 댓글 달기
-    fun addComment(comment: String) {
+    fun addComment(comment: String, isReply: Boolean) {
         onIO {
-            commentUseCase.addComment(
-                postId = postId,
-                user = user.value,
-                text = comment
-            ).collect()
+            if (isReply) {
+                // 답글
+                _selectedTargetComment.value?.let { targetComment ->
+                    commentUseCase.addReply(
+                        postId = postId,
+                        commentId = targetComment.id,
+                        user = user.value,
+                        text = comment
+                    ).collect()
+
+                    // 답글 모드 종료
+                    closeReplyNotice()
+                }
+            } else {
+                // 댓글
+                commentUseCase.addComment(
+                    postId = postId,
+                    user = user.value,
+                    text = comment
+                ).collect()
+            }
         }
     }
 
     // 댓글 삭제
-    fun deleteComment(commentId: String) {
+    private fun deleteComment(commentId: String) {
         onIO {
             commentUseCase.deleteComment(
                 postId = postId,
                 commentId = commentId
+            ).collect()
+        }
+    }
+
+    // 답글 삭제
+    private fun deleteReply(commentId: String, replyId: String) {
+        onIO {
+            commentUseCase.deleteReply(
+                postId = postId,
+                commentId = commentId,
+                replyId = replyId
             ).collect()
         }
     }

@@ -4,6 +4,8 @@ import android.net.Uri
 import com.app.data.mapper.toComment
 import com.app.data.mapper.toDto
 import com.app.data.mapper.toPost
+import com.app.data.mapper.toReply
+import com.app.data.utils.Util.DELETED_AUTHOR_ID
 import com.app.domain.model.User
 import com.app.domain.model.community.Comment
 import com.app.domain.model.community.Post
@@ -19,13 +21,17 @@ import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.storageMetadata
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.tasks.await
 import java.util.UUID
@@ -82,7 +88,7 @@ class BoardRepositoryImpl @Inject constructor(
             .snapshotsFlow()
             .map { it?.toPost() }
 
-    // 댓글 올리기
+    // 댓글 달기
     override suspend fun addComment(postId: String, user: User, text: String): Flow<String> = flow {
         val postRef = boardRef.document(postId)
         val commentRef = postRef.collection("comments").document()
@@ -95,7 +101,6 @@ class BoardRepositoryImpl @Inject constructor(
             createdAt = System.currentTimeMillis()
         )
 
-//        commentRef.set(comment.toDto()).await()
         db.runBatch { batch ->
             batch.set(commentRef, comment.toDto())
             batch.update(postRef, "commentCount", FieldValue.increment(1))
@@ -108,9 +113,81 @@ class BoardRepositoryImpl @Inject constructor(
     override suspend fun deleteComment(postId: String, commentId: String): Flow<Unit> = flow {
         val postRef = boardRef.document(postId)
         val commentRef = postRef.collection("comments").document(commentId)
+        val replySize = commentRef.collection("reply").get().await().size()
+
+        db.runTransaction { tx ->
+            val snap = tx.get(commentRef)
+            if (!snap.exists()) return@runTransaction
+
+            tx.update(postRef, "commentCount", FieldValue.increment(-1))
+            if (replySize > 0) {
+                // 답글이 존재할 경우
+                // 이미 소프트 삭제 되었는지 체크
+                val isDeleted = snap.getBoolean("isDeleted") ?: false
+                val authorId = snap.getString("authorId") ?: ""
+                if (isDeleted || authorId == DELETED_AUTHOR_ID) return@runTransaction
+
+                // 2) 댓글 소프트 삭제 (답글은 건드리지 않음)
+                val updates = mutableMapOf<String, Any>(
+                    "isDeleted" to true,
+                    "authorName" to "",
+                    "authorPhotoUrl" to "",
+                    "authorId" to DELETED_AUTHOR_ID,
+                    "text" to ""
+                )
+
+                tx.update(commentRef, updates as Map<String, Any>)
+            } else {
+                tx.delete(commentRef)
+            }
+        }
+    }
+
+    // 답글 달기
+    override suspend fun addReply(
+        postId: String,
+        commentId: String,
+        user: User,
+        text: String
+    ): Flow<String> = flow {
+        val postRef = boardRef.document(postId)
+        val replyRef = postRef
+            .collection("comments")
+            .document(commentId)
+            .collection("reply")
+            .document()
+        val reply = Comment.Reply(
+            id = replyRef.id,
+            text = text,
+            authorId = auth.currentUser?.uid ?: user.tokenId,
+            authorName = user.name,
+            authorPhotoUrl = user.photoUrl,
+            createdAt = System.currentTimeMillis()
+        )
 
         db.runBatch { batch ->
-            batch.delete(commentRef)
+            batch.set(replyRef, reply.toDto())
+            batch.update(postRef, "commentCount", FieldValue.increment(1))
+        }.await()
+
+        emit(replyRef.id)
+    }
+
+    // 답글 삭제
+    override suspend fun deleteReply(
+        postId: String,
+        commentId: String,
+        replyId: String
+    ): Flow<Unit> = flow {
+        val postRef = boardRef.document(postId)
+        val replyRef = postRef
+            .collection("comments")
+            .document(commentId)
+            .collection("reply")
+            .document(replyId)
+
+        db.runBatch { batch ->
+            batch.delete(replyRef)
             batch.update(postRef, "commentCount", FieldValue.increment(-1))
         }.await()
 
@@ -118,12 +195,41 @@ class BoardRepositoryImpl @Inject constructor(
     }
 
     // 댓글 목록
-    override fun observeComments(postId: String): Flow<List<Comment>> =
+    @OptIn(ExperimentalCoroutinesApi::class)
+    override fun observeCommentsWithReplies(postId: String): Flow<List<Comment>> =
+        observeComments(postId = postId).flatMapLatest { comments ->
+            if (comments.isEmpty()) return@flatMapLatest flowOf(emptyList())
+
+            val replyFlows: List<Flow<List<Comment.Reply>>> =
+                comments.map { comment -> observeReplies(postId = postId, commentId = comment.id) }
+
+            combine(replyFlows) { repliesArray ->
+                comments.mapIndexed { index, comment ->
+                    comment.copy(replyList = repliesArray.getOrNull(index).orEmpty())
+                }
+            }
+        }
+
+    private fun observeComments(postId: String): Flow<List<Comment>> =
         boardRef.document(postId)
             .collection("comments")
             .orderBy("createdAt", Query.Direction.ASCENDING)
             .snapshotsFlow()
             .map { qs -> qs.documents.mapNotNull { it.toComment() } }
+
+    private fun observeReplies(
+        postId: String,
+        commentId: String
+    ): Flow<List<Comment.Reply>> =
+        boardRef.document(postId)
+            .collection("comments")
+            .document(commentId)
+            .collection("reply")
+            .orderBy("createdAt", Query.Direction.ASCENDING)
+            .snapshotsFlow()
+            .map { qs ->
+                qs.documents.mapNotNull { it.toReply() }
+            }
 
     // 좋아요 여부
     override suspend fun hasLiked(postId: String, user: User): Boolean {

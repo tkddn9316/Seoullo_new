@@ -1,10 +1,9 @@
 package com.app.data.model
 
-data class CommentDTO(
+data class ReplyDTO(
     val text: String = "",
     val authorId: String = "",
     val authorName: String = "",
     val authorPhotoUrl: String = "",
-    val createdAt: Long = 0L,
-    val replyList: List<ReplyDTO> = emptyList()
+    val createdAt: Long = 0L
 )

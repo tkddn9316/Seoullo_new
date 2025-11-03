@@ -2,6 +2,8 @@ package com.app.data.mapper
 
 import com.app.data.model.CommentDTO
 import com.app.data.model.PostDTO
+import com.app.data.model.ReplyDTO
+import com.app.data.utils.Logging
 import com.app.domain.model.community.Comment
 import com.app.domain.model.community.Post
 import com.google.firebase.firestore.DocumentSnapshot
@@ -34,6 +36,19 @@ fun DocumentSnapshot.toComment(): Comment? =
         )
     }
 
+fun DocumentSnapshot.toReply(): Comment.Reply? =
+    toObject(ReplyDTO::class.java)?.let { dto ->
+        Logging.e(dto)
+        Comment.Reply(
+            id = this.id,
+            text = dto.text,
+            authorId = dto.authorId,
+            authorName = dto.authorName,
+            authorPhotoUrl = dto.authorPhotoUrl,
+            createdAt = dto.createdAt
+        )
+    }
+
 fun Post.toDto() = PostDTO(
     title = title,
     content = content,
@@ -46,6 +61,23 @@ fun Post.toDto() = PostDTO(
 )
 
 fun Comment.toDto() = CommentDTO(
+    text = text,
+    authorId = authorId,
+    authorName = authorName,
+    authorPhotoUrl = authorPhotoUrl,
+    createdAt = createdAt,
+    replyList = replyList.toList().map {
+        ReplyDTO(
+            text = it.text,
+            authorId = it.authorId,
+            authorName = it.authorName,
+            authorPhotoUrl = it.authorPhotoUrl,
+            createdAt = it.createdAt
+        )
+    }
+)
+
+fun Comment.Reply.toDto() = ReplyDTO(
     text = text,
     authorId = authorId,
     authorName = authorName,

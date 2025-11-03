@@ -10,5 +10,6 @@ data class DialogState(
     val isDirectionSelectDialogOpen: Boolean = false,
     val isLogoutDialogOpen: Boolean = false,
     val isTodayWatchedListDialogOpen: Boolean = false,
-    val isDeleteCommentDialogOpen: Boolean = false
+    val isDeleteCommentDialogOpen: Boolean = false,
+    val isDeleteReplyDialogOpen: Boolean = false
 )

@@ -19,17 +19,22 @@ import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.foundation.text.input.clearText
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Upload
+import androidx.compose.material.icons.outlined.Close
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.LocalFocusManager
@@ -38,6 +43,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.app.domain.model.User
+import com.app.domain.model.community.Comment
 import com.app.seoullo_new.R
 import com.app.seoullo_new.view.ui.theme.notosansFont
 import com.app.seoullo_new.view.ui.theme.seoulloLightGray
@@ -47,10 +53,47 @@ import com.app.seoullo_new.view.util.CircularProfileImage
 fun CommentTextField(
     userInfo: User,
     commentTextState: TextFieldState,
+    isReply: Boolean,
+    targetComment: Comment?,
     modifier: Modifier = Modifier,
-    onAddCommentClick: (comment: String) -> Unit
+    onAddCommentClick: (comment: String) -> Unit,
+    onCloseReplyNoticeClick: () -> Unit
 ) {
     val focusManager = LocalFocusManager.current
+    val focusRequester = remember { FocusRequester() }
+
+    // 답글 여부 알림
+    if (isReply && targetComment != null) {
+        Row(
+            modifier = modifier
+                .background(color = MaterialTheme.colorScheme.surfaceVariant)
+                .padding(6.dp),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Text(
+                modifier = modifier.weight(1f),
+                text = stringResource(R.string.reply_notice, targetComment.authorName)
+            )
+
+            IconButton(
+                modifier = modifier.size(24.dp),
+                onClick = { onCloseReplyNoticeClick() }
+            ) {
+                Icon(
+                    imageVector = Icons.Outlined.Close,
+                    tint = MaterialTheme.colorScheme.outline,
+                    contentDescription = null
+                )
+            }
+        }
+    }
+
+    LaunchedEffect(key1 = isReply) {
+        if (isReply) {
+            // 리플 모드 ON일 때 키보드 올라오도록
+            focusRequester.requestFocus()
+        }
+    }
 
     HorizontalDivider(
         thickness = 1.dp,
@@ -69,7 +112,8 @@ fun CommentTextField(
         BasicTextField(
             modifier = modifier
                 .fillMaxWidth()
-                .wrapContentHeight(),
+                .wrapContentHeight()
+                .focusRequester(focusRequester = focusRequester),
             state = commentTextState,
             textStyle = TextStyle(
                 fontSize = 16.sp,

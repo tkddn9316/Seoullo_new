@@ -10,6 +10,8 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 
 object Util {
+    const val DELETED_AUTHOR_ID = "__deleted__"
+
     fun String.addHttps(): String {
         return if (this.startsWith("http://") || this.startsWith("https://")) this
         else "https://$this"
