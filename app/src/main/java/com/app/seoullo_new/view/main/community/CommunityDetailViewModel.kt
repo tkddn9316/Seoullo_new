@@ -10,6 +10,7 @@ import com.app.domain.usecase.community.CommentUseCase
 import com.app.domain.usecase.community.LikePostUseCase
 import com.app.domain.usecase.community.ObserveCommentsUseCase
 import com.app.domain.usecase.community.ObservePostsUseCase
+import com.app.domain.usecase.community.PostUseCase
 import com.app.domain.usecase.user.SelectUserUseCase
 import com.app.seoullo_new.di.DispatcherProvider
 import com.app.seoullo_new.utils.Logging
@@ -41,24 +42,32 @@ class CommunityDetailViewModel @Inject constructor(
     observeCommentsUseCase: ObserveCommentsUseCase,
     selectUserUseCase: SelectUserUseCase,
     private val auth: FirebaseAuth,
+    private val postUseCase: PostUseCase,
     private val commentUseCase: CommentUseCase,
     private val likePostUseCase: LikePostUseCase
 ) : BaseViewModel2(dispatcherProvider) {
     private val postId: String = checkNotNull(savedStateHandle["postId"])
 
-    // 댓삭 팝업
+    // 게시글 삭제 팝업
     private val _dialogState = MutableStateFlow(DialogState())
     val dialogState: StateFlow<DialogState> = _dialogState.asStateFlow()
+
+    fun openPostDeleteDialog() = _dialogState.update { it.copy(isDeletePostDialogOpen = true) }
+    fun closePostDeleteDialog() = _dialogState.update { it.copy(isDeletePostDialogOpen = false) }
+
+    // 댓삭 팝업
+    private val _dialogState2 = MutableStateFlow(DialogState())
+    val dialogState2: StateFlow<DialogState> = _dialogState2.asStateFlow()
 
     private val _selectedCommentId = MutableStateFlow<String?>(null)
 
     fun openCommentDeleteDialog(commentId: String) {
         _selectedCommentId.value = commentId
-        _dialogState.value = _dialogState.value.copy(isDeleteCommentDialogOpen = true)
+        _dialogState2.value = _dialogState2.value.copy(isDeleteCommentDialogOpen = true)
     }
 
     fun closeCommentDeleteDialog() {
-        _dialogState.value = _dialogState.value.copy(isDeleteCommentDialogOpen = false)
+        _dialogState2.value = _dialogState2.value.copy(isDeleteCommentDialogOpen = false)
         _selectedCommentId.value = null
     }
 
@@ -87,19 +96,19 @@ class CommunityDetailViewModel @Inject constructor(
         _replyNoticeState.value = false
     }
 
-    private val _dialogState2 = MutableStateFlow(DialogState())
-    val dialogState2: StateFlow<DialogState> = _dialogState2.asStateFlow()
+    private val _dialogState3 = MutableStateFlow(DialogState())
+    val dialogState3: StateFlow<DialogState> = _dialogState3.asStateFlow()
 
     private val _selectedReplyId = MutableStateFlow<Pair<String, String>?>(null)
 
     fun openReplyDeleteDialog(commentId: String, replyId: String) {
         _selectedReplyId.value = Pair(commentId, replyId)
-        _dialogState2.value = _dialogState2.value.copy(isDeleteReplyDialogOpen = true)
+        _dialogState3.value = _dialogState3.value.copy(isDeleteReplyDialogOpen = true)
     }
 
     fun closeReplyDeleteDialog() {
         _selectedReplyId.value = null
-        _dialogState2.value = _dialogState2.value.copy(isDeleteReplyDialogOpen = false)
+        _dialogState3.value = _dialogState3.value.copy(isDeleteReplyDialogOpen = false)
     }
 
     fun deleteSelectedReply() {
@@ -226,6 +235,14 @@ class CommunityDetailViewModel @Inject constructor(
                     text = comment
                 ).collect()
             }
+        }
+    }
+
+    // 게시글 삭제
+    fun deletePost() {
+        onIO {
+            postUseCase.deletePost(postId = postId).collect()
+            closePostDeleteDialog()
         }
     }
 

@@ -6,6 +6,7 @@ import com.app.data.mapper.toDto
 import com.app.data.mapper.toPost
 import com.app.data.mapper.toReply
 import com.app.data.utils.Util.DELETED_AUTHOR_ID
+import com.app.domain.model.DeletionResult
 import com.app.domain.model.User
 import com.app.domain.model.community.Comment
 import com.app.domain.model.community.Post
@@ -18,6 +19,7 @@ import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.QuerySnapshot
+import com.google.firebase.functions.FirebaseFunctions
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.storageMetadata
 import kotlinx.coroutines.Dispatchers
@@ -43,7 +45,8 @@ class BoardRepositoryImpl @Inject constructor(
     private val imageOptRepo: ImageOptimizationRepository,
     private val auth: FirebaseAuth,
     private val db: FirebaseFirestore,
-    private val storage: FirebaseStorage
+    private val storage: FirebaseStorage,
+    private val functions: FirebaseFunctions
 ) : BoardRepository {
 
     // 게시글 올리기
@@ -72,6 +75,19 @@ class BoardRepositoryImpl @Inject constructor(
         postRef.set(post.toDto()).await()
 
         emit(postId)
+    }
+
+    override suspend fun deletePost(postId: String): Result<DeletionResult> = runCatching {
+        val result = functions
+            .getHttpsCallable("deletePost")
+            .call(mapOf("postId" to postId))
+            .await()
+
+        @Suppress("UNCHECKED_CAST")
+        val data = result.data as? Map<String, Any?> ?: emptyMap()
+        val docs = (data["deletedDocs"] as? Number)?.toInt() ?: 0
+        val files = (data["deletedFiles"] as? Number)?.toInt() ?: 0
+        DeletionResult(docs, files)
     }
 
     // 게시글 목록

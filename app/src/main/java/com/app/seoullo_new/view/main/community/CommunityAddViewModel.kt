@@ -2,7 +2,7 @@ package com.app.seoullo_new.view.main.community
 
 import android.net.Uri
 import com.app.domain.model.common.ApiState
-import com.app.domain.usecase.community.AddPostUseCase
+import com.app.domain.usecase.community.PostUseCase
 import com.app.domain.usecase.user.SelectUserUseCase
 import com.app.seoullo_new.di.DispatcherProvider
 import com.app.seoullo_new.utils.Logging
@@ -23,7 +23,7 @@ import javax.inject.Inject
 class CommunityAddViewModel @Inject constructor(
     dispatcherProvider: DispatcherProvider,
     private val selectUserUseCase: SelectUserUseCase,
-    private val addPostUseCase: AddPostUseCase
+    private val postUseCase: PostUseCase
 ) : BaseViewModel2(dispatcherProvider) {
 
     private val _addPostState = MutableStateFlow<ApiState<String>>(ApiState.Initial())
@@ -43,7 +43,7 @@ class CommunityAddViewModel @Inject constructor(
                 .firstOrNull() ?: run { return@onIO }
             val sendImageList = _addImageList.value.map { it.uri }
 
-            addPostUseCase(
+            postUseCase.addPost(
                 user = user,
                 title = title,
                 content = content,

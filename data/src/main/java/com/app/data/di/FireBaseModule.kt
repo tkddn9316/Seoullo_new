@@ -2,6 +2,8 @@ package com.app.data.di
 
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.functions.FirebaseFunctions
+import com.google.firebase.functions.ktx.functions
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.ktx.storage
@@ -37,4 +39,9 @@ class FireBaseModule {
     @Named("reviewsRef")
     fun provideReviewsRef() =
         Firebase.firestore("seoullo-places-review-database").collection("reviews")
+
+    @Provides
+    @Singleton
+    fun provideFunctions(): FirebaseFunctions =
+        Firebase.functions("asia-northeast3")
 }

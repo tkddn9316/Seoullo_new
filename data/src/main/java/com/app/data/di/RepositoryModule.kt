@@ -45,6 +45,7 @@ import com.app.domain.repository.WeatherRepository
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.functions.FirebaseFunctions
 import com.google.firebase.storage.FirebaseStorage
 import dagger.Module
 import dagger.Provides
@@ -152,8 +153,9 @@ class RepositoryModule {
         imageOptRepo: ImageOptimizationRepository,
         auth: FirebaseAuth,
         db: FirebaseFirestore,
-        storage: FirebaseStorage
+        storage: FirebaseStorage,
+        functions: FirebaseFunctions
     ): BoardRepository {
-        return BoardRepositoryImpl(boardRef, imageOptRepo, auth, db, storage)
+        return BoardRepositoryImpl(boardRef, imageOptRepo, auth, db, storage, functions)
     }
 }

@@ -1,6 +1,8 @@
 package com.app.domain.usecase.community
 
 import android.net.Uri
+import android.util.Log
+import com.app.domain.model.DeletionResult
 import com.app.domain.model.User
 import com.app.domain.model.common.ApiState
 import com.app.domain.repository.BoardRepository
@@ -10,8 +12,8 @@ import kotlinx.coroutines.flow.flow
 import java.io.IOException
 import javax.inject.Inject
 
-class AddPostUseCase @Inject constructor(private val repository: BoardRepository) {
-    operator fun invoke(
+class PostUseCase @Inject constructor(private val repository: BoardRepository) {
+    fun addPost(
         user: User,
         title: String,
         content: String,
@@ -43,5 +45,23 @@ class AddPostUseCase @Inject constructor(private val repository: BoardRepository
             }
             emit(ApiState.Error(errorMessage))
         }
+    }
+
+    fun deletePost(postId: String): Flow<ApiState<DeletionResult>> = flow {
+        emit(ApiState.Loading())
+        val r = repository.deletePost(postId)
+        r.fold(
+            onSuccess = { emit(ApiState.Success(it)) },
+            onFailure = { e ->
+                val msg = when (e) {
+                    is IOException -> {
+                        "Server error: ${e.message}"
+                    }
+                    else -> e.message ?: "Unknown error"
+                }
+                Log.e("deletePost ERROR", msg)
+                emit(ApiState.Error(msg))
+            }
+        )
     }
 }

@@ -97,6 +97,7 @@ fun CommunityDetailScreen(
     // dialog
     val dialogState by viewModel.dialogState.collectAsStateWithLifecycle()
     val dialogState2 by viewModel.dialogState2.collectAsStateWithLifecycle()
+    val dialogState3 by viewModel.dialogState3.collectAsStateWithLifecycle()
 
     val replyNoticeState by viewModel.replyNoticeState.collectAsStateWithLifecycle()
     val targetComment by viewModel.selectedTargetComment.collectAsStateWithLifecycle()
@@ -143,6 +144,7 @@ fun CommunityDetailScreen(
                                 },
                                 onPostDeleteClick = { postId ->
                                     // 게시글 삭제
+                                    viewModel.openPostDeleteDialog()
                                 },
                                 onDeleteCommentClick = { commentId ->
                                     // 댓글 삭제
@@ -199,17 +201,28 @@ fun CommunityDetailScreen(
             }
         }
 
+        // 게시글 삭제 팝업
+        if (dialogState.isDeletePostDialogOpen) {
+            DeleteNoticeDialog(
+                text = stringResource(R.string.delete_post_dialog_contents),
+                onDone = { viewModel.deletePost() },
+                onClose = { viewModel.closePostDeleteDialog() }
+            )
+        }
+
         // 댓글 삭제 팝업
-        if (dialogState.isDeleteCommentDialogOpen) {
-            DeleteCommentDialog(
+        if (dialogState2.isDeleteCommentDialogOpen) {
+            DeleteNoticeDialog(
+                text = stringResource(R.string.delete_comment_dialog_contents),
                 onDone = { viewModel.deleteSelectedComment() },
                 onClose = { viewModel.closeCommentDeleteDialog() }
             )
         }
 
         // 답글 삭제 팝업
-        if (dialogState2.isDeleteReplyDialogOpen) {
-            DeleteReplyDialog (
+        if (dialogState3.isDeleteReplyDialogOpen) {
+            DeleteNoticeDialog (
+                text = stringResource(R.string.delete_reply_dialog_contents),
                 onDone = { viewModel.deleteSelectedReply() },
                 onClose = { viewModel.closeReplyDeleteDialog() }
             )

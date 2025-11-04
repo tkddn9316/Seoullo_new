@@ -1,6 +1,7 @@
 package com.app.domain.repository
 
 import android.net.Uri
+import com.app.domain.model.DeletionResult
 import com.app.domain.model.User
 import com.app.domain.model.community.Comment
 import com.app.domain.model.community.Post
@@ -8,6 +9,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface BoardRepository {
     fun addPost(user: User, title: String, content: String, images: List<Uri>): Flow<String>
+    suspend fun deletePost(postId: String): Result<DeletionResult>
     fun observePosts(): Flow<List<Post>>
     fun getPost(postId: String): Flow<Post?>
 

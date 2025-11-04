@@ -106,6 +106,7 @@
     <string name="add_post_summit">올리기</string>
     <string name="post_modify">수정</string>
     <string name="post_delete">삭제</string>
+    <string name="delete_post_dialog_contents">정말 게시글을 삭제하시겠습니까?\n삭제 후에는 복구가 불가능합니다.</string>
     <string name="delete_comment_dialog_contents">정말 댓글을 삭제하시겠습니까?\n삭제 후에는 복구가 불가능합니다.</string>
     <string name="delete_reply_dialog_contents">정말 답글을 삭제하시겠습니까?\n삭제 후에는 복구가 불가능합니다.</string>
     <string name="reply">답글 달기</string>
