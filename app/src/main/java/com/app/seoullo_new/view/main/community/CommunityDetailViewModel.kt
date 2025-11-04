@@ -2,6 +2,7 @@ package com.app.seoullo_new.view.main.community
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.app.domain.model.DeletionResult
 import com.app.domain.model.User
 import com.app.domain.model.common.ApiState
 import com.app.domain.model.community.Comment
@@ -47,6 +48,9 @@ class CommunityDetailViewModel @Inject constructor(
     private val likePostUseCase: LikePostUseCase
 ) : BaseViewModel2(dispatcherProvider) {
     private val postId: String = checkNotNull(savedStateHandle["postId"])
+
+    private val _deletePostState = MutableStateFlow<ApiState<DeletionResult>>(ApiState.Initial())
+    val deletePostState = _deletePostState.asStateFlow()
 
     // 게시글 삭제 팝업
     private val _dialogState = MutableStateFlow(DialogState())
@@ -241,8 +245,11 @@ class CommunityDetailViewModel @Inject constructor(
     // 게시글 삭제
     fun deletePost() {
         onIO {
-            postUseCase.deletePost(postId = postId).collect()
             closePostDeleteDialog()
+            postUseCase.deletePost(postId = postId)
+                .collect { state ->
+                    _deletePostState.value = state
+                }
         }
     }
 

@@ -1,5 +1,6 @@
 package com.app.seoullo_new.view.main.community
 
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -50,6 +51,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -81,9 +83,11 @@ fun CommunityDetailScreen(
     viewModel: CommunityDetailViewModel = hiltViewModel(),
     onNavigationClick: () -> Unit
 ) {
+    val context = LocalContext.current
     val listState = rememberLazyListState()
 
     val postState by viewModel.post.collectAsStateWithLifecycle()
+    val deletePostState by viewModel.deletePostState.collectAsStateWithLifecycle()
     val commentListState by viewModel.comments.collectAsStateWithLifecycle()
     val title by viewModel.title.collectAsStateWithLifecycle()
     val writerState by viewModel.isWriter.collectAsStateWithLifecycle()
@@ -161,7 +165,10 @@ fun CommunityDetailScreen(
                                 },
                                 onDeleteReplyClick = { commentId: String, replyId: String ->
                                     // 답글 삭제
-                                    viewModel.openReplyDeleteDialog(commentId = commentId, replyId = replyId)
+                                    viewModel.openReplyDeleteDialog(
+                                        commentId = commentId,
+                                        replyId = replyId
+                                    )
                                 }
                             )
                         }
@@ -199,6 +206,24 @@ fun CommunityDetailScreen(
                     )
                 }
             }
+
+            when (val s = deletePostState) {
+                is ApiState.Loading -> {
+                    // API 로딩 처리
+                    LoadingOverlay()
+                }
+
+                is ApiState.Success -> {
+                    onNavigationClick()
+                }
+
+                is ApiState.Error -> {
+                    val error = s.message.orEmpty()
+                    Toast.makeText(context, error, Toast.LENGTH_SHORT).show()
+                }
+
+                else -> {}
+            }
         }
 
         // 게시글 삭제 팝업
@@ -221,7 +246,7 @@ fun CommunityDetailScreen(
 
         // 답글 삭제 팝업
         if (dialogState3.isDeleteReplyDialogOpen) {
-            DeleteNoticeDialog (
+            DeleteNoticeDialog(
                 text = stringResource(R.string.delete_reply_dialog_contents),
                 onDone = { viewModel.deleteSelectedReply() },
                 onClose = { viewModel.closeReplyDeleteDialog() }
