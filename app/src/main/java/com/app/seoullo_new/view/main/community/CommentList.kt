@@ -1,5 +1,9 @@
 package com.app.seoullo_new.view.main.community
 
+import androidx.compose.animation.Animatable
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -15,8 +19,12 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.PlatformTextStyle
 import androidx.compose.ui.text.TextStyle
@@ -32,20 +40,38 @@ import com.app.seoullo_new.utils.Util
 import com.app.seoullo_new.view.ui.theme.notosansFont
 import com.app.seoullo_new.view.ui.theme.seoulloLightGray
 import com.app.seoullo_new.view.util.CircularProfileImage
+import kotlinx.coroutines.delay
 
 @Composable
 fun CommentList(
     item: Comment,
+    isHighlighted: Boolean = false,
+    triggerSeq: Long,
     modifier: Modifier = Modifier,
     onReplyCallback: (targetComment: Comment) -> Unit,
     onDeleteCommentClick: (commentId: String) -> Unit,
     onDeleteReplyClick: (commentId: String, replyId: String) -> Unit
 ) {
+    val highlightColor = MaterialTheme.colorScheme.secondary.copy(alpha = 0.20f)
+    val bgAnim = remember(item.id) { Animatable(Color.Transparent) }
+
+    LaunchedEffect(isHighlighted, triggerSeq, item.id) {
+        if (isHighlighted) {
+            bgAnim.snapTo(Color.Transparent)
+            bgAnim.animateTo(highlightColor, tween(160))
+            delay(160)
+            bgAnim.animateTo(Color.Transparent, tween(240))
+        }
+    }
+
     Column(
         modifier = modifier.fillMaxWidth()
     ) {
         Row(
-            modifier = modifier.fillMaxWidth(),
+            modifier = modifier
+                .fillMaxWidth()
+                .background(bgAnim.value)
+            ,
             verticalAlignment = Alignment.Top
         ) {
             val isDeleted = item.authorId == DELETED_AUTHOR_ID  // 삭제된 댓글 여부
@@ -137,7 +163,6 @@ fun CommentList(
             }
         }
     }
-
 }
 
 @Preview(
@@ -166,6 +191,7 @@ fun CommentListPreview() {
 
     CommentList(
         item = item,
+        triggerSeq = 0,
         onReplyCallback = {},
         onDeleteCommentClick = {},
         onDeleteReplyClick = { _, _ -> }

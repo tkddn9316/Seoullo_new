@@ -15,6 +15,7 @@ import com.app.seoullo_new.di.DispatcherProvider
 import com.app.seoullo_new.utils.Logging
 import com.app.seoullo_new.view.base.BaseViewModel2
 import com.app.seoullo_new.view.util.DialogState
+import com.app.seoullo_new.view.util.Highlight
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -29,6 +30,7 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.update
 import javax.inject.Inject
 
 @HiltViewModel
@@ -159,6 +161,14 @@ class CommunityDetailViewModel @Inject constructor(
                 started = SharingStarted.WhileSubscribed(5000),
                 initialValue = emptyList()
             )
+
+    // 하이라이트
+    private val _highlight = MutableStateFlow(Highlight())
+    val highlight: StateFlow<Highlight> = _highlight
+
+    fun startReplyTo(commentId: String) {
+        _highlight.update { it.copy(id = commentId, seq = it.seq + 1) }
+    }
 
     fun setTitle(value: String) {
         title.value = value

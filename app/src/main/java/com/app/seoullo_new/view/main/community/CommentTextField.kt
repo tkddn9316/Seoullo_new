@@ -11,6 +11,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.relocation.BringIntoViewRequester
+import androidx.compose.foundation.relocation.bringIntoViewRequester
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
@@ -38,6 +40,7 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
@@ -48,6 +51,7 @@ import com.app.seoullo_new.R
 import com.app.seoullo_new.view.ui.theme.notosansFont
 import com.app.seoullo_new.view.ui.theme.seoulloLightGray
 import com.app.seoullo_new.view.util.CircularProfileImage
+import kotlinx.coroutines.android.awaitFrame
 
 @Composable
 fun CommentTextField(
@@ -61,6 +65,8 @@ fun CommentTextField(
 ) {
     val focusManager = LocalFocusManager.current
     val focusRequester = remember { FocusRequester() }
+    val keyboard = LocalSoftwareKeyboardController.current
+    val bringIntoViewRequester = remember { BringIntoViewRequester() }
 
     // 답글 여부 알림
     if (isReply && targetComment != null) {
@@ -88,10 +94,18 @@ fun CommentTextField(
         }
     }
 
-    LaunchedEffect(key1 = isReply) {
+    LaunchedEffect(
+        key1 = isReply,
+        key2 = targetComment?.id
+    ) {
+        // 리플 모드 ON일 때 키보드 올라오도록
         if (isReply) {
-            // 리플 모드 ON일 때 키보드 올라오도록
+            // 구성 1프레임 후 포커스 -> 키보드 표시 -> 화면 안으로 스크롤
+            awaitFrame()
             focusRequester.requestFocus()
+            keyboard?.show()
+            // 키보드가 가리면 올려주기 (예외 무시)
+            runCatching { bringIntoViewRequester.bringIntoView() }
         }
     }
 
@@ -113,6 +127,7 @@ fun CommentTextField(
             modifier = modifier
                 .fillMaxWidth()
                 .wrapContentHeight()
+                .bringIntoViewRequester(bringIntoViewRequester = bringIntoViewRequester)
                 .focusRequester(focusRequester = focusRequester),
             state = commentTextState,
             textStyle = TextStyle(

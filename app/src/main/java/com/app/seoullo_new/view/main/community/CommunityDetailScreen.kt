@@ -70,9 +70,11 @@ import com.app.seoullo_new.view.base.ErrorScreen
 import com.app.seoullo_new.view.base.LoadingOverlay
 import com.app.seoullo_new.view.base.SeoulloAppBar
 import com.app.seoullo_new.view.util.CircularProfileImage
+import com.app.seoullo_new.view.util.Highlight
 import com.app.seoullo_new.view.util.PagerIndicator
 import com.app.seoullo_new.view.util.advancedImePadding
 import com.skydoves.landscapist.glide.GlideImage
+import kotlinx.coroutines.delay
 
 @Composable
 fun CommunityDetailScreen(
@@ -98,6 +100,9 @@ fun CommunityDetailScreen(
 
     val replyNoticeState by viewModel.replyNoticeState.collectAsStateWithLifecycle()
     val targetComment by viewModel.selectedTargetComment.collectAsStateWithLifecycle()
+
+    // highlight
+    val highlight by viewModel.highlight.collectAsStateWithLifecycle()
 
     Scaffold(
         topBar = {
@@ -128,6 +133,8 @@ fun CommunityDetailScreen(
                                 state = listState,
                                 post = it,
                                 commentList = commentListState,
+                                targetComment = targetComment,
+                                highlight = highlight,
                                 isWriter = writerState,
                                 hasLiked = hasLikedState,
                                 bottomPadding = with(density) { commentBoxHeightPx.intValue.toDp() },
@@ -147,6 +154,7 @@ fun CommunityDetailScreen(
                                 },
                                 onReplyCallback = { targetComment ->
                                     // 답글 달기
+                                    viewModel.startReplyTo(commentId = targetComment.id)
                                     viewModel.openReplyNotice(comment = targetComment)
                                 },
                                 onDeleteReplyClick = { commentId: String, replyId: String ->
@@ -191,6 +199,7 @@ fun CommunityDetailScreen(
             }
         }
 
+        // 댓글 삭제 팝업
         if (dialogState.isDeleteCommentDialogOpen) {
             DeleteCommentDialog(
                 onDone = { viewModel.deleteSelectedComment() },
@@ -198,6 +207,7 @@ fun CommunityDetailScreen(
             )
         }
 
+        // 답글 삭제 팝업
         if (dialogState2.isDeleteReplyDialogOpen) {
             DeleteReplyDialog (
                 onDone = { viewModel.deleteSelectedReply() },
@@ -212,6 +222,8 @@ fun CommunityDetailView(
     state: LazyListState,
     post: Post,
     commentList: List<Comment>,
+    targetComment: Comment?,
+    highlight: Highlight,
     isWriter: Boolean,
     hasLiked: Boolean,
     bottomPadding: Dp = 0.dp,
@@ -224,12 +236,29 @@ fun CommunityDetailView(
     onReplyCallback: (targetComment: Comment) -> Unit,
 ) {
     var previousSize by remember { mutableIntStateOf(commentList.size) }
-    LaunchedEffect(commentList.size) {
+    LaunchedEffect(key1 = commentList.size) {
         if (commentList.size > previousSize) {
             // 새로운 댓글이 추가되었을 때만
-            state.scrollToItem(commentList.size)
+            state.animateScrollToItem(commentList.size)
         }
         previousSize = commentList.size
+    }
+
+    LaunchedEffect(
+        key1 = targetComment?.id,
+        key2 = commentList
+    ) {
+        val targetId = targetComment?.id ?: return@LaunchedEffect
+        val idx = commentList.indexOfFirst { it.id == targetId }
+        if (idx >= 0) {
+            // 이미 보이면 생략하고, 안 보일 때만 스크롤
+//            val visible = state.layoutInfo.visibleItemsInfo.any { it.index == idx }
+//            if (!visible) {
+//                state.animateScrollToItem(idx) // or scrollToItem(idx)
+//            }
+            delay(160)
+            state.animateScrollToItem(idx)
+        }
     }
 
     LazyColumn(
@@ -476,6 +505,8 @@ fun CommunityDetailView(
             ) {
                 CommentList(
                     item = comment,
+                    isHighlighted = (comment.id == highlight.id) && (comment.id == targetComment?.id),
+                    triggerSeq = highlight.seq,
                     onReplyCallback = { targetComment -> onReplyCallback(targetComment) },
                     onDeleteCommentClick = { commentId -> onDeleteCommentClick(commentId) },
                     onDeleteReplyClick = { commentId, replyId -> onDeleteReplyClick(commentId, replyId) }
