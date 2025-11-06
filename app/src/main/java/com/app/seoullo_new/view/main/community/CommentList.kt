@@ -1,18 +1,17 @@
 package com.app.seoullo_new.view.main.community
 
 import androidx.compose.animation.Animatable
-import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.WatchLater
 import androidx.compose.material.icons.outlined.Close
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -23,7 +22,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.PlatformTextStyle
@@ -86,21 +84,25 @@ fun CommentList(
                     .padding(start = 10.dp)
                     .weight(1f)
             ) {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    // 작성자
-                    Text(
-                        text = if (isDeleted) "" else item.authorName,
-                        fontSize = 12.sp,
-                        style = TextStyle(
-                            lineHeight = 12.sp,
-                            platformStyle = PlatformTextStyle(includeFontPadding = false)
-                        )
+                // 작성자
+                Text(
+                    text = if (isDeleted) "-" else item.authorName,
+                    fontSize = 12.sp,
+                    style = TextStyle(
+                        lineHeight = 12.sp,
+                        platformStyle = PlatformTextStyle(includeFontPadding = false)
                     )
+                )
 
-                    if (!isDeleted) {
-                        Spacer(modifier = modifier.padding(start = 10.dp))
-                    }
-
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Icon(
+                        imageVector = Icons.Filled.WatchLater,
+                        tint = MaterialTheme.colorScheme.outline,
+                        modifier = modifier
+                            .size(16.dp)
+                            .padding(end = 4.dp),
+                        contentDescription = null
+                    )
                     Text(
                         text = Util.getCurrentDateAndTime(item.createdAt),
                         fontSize = 12.sp,

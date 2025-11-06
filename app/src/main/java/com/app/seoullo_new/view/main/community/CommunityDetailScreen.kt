@@ -81,7 +81,8 @@ import kotlinx.coroutines.delay
 @Composable
 fun CommunityDetailScreen(
     viewModel: CommunityDetailViewModel = hiltViewModel(),
-    onNavigationClick: () -> Unit
+    onNavigationClick: () -> Unit,
+    onPostModifyClick: (postId: String) -> Unit
 ) {
     val context = LocalContext.current
     val listState = rememberLazyListState()
@@ -94,6 +95,7 @@ fun CommunityDetailScreen(
     val hasLikedState by viewModel.hasLiked.collectAsStateWithLifecycle()
     val userInfo by viewModel.user.collectAsStateWithLifecycle()
     val commentTextState = rememberTextFieldState()
+    val likeState by viewModel.likeState.collectAsStateWithLifecycle()
 
     val commentBoxHeightPx = remember { mutableIntStateOf(0) }
     val density = LocalDensity.current
@@ -145,8 +147,9 @@ fun CommunityDetailScreen(
                                 bottomPadding = with(density) { commentBoxHeightPx.intValue.toDp() },
                                 onPostModifyClick = { postId ->
                                     // 게시글 수정
+                                    onPostModifyClick(postId)
                                 },
-                                onPostDeleteClick = { postId ->
+                                onPostDeleteClick = {
                                     // 게시글 삭제
                                     viewModel.openPostDeleteDialog()
                                 },
@@ -207,22 +210,25 @@ fun CommunityDetailScreen(
                 }
             }
 
-            when (val s = deletePostState) {
-                is ApiState.Loading -> {
-                    // API 로딩 처리
-                    LoadingOverlay()
-                }
+            // 둘 중 하나라도 로딩이면 오버레이 표시
+            val loading = (deletePostState is ApiState.Loading) || (likeState is ApiState.Loading)
+            if (loading) {
+                LoadingOverlay()
+            }
 
-                is ApiState.Success -> {
-                    onNavigationClick()
+            LaunchedEffect(key1 = deletePostState) {
+                when (deletePostState) {
+                    is ApiState.Success<*> -> onNavigationClick()
+                    is ApiState.Error -> {
+                        Toast.makeText(context, deletePostState.message.orEmpty(), Toast.LENGTH_SHORT).show()
+                    }
+                    else -> Unit
                 }
-
-                is ApiState.Error -> {
-                    val error = s.message.orEmpty()
-                    Toast.makeText(context, error, Toast.LENGTH_SHORT).show()
+            }
+            LaunchedEffect(key1 = likeState) {
+                if (likeState is ApiState.Error) {
+                    Toast.makeText(context, likeState.message.orEmpty(), Toast.LENGTH_SHORT).show()
                 }
-
-                else -> {}
             }
         }
 
@@ -267,7 +273,7 @@ fun CommunityDetailView(
     bottomPadding: Dp = 0.dp,
     modifier: Modifier = Modifier,
     onPostModifyClick: (postId: String) -> Unit,
-    onPostDeleteClick: (postId: String) -> Unit,
+    onPostDeleteClick: () -> Unit,
     onDeleteCommentClick: (commentId: String) -> Unit,
     onDeleteReplyClick: (commentId: String, replyId: String) -> Unit,
     onLikeClick: (postId: String) -> Unit,
@@ -320,7 +326,9 @@ fun CommunityDetailView(
                 )
 
                 Column(
-                    modifier = modifier.padding(start = 10.dp)
+                    modifier = modifier
+                        .padding(start = 10.dp)
+                        .weight(1f)
                 ) {
                     // 작성자
                     Text(
@@ -358,8 +366,6 @@ fun CommunityDetailView(
                 if (isWriter) {
                     var isDropDownMenuExpanded by remember { mutableStateOf(false) }
 
-                    Spacer(modifier = modifier.weight(1f))
-
                     Box {
                         IconButton(
                             onClick = { isDropDownMenuExpanded = true }
@@ -391,7 +397,7 @@ fun CommunityDetailView(
                                 },
                                 onClick = {
                                     isDropDownMenuExpanded = false
-                                    onPostDeleteClick(post.id)
+                                    onPostDeleteClick()
                                 }
                             )
                         }

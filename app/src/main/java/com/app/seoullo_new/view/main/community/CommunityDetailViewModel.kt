@@ -14,7 +14,6 @@ import com.app.domain.usecase.community.ObservePostsUseCase
 import com.app.domain.usecase.community.PostUseCase
 import com.app.domain.usecase.user.SelectUserUseCase
 import com.app.seoullo_new.di.DispatcherProvider
-import com.app.seoullo_new.utils.Logging
 import com.app.seoullo_new.view.base.BaseViewModel2
 import com.app.seoullo_new.view.util.DialogState
 import com.app.seoullo_new.view.util.Highlight
@@ -130,6 +129,9 @@ class CommunityDetailViewModel @Inject constructor(
     private val _hasLiked = MutableStateFlow(false)
     val hasLiked: StateFlow<Boolean> = _hasLiked
 
+    private val _likeState = MutableStateFlow<ApiState<Unit>>(ApiState.Initial())
+    val likeState = _likeState.asStateFlow()
+
     val user: StateFlow<User> =
         selectUserUseCase()
             .flowOn(Dispatchers.IO)
@@ -204,11 +206,19 @@ class CommunityDetailViewModel @Inject constructor(
         if (this.postId == postId) {
             onIO {
                 if (_hasLiked.value) {
-                    likePostUseCase.unlike(postId = postId, user = user.value)
-                        .onFailure { e -> Logging.e("좋아요 실패: ${e.message}") }
+                    likePostUseCase.unlike(
+                        postId = postId,
+                        user = user.value
+                    ).collect {
+                        _likeState.value = it
+                    }
                 } else {
-                    likePostUseCase.like(postId = postId, user = user.value)
-                        .onFailure { e -> Logging.e("좋아요 실패: ${e.message}") }
+                    likePostUseCase.like(
+                        postId = postId,
+                        user = user.value
+                    ).collect {
+                        _likeState.value = it
+                    }
                 }
                 checkIsLike(postId = postId)
             }

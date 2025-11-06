@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.input.TextFieldLineLimits
+import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.material3.Button
 import androidx.compose.material3.HorizontalDivider
@@ -22,10 +23,13 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
@@ -37,6 +41,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.app.domain.model.common.ApiState
+import com.app.domain.model.community.Post
 import com.app.seoullo_new.R
 import com.app.seoullo_new.utils.Logging
 import com.app.seoullo_new.view.base.LoadingOverlay
@@ -53,10 +58,14 @@ fun CommunityAddScreen(
     val context = LocalContext.current
     val addPostState by viewModel.addPostState.collectAsStateWithLifecycle()
 
+    // 게시글 수정 관련
+    val isEditState by viewModel.isEditState.collectAsStateWithLifecycle()
+    val postState by viewModel.postState.collectAsStateWithLifecycle()      // val postState: Post
+
     Scaffold(
         topBar = {
             SeoulloAppBar(
-                title = stringResource(R.string.add_post_title),
+                title = stringResource(if (isEditState) R.string.edit_post_title else R.string.add_post_title),
                 onNavigationClick = onNavigationClick,
                 showAction = false,
             ) { }
@@ -69,7 +78,9 @@ fun CommunityAddScreen(
                 modifier = Modifier.fillMaxSize()
             ) {
                 CommunityAddView(
-                    viewModel = viewModel
+                    viewModel = viewModel,
+                    post = postState,
+                    isEdit = isEditState
                 )
 
                 when (val s = addPostState) {
@@ -97,7 +108,9 @@ fun CommunityAddScreen(
 @Composable
 fun CommunityAddView(
     viewModel: CommunityAddViewModel = hiltViewModel(),
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    post: Post?,
+    isEdit: Boolean
 ) {
     // picker
     val picker =
@@ -123,6 +136,25 @@ fun CommunityAddView(
     val focusManager = LocalFocusManager.current
     val titleText = rememberTextFieldState()
     val contentText = rememberTextFieldState()
+
+    // 게시글 수정 관련(불러오기)
+    var prefilled by remember(
+        key1 = isEdit,
+        key2 = post?.id
+    ) {
+        mutableStateOf(false)
+    }
+    LaunchedEffect(
+        key1 = isEdit,
+        key2 = post?.id
+    ) {
+        if (isEdit && post != null && !prefilled) {
+            titleText.overwrite(text = post.title)
+            contentText.overwrite(text = post.content)
+            viewModel.setInitialRemoteImages(post.imageUrls)
+            prefilled = true
+        }
+    }
 
     Column(
         modifier = Modifier
@@ -231,16 +263,30 @@ fun CommunityAddView(
             shape = RoundedCornerShape(10.dp),
             onClick = {
                 focusManager.clearFocus()
-                viewModel.addPost(
-                    title = titleText.text.toString(),
-                    content = contentText.text.toString()
-                )
+                if (!isEdit) {
+                    viewModel.addPost(
+                        title = titleText.text.toString(),
+                        content = contentText.text.toString()
+                    )
+                } else {
+                    viewModel.updatePost(
+                        title = titleText.text.toString(),
+                        content = contentText.text.toString()
+                    )
+                }
+
             }
         ) {
             Text(
                 text = stringResource(R.string.add_post_summit)
             )
         }
+    }
+}
+
+private fun TextFieldState.overwrite(text: String) {
+    edit {
+        replace(0, length, text)
     }
 }
 

@@ -8,6 +8,7 @@ import com.app.domain.model.common.ApiState
 import com.app.domain.repository.BoardRepository
 import com.google.gson.JsonSyntaxException
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import java.io.IOException
 import javax.inject.Inject
@@ -46,6 +47,38 @@ class PostUseCase @Inject constructor(private val repository: BoardRepository) {
             emit(ApiState.Error(errorMessage))
         }
     }
+
+    fun updatePost(
+        user: User,
+        postId: String,
+        title: String,
+        content: String,
+        keptRemoteUrls: List<String>,
+        newLocalUris: List<Uri>,
+        deleteRemoved: Boolean
+    ): Flow<ApiState<String>> = flow {
+        emit(ApiState.Loading())
+
+        repository.updatePost(
+            user = user,
+            postId = postId,
+            title = title,
+            content = content,
+            keptRemoteUrls = keptRemoteUrls,
+            newLocalUris = newLocalUris,
+            deleteRemoved = deleteRemoved
+        ).collect {
+            emit(ApiState.Success(it))
+        }
+    }.catch { e ->
+        val errorMessage = when (e) {
+            is IOException -> "Network Error: ${e.message}"
+            is JsonSyntaxException -> "Parsing error: Received non-JSON response (possibly HTML)."
+            else -> "Exception: ${e.message}"
+        }
+        emit(ApiState.Error(errorMessage))
+    }
+
 
     fun deletePost(postId: String): Flow<ApiState<DeletionResult>> = flow {
         emit(ApiState.Loading())

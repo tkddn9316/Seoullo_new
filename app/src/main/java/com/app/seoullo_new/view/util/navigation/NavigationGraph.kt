@@ -107,13 +107,15 @@ fun NavGraphBuilder.mainScreenNavigation(navController: NavHostController) {
                 navController.navigate(Route.placeListParameter(itemJson))
             },
             communityOnClick = { route, postId ->
-                // TODO: 게시글 세부 화면/글쓰기 화면 이동 필요(추후)
-                val newRoute = if (postId.isNotEmpty()) {
+                val newRoute = if (!postId.isNullOrEmpty()) {
                     Route.DETAIL_POST.replace("{postId}", postId)
                 } else {
-                    route
+                    Route.addPost()
                 }
-                navController.navigate(newRoute)
+                navController.navigate(newRoute) {
+                    launchSingleTop = true
+                    restoreState = true
+                }
             },
             settingOnClick = { route ->
                 when (route) {
@@ -213,18 +215,35 @@ fun NavGraphBuilder.travelScreenNavigation(navController: NavHostController) {
 }
 
 fun NavGraphBuilder.communityNavigation(navController: NavHostController) {
-    composable(Route.ADD_POST) {
+    composable(
+        route = Route.ADD_OR_EDIT_POST,
+        arguments = listOf(
+            navArgument("postId") {
+                type = NavType.StringType
+                nullable = true         // null 이면 ADD 모드
+                defaultValue = null
+            }
+        )
+    ) {
         CommunityAddScreen(
             onNavigationClick = { navController.navigateUp() },
             addPostOnClick = { navController.navigateUp() }
         )
     }
     composable(
-        Route.DETAIL_POST,
+        route = Route.DETAIL_POST,
         arguments = listOf(navArgument(("postId")) { type = NavType.StringType })
     ) {
         CommunityDetailScreen(
-            onNavigationClick = { navController.navigateUp() }
+            onNavigationClick = { navController.navigateUp() },
+            onPostModifyClick = { postId ->
+                navController.navigate(
+                    Route.editPost(postId = postId)
+                ) {
+                    launchSingleTop = true
+                    restoreState = true
+                }
+            }
         )
     }
 }

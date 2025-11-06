@@ -29,7 +29,7 @@ import com.app.seoullo_new.view.util.navigation.Route
 @Composable
 fun CommunityScreen(
     viewModel: CommunityViewModel = hiltViewModel(),
-    communityOnClick: (destination: String, postId: String) -> Unit
+    communityOnClick: (destination: String, postId: String?) -> Unit
 ) {
     val postListState by viewModel.posts.collectAsStateWithLifecycle()
 
@@ -39,7 +39,7 @@ fun CommunityScreen(
             FloatingActionButton(
                 shape = CircleShape,
                 containerColor = MaterialTheme.colorScheme.primary,
-                onClick = { communityOnClick(Route.ADD_POST, "") }
+                onClick = { communityOnClick(Route.ADD_OR_EDIT_POST, null) }
             ) {
                 Icon(
                     imageVector = Icons.Rounded.Edit,

@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.SubdirectoryArrowRight
+import androidx.compose.material.icons.filled.WatchLater
 import androidx.compose.material.icons.outlined.Close
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -53,25 +54,30 @@ fun ReplyList(
             size = 30.dp
         )
 
-
         Column(
             modifier = modifier
                 .padding(start = 10.dp)
                 .weight(1f)
         ) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                // 작성자
-                Text(
-                    text = item.authorName,
-                    fontSize = 12.sp,
-                    style = TextStyle(
-                        lineHeight = 12.sp,
-                        platformStyle = PlatformTextStyle(includeFontPadding = false)
-                    )
+            // 작성자
+            Text(
+                text = item.authorName,
+                fontSize = 12.sp,
+                style = TextStyle(
+                    lineHeight = 12.sp,
+                    platformStyle = PlatformTextStyle(includeFontPadding = false)
                 )
+            )
 
-                Spacer(modifier = modifier.padding(start = 10.dp))
-
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Icon(
+                    imageVector = Icons.Filled.WatchLater,
+                    tint = MaterialTheme.colorScheme.outline,
+                    modifier = modifier
+                        .size(16.dp)
+                        .padding(end = 4.dp),
+                    contentDescription = null
+                )
                 Text(
                     text = Util.getCurrentDateAndTime(item.createdAt),
                     fontSize = 12.sp,

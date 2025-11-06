@@ -72,7 +72,7 @@ fun MainScreen(
     viewModel: MainViewModel = hiltViewModel(),
     watchedOnClick: (places: String, isNearby: String) -> Unit,
     travelOnClick: (TravelJsonItemData) -> Unit,
-    communityOnClick: (destination: String, postId: String) -> Unit,
+    communityOnClick: (destination: String, postId: String?) -> Unit,
     settingOnClick: (String) -> Unit
 ) {
     BackOnPressed()

@@ -15,7 +15,7 @@ class CommentUseCase @Inject constructor(private val boardRepository: BoardRepos
         postId: String,
         user: User,
         text: String
-    ): Flow<ApiState<String>> = flow {
+    ): Flow<ApiState<Unit>> = flow {
         emit(ApiState.Loading())
 
         if (text.isBlank()) {
@@ -48,7 +48,7 @@ class CommentUseCase @Inject constructor(private val boardRepository: BoardRepos
             postId = postId,
             commentId = commentId
         ).collect {
-            emit(ApiState.Success(Unit))
+            emit(ApiState.Success(it))
         }
     }.catch { e ->
         val errorMessage = when (e) {
@@ -64,7 +64,7 @@ class CommentUseCase @Inject constructor(private val boardRepository: BoardRepos
         commentId: String,
         user: User,
         text: String
-    ): Flow<ApiState<String>> = flow {
+    ): Flow<ApiState<Unit>> = flow {
         emit(ApiState.Loading())
 
         if (text.isBlank()) {

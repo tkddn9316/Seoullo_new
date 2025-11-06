@@ -77,6 +77,60 @@ class BoardRepositoryImpl @Inject constructor(
         emit(postId)
     }
 
+    /**
+     * @param postId           수정할 게시글 ID
+     * @param title            최종 제목
+     * @param content          최종 내용
+     * @param keptRemoteUrls   기존 원격 이미지 중 유지할 것들(URL)
+     * @param newLocalUris     이번에 새로 추가된 로컬 이미지 URI 목록
+     * @param deleteRemoved    true면 기존에서 빠진 원격 이미지는 Storage에서 삭제 시도
+     */
+    override suspend fun updatePost(
+        user: User,
+        postId: String,
+        title: String,
+        content: String,
+        keptRemoteUrls: List<String>,
+        newLocalUris: List<Uri>,
+        deleteRemoved: Boolean
+    ): Flow<String> = flow {
+        val rawUid = auth.currentUser?.uid
+        val authId = if (!rawUid.isNullOrBlank()) rawUid else user.tokenId
+        val postRef = boardRef.document(postId)
+
+        val snap = postRef.get().await()
+        if (!snap.exists()) throw IllegalArgumentException("Post not found")
+
+        val authorId = snap.getString("authorId") ?: ""
+        if (authorId != authId) throw SecurityException("Only author can edit")
+
+        val oldUrls: List<String> = (snap.get("imageUrls") as? List<*>)?.filterIsInstance<String>().orEmpty()
+        val uploadedUrls = uploadPostImages(postId, newLocalUris)
+        val finalUrls = (keptRemoteUrls + uploadedUrls).distinct()
+
+        val updates = mapOf(
+            "title" to title,
+            "content" to content,
+            "imageUrls" to finalUrls
+        )
+        // 업데이트
+        postRef.update(updates).await()
+
+        // 이미지 삭제한거 있으면 storage 반영
+        if (deleteRemoved) {
+            val removed = oldUrls.toSet() - keptRemoteUrls.toSet()
+            coroutineScope {
+                removed.map { url ->
+                    async(Dispatchers.IO) {
+                        runCatching { storage.getReferenceFromUrl(url).delete().await() }
+                    }
+                }.awaitAll()
+            }
+        }
+
+        emit(postId)
+    }
+
     override suspend fun deletePost(postId: String): Result<DeletionResult> = runCatching {
         val result = functions
             .getHttpsCallable("deletePost")
@@ -105,7 +159,7 @@ class BoardRepositoryImpl @Inject constructor(
             .map { it?.toPost() }
 
     // 댓글 달기
-    override suspend fun addComment(postId: String, user: User, text: String): Flow<String> = flow {
+    override suspend fun addComment(postId: String, user: User, text: String): Flow<Unit> = flow {
         val postRef = boardRef.document(postId)
         val commentRef = postRef.collection("comments").document()
         val comment = Comment(
@@ -122,7 +176,7 @@ class BoardRepositoryImpl @Inject constructor(
             batch.update(postRef, "commentCount", FieldValue.increment(1))
         }.await()
 
-        emit(commentRef.id)
+        emit(Unit)
     }
 
     // 댓글 삭제
@@ -165,7 +219,7 @@ class BoardRepositoryImpl @Inject constructor(
         commentId: String,
         user: User,
         text: String
-    ): Flow<String> = flow {
+    ): Flow<Unit> = flow {
         val postRef = boardRef.document(postId)
         val replyRef = postRef
             .collection("comments")
@@ -186,7 +240,7 @@ class BoardRepositoryImpl @Inject constructor(
             batch.update(postRef, "commentCount", FieldValue.increment(1))
         }.await()
 
-        emit(replyRef.id)
+        emit(Unit)
     }
 
     // 답글 삭제
@@ -262,7 +316,7 @@ class BoardRepositoryImpl @Inject constructor(
     }
 
     // 좋아요 올리기
-    override suspend fun like(postId: String, user: User) {
+    override suspend fun like(postId: String, user: User): Flow<Unit> = flow {
         val authId = auth.currentUser?.uid ?: user.tokenId
         val data = mapOf(
             "authorId" to authId,
@@ -282,10 +336,12 @@ class BoardRepositoryImpl @Inject constructor(
             tx.update(postRef, "likeCount", cur + 1)
             tx.set(likeRef, data)
         }.await()
+
+        emit(Unit)
     }
 
     // 좋아요 삭제
-    override suspend fun unlike(postId: String, user: User) {
+    override suspend fun unlike(postId: String, user: User): Flow<Unit> = flow {
         val authId = auth.currentUser?.uid ?: user.tokenId
         val postRef = boardRef.document(postId)
 
@@ -301,6 +357,8 @@ class BoardRepositoryImpl @Inject constructor(
             tx.update(postRef, "likeCount", (cur - 1).coerceAtLeast(0))
             tx.delete(likeRef)
         }.await()
+
+        emit(Unit)
     }
 
     // 이미지 업로드
