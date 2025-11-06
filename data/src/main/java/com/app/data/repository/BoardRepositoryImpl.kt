@@ -210,7 +210,9 @@ class BoardRepositoryImpl @Inject constructor(
             } else {
                 tx.delete(commentRef)
             }
-        }
+        }.await()
+
+        emit(Unit)
     }
 
     // 답글 달기

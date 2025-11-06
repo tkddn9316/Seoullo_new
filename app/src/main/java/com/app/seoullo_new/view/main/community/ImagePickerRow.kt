@@ -1,6 +1,5 @@
 package com.app.seoullo_new.view.main.community
 
-import android.net.Uri
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box

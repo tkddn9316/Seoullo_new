@@ -15,7 +15,10 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
@@ -25,6 +28,7 @@ import com.app.domain.model.common.ApiState
 import com.app.seoullo_new.view.base.ErrorScreen
 import com.app.seoullo_new.view.base.LoadingOverlay
 import com.app.seoullo_new.view.util.navigation.Route
+import kotlinx.coroutines.delay
 
 @Composable
 fun CommunityScreen(
@@ -32,6 +36,18 @@ fun CommunityScreen(
     communityOnClick: (destination: String, postId: String?) -> Unit
 ) {
     val postListState by viewModel.posts.collectAsStateWithLifecycle()
+    val hasFirstLoaded by viewModel.hasFirstPostLoaded.collectAsStateWithLifecycle()
+    val lazyListState = rememberLazyListState()
+    val hasScrolled = rememberSaveable { mutableStateOf(false) }
+
+    // 최초 1회만 스크롤 이동 제어
+    LaunchedEffect(hasFirstLoaded) {
+        if (hasFirstLoaded && !hasScrolled.value) {
+            delay(150)
+            lazyListState.scrollToItem(0)
+            hasScrolled.value = true
+        }
+    }
 
     Scaffold(
         contentWindowInsets = WindowInsets(0),
@@ -61,7 +77,7 @@ fun CommunityScreen(
                         modifier = Modifier.padding(innerPadding),
                         contentPadding = PaddingValues(16.dp),
                         verticalArrangement = Arrangement.spacedBy(8.dp),
-                        state = rememberLazyListState()
+                        state = lazyListState
                     ) {
                         items(
                             items = postList,

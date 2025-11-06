@@ -17,7 +17,7 @@ import {getStorage} from "firebase-admin/storage";
 
 if (!admin.apps.length) {
   admin.initializeApp({
-    storageBucket: "seoullo-new.appspot.com",
+    storageBucket: "seoullo-new.firebasestorage.app",
   });
 }
 
