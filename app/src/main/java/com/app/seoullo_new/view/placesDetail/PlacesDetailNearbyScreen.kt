@@ -73,7 +73,9 @@ fun PlaceDetailNearbyScreen(
                         // DB 넣기(리스트에서 진입했을 경우만)
                         if (placesState.languageCode.isEmpty()) {
                             viewModel.insertTodayWatchedList(
-                                data = placesState, isNearby = true, languageCode = getLanguageCode(
+                                data = placesState,
+                                isNearby = true,
+                                languageCode = getLanguageCode(
                                     context = context, language = language
                                 )
                             )

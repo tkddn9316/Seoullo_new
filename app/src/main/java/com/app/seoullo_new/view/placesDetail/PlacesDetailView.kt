@@ -17,7 +17,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Directions
@@ -25,7 +24,6 @@ import androidx.compose.material.icons.filled.Language
 import androidx.compose.material.icons.filled.NearMe
 import androidx.compose.material.icons.filled.Phone
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
@@ -62,6 +60,7 @@ import com.app.seoullo_new.utils.Util.getCurrentDate
 import com.app.seoullo_new.view.ui.theme.Color_ERROR
 import com.app.seoullo_new.view.ui.theme.notosansFont
 import com.app.seoullo_new.view.util.CircularProfileImage
+import com.app.seoullo_new.view.util.ConvergeButton
 import com.app.seoullo_new.view.util.RatingBar
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
@@ -186,13 +185,7 @@ fun PlacesDetailView(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.Center      // 중앙 정렬
             ) {
-                Button(
-                    modifier = Modifier.fillMaxWidth(0.5f),
-                    shape = RoundedCornerShape(6.dp),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = MaterialTheme.colorScheme.surfaceVariant,
-                        contentColor = MaterialTheme.colorScheme.onBackground
-                    ),
+                ConvergeButton(
                     onClick = {
                         val directionRequest = DirectionRequest(
                             lat = placesDetail.latitude,
@@ -203,17 +196,21 @@ fun PlacesDetailView(
                         val json = Json.encodeToString(directionRequest)
                         val encodedJson = Uri.encode(json)
                         onDirectionClick(encodedJson)
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth(0.5f)
+                        .height(64.dp),
+                    label = {
+                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                            Icon(
+                                imageVector = Icons.Filled.Directions,
+                                contentDescription = null
+                            )
+                            Spacer(modifier = Modifier.width(8.dp))
+                            Text(text = stringResource(R.string.direction_title))
+                        }
                     }
-                ) {
-                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                        Icon(
-                            imageVector = Icons.Filled.Directions,
-                            contentDescription = null
-                        )
-                        Spacer(modifier = Modifier.width(8.dp))
-                        Text(text = stringResource(R.string.direction_title))
-                    }
-                }
+                )
             }
 
             Spacer(modifier = Modifier.height(8.dp))

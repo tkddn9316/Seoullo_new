@@ -12,12 +12,10 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.input.TextFieldLineLimits
 import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.foundation.text.input.rememberTextFieldState
-import androidx.compose.material3.Button
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -47,6 +45,7 @@ import com.app.seoullo_new.utils.Logging
 import com.app.seoullo_new.view.base.LoadingOverlay
 import com.app.seoullo_new.view.base.SeoulloAppBar
 import com.app.seoullo_new.view.ui.theme.seoulloLightGray
+import com.app.seoullo_new.view.util.ConvergeButton
 import com.app.seoullo_new.view.util.advancedImePadding
 
 @Composable
@@ -258,9 +257,7 @@ fun CommunityAddView(
             }
         }
 
-        Button(
-            modifier = modifier.fillMaxWidth(),
-            shape = RoundedCornerShape(10.dp),
+        ConvergeButton(
             onClick = {
                 focusManager.clearFocus()
                 if (!isEdit) {
@@ -274,13 +271,16 @@ fun CommunityAddView(
                         content = contentText.text.toString()
                     )
                 }
-
-            }
-        ) {
-            Text(
-                text = stringResource(R.string.add_post_summit)
-            )
-        }
+            },
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(48.dp),
+            label = {
+                Text(
+                    text = stringResource(R.string.add_post_summit)
+                )
+            },
+        )
     }
 }
 

@@ -10,6 +10,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -47,6 +49,7 @@ import com.app.seoullo_new.utils.Constants.TODAY_WATCHED_LIST_VISIBILITY_SIZE
 import com.app.seoullo_new.utils.Logging
 import com.app.seoullo_new.view.ui.theme.Color_ERROR
 import com.app.seoullo_new.view.ui.theme.notosansFont
+import com.app.seoullo_new.view.util.ConvergeButton
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import com.skydoves.landscapist.glide.GlideImage
@@ -85,58 +88,27 @@ fun TodayWatchedList(
             )
             if (list.size > TODAY_WATCHED_LIST_VISIBILITY_SIZE) {
                 Spacer(modifier = modifier.weight(1f))
-                Button(
-                    modifier = modifier.padding(start = 6.dp),
+                ConvergeButton(
+                    onClick = viewModel::openTodayWatchedListDialog,
+                    modifier = modifier
+                        .width(95.dp)
+                        .padding(start = 6.dp),
                     shape = RoundedCornerShape(8.dp),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = Color.White.copy(alpha = 0.2f)
-                    ),
-                    onClick = viewModel::openTodayWatchedListDialog
-
-//                    onClick = {
-//                        val review = PlacesDetailReview(
-//                            text = "aaaaaaaaaaaaaaa",
-//                            category = "1",
-//                            contentId = "1",
-//                            contentTypeId = "1",
-//                            profileName = "1",
-//                            profilePhotoUrl = "1",
-//                            rating = 1,
-//                        )
-//                        val db = Firebase.firestore("seoullo-places-review-database")
-//                        db.collection("reviews")
-//                            .document("흠")      // TODO: 게시글 이름
-//                            .collection("review")
-//                            .add(review)
-//                            .addOnSuccessListener {
-//                                Logging.e("성공")
-//                                db.collection("reviews")
-//                                    .document("흠")
-//                                    .collection("review")
-//                                    .get()
-//                                    .addOnSuccessListener { result ->
-//                                        for (document in result) {
-//                                            Logging.e("${document.id} => ${document.data}")
-//                                        }
-//                                    }
-//                                    .addOnFailureListener {
-//                                        Logging.e(it.message ?: "")
-//                                    }
-//                            }
-//                            .addOnFailureListener { Logging.e("실패 ${it.message}") }
-//                    }
-                ) {
-                    BasicText(
-                        text = stringResource(R.string.see_more),
-                        color = { Color.White },
-                        maxLines = 1,
-                        autoSize = TextAutoSize.StepBased(
-                            minFontSize = 2.sp,
-                            maxFontSize = 14.sp,
-                            stepSize = 2.sp
+                    containerColor = Color.White.copy(alpha = 0.2f),
+                    pressedColor = Color.Black.copy(alpha = 0.1f),
+                    label = {
+                        BasicText(
+                            text = stringResource(R.string.see_more),
+                            color = { Color.White },
+                            maxLines = 1,
+                            autoSize = TextAutoSize.StepBased(
+                                minFontSize = 2.sp,
+                                maxFontSize = 14.sp,
+                                stepSize = 2.sp
+                            )
                         )
-                    )
-                }
+                    }
+                )
             }
         }
 

@@ -16,7 +16,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccessTime
@@ -60,6 +59,7 @@ import com.app.seoullo_new.view.ui.theme.Color_ERROR
 import com.app.seoullo_new.view.ui.theme.colorRatingStar
 import com.app.seoullo_new.view.ui.theme.notosansFont
 import com.app.seoullo_new.view.util.CircularProfileImage
+import com.app.seoullo_new.view.util.ConvergeButton
 import com.app.seoullo_new.view.util.RatingBar
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
@@ -217,13 +217,7 @@ fun PlacesDetailNearbyView(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.Center      // 중앙 정렬
             ) {
-                Button(
-                    modifier = Modifier.fillMaxWidth(0.5f),
-                    shape = RoundedCornerShape(6.dp),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = MaterialTheme.colorScheme.surfaceVariant,
-                        contentColor = MaterialTheme.colorScheme.onBackground
-                    ),
+                ConvergeButton(
                     onClick = {
                         val directionRequest = DirectionRequest(
                             lat = placesDetail.latitude,
@@ -234,17 +228,21 @@ fun PlacesDetailNearbyView(
                         val json = Json.encodeToString(directionRequest)
                         val encodedJson = Uri.encode(json)
                         onDirectionClick(encodedJson)
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth(0.5f)
+                        .height(64.dp),
+                    label = {
+                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                            Icon(
+                                imageVector = Icons.Filled.Directions,
+                                contentDescription = null
+                            )
+                            Spacer(modifier = Modifier.width(8.dp))
+                            Text(text = stringResource(R.string.direction_title))
+                        }
                     }
-                ) {
-                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                        Icon(
-                            imageVector = Icons.Filled.Directions,
-                            contentDescription = null
-                        )
-                        Spacer(modifier = Modifier.width(8.dp))
-                        Text(text = stringResource(R.string.direction_title))
-                    }
-                }
+                )
             }
 
             Spacer(modifier = Modifier.height(8.dp))
