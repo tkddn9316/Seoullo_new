@@ -1,4 +1,4 @@
-package com.app.seoullo_new.view.main.community
+package com.app.seoullo_new.view.main.community.detail
 
 import androidx.compose.animation.Animatable
 import androidx.compose.animation.core.tween
@@ -53,7 +53,11 @@ fun CommentList(
     val highlightColor = MaterialTheme.colorScheme.secondary.copy(alpha = 0.20f)
     val bgAnim = remember(item.id) { Animatable(Color.Transparent) }
 
-    LaunchedEffect(isHighlighted, triggerSeq, item.id) {
+    LaunchedEffect(
+        key1 = isHighlighted,
+        key2 = triggerSeq,
+        key3 = item.id
+    ) {
         if (isHighlighted) {
             bgAnim.snapTo(Color.Transparent)
             bgAnim.animateTo(highlightColor, tween(160))
@@ -104,7 +108,7 @@ fun CommentList(
                         contentDescription = null
                     )
                     Text(
-                        text = Util.getCurrentDateAndTime(item.createdAt),
+                        text = Util.getCurrentDateAndTime(timestamp = item.createdAt),
                         fontSize = 12.sp,
                         style = TextStyle(
                             lineHeight = 12.sp,

@@ -16,8 +16,8 @@ import androidx.navigation.compose.navigation
 import androidx.navigation.navArgument
 import com.app.seoullo_new.utils.Constants.VALUE_YES
 import com.app.seoullo_new.view.main.MainScreen
-import com.app.seoullo_new.view.main.community.CommunityAddScreen
-import com.app.seoullo_new.view.main.community.CommunityDetailScreen
+import com.app.seoullo_new.view.main.community.add.CommunityAddScreen
+import com.app.seoullo_new.view.main.community.detail.CommunityDetailScreen
 import com.app.seoullo_new.view.main.setting.LicenseScreen
 import com.app.seoullo_new.view.map.DirectionScreen
 import com.app.seoullo_new.view.placesDetail.PlaceDetailNearbyScreen

@@ -1,4 +1,4 @@
-package com.app.seoullo_new.view.main.community
+package com.app.seoullo_new.view.main.community.add
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement

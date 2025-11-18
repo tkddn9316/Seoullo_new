@@ -1,4 +1,4 @@
-package com.app.seoullo_new.view.main.community
+package com.app.seoullo_new.view.main.community.add
 
 import android.os.Build
 import android.widget.Toast

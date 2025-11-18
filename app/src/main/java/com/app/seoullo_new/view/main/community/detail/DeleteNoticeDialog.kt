@@ -1,4 +1,4 @@
-package com.app.seoullo_new.view.main.community
+package com.app.seoullo_new.view.main.community.detail
 
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ButtonDefaults

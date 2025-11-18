@@ -1,4 +1,4 @@
-package com.app.seoullo_new.view.main.community
+package com.app.seoullo_new.view.main.community.detail
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
