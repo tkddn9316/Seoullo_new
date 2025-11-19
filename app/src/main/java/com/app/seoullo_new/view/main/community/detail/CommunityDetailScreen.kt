@@ -3,6 +3,7 @@ package com.app.seoullo_new.view.main.community.detail
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.animateScrollBy
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -64,12 +65,15 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.app.domain.model.User
 import com.app.domain.model.common.ApiState
 import com.app.domain.model.community.Comment
 import com.app.domain.model.community.Post
+import com.app.domain.model.theme.ImageViewerState
 import com.app.seoullo_new.R
 import com.app.seoullo_new.utils.Util
 import com.app.seoullo_new.view.base.ErrorScreen
@@ -115,6 +119,7 @@ fun CommunityDetailScreen(
     val dialogState by viewModel.dialogState.collectAsStateWithLifecycle()
     val dialogState2 by viewModel.dialogState2.collectAsStateWithLifecycle()
     val dialogState3 by viewModel.dialogState3.collectAsStateWithLifecycle()
+    val dialogImageViewState by viewModel.dialogState4.collectAsStateWithLifecycle()
 
     // Reply 타겟/하이라이트
     val replyNoticeState by viewModel.replyNoticeState.collectAsStateWithLifecycle()
@@ -164,7 +169,8 @@ fun CommunityDetailScreen(
                                 onReplyCallback = { comment ->
                                     viewModel.startReplyTo(commentId = comment.id)
                                     viewModel.openReplyNotice(comment = comment)
-                                }
+                                },
+                                onImageClick = viewModel::openImageViewerDialog
                             )
                         }
                     }
@@ -215,12 +221,14 @@ fun CommunityDetailScreen(
             dialogState = dialogState,
             dialogState2 = dialogState2,
             dialogState3 = dialogState3,
+            dialogImageViewState = dialogImageViewState,
             onDeletePost = viewModel::deletePost,
             onDismissPost = viewModel::closePostDeleteDialog,
             onDeleteComment = viewModel::deleteSelectedComment,
             onDismissComment = viewModel::closeCommentDeleteDialog,
             onDeleteReply = viewModel::deleteSelectedReply,
             onDismissReply = viewModel::closeReplyDeleteDialog,
+            onDismissImageViewer = viewModel::closeImageViewerDialog
         )
     }
 }
@@ -258,12 +266,14 @@ private fun DialogHosts(
     dialogState: DialogState,
     dialogState2: DialogState,
     dialogState3: DialogState,
+    dialogImageViewState: ImageViewerState,
     onDeletePost: () -> Unit,
     onDismissPost: () -> Unit,
     onDeleteComment: () -> Unit,
     onDismissComment: () -> Unit,
     onDeleteReply: () -> Unit,
     onDismissReply: () -> Unit,
+    onDismissImageViewer: () -> Unit
 ) {
     if (dialogState.isDeletePostDialogOpen) {
         DeleteNoticeDialog(
@@ -286,6 +296,12 @@ private fun DialogHosts(
             onClose = onDismissReply
         )
     }
+    if (dialogImageViewState.isOpen && !dialogImageViewState.url.isNullOrBlank()) {
+        ImageViewerDialog(
+            imageUrl = dialogImageViewState.url!!,
+            onClose = onDismissImageViewer
+        )
+    }
 }
 
 @Composable
@@ -305,6 +321,7 @@ fun CommunityDetailView(
     onDeleteReplyClick: (commentId: String, replyId: String) -> Unit,
     onLikeClick: (postId: String) -> Unit,
     onReplyCallback: (targetComment: Comment) -> Unit,
+    onImageClick: (url: String) -> Unit
 ) {
     // 스크롤 사이드 이펙트는 뷰 본문에서 분리(가독/테스트성 향상)
     ReplyNavigationEffects(
@@ -348,7 +365,10 @@ fun CommunityDetailView(
             )
 
             // 이미지
-            PostImages(imageUrls = post.imageUrls)
+            PostImages(
+                imageUrls = post.imageUrls,
+                onImageClick = { url -> onImageClick(url) }
+            )
 
             // 리액션 바
             Spacer(Modifier.height(9.dp))
@@ -479,7 +499,9 @@ private fun PostHeader(
 
 @Composable
 private fun PostImages(
-    imageUrls: List<String>
+    modifier: Modifier = Modifier,
+    imageUrls: List<String>,
+    onImageClick: (url: String) -> Unit
 ) {
     if (imageUrls.isEmpty()) return
 
@@ -498,6 +520,7 @@ private fun PostImages(
         ) { index ->
             imageUrls.getOrNull(index % imageUrls.size)?.let { url ->
                 GlideImage(
+                    modifier = modifier.clickable { onImageClick(url) },
                     imageModel = url,
                     contentScale = ContentScale.FillBounds,
                     loading = {

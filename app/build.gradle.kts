@@ -205,4 +205,7 @@ dependencies {
     implementation(libs.workManager)
     implementation(libs.workManager.hilt)
     ksp(libs.workManager.hilt.compiler)
+
+    // zoomable
+    implementation(libs.zoomable)
 }

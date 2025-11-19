@@ -7,6 +7,7 @@ import com.app.domain.model.User
 import com.app.domain.model.common.ApiState
 import com.app.domain.model.community.Comment
 import com.app.domain.model.community.Post
+import com.app.domain.model.theme.ImageViewerState
 import com.app.domain.usecase.community.CommentUseCase
 import com.app.domain.usecase.community.LikePostUseCase
 import com.app.domain.usecase.community.ObserveCommentsUseCase
@@ -131,6 +132,18 @@ class CommunityDetailViewModel @Inject constructor(
 
     private val _likeState = MutableStateFlow<ApiState<Unit>>(ApiState.Initial())
     val likeState = _likeState.asStateFlow()
+
+    // 이미지 뷰어 팝업
+    private val _dialogState4 = MutableStateFlow(ImageViewerState())
+    val dialogState4: StateFlow<ImageViewerState> = _dialogState4.asStateFlow()
+
+    fun openImageViewerDialog(url: String) {
+        _dialogState4.value = ImageViewerState(isOpen = true, url = url)
+    }
+
+    fun closeImageViewerDialog() {
+        _dialogState4.value = ImageViewerState(isOpen = false, url = null)
+    }
 
     val user: StateFlow<User> =
         selectUserUseCase()
