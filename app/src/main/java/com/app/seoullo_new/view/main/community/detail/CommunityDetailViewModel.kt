@@ -1,5 +1,6 @@
 package com.app.seoullo_new.view.main.community.detail
 
+import android.net.Uri
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.app.domain.model.DeletionResult
@@ -144,6 +145,10 @@ class CommunityDetailViewModel @Inject constructor(
     fun closeImageViewerDialog() {
         _dialogState4.value = ImageViewerState(isOpen = false, url = null)
     }
+
+    // 이미지 다운로드 관련
+    private val _saveState = MutableStateFlow<ApiState<Uri>>(ApiState.Initial())
+    val saveState: StateFlow<ApiState<Uri>> = _saveState
 
     val user: StateFlow<User> =
         selectUserUseCase()
@@ -294,6 +299,23 @@ class CommunityDetailViewModel @Inject constructor(
                 commentId = commentId,
                 replyId = replyId
             ).collect()
+        }
+    }
+
+    // 이미지 다운로드
+    fun downloadImageToGallery(
+        url: String,
+        displayName: String? = null,
+        subDir: String = "Seoullo"
+    ) {
+        onIO {
+            postUseCase.saveImageToGallery(
+                url = url,
+                displayName = displayName,
+                subDir = subDir
+            ).collect {
+                _saveState.value = it
+            }
         }
     }
 }

@@ -113,6 +113,7 @@
     <string name="reply_notice">Reply to %s</string>
     <string name="has_been_deleted_comment">This comment has been deleted.</string>
     <string name="edit_post_title">Edit Post</string>
+    <string name="image_download_complete">Image Download Complete.</string>
 
     <!--  setting  -->
     <string name="theme_title">Theme Setting</string>

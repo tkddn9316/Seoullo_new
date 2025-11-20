@@ -1,5 +1,6 @@
 package com.app.seoullo_new.view.main.community.detail
 
+import android.net.Uri
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -126,6 +127,8 @@ fun CommunityDetailScreen(
     val targetComment by viewModel.selectedTargetComment.collectAsStateWithLifecycle()
     val highlight by viewModel.highlight.collectAsStateWithLifecycle()
 
+    val saveImageState by viewModel.saveState.collectAsStateWithLifecycle()
+
     Scaffold(
         topBar = {
             SeoulloAppBar(
@@ -211,6 +214,7 @@ fun CommunityDetailScreen(
             OverlayAndSideEffects(
                 likeState = likeState,
                 deletePostState = deletePostState,
+                saveImageState = saveImageState,
                 onDeleteSuccessNavigateUp = onNavigationClick,
                 showToast = { msg -> Toast.makeText(context, msg, Toast.LENGTH_SHORT).show() }
             )
@@ -228,7 +232,13 @@ fun CommunityDetailScreen(
             onDismissComment = viewModel::closeCommentDeleteDialog,
             onDeleteReply = viewModel::deleteSelectedReply,
             onDismissReply = viewModel::closeReplyDeleteDialog,
-            onDismissImageViewer = viewModel::closeImageViewerDialog
+            onDismissImageViewer = viewModel::closeImageViewerDialog,
+            onImageDownloadClick = { imageUrl ->
+                viewModel.downloadImageToGallery(
+                    url = imageUrl,
+                    displayName = "Seoullo_${System.currentTimeMillis()}"
+                )
+            }
         )
     }
 }
@@ -237,6 +247,7 @@ fun CommunityDetailScreen(
 private fun OverlayAndSideEffects(
     likeState: ApiState<Unit>,
     deletePostState: ApiState<*>,
+    saveImageState: ApiState<Uri>,
     onDeleteSuccessNavigateUp: () -> Unit,
     showToast: (String) -> Unit
 ) {
@@ -245,7 +256,7 @@ private fun OverlayAndSideEffects(
     if (showLoading) LoadingOverlay()
 
     // 삭제 결과 처리
-    LaunchedEffect(deletePostState) {
+    LaunchedEffect(key1 = deletePostState) {
         when (deletePostState) {
             is ApiState.Success<*> -> onDeleteSuccessNavigateUp()
             is ApiState.Error -> showToast(deletePostState.message.orEmpty())
@@ -253,10 +264,23 @@ private fun OverlayAndSideEffects(
         }
     }
 
-    // 좋아요 에러만 토스트
-    LaunchedEffect(likeState) {
+    // 토스트
+    LaunchedEffect(key1 = likeState) {
         if (likeState is ApiState.Error) {
             showToast(likeState.message.orEmpty())
+        }
+    }
+
+    val message = stringResource(R.string.image_download_complete)
+    LaunchedEffect(key1 = saveImageState) {
+        when (saveImageState) {
+            is ApiState.Success -> {
+                showToast(message)
+            }
+            is ApiState.Error -> {
+                showToast(saveImageState.message.orEmpty())
+            }
+            else -> Unit
         }
     }
 }
@@ -273,7 +297,8 @@ private fun DialogHosts(
     onDismissComment: () -> Unit,
     onDeleteReply: () -> Unit,
     onDismissReply: () -> Unit,
-    onDismissImageViewer: () -> Unit
+    onDismissImageViewer: () -> Unit,
+    onImageDownloadClick: (imageUrl: String) -> Unit
 ) {
     if (dialogState.isDeletePostDialogOpen) {
         DeleteNoticeDialog(
@@ -299,7 +324,8 @@ private fun DialogHosts(
     if (dialogImageViewState.isOpen && !dialogImageViewState.url.isNullOrBlank()) {
         ImageViewerDialog(
             imageUrl = dialogImageViewState.url!!,
-            onClose = onDismissImageViewer
+            onClose = onDismissImageViewer,
+            onImageDownloadClick = { imageUrl -> onImageDownloadClick(imageUrl) }
         )
     }
 }

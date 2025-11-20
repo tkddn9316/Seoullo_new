@@ -5,13 +5,16 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Close
+import androidx.compose.material.icons.rounded.Download
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -25,6 +28,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import com.app.seoullo_new.utils.Logging
 import com.skydoves.landscapist.glide.GlideImage
 import net.engawapg.lib.zoomable.rememberZoomState
 import net.engawapg.lib.zoomable.zoomable
@@ -33,7 +37,8 @@ import net.engawapg.lib.zoomable.zoomable
 fun ImageViewerDialog(
     imageUrl: String,
     modifier: Modifier = Modifier,
-    onClose: () -> Unit
+    onClose: () -> Unit,
+    onImageDownloadClick: (imageUrl: String) -> Unit
 ) {
     val zoomState = rememberZoomState()
     Dialog(
@@ -68,6 +73,21 @@ fun ImageViewerDialog(
                 horizontalArrangement = Arrangement.End,
                 verticalAlignment = Alignment.CenterVertically
             ) {
+                Surface(
+                    modifier = modifier.clip(CircleShape),
+                    color = Color.Black.copy(alpha = 0.45f)
+                ) {
+                    IconButton(onClick = { onImageDownloadClick(imageUrl) }) {
+                        Icon(
+                            imageVector = Icons.Rounded.Download,
+                            contentDescription = "다운로드",
+                            tint = Color.White
+                        )
+                    }
+                }
+
+                Spacer(modifier = modifier.width(8.dp))
+
                 Surface(
                     modifier = modifier.clip(CircleShape),
                     color = Color.Black.copy(alpha = 0.45f)

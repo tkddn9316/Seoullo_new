@@ -5,6 +5,7 @@ import com.app.data.repository.AutoCompleteRepositoryImpl
 import com.app.data.repository.BoardRepositoryImpl
 import com.app.data.repository.DirectionRepositoryImpl
 import com.app.data.repository.ImageOptimizationRepository
+import com.app.data.repository.ImageSaverRepositoryImpl
 import com.app.data.repository.PlacesDetailGoogleRepositoryImpl
 import com.app.data.repository.PlacesDetailRepositoryImpl
 import com.app.data.repository.PlacesNearbyRepositoryImpl
@@ -32,6 +33,7 @@ import com.app.data.source.WeatherDataSource
 import com.app.domain.repository.AutoCompleteRepository
 import com.app.domain.repository.BoardRepository
 import com.app.domain.repository.DirectionRepository
+import com.app.domain.repository.ImageSaverRepository
 import com.app.domain.repository.PlacesDetailGoogleRepository
 import com.app.domain.repository.PlacesDetailRepository
 import com.app.domain.repository.PlacesNearbyRepository
@@ -158,4 +160,17 @@ class RepositoryModule {
     ): BoardRepository {
         return BoardRepositoryImpl(boardRef, imageOptRepo, auth, db, storage, functions)
     }
+
+    @Provides
+    @Singleton
+    fun provideImageSaverRepository(
+        @ApplicationContext context: Context
+    ): ImageSaverRepository {
+        return ImageSaverRepositoryImpl(context)
+    }
+//    @Provides
+//    @Singleton
+//    fun provideImageSaverRepository(
+//        impl: ImageSaverRepositoryImpl
+//    ): ImageSaverRepository = impl
 }

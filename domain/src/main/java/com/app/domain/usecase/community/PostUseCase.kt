@@ -6,6 +6,7 @@ import com.app.domain.model.DeletionResult
 import com.app.domain.model.User
 import com.app.domain.model.common.ApiState
 import com.app.domain.repository.BoardRepository
+import com.app.domain.repository.ImageSaverRepository
 import com.google.gson.JsonSyntaxException
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
@@ -13,7 +14,10 @@ import kotlinx.coroutines.flow.flow
 import java.io.IOException
 import javax.inject.Inject
 
-class PostUseCase @Inject constructor(private val repository: BoardRepository) {
+class PostUseCase @Inject constructor(
+    private val repository: BoardRepository,
+    private val imageSaverRepository: ImageSaverRepository
+) {
     fun addPost(
         user: User,
         title: String,
@@ -96,5 +100,28 @@ class PostUseCase @Inject constructor(private val repository: BoardRepository) {
                 emit(ApiState.Error(msg))
             }
         )
+    }
+
+    fun saveImageToGallery(
+        url: String,
+        displayName: String? = null,
+        subDir: String = "Seoullo"
+    ): Flow<ApiState<Uri>> = flow {
+        emit(ApiState.Loading())
+
+        imageSaverRepository.saveImageToGallery(
+            url = url,
+            displayName = displayName,
+            subDir = subDir
+        ).collect {
+            emit(ApiState.Success(it))
+        }
+    }.catch { e ->
+        val errorMessage = when (e) {
+            is IOException -> "Network Error: ${e.message}"
+            is JsonSyntaxException -> "Parsing error: Received non-JSON response (possibly HTML)."
+            else -> "Exception: ${e.message}"
+        }
+        emit(ApiState.Error(errorMessage))
     }
 }
