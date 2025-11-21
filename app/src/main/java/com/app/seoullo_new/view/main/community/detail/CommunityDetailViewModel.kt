@@ -38,7 +38,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class CommunityDetailViewModel @Inject constructor(
-    savedStateHandle: SavedStateHandle,
+    private val savedStateHandle: SavedStateHandle,
     dispatcherProvider: DispatcherProvider,
     observePostsUseCase: ObservePostsUseCase,
     observeCommentsUseCase: ObserveCommentsUseCase,
@@ -50,10 +50,18 @@ class CommunityDetailViewModel @Inject constructor(
 ) : BaseViewModel2(dispatcherProvider) {
     private val postId: String = checkNotNull(savedStateHandle["postId"])
 
+    // 이미지 페이지 상태
+    private val _imagePage = savedStateHandle.getStateFlow("imagePage:$postId", 0)
+    val imagePage: StateFlow<Int> = _imagePage
+
+    fun setImagePage(page: Int) {
+        savedStateHandle["imagePage:$postId"] = page
+    }
+
+    // 게시글 삭제 팝업
     private val _deletePostState = MutableStateFlow<ApiState<DeletionResult>>(ApiState.Initial())
     val deletePostState = _deletePostState.asStateFlow()
 
-    // 게시글 삭제 팝업
     private val _dialogState = MutableStateFlow(DialogState())
     val dialogState: StateFlow<DialogState> = _dialogState.asStateFlow()
 

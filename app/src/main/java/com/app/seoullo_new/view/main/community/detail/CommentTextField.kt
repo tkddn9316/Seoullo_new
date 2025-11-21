@@ -31,6 +31,8 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -67,6 +69,11 @@ fun CommentTextField(
     val focusRequester = remember { FocusRequester() }
     val keyboard = LocalSoftwareKeyboardController.current
     val bringIntoViewRequester = remember { BringIntoViewRequester() }
+
+    // 업로드 버튼 노출 여부
+    val isSendVisible by remember {
+        derivedStateOf { commentTextState.text.isNotEmpty() }
+    }
 
     // 답글 여부 알림
     if (isReply && targetComment != null) {
@@ -114,7 +121,12 @@ fun CommentTextField(
         color = MaterialTheme.colorScheme.outlineVariant
     )
     Row(
-        modifier = modifier.padding(6.dp),
+        modifier = modifier
+            .padding(6.dp)
+            .bringIntoViewRequester(
+                // 커서를 따라 스크롤
+                bringIntoViewRequester = bringIntoViewRequester
+            ),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         CircularProfileImage(
@@ -127,7 +139,6 @@ fun CommentTextField(
             modifier = modifier
                 .fillMaxWidth()
                 .wrapContentHeight()
-                .bringIntoViewRequester(bringIntoViewRequester = bringIntoViewRequester)
                 .focusRequester(focusRequester = focusRequester),
             state = commentTextState,
             textStyle = TextStyle(
@@ -159,7 +170,7 @@ fun CommentTextField(
                                 .weight(1f)
                                 .padding(end = 8.dp) // 버튼과 간격
                         ) {
-                            if (commentTextState.text.isEmpty()) {
+                            if (!isSendVisible) {
                                 Text(
                                     text = stringResource(R.string.add_post_content_hint),
                                     fontSize = 16.sp,
@@ -170,7 +181,7 @@ fun CommentTextField(
                         }
 
                         // 업로드 버튼
-                        if (commentTextState.text.isNotEmpty()) {
+                        if (isSendVisible) {
                             Surface(
                                 color = MaterialTheme.colorScheme.primary,
                                 modifier = modifier

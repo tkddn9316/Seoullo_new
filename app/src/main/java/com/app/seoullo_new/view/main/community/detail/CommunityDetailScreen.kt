@@ -66,8 +66,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.window.Dialog
-import androidx.compose.ui.window.DialogProperties
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.app.domain.model.User
@@ -103,6 +101,7 @@ fun CommunityDetailScreen(
     val context = LocalContext.current
     val listState = rememberLazyListState()
 
+    val currentImagePage = viewModel.imagePage.collectAsStateWithLifecycle()
     val postState by viewModel.post.collectAsStateWithLifecycle()
     val deletePostState by viewModel.deletePostState.collectAsStateWithLifecycle()
     val commentListState by viewModel.comments.collectAsStateWithLifecycle()
@@ -173,7 +172,9 @@ fun CommunityDetailScreen(
                                     viewModel.startReplyTo(commentId = comment.id)
                                     viewModel.openReplyNotice(comment = comment)
                                 },
-                                onImageClick = viewModel::openImageViewerDialog
+                                onImageClick = viewModel::openImageViewerDialog,
+                                currentImagePage = currentImagePage.value,
+                                onImagePageChanged = viewModel::setImagePage
                             )
                         }
                     }
@@ -347,7 +348,9 @@ fun CommunityDetailView(
     onDeleteReplyClick: (commentId: String, replyId: String) -> Unit,
     onLikeClick: (postId: String) -> Unit,
     onReplyCallback: (targetComment: Comment) -> Unit,
-    onImageClick: (url: String) -> Unit
+    onImageClick: (url: String) -> Unit,
+    currentImagePage: Int,
+    onImagePageChanged: (Int) -> Unit,
 ) {
     // 스크롤 사이드 이펙트는 뷰 본문에서 분리(가독/테스트성 향상)
     ReplyNavigationEffects(
@@ -393,7 +396,9 @@ fun CommunityDetailView(
             // 이미지
             PostImages(
                 imageUrls = post.imageUrls,
-                onImageClick = { url -> onImageClick(url) }
+                onImageClick = onImageClick,
+                currentPage = currentImagePage,
+                onPageChanged = onImagePageChanged
             )
 
             // 리액션 바
@@ -527,11 +532,33 @@ private fun PostHeader(
 private fun PostImages(
     modifier: Modifier = Modifier,
     imageUrls: List<String>,
-    onImageClick: (url: String) -> Unit
+    onImageClick: (url: String) -> Unit,
+    currentPage: Int,
+    onPageChanged: (Int) -> Unit
 ) {
     if (imageUrls.isEmpty()) return
 
-    val pagerState = rememberPagerState(pageCount = { imageUrls.size })
+    val pageCount = imageUrls.size
+    val initialPage = currentPage.coerceIn(0, pageCount - 1)
+
+    val pagerState = rememberPagerState(
+        initialPage = initialPage,
+        pageCount = { pageCount }    // 지원되는 버전에서만 존재
+    )
+
+    LaunchedEffect(key1 = pagerState) {
+        snapshotFlow { pagerState.currentPage }.collect { onPageChanged(it) }
+    }
+    // 이미지 개수/외부 현재페이지가 변해도 안전하게 보정
+    LaunchedEffect(
+        key1 = pageCount,
+        key2 = currentPage
+    ) {
+        val want = currentPage.coerceIn(0, pageCount - 1)
+        if (pagerState.currentPage != want) {
+            pagerState.scrollToPage(want)
+        }
+    }
 
     Spacer(Modifier.height(9.dp))
     Column(
@@ -544,38 +571,37 @@ private fun PostImages(
             state = pagerState,
             modifier = Modifier.height(350.dp)
         ) { index ->
-            imageUrls.getOrNull(index % imageUrls.size)?.let { url ->
-                GlideImage(
-                    modifier = modifier.clickable { onImageClick(url) },
-                    imageModel = url,
-                    contentScale = ContentScale.FillBounds,
-                    loading = {
-                        Box(Modifier.fillMaxSize()) {
-                            CircularProgressIndicator(Modifier.align(Alignment.Center))
-                        }
-                    },
-                    failure = {
-                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                            Image(
-                                painter = painterResource(id = R.drawable.ic_seoul_symbol),
-                                contentDescription = null,
-                                contentScale = ContentScale.Fit
-                            )
-                        }
+            val url = imageUrls[index]
+            GlideImage(
+                modifier = modifier.clickable { onImageClick(url) },
+                imageModel = url,
+                contentScale = ContentScale.FillBounds,
+                loading = {
+                    Box(Modifier.fillMaxSize()) {
+                        CircularProgressIndicator(Modifier.align(Alignment.Center))
                     }
-                )
-            }
+                },
+                failure = {
+                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                        Image(
+                            painter = painterResource(id = R.drawable.ic_seoul_symbol),
+                            contentDescription = null,
+                            contentScale = ContentScale.Fit
+                        )
+                    }
+                }
+            )
         }
     }
 
-    if (imageUrls.size > 1) {
+    if (pageCount > 1) {
         Spacer(Modifier.height(6.dp))
         PagerIndicator(
             modifier = Modifier.fillMaxWidth(),
             count = imageUrls.size,
             dotSize = 9.dp,
             spacedBy = 4.dp,
-            currentPage = pagerState.currentPage % imageUrls.size,
+            currentPage = pagerState.currentPage,
             selectedColor = MaterialTheme.colorScheme.primary,
             unSelectedColor = Color.LightGray,
             dotAlignment = Alignment.Center
@@ -633,7 +659,6 @@ private fun BottomCommentInput(
     onAddCommentClick: (String) -> Unit,
     onCloseReplyNoticeClick: () -> Unit,
 ) {
-    // 기존 CommentTextField 재사용(강결합 해소: API만 노출)
     CommentTextField(
         userInfo = userInfo,
         commentTextState = commentTextState,
@@ -644,7 +669,7 @@ private fun BottomCommentInput(
     )
 }
 
-// 스크롤 관련 사이드 이펙트만 집중 처리 (SRP)
+// 스크롤 관련 사이드 이펙트
 @Composable
 private fun ReplyNavigationEffects(
     listState: LazyListState,
